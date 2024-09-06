@@ -1,0 +1,17 @@
+{
+  "name": "@libs/services",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@libs/api-service": "workspace:^",
+    "rabbitmq-client": "^4.6.0",
+    "rxjs": "^7.8.1"
+  }
+}
