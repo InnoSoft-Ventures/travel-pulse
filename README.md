@@ -20,8 +20,8 @@ The project is structured using **pnpm** for efficient package management, with 
    Begin by cloning the repository to your local machine:
 
    ```bash
-   git clone https://github.com/InnoSoft-Ventures/travel-core.git
-   cd travel-core
+   git clone https://github.com/InnoSoft-Ventures/travel-pulse.git
+   cd travel-pulse
    ```
 
 2. **Install Dependencies**
