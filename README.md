@@ -1,7 +1,7 @@
-# **TravelCore**
+# **TravelPulse**
 
 ## **Project Description**
-**TravelCore** is a monorepo-based platform designed to offer seamless eSIM solutions for travelers and digital nomads. Built with flexibility in mind, TravelCore allows users to explore and purchase eSIM plans for various regions, compare options, and manage their eSIM subscriptions, all within a single platform.
+**TravelPulse** is a monorepo-based platform designed to offer seamless eSIM solutions for travelers and digital nomads. Built with flexibility in mind, TravelPulse allows users to explore and purchase eSIM plans for various regions, compare options, and manage their eSIM subscriptions, all within a single platform.
 
 The project is structured using **pnpm** for efficient package management, with **Nx** on top to streamline development workflows across multiple applications and libraries within the monorepo.
 
