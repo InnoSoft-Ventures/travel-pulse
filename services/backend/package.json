@@ -1,5 +1,5 @@
 {
-  "name": "@travel-core/backend",
+  "name": "@travel-core/api",
   "version": "1.0.0",
   "description": "",
   "scripts": {
