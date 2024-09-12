@@ -18,7 +18,24 @@ type RequestHeaders = Partial<
 >;
 
 class ApiService {
+	private static instance: AxiosInstance;
 	private static axiosInstances: { [key in SERVICE]?: AxiosInstance } = {};
+
+	public static request() {
+		if (!this.instance) {
+			this.instance = axios.create({
+				headers: {
+					"Content-Type": "application/json",
+				},
+				validateStatus: (status) => {
+					return status >= 200 && status < 500;
+				},
+				maxRedirects: 5,
+			});
+		}
+
+		return this.instance;
+	}
 
 	private static async getAxiosInstance(
 		service: SERVICE
@@ -79,7 +96,7 @@ class ApiService {
 		}
 	}
 
-	public static async request<Response>(
+	public static async requestConfig<Response>(
 		service: SERVICE,
 		method: Method,
 		req: Request,
@@ -122,7 +139,7 @@ class ApiService {
 		data?: Record<string, string>,
 		headers?: RequestHeaders
 	): Promise<ResponseData<Response>> {
-		return this.request<Response>(service, "GET", req, endpoint, data, headers);
+		return this.requestConfig<Response>(service, "GET", req, endpoint, data, headers);
 	}
 
 	public static async post<Response>(
@@ -132,7 +149,7 @@ class ApiService {
 		data: Record<string, any>,
 		headers?: RequestHeaders
 	): Promise<ResponseData<Response>> {
-		return this.request<Response>(
+		return this.requestConfig<Response>(
 			service,
 			"POST",
 			req,
@@ -149,7 +166,7 @@ class ApiService {
 		data: Record<string, string>,
 		headers?: RequestHeaders
 	): Promise<ResponseData<Response>> {
-		return this.request<Response>(service, "PUT", req, endpoint, data, headers);
+		return this.requestConfig<Response>(service, "PUT", req, endpoint, data, headers);
 	}
 
 	public static async delete<Response>(
@@ -159,7 +176,7 @@ class ApiService {
 		data?: Record<string, string>,
 		headers?: RequestHeaders
 	): Promise<ResponseData<Response>> {
-		return this.request<Response>(
+		return this.requestConfig<Response>(
 			service,
 			"DELETE",
 			req,
@@ -170,4 +187,6 @@ class ApiService {
 	}
 }
 
-export { ApiService, SERVICE_NAME, SERVICE };
+const APIRequest = ApiService.request();
+
+export { ApiService, SERVICE_NAME, SERVICE, APIRequest };

@@ -1,20 +1,22 @@
 {
-  "name": "@travel-core/api",
+  "name": "@travel-pulse/api",
   "version": "1.0.0",
   "description": "",
   "scripts": {
     "dev": "nodemon .",
     "start": "node dist/index.js",
+    "sq-cli": "npx sequelize-cli",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/InnoSoft-Ventures/travel-core.git"
+    "url": "git+https://github.com/InnoSoft-Ventures/travel-pulse.git"
   },
   "keywords": [],
   "author": "",
   "dependencies": {
+    "@libs/api-service": "workspace:^",
     "@libs/interfaces": "workspace:^",
     "@libs/middlewares": "workspace:^",
     "@libs/services": "workspace:^",
@@ -24,6 +26,8 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "helmet": "^7.1.0",
+    "mysql2": "^3.11.2",
+    "sequelize": "^6.37.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -36,9 +40,11 @@
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.8",
+    "@types/sequelize": "^4.28.20",
     "jest": "^29.7.0",
     "nodemon": "^3.1.4",
     "prettier": "^3.3.2",
+    "sequelize-cli": "^6.6.2",
     "ts-jest": "^29.1.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.2"

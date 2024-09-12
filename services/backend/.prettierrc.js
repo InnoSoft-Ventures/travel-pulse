@@ -1,2 +1,2 @@
 /* eslint-disable no-undef */
-module.exports = require('@travel-core/prettier');
+module.exports = require('@config/prettier');

@@ -28,6 +28,8 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
+		"allowJs": true,
+    "checkJs": false,
     "baseUrl": ".",
     "typeRoots": [
       "./node_modules/@types",

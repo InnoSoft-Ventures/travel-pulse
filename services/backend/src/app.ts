@@ -9,7 +9,6 @@ import {
 	NotFoundException,
 	errorMiddleware,
 	logger,
-	routeMiddleware,
 } from '@libs/middlewares';
 
 dotenv.config();
@@ -29,7 +28,7 @@ app.use(logger('combined'));
 // rabbitMqInit();
 
 // Authentication and Authorization middleware
-app.use(routeMiddleware);
+// app.use(routeMiddleware);
 
 // Config routers
 app.use(routes);
