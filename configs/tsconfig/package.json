@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "files": [
-    "base.json"
+    "base.json",
+		"next.json"
   ],
   "exclude": ["node_modules"]
 }

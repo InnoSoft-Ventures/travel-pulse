@@ -42,7 +42,7 @@ The project is structured using **pnpm** for efficient package management, with 
    To start the development server for your application, run the following command:
 
    ```bash
-   pnpm run web:dev
+   pnpm run client:dev
    ```
 
 *  **Run the API server**
@@ -72,7 +72,7 @@ The project is structured using **pnpm** for efficient package management, with 
 
 - **apps/**:
   Contains the client applications in the monorepo, such as:
-  - **web app**: The main web interface for users.
+  - **client app**: The main web interface for users.
   - **mobile app**: The mobile version of the platform for travelers on the go.
 
 - **services/**:
