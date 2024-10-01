@@ -189,4 +189,4 @@ class ApiService {
 
 const APIRequest = ApiService.request();
 
-export { ApiService, SERVICE_NAME, SERVICE, APIRequest };
+export { ApiService, SERVICE_NAME, SERVICE, APIRequest, AxiosError };

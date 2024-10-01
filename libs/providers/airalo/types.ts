@@ -1,0 +1,165 @@
+export interface AiraloCountry {
+	country_code: string;
+	title: string;
+}
+
+export interface Package {
+	id: string;
+	type: string;
+	price: number;
+
+	/** Amount in MB */
+	amount: number;
+
+	/** Number of days */
+	day: number;
+	is_unlimited: boolean;
+	title: string;
+	data: string;
+	short_info: string | null;
+
+	/** HTML string content */
+	qr_installation: string | null;
+
+	/** HTML string content */
+	manual_installation: string | null;
+	voice: number | null;
+	text: number | null;
+	net_price: number | null;
+}
+
+export interface AiraloNetwork {
+	name: string;
+	types: string[];
+}
+
+export interface AiraloCoverage {
+	/** Country ISO2 */
+	name: string;
+	networks: AiraloNetwork[];
+}
+
+export interface AiraloOperator {
+	id: number;
+	style: string;
+	gradient_start: string;
+	gradient_end: string;
+	type: "local" | "global";
+	is_prepaid: boolean;
+	title: string;
+	esim_type: string;
+	warning: string | null;
+	apn_type: string;
+	apn_value: string | null;
+	is_roaming: boolean;
+	info: string[];
+	image?: {
+		width: number;
+		height: number;
+		url: string;
+	};
+	plan_type: "data" | "voice" | "data_voice";
+	activation_policy: string;
+	is_kyc_verify: boolean;
+	rechargeability: boolean;
+	other_info: string;
+	coverages: AiraloCoverage[];
+	apn: {
+		ios: {
+			apn_type: string;
+			apn_value: null;
+		};
+		android: {
+			apn_type: string;
+			apn_value: null;
+		};
+	};
+	packages: Package[];
+	countries: AiraloCountry[];
+}
+
+export interface AiraloPackage {
+	/** Possibly "world" and "regional" if contains a region name, for example, "europe" or "Africa" and "local" if has country name */
+	slug: string;
+
+	/** Country code will be empty if package is "regional" or "world" */
+	country_code: string;
+	title: string;
+	operators: AiraloOperator[];
+}
+
+export interface AiraloPackageWithCountryId extends AiraloPackage {
+	countryId: number;
+}
+
+export interface AiraloPackageResponse {
+	/** The package data */
+	data: AiraloPackage[];
+	links: {
+		first: string;
+		last: string;
+		prev: string | null;
+		next: string | null;
+	};
+	meta: {
+		message: string;
+		current_page: number;
+		from: number;
+		last_page: number;
+		path: string;
+		per_page: string;
+		to: number;
+		total: number;
+	};
+}
+
+export interface AiraloAccessToken {
+	data: {
+		token_type: string;
+		expires_in: number;
+		access_token: string;
+	};
+}
+
+export interface AiraloOrderNotification {
+	type: "async_orders";
+	webhook_url: string;
+}
+
+export interface AiraloLowDataNotification {
+	type: "webhook_low_data";
+	webhook_url: string;
+	/** use this value to receive notification via email */
+	email_low_data: string;
+	email: string;
+	language: "en";
+}
+
+export interface AiraloCreditLimitNotification {
+	type: "webhook_credit_limit";
+	webhook_url: string;
+	/** receive notification via email */
+	email_credit_limit: string;
+	email: string;
+	language: "en";
+}
+
+export type AiraloNotification =
+	| AiraloOrderNotification
+	| AiraloLowDataNotification
+	| AiraloCreditLimitNotification;
+
+export interface AiraloOrderRequest {
+	packageId: string;
+	type: "sim";
+	quantity: number;
+	description: string;
+	webhookUrl: string;
+}
+
+export interface AiraloOrderResponse {
+	data: {
+		request_id: string;
+		accepted_at: string;
+	};
+}

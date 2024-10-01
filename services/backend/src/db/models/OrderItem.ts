@@ -1,0 +1,110 @@
+import { Model, DataTypes, Optional } from 'sequelize';
+import dbConnect from '..';
+import Order from './Order';
+import Package from './Package';
+
+export interface OrderItemAttributes {
+	id: number;
+	orderId: number;
+	packageId: number;
+	quantity: number;
+	startDate: string;
+	iccid: string;
+	price: number;
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+export type OrderItemCreationAttributes = Optional<
+	OrderItemAttributes,
+	'id' | 'createdAt' | 'updatedAt' | 'iccid'
+>;
+
+class OrderItem extends Model<
+	OrderItemAttributes,
+	OrderItemCreationAttributes
+> {
+	public id!: number;
+	public orderId!: number;
+	public packageId!: number;
+	public quantity!: number;
+	public startDate!: string;
+	public iccid!: string;
+	public price!: number;
+}
+
+OrderItem.init(
+	{
+		id: {
+			allowNull: false,
+			autoIncrement: true,
+			primaryKey: true,
+			type: DataTypes.INTEGER,
+		},
+		orderId: {
+			allowNull: false,
+			type: DataTypes.INTEGER,
+			field: 'order_id',
+			references: {
+				model: Order,
+				key: 'id',
+			},
+		},
+		packageId: {
+			allowNull: false,
+			type: DataTypes.INTEGER,
+			field: 'package_id',
+			references: {
+				model: Package,
+				key: 'id',
+			},
+		},
+		quantity: {
+			allowNull: false,
+			type: DataTypes.INTEGER,
+			defaultValue: 1,
+		},
+		price: {
+			allowNull: false,
+			type: DataTypes.DECIMAL(10, 2),
+		},
+		iccid: {
+			allowNull: true,
+			type: DataTypes.STRING,
+		},
+		startDate: {
+			allowNull: false,
+			type: DataTypes.STRING(10),
+			field: 'start_date',
+		},
+		createdAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW,
+			field: 'created_at',
+		},
+		updatedAt: {
+			allowNull: false,
+			type: DataTypes.DATE,
+			defaultValue: DataTypes.NOW,
+			field: 'updated_at',
+		},
+	},
+	{
+		sequelize: dbConnect,
+		modelName: 'OrderItem',
+		tableName: 'order_items',
+		timestamps: false,
+	}
+);
+
+OrderItem.belongsTo(Order, {
+	foreignKey: 'orderId',
+	as: 'order',
+});
+OrderItem.belongsTo(Package, {
+	foreignKey: 'packageId',
+	as: 'package',
+});
+
+export default OrderItem;

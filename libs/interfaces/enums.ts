@@ -6,3 +6,10 @@ export const ERROR_CODE = {
 	INVALID_TOKEN: "invalid_token",
 	INVALID_CREDENTIALS: "invalid_credentials",
 };
+
+export enum OrderStatus {
+	PENDING = "pending",
+	PROCESSING = "processing",
+	COMPLETED = "completed",
+	CANCELLED = "cancelled",
+}
