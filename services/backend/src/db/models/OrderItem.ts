@@ -52,7 +52,7 @@ OrderItem.init(
 		},
 		packageId: {
 			allowNull: false,
-			type: DataTypes.INTEGER,
+			type: DataTypes.BIGINT,
 			field: 'package_id',
 			references: {
 				model: Package,

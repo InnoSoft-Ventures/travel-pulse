@@ -130,6 +130,9 @@ importers:
       '@libs/api-service':
         specifier: workspace:^
         version: link:../api-service
+      '@libs/interfaces':
+        specifier: workspace:^
+        version: link:../interfaces
     devDependencies:
       '@types/node':
         specifier: ^22.7.2

@@ -5,6 +5,7 @@ import Country from './Country';
 export interface OperatorAttributes {
 	id: number;
 	externalId: number;
+	provider: string;
 	countryId: number;
 	title: string;
 	type: string;
@@ -33,6 +34,7 @@ export type OperatorCreationAttributes = Optional<
 class Operator extends Model<OperatorAttributes, OperatorCreationAttributes> {
 	public id!: number;
 	public externalId!: number;
+	public provider!: string;
 	public countryId!: number;
 	public title!: string;
 	public type!: string;
@@ -74,6 +76,10 @@ Operator.init(
 				key: 'id',
 			},
 			field: 'country_id',
+		},
+		provider: {
+			allowNull: false,
+			type: DataTypes.STRING(100),
 		},
 		title: {
 			allowNull: false,

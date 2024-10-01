@@ -1,9 +1,10 @@
 import express from 'express';
-import { errorHandler } from '@libs/middlewares';
+import { errorHandler, validateData } from '@libs/middlewares';
 import { makeOrder } from '../controllers/orders.controller';
+import { OrderPayloadSchema } from '../schema/order.schema';
 
 const router = express.Router();
 
-router.post('/', errorHandler(makeOrder));
+router.post('/', validateData(OrderPayloadSchema), errorHandler(makeOrder));
 
 export default router;

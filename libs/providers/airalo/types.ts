@@ -1,3 +1,5 @@
+import { PackageType } from "@libs/interfaces";
+
 export interface AiraloCountry {
 	country_code: string;
 	title: string;
@@ -151,10 +153,8 @@ export type AiraloNotification =
 
 export interface AiraloOrderRequest {
 	packageId: string;
-	type: "sim";
+	type: PackageType.SIM;
 	quantity: number;
-	description: string;
-	webhookUrl: string;
 }
 
 export interface AiraloOrderResponse {

@@ -1,12 +1,14 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
 import Operator from './Operator';
+import { PackageType, ProviderIdentity } from '@libs/interfaces';
 
 export interface PackageAttributes {
 	id: number;
+	provider: ProviderIdentity;
 	operatorId: number;
 	externalPackageId: string;
-	type: string;
+	type: PackageType;
 	title: string;
 	price: number;
 	amount: number;
@@ -23,13 +25,17 @@ export interface PackageAttributes {
 	updatedAt: Date;
 }
 
-export type PackageCreationAttributes = Optional<PackageAttributes, 'id' | 'createdAt' | 'updatedAt'>;
+export type PackageCreationAttributes = Optional<
+	PackageAttributes,
+	'id' | 'createdAt' | 'updatedAt'
+>;
 
 class Package extends Model<PackageAttributes, PackageCreationAttributes> {
 	public id!: number;
 	public operatorId!: number;
+	public provider!: ProviderIdentity;
 	public externalPackageId!: string;
-	public type!: string;
+	public type!: PackageType;
 	public title!: string;
 	public price!: number;
 	public amount!: number;
@@ -62,6 +68,10 @@ Package.init(
 				model: 'operators',
 				key: 'id',
 			},
+		},
+		provider: {
+			allowNull: false,
+			type: DataTypes.STRING(100),
 		},
 		externalPackageId: {
 			allowNull: false,

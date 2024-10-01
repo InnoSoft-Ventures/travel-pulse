@@ -13,3 +13,19 @@ export enum OrderStatus {
 	COMPLETED = "completed",
 	CANCELLED = "cancelled",
 }
+
+export enum OrderProviderStatus {
+	PENDING = "pending",
+	PROCESSING = "processing",
+	COMPLETED = "completed",
+	CANCELLED = "cancelled",
+}
+
+export enum ProviderIdentity {
+	AIRALO = "airalo",
+	ESIMACCESS = "esimaccess",
+}
+
+export enum PackageType {
+	SIM = "sim",
+}
