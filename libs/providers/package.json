@@ -9,7 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@libs/api-service": "workspace:^"
+    "@libs/api-service": "workspace:^",
+    "@libs/interfaces": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^22.7.2"

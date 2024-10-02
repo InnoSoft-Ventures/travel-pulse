@@ -8,15 +8,13 @@ export interface OrderAttributes {
 	userId: number;
 	totalAmount: number;
 	status: string;
-	externalOrderRequestId: string;
-	externalOrderId: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
 export type OrderCreationAttributes = Optional<
 	OrderAttributes,
-	'id' | 'status' | 'createdAt' | 'updatedAt' | 'externalOrderId'
+	'id' | 'status' | 'createdAt' | 'updatedAt'
 >;
 
 class Order extends Model<OrderAttributes, OrderCreationAttributes> {
@@ -24,8 +22,6 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> {
 	public userId!: number;
 	public totalAmount!: number;
 	public status!: string;
-	public externalOrderRequestId!: string;
-	public externalOrderId!: string;
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
 }
@@ -46,16 +42,6 @@ Order.init(
 				model: User,
 				key: 'id',
 			},
-		},
-		externalOrderRequestId: {
-			allowNull: true,
-			type: DataTypes.STRING,
-			field: 'external_order_request_id',
-		},
-		externalOrderId: {
-			allowNull: true,
-			type: DataTypes.STRING,
-			field: 'external_order_id',
 		},
 		totalAmount: {
 			allowNull: false,

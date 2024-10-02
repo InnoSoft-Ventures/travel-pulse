@@ -1,26 +1,70 @@
-import { AIRALO_CLIENT_SECRET } from "./config";
 import crypto from "crypto";
+import fs from "fs";
+import path from "path";
+import { AIRALO_CLIENT_SECRET } from "./config";
 
-export const secureAiraloWebhook = (payload: any, signature: string) => {
-	let payloadData = "{}";
+const LOG_FILE_PATH = path.join(__dirname, "airalo_webhook_log.json");
 
-	if (typeof payload === "object") {
-		payloadData = JSON.stringify(payload);
+export const secureAiraloWebhook = (
+	payload: any,
+	signature: string,
+): boolean => {
+	// Validate input
+	console.log(signature, payload);
+
+	if (!signature || !payload) {
+		console.warn("Missing payload or signature");
+		return false;
 	}
 
+	const payloadData =
+		typeof payload === "object" ? JSON.stringify(payload) : "{}";
 	const expectedSignature = crypto
 		.createHmac("sha512", AIRALO_CLIENT_SECRET || "")
 		.update(payloadData)
 		.digest("hex");
 
-	if (signature && expectedSignature === signature) {
-		// Here you are guaranteed the payload came from Airalo's system, and it is not from any third party or attacker.
-		// You can safely proceed with your flow.
-		console.log("Yay!");
+	const isValid = expectedSignature === signature;
+
+	if (isValid) {
+		console.log("Valid payload received from Airalo");
 	} else {
-		// We wouldn't trust this payload and the system that sent it... Better to reject it or proceed at your own risk.
-		console.log("Hmm.... it is suspicious");
+		console.warn("Invalid signature detected for Airalo payload");
 	}
 
-	return false;
+	// Log payload to a JSON file
+	logPayloadToFile(payload, isValid);
+
+	return isValid;
+};
+
+// Utility function to log payload data into a JSON file
+const logPayloadToFile = (payload: any, isValid: boolean) => {
+	const logEntry = {
+		timestamp: new Date().toISOString(),
+		isValid,
+		payload,
+	};
+
+	try {
+		// Check if log file exists
+		if (fs.existsSync(LOG_FILE_PATH)) {
+			const existingLogs = JSON.parse(fs.readFileSync(LOG_FILE_PATH, "utf8"));
+			existingLogs.push(logEntry);
+			fs.writeFileSync(
+				LOG_FILE_PATH,
+				JSON.stringify(existingLogs, null, 2),
+				"utf8",
+			);
+		} else {
+			// Create the log file with the first entry
+			fs.writeFileSync(
+				LOG_FILE_PATH,
+				JSON.stringify([logEntry], null, 2),
+				"utf8",
+			);
+		}
+	} catch (error) {
+		console.error("Error writing to log file:", error);
+	}
 };

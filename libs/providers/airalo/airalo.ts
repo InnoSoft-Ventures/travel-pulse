@@ -7,6 +7,7 @@ import {
 } from "./types";
 import { AxiosError } from "@libs/api-service";
 import { AIRALO_API_URL } from "../config";
+import { SOMETHING_WENT_WRONG } from "@libs/interfaces";
 
 export class Airalo extends AiraloBase {
 	private static instance: Airalo;
@@ -89,7 +90,11 @@ export class Airalo extends AiraloBase {
 	}
 
 	/**
-	 * Opt-in to Airalo notifications
+	 * Opt-in for Airalo notifications.
+	 *
+	 * @param data - The Airalo notification data.
+	 * @returns The response data from the Airalo API.
+	 * @throws Error if unable to opt-in from Airalo API.
 	 */
 	public async optIn(data: AiraloNotification) {
 		try {
@@ -105,9 +110,16 @@ export class Airalo extends AiraloBase {
 		}
 	}
 
-	public async orderPackage(data: AiraloOrderRequest) {
+	/**
+	 * Creates an order for a package from Airalo.
+	 *
+	 * @param data - The data required to create the order.
+	 * @returns The response data containing the order details.
+	 * @throws An error if the order creation fails.
+	 */
+	public async createOrder(data: AiraloOrderRequest) {
 		try {
-			const description = `${data.quantity} x ${data.type} - ${data.description}`;
+			const description = `${data.quantity} x ${data.type} - ${data.packageId}`;
 
 			// Call the service to process the order
 			const response = await this.request.post<AiraloOrderResponse>(
@@ -120,10 +132,17 @@ export class Airalo extends AiraloBase {
 				},
 			);
 
-			return response.data;
+			if (response.status === 202) {
+				return { success: true, data: response.data.data };
+			}
+
+			console.log("Airalo Order Error:", response.data.data);
+
+			return { success: false, error: response.data.data };
 		} catch (error) {
 			console.error("Airalo API: Failed to order package:", error);
-			throw new Error("Unable to order package from Airalo API");
+
+			return { success: false, error: SOMETHING_WENT_WRONG };
 		}
 	}
 }

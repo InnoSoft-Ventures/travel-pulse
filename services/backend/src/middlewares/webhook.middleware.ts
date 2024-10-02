@@ -7,9 +7,6 @@ export const secureWebhookMiddleware = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	console.log('Received async order:', req.body);
-	console.log('Headers', req.headers);
-
 	if (
 		!secureAiraloWebhook(
 			req.body,

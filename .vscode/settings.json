@@ -1,6 +1,10 @@
 {
 	"editor.formatOnSave": true,
 	"cSpell.words": [
-		"iccid"
+		"esimaccess",
+		"iccid",
+		"imsis",
+		"msisdn",
+		"qrcode"
 	]
 }
