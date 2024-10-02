@@ -8,20 +8,24 @@ export interface ProviderFactoryData {
 	quantity: number;
 	type: PackageType.SIM;
 	startDate: string;
+	dataAmount: number;
+	voice: number;
+	text: number;
 }
 
 interface ProviderOrderResponse {
 	externalRequestId: string;
 	provider: ProviderIdentity;
+	dataAmount: number;
+	voice: number;
+	text: number;
 }
 
 export class ProviderFactory {
 	private data: ProviderFactoryData[];
-	private orderId: number;
 
-	constructor(data: ProviderFactoryData[], orderId: number) {
+	constructor(data: ProviderFactoryData[]) {
 		this.data = data;
-		this.orderId = orderId;
 	}
 
 	private async airaloProvider(
@@ -31,41 +35,66 @@ export class ProviderFactory {
 
 		const instance = Airalo.getInstance();
 
-		const response = await instance.createOrder({
-			quantity: data.quantity,
-			packageId: data.packageId,
-			type: data.type,
-		});
+		try {
+			const response = await instance.createOrder({
+				quantity: data.quantity,
+				packageId: data.packageId,
+				type: data.type,
+			});
 
-		if (!response.data) {
+			if (!response.data) {
+				console.error("Error from Airalo", response.error);
+				throw new Error("Error from Airalo");
+			}
+
+			return {
+				externalRequestId: response.data.request_id,
+				provider: ProviderIdentity.AIRALO,
+				dataAmount: data.dataAmount,
+				voice: data.voice,
+				text: data.text,
+			};
+		} catch (error) {
 			throw new BadRequestException(
-				"Failed to complete order:",
-				response.error,
+				`Failed to complete order for Airalo: ${error}`,
+				error,
 			);
 		}
-
-		return {
-			externalRequestId: response.data.request_id,
-			provider: ProviderIdentity.AIRALO,
-		};
 	}
 
-	async processOrder() {
-		// Process order
-		console.log("Processing order");
-		console.log(this.orderId, this.data);
-
-		const providerOrderResponse: ProviderOrderResponse[] = [];
-
-		for (const item of this.data) {
-			if (item.provider === ProviderIdentity.AIRALO) {
-				const airaloOrder = await this.airaloProvider(item);
-
-				providerOrderResponse.push(airaloOrder);
-			}
+	private getProviderFunction(
+		provider: ProviderIdentity,
+	): (data: ProviderFactoryData) => Promise<ProviderOrderResponse> {
+		switch (provider) {
+			case ProviderIdentity.AIRALO:
+				return this.airaloProvider;
+			// Add other providers here as needed
+			default:
+				throw new BadRequestException(
+					`Unsupported provider: ${provider}`,
+					null,
+				);
 		}
+	}
 
-		console.log("Order processed", providerOrderResponse);
-		return providerOrderResponse;
+	async processOrder(): Promise<ProviderOrderResponse[]> {
+		console.log("Processing order", this.data);
+
+		// Process all provider orders concurrently
+		const providerOrderPromises = this.data.map(async (item) => {
+			const providerFunction = this.getProviderFunction(item.provider);
+
+			return providerFunction.call(this, item);
+		});
+
+		try {
+			const providerOrderResponses = await Promise.all(providerOrderPromises);
+			console.log("Order processed", providerOrderResponses);
+
+			return providerOrderResponses;
+		} catch (error) {
+			console.error("Error processing order:", error);
+			throw error;
+		}
 	}
 }

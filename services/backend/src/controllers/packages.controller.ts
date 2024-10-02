@@ -2,7 +2,7 @@ import { Airalo, AiraloPackageWithCountryId } from '@libs/providers';
 import { Request, Response } from 'express';
 import Country from '../db/models/Country';
 import Operator from '../db/models/Operator';
-import Package from '../db/models/Package';
+import Package, { PackageCreationAttributes } from '../db/models/Package';
 import Coverage from '../db/models/Coverage';
 import Bottleneck from 'bottleneck';
 import { ProviderIdentity } from '@libs/interfaces';
@@ -91,24 +91,25 @@ const getPackageList = async (
 		for (const [index, operator] of pkg.operators.entries()) {
 			const operatorId = operators[index].id;
 
-			const packageRecords = operator.packages.map((pkg) => ({
-				operatorId,
-				externalPackageId: pkg.id,
-				provider: ProviderIdentity.AIRALO,
-				type: pkg.type,
-				title: pkg.title,
-				price: pkg.price,
-				amount: pkg.amount,
-				day: pkg.day,
-				isUnlimited: pkg.is_unlimited,
-				data: pkg.data,
-				shortInfo: pkg.short_info,
-				qrInstallation: pkg.qr_installation,
-				manualInstallation: pkg.manual_installation,
-				voice: pkg.voice,
-				text: pkg.text,
-				netPrice: pkg.net_price,
-			}));
+			const packageRecords: PackageCreationAttributes[] =
+				operator.packages.map((pkg) => ({
+					operatorId,
+					externalPackageId: pkg.id,
+					provider: ProviderIdentity.AIRALO,
+					type: pkg.type,
+					title: pkg.title,
+					price: pkg.price,
+					amount: pkg.amount,
+					day: pkg.day,
+					isUnlimited: pkg.is_unlimited,
+					data: pkg.data,
+					shortInfo: pkg.short_info,
+					qrInstallation: pkg.qr_installation,
+					manualInstallation: pkg.manual_installation,
+					voice: pkg.voice,
+					text: pkg.text,
+					netPrice: pkg.net_price,
+				}));
 
 			const coverageRecord = {
 				operatorId,

@@ -7,33 +7,41 @@ import Package from '../db/models/Package';
 import { OrderPayload } from '../schema/order.schema';
 import { Request } from 'express';
 import { ProviderFactory, ProviderFactoryData } from '@libs/providers';
-import OrderProvider from '../db/models/OrderProvider';
+import ProviderOrder from '../db/models/ProviderOrder';
 import { Transaction } from 'sequelize';
 
-const packageDetails = async (
-	data: OrderPayload['packages'],
-	orderId: number,
-	transact: Transaction
-) => {
+const fetchPackages = async (packageIds: number[]) => {
+	console.log('Fetching packages');
 	const packages = await Package.findAll({
 		where: {
-			id: data.map((item) => item.packageId),
+			id: packageIds,
 		},
-		attributes: ['id', 'price', 'type', 'externalPackageId', 'provider'],
+		attributes: [
+			'id',
+			'price',
+			'type',
+			'amount',
+			'voice',
+			'text',
+			'externalPackageId',
+			'provider',
+		],
 	});
 
-	const reducePackage = packages.reduce<Record<number, Package>>(
-		(acc, item) => {
-			acc[item.id] = item;
+	return packages.reduce<Record<number, Package>>((acc, pkg) => {
+		acc[pkg.id] = pkg;
+		return acc;
+	}, {});
+};
 
-			return acc;
-		},
-		{}
-	);
-
+const prepareOrderDetails = (
+	data: OrderPayload['packages'],
+	reducePackage: Record<number, Package>,
+	orderId: number
+) => {
 	let totalAmount = 0;
-	let packageList: OrderItemCreationAttributes[] = [];
-	let providerOrderDataPreparation: ProviderFactoryData[] = [];
+	const packageList: OrderItemCreationAttributes[] = [];
+	const providerOrderDataPreparation: ProviderFactoryData[] = [];
 
 	for (const item of data) {
 		const packageData = reducePackage[item.packageId];
@@ -42,8 +50,8 @@ const packageDetails = async (
 			throw new InternalException('Package not found', null);
 		}
 
-		// Calculate total amount
-		totalAmount = packageData.price * item.quantity;
+		const itemTotal = packageData.price * item.quantity;
+		totalAmount += itemTotal;
 
 		packageList.push({
 			orderId,
@@ -57,73 +65,90 @@ const packageDetails = async (
 			packageId: packageData.externalPackageId,
 			provider: packageData.provider,
 			quantity: item.quantity,
+			dataAmount: packageData.amount,
+			voice: packageData.voice,
+			text: packageData.text,
 			type: packageData.type,
 			startDate: item.startDate,
 		});
 	}
 
-	// Provider Order processing
-	const provider = new ProviderFactory(providerOrderDataPreparation, orderId);
+	return { totalAmount, packageList, providerOrderDataPreparation };
+};
 
+const processProviderOrders = async (
+	providerOrderDataPreparation: ProviderFactoryData[],
+	orderId: number,
+	transact: Transaction
+) => {
+	console.log('Processing provider orders');
+	const provider = new ProviderFactory(providerOrderDataPreparation);
 	const providerOrders = await provider.processOrder();
 
-	// Saving provider orders and assign order id to each provider order
 	const providerOrderList = providerOrders.map((item) => ({
 		...item,
 		orderId,
 	}));
 
-	await OrderProvider.bulkCreate(providerOrderList, {
+	await ProviderOrder.bulkCreate(providerOrderList, {
 		transaction: transact,
 	});
 
-	return {
-		totalAmount,
-		packages: packageList,
-	};
+	console.log('Provider orders processed');
 };
 
 export const createOrderService = async (req: Request) => {
 	const data = req.body as OrderPayload;
-
-	const userId = 1;
+	const userId = 1; // Hardcoded for now
 	const transact = await dbConnect.transaction();
 
 	try {
+		// Step 1: Create the order entry;.
 		const order = await Order.create(
 			{
 				userId,
 				status: OrderStatus.PENDING,
 				totalAmount: 0,
 			},
-			{
-				transaction: transact,
-			}
+			{ transaction: transact }
 		);
 
-		const details = await packageDetails(data.packages, order.id, transact);
+		// Step 2: Fetch package details
+		const reducePackage = await fetchPackages(
+			data.packages.map((item) => item.packageId)
+		);
 
-		// Creating order items
-		await OrderItem.bulkCreate(details.packages, {
+		// Step 3: Prepare order details
+		const { totalAmount, packageList, providerOrderDataPreparation } =
+			prepareOrderDetails(data.packages, reducePackage, order.id);
+
+		console.log('Order details prepared');
+		// Step 4: Create order items
+		await OrderItem.bulkCreate(packageList, {
 			transaction: transact,
 		});
 
-		// Update order total amount
-		await order.update(
-			{
-				totalAmount: details.totalAmount,
-			},
-			{
-				transaction: transact,
-			}
+		console.log('Order items created');
+
+		// Step 5: Process provider orders
+		await processProviderOrders(
+			providerOrderDataPreparation,
+			order.id,
+			transact
 		);
 
-		// await transact.commit();
+		// Step 6: Update order total amount
+		await order.update({ totalAmount }, { transaction: transact });
 
-		return [];
+		console.log('Order total amount updated');
+
+		// Commit the transaction
+		await transact.commit();
+
+		return order;
 	} catch (error) {
-		transact.rollback();
-
+		console.error('Failed to create order:', error);
+		await transact.rollback();
 		throw new InternalException(SOMETHING_WENT_WRONG, error);
 	}
 };

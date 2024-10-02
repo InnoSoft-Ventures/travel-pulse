@@ -14,7 +14,7 @@ export enum OrderStatus {
 	CANCELLED = "cancelled",
 }
 
-export enum OrderProviderStatus {
+export enum ProviderOrderStatus {
 	PENDING = "pending",
 	PROCESSING = "processing",
 	COMPLETED = "completed",
@@ -28,4 +28,14 @@ export enum ProviderIdentity {
 
 export enum PackageType {
 	SIM = "sim",
+}
+
+export type ApnType = "automatic" | "manual";
+
+export enum SimStatus {
+	NOT_ACTIVE = "NOT_ACTIVE",
+	ACTIVE = "ACTIVE",
+	FINISHED = "FINISHED",
+	UNKNOWN = "UNKNOWN",
+	EXPIRED = "EXPIRED",
 }

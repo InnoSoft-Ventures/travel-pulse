@@ -1,4 +1,4 @@
-import { PackageType } from "@libs/interfaces";
+import { PackageType, SIM } from "@libs/interfaces";
 
 export interface AiraloCountry {
 	country_code: string;
@@ -7,7 +7,7 @@ export interface AiraloCountry {
 
 export interface Package {
 	id: string;
-	type: string;
+	type: PackageType;
 	price: number;
 
 	/** Amount in MB */
@@ -153,7 +153,7 @@ export type AiraloNotification =
 
 export interface AiraloOrderRequest {
 	packageId: string;
-	type: PackageType.SIM;
+	type: PackageType;
 	quantity: number;
 }
 
@@ -163,3 +163,41 @@ export interface AiraloOrderResponse {
 		accepted_at: string;
 	};
 }
+
+export type AiraloInstallationGuide = {
+	[key in "en"]: string;
+};
+
+export type AiraloAsyncOrderResponse = {
+	data: {
+		"0": {
+			data: {
+				text: null;
+				voice: null;
+			};
+		};
+		"1": {
+			data: {
+				net_price: number;
+			};
+		};
+		id: number;
+		code: string;
+		currency: string;
+		package_id: string;
+		quantity: number;
+		type: PackageType;
+		description: string;
+		esim_type: string;
+		validity: number;
+		package: string;
+		data: string;
+		price: number;
+		created_at: string;
+		manual_installation: string;
+		qrcode_installation: string;
+		installation_guides: AiraloInstallationGuide;
+		sims: SIM[];
+	};
+	request_id: string;
+};

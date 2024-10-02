@@ -2,6 +2,9 @@
 	"editor.formatOnSave": true,
 	"cSpell.words": [
 		"esimaccess",
-		"iccid"
+		"iccid",
+		"imsis",
+		"msisdn",
+		"qrcode"
 	]
 }

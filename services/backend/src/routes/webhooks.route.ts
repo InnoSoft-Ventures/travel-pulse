@@ -1,7 +1,8 @@
 import express, { Request, Response } from 'express';
 import { errorHandler } from '@libs/middlewares';
 import { asyncOrders, optIn } from '../controllers/webhook.controller';
-import { secureWebhookMiddleware } from '../middlewares/webhook.middleware';
+import { ProviderIdentity } from '@libs/interfaces';
+// import { secureWebhookMiddleware } from '../middlewares/webhook.middleware';
 
 const router = express.Router();
 
@@ -13,8 +14,8 @@ router.head('/airalo/orders', (_req: Request, res: Response) => {
 
 router.post(
 	'/airalo/orders',
-	secureWebhookMiddleware,
-	errorHandler(asyncOrders)
+	// secureWebhookMiddleware,
+	errorHandler(asyncOrders(ProviderIdentity.AIRALO))
 );
 
 export default router;
