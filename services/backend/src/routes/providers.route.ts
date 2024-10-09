@@ -1,5 +1,5 @@
 import express from 'express';
-import { authenticate, getPackages } from '../controllers/packages.controller';
+import { authenticate, getPackages } from '../controllers/providers.controller';
 import { errorHandler } from '@libs/middlewares';
 
 const router = express.Router();

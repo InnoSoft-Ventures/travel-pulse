@@ -23,3 +23,5 @@ export interface SIM {
 	msisdn: string | null;
 	direct_apple_installation_url: string;
 }
+
+export type SimPackageType = "local" | "global" | "regional";

@@ -1,12 +1,14 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
 import Country from './Country';
+import Continent from './Continent';
 
 export interface OperatorAttributes {
 	id: number;
 	externalId: number;
 	provider: string;
 	countryId: number;
+	continentId: number;
 	title: string;
 	type: string;
 	isPrepaid: boolean;
@@ -36,6 +38,7 @@ class Operator extends Model<OperatorAttributes, OperatorCreationAttributes> {
 	public externalId!: number;
 	public provider!: string;
 	public countryId!: number;
+	public continentId!: number;
 	public title!: string;
 	public type!: string;
 	public isPrepaid!: boolean;
@@ -76,6 +79,15 @@ Operator.init(
 				key: 'id',
 			},
 			field: 'country_id',
+		},
+		continentId: {
+			allowNull: true,
+			type: DataTypes.INTEGER,
+			references: {
+				model: 'continents',
+				key: 'id',
+			},
+			field: 'continent_id',
 		},
 		provider: {
 			allowNull: false,
@@ -177,8 +189,18 @@ Operator.belongsTo(Country, {
 	as: 'country',
 });
 
+Operator.belongsTo(Continent, {
+	foreignKey: 'continentId',
+	as: 'country',
+});
+
 Country.hasMany(Operator, {
 	foreignKey: 'countryId',
+	as: 'operators',
+});
+
+Continent.hasMany(Operator, {
+	foreignKey: 'continentId',
 	as: 'operators',
 });
 
