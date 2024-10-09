@@ -46,7 +46,7 @@ export interface AiraloOperator {
 	style: string;
 	gradient_start: string;
 	gradient_end: string;
-	type: "local" | "global";
+	type: "local" | "global" | "regional";
 	is_prepaid: boolean;
 	title: string;
 	esim_type: string;
