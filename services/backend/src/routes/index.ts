@@ -5,6 +5,7 @@ import masterDataRoute from './masterdata.route';
 import providersRoute from './providers.route';
 import webhooksRoute from './webhooks.route';
 import ordersRoute from './orders.route';
+import packagesRoute from './packages.route';
 
 const router = Router();
 
@@ -14,5 +15,7 @@ router.use('/providers', providersRoute);
 router.use('/webhooks', webhooksRoute);
 
 router.use('/orders', ordersRoute);
+
+router.use('/packages', packagesRoute);
 
 export default router;

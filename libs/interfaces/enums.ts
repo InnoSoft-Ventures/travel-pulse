@@ -32,6 +32,12 @@ export enum PackageType {
 
 export type ApnType = "automatic" | "manual";
 
+export enum SimPackageTypeEnum {
+	LOCAL = "local",
+	GLOBAL = "global",
+	REGIONAL = "regional",
+}
+
 export enum SimStatus {
 	NOT_ACTIVE = "NOT_ACTIVE",
 	ACTIVE = "ACTIVE",
