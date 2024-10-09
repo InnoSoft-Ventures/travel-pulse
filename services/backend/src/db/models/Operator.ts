@@ -177,6 +177,11 @@ Operator.belongsTo(Country, {
 	as: 'country',
 });
 
+Operator.belongsTo(Continent, {
+	foreignKey: 'continentId',
+	as: 'continent',
+});
+
 Country.hasMany(Operator, {
 	foreignKey: 'countryId',
 	as: 'operators',
