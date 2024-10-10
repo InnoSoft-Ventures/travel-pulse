@@ -4,13 +4,18 @@ import dbConnect from '..';
 export interface ContinentAttributes {
 	id: number;
 	name: string;
+	aliasList: string[];
 }
 
 export type ContinentCreationAttributes = Optional<ContinentAttributes, 'id'>;
 
-class Continent extends Model<ContinentAttributes, ContinentCreationAttributes> {
+class Continent extends Model<
+	ContinentAttributes,
+	ContinentCreationAttributes
+> {
 	public id!: number;
 	public name!: string;
+	public aliasList!: string[];
 }
 
 Continent.init(
@@ -24,6 +29,11 @@ Continent.init(
 		name: {
 			allowNull: false,
 			type: DataTypes.STRING,
+		},
+		aliasList: {
+			allowNull: false,
+			field: 'alias_list',
+			type: DataTypes.JSON,
 		},
 	},
 	{

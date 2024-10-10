@@ -8,7 +8,7 @@ export interface OperatorAttributes {
 	externalId: number;
 	provider: string;
 	countryId: number;
-	continentId: number;
+	continentId: number | null;
 	title: string;
 	type: string;
 	isPrepaid: boolean;
@@ -38,7 +38,7 @@ class Operator extends Model<OperatorAttributes, OperatorCreationAttributes> {
 	public externalId!: number;
 	public provider!: string;
 	public countryId!: number;
-	public continentId!: number;
+	public continentId!: number | null;
 	public title!: string;
 	public type!: string;
 	public isPrepaid!: boolean;
