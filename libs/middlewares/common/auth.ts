@@ -15,7 +15,7 @@ import { errorResponse } from "../httpResponse";
 
 export const getTokenKey = (
 	servicePath: string,
-	keyType: "public" | "private"
+	keyType: "public" | "private",
 ) => {
 	try {
 		let link = servicePath;
@@ -42,11 +42,11 @@ export const getTokenKey = (
 export const authMiddleware = (
 	req: Request,
 	_res: Response,
-	next: NextFunction
+	next: NextFunction,
 ) => {
 	// Extract bearer token from the request headers
 	const token = (req.headers["service-token"] as string | undefined)?.split(
-		" "
+		" ",
 	)[1];
 
 	const SERVICE_COMMUNICATION_TOKEN =
@@ -75,7 +75,7 @@ export const authMiddleware = (
 export const tokenSigning = (
 	data: string | object | Buffer,
 	secret: jwt.Secret,
-	options?: jwt.SignOptions
+	options?: jwt.SignOptions,
 ) => {
 	return jwt.sign(data, secret, options);
 };
@@ -83,7 +83,7 @@ export const tokenSigning = (
 export const tokenVerification = (
 	token: string,
 	secret: jwt.Secret,
-	options?: jwt.VerifyOptions
+	options?: jwt.VerifyOptions,
 ) => {
 	return jwt.verify(token, secret, options) as SessionToken;
 };
@@ -93,7 +93,7 @@ export function signToken<T extends string | object | Buffer>(
 	data: T,
 	options?: {
 		expiresIn: jwt.SignOptions["expiresIn"];
-	}
+	},
 ) {
 	const secret = getTokenKey(servicePath, "private");
 
@@ -146,7 +146,7 @@ export const extractToken = (
 	servicePath: string,
 	req: Request,
 	res: Response,
-	next: NextFunction
+	next: NextFunction,
 ) => {
 	const authHeader = req.headers.authorization;
 
@@ -156,7 +156,7 @@ export const extractToken = (
 		return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json(
 			errorResponse("Unauthorized access", {
 				error: "Authorization header not found",
-			})
+			}),
 		);
 	}
 
@@ -168,7 +168,7 @@ export const extractToken = (
 		return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json(
 			errorResponse("Unauthorized access", {
 				error: "Token not found",
-			})
+			}),
 		);
 	}
 
@@ -195,7 +195,7 @@ export const extractToken = (
 		return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json(
 			errorResponse("Unauthorized access", {
 				error: "Invalid token",
-			})
+			}),
 		);
 	}
 };

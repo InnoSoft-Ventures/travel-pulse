@@ -1,10 +1,12 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
+import Operator from './Operator';
 
 export interface ContinentAttributes {
 	id: number;
 	name: string;
 	aliasList: string[];
+	operators?: Operator[];
 }
 
 export type ContinentCreationAttributes = Optional<ContinentAttributes, 'id'>;
@@ -16,6 +18,7 @@ class Continent extends Model<
 	public id!: number;
 	public name!: string;
 	public aliasList!: string[];
+	public operators?: Operator[];
 }
 
 Continent.init(
