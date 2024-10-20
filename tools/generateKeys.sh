@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Directory paths
-AUTH_SERVICE_DIR="./services/auth-service/src/secrets"
+AUTH_SERVICE_DIR="./services/backend/src/secrets"
 SERVICES_DIR="./services"
 
 # Create the secrets directory if it doesn't exist
@@ -31,7 +31,7 @@ copy_public_key_to_service() {
 # Find all service directories and copy the public key
 find "$SERVICES_DIR" -mindepth 1 -maxdepth 1 -type d | while read -r service_dir; do
     # Skip the auth-service directory
-    if [ "$(basename "$service_dir")" == "auth-service" ]; then
+    if [ "$(basename "$service_dir")" == "backend" ]; then
         continue
     fi
     copy_public_key_to_service "$service_dir"

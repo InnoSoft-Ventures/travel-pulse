@@ -5,7 +5,8 @@ import masterDataRoute from './masterdata.route';
 import providersRoute from './providers.route';
 import webhooksRoute from './webhooks.route';
 import ordersRoute from './orders.route';
-import packagesRoute from './packages.route';
+import productsRoute from './products.route';
+import authRoute from './auth.route';
 
 const router = Router();
 
@@ -16,6 +17,9 @@ router.use('/webhooks', webhooksRoute);
 
 router.use('/orders', ordersRoute);
 
-router.use('/packages', packagesRoute);
+router.use('/products', productsRoute);
+
+// Auth routes
+router.use('/auth', authRoute);
 
 export default router;

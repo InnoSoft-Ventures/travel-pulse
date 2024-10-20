@@ -14,7 +14,7 @@ export interface UserAttributes {
 
 export type UserCreationAttributes = Optional<
 	UserAttributes,
-	'id' | 'createdAt' | 'updatedAt'
+	'id' | 'phone' | 'createdAt' | 'updatedAt'
 >;
 
 class User extends Model<UserAttributes, UserCreationAttributes> {

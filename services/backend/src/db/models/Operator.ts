@@ -2,13 +2,15 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
 import Country from './Country';
 import Continent from './Continent';
+import Package from './Package';
+import Coverage from './Coverage';
 
 export interface OperatorAttributes {
 	id: number;
 	externalId: number;
 	provider: string;
 	countryId: number;
-	continentId: number;
+	continentId: number | null;
 	title: string;
 	type: string;
 	isPrepaid: boolean;
@@ -24,6 +26,9 @@ export interface OperatorAttributes {
 	rechargeability: boolean;
 	otherInfo: string;
 	info: string[];
+	continent?: Continent;
+	packages?: Package[];
+	coverage?: Coverage;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -38,7 +43,7 @@ class Operator extends Model<OperatorAttributes, OperatorCreationAttributes> {
 	public externalId!: number;
 	public provider!: string;
 	public countryId!: number;
-	public continentId!: number;
+	public continentId!: number | null;
 	public title!: string;
 	public type!: string;
 	public isPrepaid!: boolean;
@@ -54,6 +59,10 @@ class Operator extends Model<OperatorAttributes, OperatorCreationAttributes> {
 	public isKycVerify!: boolean;
 	public rechargeability!: boolean;
 	public otherInfo!: string;
+	public country?: Country;
+	public continent?: Continent;
+	public packages?: Package[];
+	public coverage?: Coverage;
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
 }
@@ -202,6 +211,16 @@ Country.hasMany(Operator, {
 Continent.hasMany(Operator, {
 	foreignKey: 'continentId',
 	as: 'operators',
+});
+
+Package.belongsTo(Operator, {
+	foreignKey: 'operatorId',
+	as: 'operator',
+});
+
+Operator.hasMany(Package, {
+	foreignKey: 'operatorId',
+	as: 'packages',
 });
 
 export default Operator;

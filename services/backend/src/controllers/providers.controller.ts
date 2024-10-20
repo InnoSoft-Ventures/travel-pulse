@@ -7,6 +7,7 @@ import Coverage from '../db/models/Coverage';
 import Bottleneck from 'bottleneck';
 import { ProviderIdentity } from '@libs/interfaces';
 import { errorResponse } from '@libs/middlewares';
+import Continent from '../db/models/Continent';
 
 export const authenticate = async (_req: Request, res: Response) => {
 	try {
@@ -42,7 +43,10 @@ const missingCountries = new Map<string, string>();
 const getPackageList = async (
 	packageType: 'local' | 'global',
 	airalo: Airalo,
-	countryCodes: Record<string, number>,
+	data: {
+		countryCodes: Record<string, number>;
+		continentCodes: Record<string, number>;
+	},
 	page: number
 ) => {
 	const packages = await limitedFetch(packageType, airalo, page);
@@ -51,6 +55,8 @@ const getPackageList = async (
 		`Fetched page ${page} of packages (${packageType})`,
 		packages.meta
 	);
+
+	const { countryCodes, continentCodes } = data;
 
 	// Process the packages
 	const packagesWithCountryId: AiraloPackageWithCountryId[] =
@@ -69,32 +75,48 @@ const getPackageList = async (
 
 	// Process Operators and Packages
 	for (const pkg of packagesWithCountryId) {
-		const operatorRecords = pkg.operators.map((operator) => ({
-			externalId: operator.id,
-			countryId: pkg.countryId,
-			continentId: 0,
-			provider: ProviderIdentity.AIRALO,
-			title: operator.title,
-			type:
+		console.log(
+			'Processing package',
+			pkg.title,
+			continentCodes[JSON.stringify([pkg.slug])],
+			JSON.stringify([pkg.slug]),
+			'\n'
+		);
+		const operatorRecords = pkg.operators.map((operator) => {
+			const type =
 				operator.type === 'global'
 					? pkg.slug === 'world'
 						? 'global'
 						: 'regional'
-					: 'local',
-			isPrepaid: operator.is_prepaid,
-			esimType: operator.esim_type,
-			warning: operator.warning,
-			apnType: operator.apn_type,
-			apnValue: operator.apn_value,
-			apn: operator.apn,
-			info: operator.info,
-			isRoaming: operator.is_roaming,
-			planType: operator.plan_type,
-			activationPolicy: operator.activation_policy,
-			isKycVerify: operator.is_kyc_verify,
-			rechargeability: operator.rechargeability,
-			otherInfo: operator.other_info,
-		}));
+					: 'local';
+			let continentId = null;
+			const continentInfo = continentCodes[JSON.stringify([pkg.slug])];
+			if (type !== 'local' && continentInfo) {
+				continentId = continentInfo;
+			}
+
+			return {
+				externalId: operator.id,
+				countryId: pkg.countryId,
+				continentId,
+				provider: ProviderIdentity.AIRALO,
+				title: operator.title,
+				type,
+				isPrepaid: operator.is_prepaid,
+				esimType: operator.esim_type,
+				warning: operator.warning,
+				apnType: operator.apn_type,
+				apnValue: operator.apn_value,
+				apn: operator.apn,
+				info: operator.info,
+				isRoaming: operator.is_roaming,
+				planType: operator.plan_type,
+				activationPolicy: operator.activation_policy,
+				isKycVerify: operator.is_kyc_verify,
+				rechargeability: operator.rechargeability,
+				otherInfo: operator.other_info,
+			};
+		});
 
 		const operators = await Operator.bulkCreate(operatorRecords, {
 			// updateOnDuplicate: ['externalId'],
@@ -145,11 +167,40 @@ const getPackageList = async (
 	}
 
 	if (packages.meta.next) {
-		await getPackageList(packageType, airalo, countryCodes, page + 1);
+		await getPackageList(packageType, airalo, data, page + 1);
 	} else {
 		console.log(' Finished fetching all packages');
 	}
 };
+
+async function getData() {
+	const [countries, continents] = await Promise.all([
+		Country.findAll({
+			attributes: ['id', 'iso2'],
+		}),
+		Continent.findAll(),
+	]);
+
+	const countryCodes = countries.reduce<Record<string, number>>(
+		(acc, country) => {
+			acc[country.iso2] = country.id;
+
+			return acc;
+		},
+		{}
+	);
+
+	const continentCodes = continents.reduce<Record<string, number>>(
+		(acc, continent) => {
+			acc[continent.aliasList.toString()] = continent.id;
+
+			return acc;
+		},
+		{}
+	);
+
+	return { countryCodes, continentCodes };
+}
 
 export const getPackages = async (req: Request, res: Response) => {
 	const { type } = req.query;
@@ -166,20 +217,9 @@ export const getPackages = async (req: Request, res: Response) => {
 
 	const airalo = Airalo.getInstance();
 
-	const countries = await Country.findAll({
-		attributes: ['id', 'iso2'],
-	});
+	const dataInfo = await getData();
 
-	const countryCodes = countries.reduce<Record<string, number>>(
-		(acc, country) => {
-			acc[country.iso2] = country.id;
-
-			return acc;
-		},
-		{}
-	);
-
-	await getPackageList(type as 'local' | 'global', airalo, countryCodes, 1);
+	await getPackageList(type as 'local' | 'global', airalo, dataInfo, 1);
 
 	return res
 		.status(200)

@@ -1,6 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
-import Operator from './Operator';
 import { PackageType, ProviderIdentity } from '@libs/interfaces';
 
 export interface PackageAttributes {
@@ -155,16 +154,5 @@ Package.init(
 		timestamps: false,
 	}
 );
-
-// Define the relationship between Package and Operator
-Package.belongsTo(Operator, {
-	foreignKey: 'operatorId',
-	as: 'operator',
-});
-
-Operator.hasMany(Package, {
-	foreignKey: 'operatorId',
-	as: 'packages',
-});
 
 export default Package;

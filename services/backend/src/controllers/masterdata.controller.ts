@@ -255,6 +255,7 @@ export const processCountries = async (_req: Request, res: Response) => {
 
 		const continents = Object.keys(countries).map((continent) => ({
 			name: continent,
+			aliasList: [continent.trim().toLowerCase().replace(' ', '-')],
 		}));
 
 		const hasContinents = await Continent.findAll();
