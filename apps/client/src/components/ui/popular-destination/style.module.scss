@@ -1,0 +1,54 @@
+.popularDestinationContainer {
+	box-shadow:
+		0 6px 10px 3px rgba(0, 0, 0, 3%),
+		0 2px 3px rgba(0, 0, 0, 15%);
+	background: #fff;
+	border-radius: 10px;
+	max-width: 300px;
+	width: 100%;
+	min-height: 84px;
+	padding: 0 30px;
+	cursor: pointer;
+
+	> div {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 100%;
+	}
+
+	.details {
+		flex: 1;
+	}
+
+	.destinationDetails {
+		display: flex;
+		align-items: center;
+		column-gap: 12px;
+		margin-bottom: 7px;
+
+		.flag {
+			width: 36px;
+			height: 20px;
+			object-fit: cover;
+		}
+
+		span {
+			font-size: 16px;
+			font-weight: 400;
+			line-height: 24px;
+			display: inline-flex;
+			color: var(--dark-purple);
+		}
+	}
+
+	.startingPrice {
+		font-size: 13px;
+		font-weight: 400;
+		color: var(--light-purple);
+
+		span {
+			font-weight: 500;
+		}
+	}
+}

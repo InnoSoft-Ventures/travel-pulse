@@ -1,0 +1,47 @@
+.topNavContainer {
+	position: fixed;
+	width: 100%;
+	top: 25px;
+	z-index: 1000;
+
+	> div {
+		margin: 0 auto;
+		max-width: 1300px;
+		position: relative;
+	}
+
+	.logoIcon {
+		position: absolute;
+		top: -2px;
+	}
+
+	.logoName {
+		font-size: 18px;
+		font-weight: 600;
+		color: #fff;
+		margin-right: 4px;
+		padding-left: 40px;
+	}
+
+	.logoSlogan {
+		color: #fff;
+		font-weight: 500;
+		font-size: 11px;
+	}
+
+	.navLinks {
+		column-gap: 20px;
+		display: flex;
+		height: 100%;
+		align-items: center;
+
+		.links {
+			display: flex;
+			column-gap: 30px;
+
+			> a {
+				@apply text-white font-semibold text-sm cursor-pointer hover:text-gray-300;
+			}
+		}
+	}
+}

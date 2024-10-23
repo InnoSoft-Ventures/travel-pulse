@@ -6,5 +6,18 @@
 		"imsis",
 		"msisdn",
 		"qrcode"
+	],
+	"tailwindCSS.experimental.classRegex": [
+		[
+			"cva\\(([^)]*)\\)",
+			"[\"'`]([^\"'`]*).*?[\"'`]"
+		],
+		[
+			"cx\\(([^)]*)\\)",
+			"(?:'|\"|`)([^']*)(?:'|\"|`)"
+		]
+	],
+	"css.customData": [
+		".vscode/tailwind.json"
 	]
 }
