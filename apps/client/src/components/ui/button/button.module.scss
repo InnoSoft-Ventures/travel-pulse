@@ -7,9 +7,31 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
+	transition: background-image 1s ease-in-out;
 
 	&.default {
 		background: var(--purple-gradient);
+	}
+
+	&.secondary {
+		@apply bg-secondary text-secondary-foreground;
+	}
+
+	&.outline {
+		border: 1px solid transparent;
+		background-image: linear-gradient(white, white), var(--purple-gradient);
+		background-origin: border-box;
+		background-clip: padding-box, border-box;
+		color: var(--purple);
+
+		&:hover {
+			background-image: linear-gradient(#efedf9, #efedf9),
+				var(--purple-gradient);
+		}
+	}
+
+	&.link {
+		@apply text-primary underline-offset-4 hover:underline;
 	}
 
 	&.defaultSize {
@@ -30,18 +52,6 @@
 		min-width: 158px;
 		padding: 10px 1.035rem;
 		height: 50px;
-	}
-
-	&.secondary {
-		@apply bg-secondary text-secondary-foreground hover:bg-secondary/90;
-	}
-
-	&.outline {
-		@apply border border-input bg-background hover:bg-accent hover:text-accent-foreground;
-	}
-
-	&.link {
-		@apply text-primary underline-offset-4 hover:underline;
 	}
 
 	.content {

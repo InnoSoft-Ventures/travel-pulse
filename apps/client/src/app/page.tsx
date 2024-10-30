@@ -9,10 +9,14 @@ import InfoIcon from '@/assets/info.svg';
 import LocationIcon from '@/assets/location.svg';
 import CalendarIcon from '@/assets/calendar.svg';
 
+import africaImage from '@/assets/africa.jpg';
+
 import styles from './home.module.scss';
 import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import PopularDestination from '@/components/ui/popular-destination';
+import Region from '@/components/ui/region';
+import FeatureCard from '@/components/ui/feature-card';
 
 const destinations = [
 	{
@@ -93,31 +97,33 @@ export default function Home() {
 					Pick a prepaid eSIM data plan for your upcoming trip
 				</div>
 
-				<div className={styles.homePackageSearch}>
-					<Input
-						icon={<LocationIcon />}
-						size="large"
-						variant="secondary"
-						placeholder="Where do you need internet?"
-					/>
-					<Input
-						icon={<CalendarIcon />}
-						lastIcon={
-							<button className={styles.infoIconBtn}>
-								<InfoIcon />
-							</button>
-						}
-						size="large"
-						variant="secondary"
-						placeholder="Arrival & Departure"
-					/>
-					<Button size="lg">
-						<WhiteSearchIcon />
-						Search
-					</Button>
+				<div className={styles.homePackageContainer}>
+					<div className={styles.homePackageSearch}>
+						<Input
+							icon={<LocationIcon />}
+							size="large"
+							variant="secondary"
+							placeholder="Where do you need internet?"
+						/>
+						<Input
+							icon={<CalendarIcon />}
+							lastIcon={
+								<button className={styles.infoIconBtn}>
+									<InfoIcon />
+								</button>
+							}
+							size="large"
+							variant="secondary"
+							placeholder="Arrival & Departure"
+						/>
+						<Button size="lg">
+							<WhiteSearchIcon />
+							Search
+						</Button>
+					</div>
 				</div>
 
-				<div>
+				<div className={styles.popularDestinationContainer}>
 					<div className={styles.popularDestination}>
 						Popular destinations
 					</div>
@@ -131,10 +137,54 @@ export default function Home() {
 							/>
 						))}
 					</div>
-					<div>
-						<Button variant="outline">
+					<div className="text-center">
+						<Button variant="outline" className={styles.seeAllBtn}>
 							See all 200+ countries
 						</Button>
+					</div>
+				</div>
+				<div className={styles.multipleRegionsContainer}>
+					<div className={styles.stayConnected}>
+						<span>Stay Connected</span> Across All Your Travel
+						Adventures
+					</div>
+					<div className={styles.mainSubTitle}>
+						Which top destinations will you be going to?
+					</div>
+					<div className={styles.popularDestinationContainer}>
+						<div className={styles.popularDestination}>
+							Exploring Multiple Regions
+						</div>
+						<div className={styles.popularDestinationCards}>
+							{destinations.map((destination, index) => (
+								<Region
+									key={`popular-destination-${index}`}
+									imageSrc={africaImage}
+									price={destination.price}
+									continentName={destination.countryName}
+								/>
+							))}
+						</div>
+						<div className="text-center">
+							<Button
+								variant="outline"
+								className={styles.seeAllBtn}
+							>
+								View all regions
+							</Button>
+						</div>
+					</div>
+				</div>
+
+				<div className={styles.choosingContainer}>
+					<div className={styles.title}>Why choose TravelPulse?</div>
+					<div className={styles.featureListContainer}>
+						<div>
+							<FeatureCard />
+							<FeatureCard />
+							<FeatureCard />
+							<FeatureCard />
+						</div>
 					</div>
 				</div>
 			</main>

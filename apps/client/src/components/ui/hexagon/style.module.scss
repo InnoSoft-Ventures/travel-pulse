@@ -1,0 +1,15 @@
+.hexagonContainer {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	.icon {
+		position: absolute;
+	}
+
+	.hexagon {
+		height: 63px;
+		width: 53px;
+	}
+}

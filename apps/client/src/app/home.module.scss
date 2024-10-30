@@ -54,11 +54,10 @@ $lightGrey: var(--light-grey);
 }
 
 .homeMain {
-	max-width: 945px;
-	margin: 0 auto;
 	padding-bottom: 50px;
 
-	.mainTitle {
+	.mainTitle,
+	.stayConnected {
 		color: var(--dark-purple);
 		font-size: 45px;
 		font-weight: 600;
@@ -70,12 +69,31 @@ $lightGrey: var(--light-grey);
 		}
 	}
 
+	.stayConnected {
+		font-size: 42px;
+	}
+
 	.mainSubTitle {
 		color: var(--dark-purple);
 		font-size: 16px;
 		font-weight: 500;
 		text-align: center;
 		margin-bottom: 49px;
+	}
+
+	.popularDestinationContainer,
+	.homePackageContainer {
+		max-width: 945px;
+		margin: 0 auto;
+	}
+
+	.popularDestinationContainer {
+		margin-bottom: 90px;
+	}
+
+	.multipleRegionsContainer {
+		max-width: 1095px;
+		margin: 0 auto;
 	}
 
 	.homePackageSearch {
@@ -105,7 +123,48 @@ $lightGrey: var(--light-grey);
 		display: flex;
 		gap: 20px;
 		padding: 10px 0;
+		margin-bottom: 45px;
 		flex-wrap: wrap;
 		justify-content: center;
+	}
+
+	.seeAllBtn {
+		padding: 10px 1.64rem;
+	}
+
+	.choosingContainer {
+		.title {
+			color: var(--dark-purple);
+			font-size: 40px;
+			font-weight: bold;
+			text-align: center;
+			margin-bottom: 59px;
+			position: relative;
+			z-index: 1;
+		}
+
+		.featureListContainer {
+			max-width: 1306px;
+			margin: 0 auto;
+			position: relative;
+
+			&::before {
+				content: '';
+				display: block;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-color: #f9f2f7;
+				filter: blur(150px);
+				z-index: 0;
+			}
+
+			> div {
+				display: flex;
+				position: relative;
+				z-index: 1;
+				gap: 40px;
+			}
+		}
 	}
 }

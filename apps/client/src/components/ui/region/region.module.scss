@@ -1,0 +1,76 @@
+.regionContainer {
+	box-shadow:
+		0 6px 10px 3px rgba(0, 0, 0, 3%),
+		0 2px 3px rgba(0, 0, 0, 15%);
+	background: #fff;
+	border-radius: 10px;
+	max-width: 300px;
+	width: 100%;
+	min-height: 84px;
+	padding-right: 23px;
+	cursor: pointer;
+
+	> div {
+		display: flex;
+		align-items: center;
+		height: 100%;
+		column-gap: 10px;
+	}
+
+	.image {
+		height: 100%;
+		max-width: 70px;
+		width: 100%;
+
+		img {
+			color: transparent;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			border-radius: 10px 0 0 10px;
+		}
+	}
+
+	.detailsContainer {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 100%;
+	}
+
+	.details {
+		flex: 1;
+	}
+
+	.regionDetails {
+		display: flex;
+		align-items: center;
+		column-gap: 12px;
+		margin-bottom: 7px;
+
+		.flag {
+			width: 36px;
+			height: 20px;
+			object-fit: cover;
+		}
+
+		span {
+			font-size: 16px;
+			font-weight: 400;
+			line-height: 24px;
+			display: inline-flex;
+			color: var(--dark-purple);
+		}
+	}
+
+	.startingPrice {
+		font-size: 13px;
+		font-weight: 400;
+		color: var(--light-purple);
+
+		span {
+			font-weight: 500;
+		}
+	}
+}
