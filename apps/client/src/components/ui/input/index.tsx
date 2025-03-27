@@ -23,7 +23,7 @@ const inputVariants = cva(styles.searchContainer, {
 interface InputProps extends VariantProps<typeof inputVariants> {
 	id?: string;
 	name?: string;
-	type?: 'search' | 'text';
+	type?: 'search' | 'text' | 'password' | 'email';
 	placeholder?: string;
 	className?: string;
 	icon?: React.ReactNode;

@@ -1,0 +1,195 @@
+$lightGrey: var(--light-grey);
+$textPurple: var(--text-purple);
+$darkPurple: var(--dark-purple);
+
+.signupContainer {
+	height: calc(100vh - 143px);
+	min-height: 815px;
+	display: flex;
+	width: 100%;
+	justify-content: center;
+
+	> div {
+		display: flex;
+		height: 100%;
+		max-width: 1400px;
+		width: 100%;
+	}
+}
+
+.signupForm {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 25px 0;
+	background: white;
+
+	.logo {
+		margin-bottom: 20px;
+		position: relative;
+		margin-left: -75px;
+	}
+
+	.formContainer {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		max-width: 386px;
+		width: 100%;
+		justify-content: center;
+	}
+
+	.innerFormContainer {
+		width: 100%;
+	}
+
+	.googleBtn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		background: #ebebeb !important;
+		box-shadow: 0 3px 4px rgb(0 0 0 / 13%),
+			0 0.7px 1.5px -1px rgb(0 0 0 / 45%);
+		width: 100%;
+		padding: 12px;
+		font-weight: 400;
+		color: #000;
+
+		svg {
+			width: 20px;
+			height: 20px;
+		}
+	}
+
+	.divider {
+		margin: 20px 0;
+		text-align: center;
+		width: 100%;
+		position: relative;
+
+		span {
+			background: white;
+			padding: 0 10px;
+			position: relative;
+			z-index: 1;
+			font-size: 14px;
+			color: #4d4d4d;
+		}
+
+		&::before {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 0;
+			width: 100%;
+			height: 1px;
+			background: #4d4d4d;
+		}
+	}
+
+	.title {
+		font-size: 25px;
+		text-align: center;
+		font-weight: 500;
+		color: $darkPurple;
+		margin-bottom: 4px;
+	}
+
+	.subtitle {
+		font-size: 14px;
+		color: $darkPurple;
+		margin-bottom: 20px;
+	}
+
+	.authInput {
+		max-width: 100%;
+
+		&:not(:last-child) {
+			margin-bottom: 23px;
+		}
+	}
+
+	.forgotPassword {
+		width: 100%;
+		margin: 20px 0;
+		font-size: 14px;
+		font-weight: 500;
+
+		a {
+			color: $textPurple;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
+	.signUpBtn {
+		width: 100%;
+		height: 45px;
+	}
+
+	form {
+		display: block;
+		margin-bottom: 30px;
+	}
+
+	.signInText {
+		font-size: 14px;
+		font-weight: 500;
+
+		a {
+			color: $textPurple;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
+	.terms {
+		font-size: 12px;
+		color: #000;
+		font-weight: 500;
+		cursor: pointer;
+	}
+}
+
+.heroSection {
+	flex: 1;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+
+	.heroImage {
+		width: 480px;
+		height: 618px;
+		position: relative;
+	}
+
+	img {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 20px;
+	}
+
+	.heroOverlay {
+		position: relative;
+		padding: 30px;
+		text-align: center;
+		background: rgba(0, 0, 0, 0.12);
+		width: 100%;
+		height: 100%;
+		border-radius: 20px;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		padding-bottom: 41px;
+	}
+}

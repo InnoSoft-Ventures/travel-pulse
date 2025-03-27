@@ -46,6 +46,7 @@ body {
     /* System */
     --light-grey: #f5f5f5;
     --light-purple: #5E5E7F;
+		--text-purple: #7765f3;
     --purple: #4D36D0;
     --dark-purple: #26263F;
     --purple-gradient: linear-gradient(356deg, #4d36d0 40%, #8474fe 100%);

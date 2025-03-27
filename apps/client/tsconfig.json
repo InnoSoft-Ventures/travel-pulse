@@ -12,6 +12,9 @@
 			"@/styles/*": [
 				"styles/*"
 			],
+			"@/public/*": [
+				"public/*"
+			],
 		},
 		"plugins": [
 			{
