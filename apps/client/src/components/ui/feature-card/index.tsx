@@ -1,6 +1,5 @@
-import React from 'react';
 import styles from './style.module.scss';
-import Hexagon from '../hexagon';
+import { Hexagon } from '../hexagon';
 
 const FeatureCard = () => {
 	return (
@@ -22,4 +21,4 @@ const FeatureCard = () => {
 	);
 };
 
-export default FeatureCard;
+export { FeatureCard };

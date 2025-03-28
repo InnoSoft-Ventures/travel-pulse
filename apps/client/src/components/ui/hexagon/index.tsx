@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './style.module.scss';
 import HexagonIcon from '@/assets/hexagon.svg';
 import SettingsIcon from '@/assets/settings-gear.svg';
@@ -16,4 +15,4 @@ const Hexagon = () => {
 	);
 };
 
-export default Hexagon;
+export { Hexagon };

@@ -1,13 +1,11 @@
 'use client';
 import Image from 'next/image';
-import Button from '@/components/ui/button';
-import Input from '@/components/ui/input';
+import { Button, Input, Logo } from '@/components/ui';
 
 import LockIcon from '@/assets/lock-icon.svg';
 import InternetBg from '@/public/assets/internet-img.jpg';
 
 import styles from './login.module.scss';
-import Logo from '@/components/ui/logo';
 
 export default function NewPasswordPage() {
 	return (

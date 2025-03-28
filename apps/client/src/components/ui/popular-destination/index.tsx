@@ -1,4 +1,3 @@
-import React from 'react';
 import Image from 'next/image';
 import ArrowIcon from '@/assets/arrow-down.svg';
 import styles from './style.module.scss';
@@ -40,4 +39,4 @@ const PopularDestination = (props: PopularDestinationProps) => {
 	);
 };
 
-export default PopularDestination;
+export { PopularDestination };

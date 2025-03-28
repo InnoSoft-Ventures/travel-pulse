@@ -1,4 +1,11 @@
-import { Hero } from '@/components/ui/hero';
+import {
+	Hero,
+	PopularDestination,
+	Input,
+	Button,
+	Region,
+	FeatureCard,
+} from '@/components/ui';
 
 // Icons
 import Characters from '@/assets/characters.svg';
@@ -12,11 +19,6 @@ import CalendarIcon from '@/assets/calendar.svg';
 import africaImage from '@/assets/africa.jpg';
 
 import styles from './home.module.scss';
-import Input from '@/components/ui/input';
-import Button from '@/components/ui/button';
-import PopularDestination from '@/components/ui/popular-destination';
-import Region from '@/components/ui/region';
-import FeatureCard from '@/components/ui/feature-card';
 
 const destinations = [
 	{

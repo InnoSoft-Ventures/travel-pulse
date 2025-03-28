@@ -1,4 +1,3 @@
-import React from 'react';
 import Image, { StaticImageData } from 'next/image';
 import ArrowIcon from '@/assets/arrow-down.svg';
 import styles from './region.module.scss';
@@ -42,4 +41,4 @@ const Region = (props: RegionProps) => {
 	);
 };
 
-export default Region;
+export { Region };
