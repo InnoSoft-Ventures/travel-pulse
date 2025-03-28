@@ -20,7 +20,7 @@ const TopNav = () => {
 					<Logo />
 					<div className={styles.navLinks}>
 						<div className={styles.links}>
-							<Link href="/">Destinations</Link>
+							<Link href="/destinations/local">Destinations</Link>
 							<Link href="/">About Us</Link>
 							<Link href="/">Help & FAQs</Link>
 							<Link href="/">USD ($)</Link>

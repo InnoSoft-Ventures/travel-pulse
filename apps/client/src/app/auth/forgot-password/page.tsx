@@ -10,7 +10,7 @@ import InternetBg from '@/public/assets/internet-img.jpg';
 import styles from './forgot-password.module.scss';
 import Logo from '@/components/ui/logo';
 
-export default function ForgotPassword() {
+export default function ForgotPasswordPage() {
 	return (
 		<div className={styles.forgotPasswordContainer}>
 			<div>

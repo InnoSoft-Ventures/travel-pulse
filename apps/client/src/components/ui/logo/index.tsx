@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './style.module.scss';
 import LogoSvg from '@/assets/logo.svg';
 import LogoPurple from '@/assets/logo-purple.svg';
+import Link from 'next/link';
 
 interface LogoProps {
 	color?: 'light' | 'dark';
@@ -16,7 +17,7 @@ function Logo(props: LogoProps) {
 	const LogoNode = variant === 'primary' ? LogoSvg : LogoPurple;
 
 	return (
-		<div className={`flex items-center h-full ${styles.logo}`}>
+		<Link href="/" className={`flex items-center h-full ${styles.logo}`}>
 			<div className={styles.logoIcon} style={iconStyle}>
 				<LogoNode alt="TravelPulse Logo" />
 			</div>
@@ -26,7 +27,7 @@ function Logo(props: LogoProps) {
 			<div className={`${styles.logoSlogan} ${textColor}`}>
 				Your eSIM Connection Hub
 			</div>
-		</div>
+		</Link>
 	);
 }
 

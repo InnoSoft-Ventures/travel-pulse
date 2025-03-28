@@ -12,7 +12,7 @@ import InternetBg from '@/public/assets/internet-img.jpg';
 import styles from './signup.module.scss';
 import Logo from '@/components/ui/logo';
 
-export default function Signup() {
+export default function SignupPage() {
 	return (
 		<div className={styles.signupContainer}>
 			<div>

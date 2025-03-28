@@ -51,7 +51,7 @@ const destinations = [
 	},
 ];
 
-export default function Home() {
+export default function HomePage() {
 	return (
 		<>
 			<Hero>

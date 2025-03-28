@@ -12,7 +12,7 @@ import InternetBg from '@/public/assets/internet-img.jpg';
 import styles from './login.module.scss';
 import Logo from '@/components/ui/logo';
 
-export default function Login() {
+export default function LoginPage() {
 	return (
 		<div className={styles.loginContainer}>
 			<div>
