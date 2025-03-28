@@ -1,0 +1,56 @@
+.mainTitle {
+	color: var(--dark-purple);
+	font-size: 45px;
+	font-weight: 600;
+	margin-bottom: 5px;
+
+	&.defaultColor {
+		color: var(--dark-purple);
+	}
+
+	&.secondaryColor {
+		color: var(--light-grey);
+	}
+
+	&.dualPrimaryColor > span {
+		color: var(--purple);
+	}
+
+	&.dualSecondaryColor > span {
+		color: var(--dark-purple);
+	}
+
+	&.size20 {
+		font-size: 20px;
+		font-weight: 400;
+	}
+
+	&.size16 {
+		font-size: 16px;
+		font-weight: 500;
+	}
+
+	&.size35 {
+		font-size: 35px;
+	}
+
+	&.size40 {
+		font-size: 40px;
+	}
+
+	&.size45 {
+		font-size: 45px;
+	}
+
+	&.left {
+		text-align: left;
+	}
+
+	&.right {
+		text-align: right;
+	}
+
+	&.center {
+		text-align: center;
+	}
+}

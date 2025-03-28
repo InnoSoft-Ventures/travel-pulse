@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { TopNav } from '../top-nav';
 import ArtLines from './art-lines.svg';
-import WhiteCurve from './white-wave.svg';
+import WhiteCurve from '@/assets/white-wave.svg';
 import styles from './hero.module.scss';
 
 interface HeroProp {

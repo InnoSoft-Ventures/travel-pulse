@@ -33,9 +33,6 @@ $lightGrey: var(--light-grey);
 	}
 
 	.title {
-		color: $lightGrey;
-		font-size: 35px;
-		font-weight: bold;
 		line-height: 48px;
 		margin-bottom: 18px;
 	}
@@ -58,26 +55,10 @@ $lightGrey: var(--light-grey);
 
 	.mainTitle,
 	.stayConnected {
-		color: var(--dark-purple);
-		font-size: 45px;
-		font-weight: 600;
-		text-align: center;
 		margin-bottom: 5px;
-
-		span {
-			color: var(--purple);
-		}
-	}
-
-	.stayConnected {
-		font-size: 42px;
 	}
 
 	.mainSubTitle {
-		color: var(--dark-purple);
-		font-size: 16px;
-		font-weight: 500;
-		text-align: center;
 		margin-bottom: 49px;
 	}
 
@@ -113,9 +94,6 @@ $lightGrey: var(--light-grey);
 	}
 
 	.popularDestination {
-		font-size: 20px;
-		font-weight: 400;
-		color: var(--dark-purple);
 		margin-bottom: 11px;
 	}
 
@@ -134,10 +112,6 @@ $lightGrey: var(--light-grey);
 
 	.choosingContainer {
 		.title {
-			color: var(--dark-purple);
-			font-size: 40px;
-			font-weight: bold;
-			text-align: center;
 			margin-bottom: 59px;
 			position: relative;
 			z-index: 1;

@@ -10,7 +10,15 @@ module.exports = {
 	webpack(config) {
 		config.module.rules.push({
 			test: /\.svg$/,
-			use: ['@svgr/webpack'],
+			oneOf: [
+				{
+          resourceQuery: /image/, // e.g. import iconUrl from './icon.svg?image'
+          type: 'asset/resource',
+        },
+        {
+          use: ['@svgr/webpack'], // e.g. import Icon from './icon.svg'
+        },
+			],
 		});
 
 		return config;

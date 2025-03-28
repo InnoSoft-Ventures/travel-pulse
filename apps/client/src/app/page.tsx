@@ -5,6 +5,7 @@ import {
 	Button,
 	Region,
 	FeatureCard,
+	Title,
 } from '@/components/ui';
 
 // Icons
@@ -64,10 +65,14 @@ export default function HomePage() {
 								<div className={styles.yellowStar}>
 									<YellowStar />
 								</div>
-								<h1 className={styles.title}>
+								<Title
+									className={styles.title}
+									color="secondary"
+									size="size35"
+								>
 									Stay connected wherever you travel, with
 									affordable rates.
-								</h1>
+								</Title>
 								<h2 className={styles.subTitle}>
 									Explore the world without losing connection.
 									Choose from hundreds of data plans and enjoy
@@ -92,12 +97,21 @@ export default function HomePage() {
 				</div>
 			</Hero>
 			<main className={styles.homeMain}>
-				<div className={styles.mainTitle}>
+				<Title
+					dualColor="primary"
+					size="size45"
+					className={styles.mainTitle}
+					position="center"
+				>
 					What’s your next <span>destination?</span>
-				</div>
-				<div className={styles.mainSubTitle}>
+				</Title>
+				<Title
+					size="size16"
+					position="center"
+					className={styles.mainSubTitle}
+				>
 					Pick a prepaid eSIM data plan for your upcoming trip
-				</div>
+				</Title>
 
 				<div className={styles.homePackageContainer}>
 					<div className={styles.homePackageSearch}>
@@ -126,9 +140,9 @@ export default function HomePage() {
 				</div>
 
 				<div className={styles.popularDestinationContainer}>
-					<div className={styles.popularDestination}>
+					<Title size="size20" className={styles.popularDestination}>
 						Popular destinations
-					</div>
+					</Title>
 					<div className={styles.popularDestinationCards}>
 						{destinations.map((destination, index) => (
 							<PopularDestination
@@ -146,17 +160,25 @@ export default function HomePage() {
 					</div>
 				</div>
 				<div className={styles.multipleRegionsContainer}>
-					<div className={styles.stayConnected}>
+					<div className={styles.stayConnected}></div>
+					<Title dualColor="primary" size="size40" position="center">
 						<span>Stay Connected</span> Across All Your Travel
 						Adventures
-					</div>
-					<div className={styles.mainSubTitle}>
+					</Title>
+					<Title
+						size="size16"
+						position="center"
+						className={styles.mainSubTitle}
+					>
 						Which top destinations will you be going to?
-					</div>
+					</Title>
 					<div className={styles.popularDestinationContainer}>
-						<div className={styles.popularDestination}>
+						<Title
+							size="size20"
+							className={styles.popularDestination}
+						>
 							Exploring Multiple Regions
-						</div>
+						</Title>
 						<div className={styles.popularDestinationCards}>
 							{destinations.map((destination, index) => (
 								<Region
@@ -179,7 +201,9 @@ export default function HomePage() {
 				</div>
 
 				<div className={styles.choosingContainer}>
-					<div className={styles.title}>Why choose TravelPulse?</div>
+					<Title position="center" className={styles.title}>
+						Why choose TravelPulse?
+					</Title>
 					<div className={styles.featureListContainer}>
 						<div>
 							<FeatureCard />

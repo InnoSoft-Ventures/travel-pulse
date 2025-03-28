@@ -3,7 +3,7 @@ import styles from './input.module.scss';
 import { cva, VariantProps } from 'class-variance-authority';
 import { cn } from 'lib/utils';
 
-const inputVariants = cva(styles.searchContainer, {
+const inputVariants = cva(styles.container, {
 	variants: {
 		variant: {
 			default: styles.default,

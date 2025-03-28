@@ -4,6 +4,7 @@
 	width: 100%;
 	position: relative;
 	overflow: hidden;
+	margin-bottom: 45px;
 
 	.artLines {
 		position: absolute;
@@ -23,12 +24,21 @@
 			opacity: 20%;
 			z-index: 1;
 		}
+
+		svg {
+			width: 100%;
+		}
 	}
 
 	.curve {
 		position: absolute;
 		z-index: 2;
-		bottom: 0;
+		bottom: -20px;
 		left: 0;
+		width: 100%;
+
+		svg {
+			width: 100%;
+		}
 	}
 }
