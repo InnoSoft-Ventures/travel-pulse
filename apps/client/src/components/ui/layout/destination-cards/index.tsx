@@ -1,5 +1,5 @@
-import { PopularDestination } from '../popular-destination';
-import { Region } from '../region';
+import { PopularDestination } from '../../popular-destination';
+import { Region } from '../../region';
 import styles from './destination-cards.module.scss';
 import africaImage from '@/assets/africa.jpg';
 

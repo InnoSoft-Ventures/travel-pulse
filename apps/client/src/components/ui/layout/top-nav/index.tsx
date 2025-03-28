@@ -1,10 +1,10 @@
 'use client';
 
 import styles from './top-nav.module.scss';
-import { Button } from '../button';
+import { Button } from '../../common/button';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Logo } from '../logo';
+import { Logo } from '../../logo';
 
 const TopNav = () => {
 	const router = useRouter();

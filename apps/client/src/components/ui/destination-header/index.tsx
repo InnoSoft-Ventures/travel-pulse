@@ -1,10 +1,10 @@
-import { Hero } from '../hero';
-import { Input } from '../input';
+import { Hero } from '../layout/hero';
+import { Input } from '../common/input';
 import styles from './style.module.scss';
 import LocationIcon from '@/assets/location.svg';
 import CalendarIcon from '@/assets/calendar.svg';
 import SearchIcon from '@/assets/white-search.svg';
-import { Button } from '../button';
+import { Button } from '../common/button';
 
 interface DestinationHeaderProps {
 	title: string;
