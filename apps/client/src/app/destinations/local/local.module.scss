@@ -1,1 +1,26 @@
+.localMain {
+	.popularDestinationContainer {
+		max-width: 945px;
+		margin: 40px auto 90px;
+	}
 
+	.subTitle,
+	.getYourEsimSubTitle {
+		font-weight: 400;
+		max-width: 575px;
+		margin: 0 auto;
+	}
+
+	.getYourEsimSubTitle {
+		max-width: 475px;
+	}
+
+	.seeAllBtn {
+		padding: 10px 1.64rem;
+	}
+
+	.getStartedBtnContainer {
+		text-align: center;
+		margin-top: 26px;
+	}
+}

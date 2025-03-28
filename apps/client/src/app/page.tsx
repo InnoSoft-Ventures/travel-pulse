@@ -1,11 +1,10 @@
 import {
 	Hero,
-	PopularDestination,
 	Input,
 	Button,
-	Region,
 	FeatureCard,
 	Title,
+	DestinationCards,
 } from '@/components/ui';
 
 // Icons
@@ -17,42 +16,8 @@ import InfoIcon from '@/assets/info.svg';
 import LocationIcon from '@/assets/location.svg';
 import CalendarIcon from '@/assets/calendar.svg';
 
-import africaImage from '@/assets/africa.jpg';
-
 import styles from './home.module.scss';
-
-const destinations = [
-	{
-		flag: 'https://flagcdn.com/tf.svg',
-		countryName: 'South Africa',
-		price: '$2.4',
-	},
-	{
-		flag: 'https://flagcdn.com/tf.svg',
-		countryName: 'South Africa',
-		price: '$2.4',
-	},
-	{
-		flag: 'https://flagcdn.com/tf.svg',
-		countryName: 'South Africa',
-		price: '$2.4',
-	},
-	{
-		flag: 'https://flagcdn.com/tf.svg',
-		countryName: 'South Africa',
-		price: '$2.4',
-	},
-	{
-		flag: 'https://flagcdn.com/tf.svg',
-		countryName: 'South Africa',
-		price: '$2.4',
-	},
-	{
-		flag: 'https://flagcdn.com/za.svg',
-		countryName: 'Germany',
-		price: '$2.4',
-	},
-];
+import DUMMY_DESTINATIONS from './data';
 
 export default function HomePage() {
 	return (
@@ -143,16 +108,12 @@ export default function HomePage() {
 					<Title size="size20" className={styles.popularDestination}>
 						Popular destinations
 					</Title>
-					<div className={styles.popularDestinationCards}>
-						{destinations.map((destination, index) => (
-							<PopularDestination
-								key={`popular-destination-${index}`}
-								flagUrl={destination.flag}
-								price={destination.price}
-								countryName={destination.countryName}
-							/>
-						))}
-					</div>
+
+					<DestinationCards
+						data={DUMMY_DESTINATIONS}
+						destinationType="popular"
+					/>
+
 					<div className="text-center">
 						<Button variant="outline" className={styles.seeAllBtn}>
 							See all 200+ countries
@@ -179,16 +140,12 @@ export default function HomePage() {
 						>
 							Exploring Multiple Regions
 						</Title>
-						<div className={styles.popularDestinationCards}>
-							{destinations.map((destination, index) => (
-								<Region
-									key={`popular-destination-${index}`}
-									imageSrc={africaImage}
-									price={destination.price}
-									continentName={destination.countryName}
-								/>
-							))}
-						</div>
+
+						<DestinationCards
+							data={DUMMY_DESTINATIONS}
+							destinationType="regions"
+						/>
+
 						<div className="text-center">
 							<Button
 								variant="outline"

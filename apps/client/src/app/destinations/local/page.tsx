@@ -1,7 +1,13 @@
 import { Metadata } from 'next';
-import { DestinationHeader } from '@/components/ui';
+import {
+	Button,
+	DestinationCards,
+	DestinationHeader,
+	Title,
+} from '@/components/ui';
+import DUMMY_DESTINATIONS from 'app/data';
 
-// import styles from './local.module.scss';
+import styles from './local.module.scss';
 
 export const metadata: Metadata = {
 	title: 'Local Destination - TravelPulse',
@@ -11,11 +17,67 @@ export const metadata: Metadata = {
 const LocalDestinationsPage = () => {
 	return (
 		<>
-			<DestinationHeader />
-			<div>
-				<h1>Local Destinations</h1>
-				<p>Explore the best local destinations around you!</p>
-			</div>
+			<DestinationHeader
+				title="Discover the power of International eSIM"
+				subTitle="Explore the world without losing connection. Choose from
+						hundreds of data plans and enjoy fast, seamless eSIM
+						connectivity tailored for travelers and digital nomads."
+			/>
+			<main className={styles.localMain}>
+				<Title position="center" size="size40">
+					Popular destination
+				</Title>
+
+				<div className={styles.popularDestinationContainer}>
+					<DestinationCards data={DUMMY_DESTINATIONS} />
+				</div>
+
+				<div>
+					<Title position="center" size="size40">
+						Stay connected globally
+					</Title>
+					<Title
+						position="center"
+						size="size16"
+						className={styles.subTitle}
+					>
+						Enjoy reliable service and uninterrupted data no matter
+						where your journey takes you. TravelPulse has got you
+						covered.
+					</Title>
+				</div>
+
+				<div className={styles.popularDestinationContainer}>
+					<Title size="size20">Local plans</Title>
+					<DestinationCards
+						data={DUMMY_DESTINATIONS}
+						destinationType="local"
+					/>
+					<div className="text-center">
+						<Button variant="outline" className={styles.seeAllBtn}>
+							View all countries
+						</Button>
+					</div>
+				</div>
+
+				<div>
+					<Title position="center" size="size35">
+						Ready to get started?
+					</Title>
+					<Title
+						position="center"
+						size="size16"
+						className={styles.getYourEsimSubTitle}
+					>
+						Get your eSIM installed in few steps and enjoy
+						uninterrupted data where ever you are.
+					</Title>
+
+					<div className={styles.getStartedBtnContainer}>
+						<Button size="lg">Get your eSIM now</Button>
+					</div>
+				</div>
+			</main>
 		</>
 	);
 };

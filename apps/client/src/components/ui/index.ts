@@ -9,3 +9,4 @@ export * from './popular-destination';
 export * from './region';
 export * from './top-nav';
 export * from './title';
+export * from './destination-cards';

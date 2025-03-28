@@ -51,8 +51,6 @@ $lightGrey: var(--light-grey);
 }
 
 .homeMain {
-	padding-bottom: 50px;
-
 	.mainTitle,
 	.stayConnected {
 		margin-bottom: 5px;
@@ -95,15 +93,6 @@ $lightGrey: var(--light-grey);
 
 	.popularDestination {
 		margin-bottom: 11px;
-	}
-
-	.popularDestinationCards {
-		display: flex;
-		gap: 20px;
-		padding: 10px 0;
-		margin-bottom: 45px;
-		flex-wrap: wrap;
-		justify-content: center;
 	}
 
 	.seeAllBtn {
