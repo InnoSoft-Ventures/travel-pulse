@@ -1,0 +1,45 @@
+.footer {
+	background: linear-gradient(90deg, #3a416f 0%, #141727 100%);
+	color: var(--light-grey);
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	row-gap: 40px;
+	padding: 0 68px 40px;
+	align-items: flex-end;
+	height: 174.25px;
+	margin-top: 50px;
+
+	.left {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+
+		.logo {
+			position: relative;
+		}
+
+		.copyright {
+			font-size: 14px;
+			color: var(--light-grey);
+		}
+	}
+
+	.right {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 24px;
+
+		a {
+			color: white;
+			font-size: 14px;
+			font-weight: 500;
+			text-decoration: none;
+			transition: opacity 0.2s;
+
+			&:hover {
+				opacity: 0.7;
+			}
+		}
+	}
+}
