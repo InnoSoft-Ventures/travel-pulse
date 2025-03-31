@@ -5,10 +5,11 @@ import LocationIcon from '@/assets/location.svg';
 import CalendarIcon from '@/assets/calendar.svg';
 import SearchIcon from '@/assets/white-search.svg';
 import { Button } from '../common/button';
+import React from 'react';
 
 interface DestinationHeaderProps {
 	title: string;
-	subTitle: string;
+	subTitle: React.ReactNode;
 	/**
 	 * Enable or disable the search bar
 	 * @default true

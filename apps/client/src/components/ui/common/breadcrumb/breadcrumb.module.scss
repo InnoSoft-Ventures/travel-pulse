@@ -1,0 +1,50 @@
+.breadcrumbContainer {
+	display: flex;
+
+	> ol {
+		display: inline-flex;
+		gap: 9px;
+		align-items: center;
+
+		li {
+			display: inline-flex;
+			align-items: center;
+		}
+
+		.breadcrumbLink {
+			display: inline-flex;
+			align-items: center;
+			color: var(--dark-purple);
+			font-weight: 500;
+			font-size: 16px;
+		}
+
+		.breadcrumbHomeLink {
+			width: 20px;
+
+			svg {
+				margin-top: -1px;
+			}
+		}
+
+		.breadcrumbSeparator {
+			display: inline-flex;
+			align-items: center;
+			gap: 9px;
+		}
+
+		.breadcrumbActive {
+			color: #5a5a79;
+			font-weight: 400;
+			font-size: 16px;
+		}
+	}
+
+	.breadcrumbArrow {
+		rotate: 0deg;
+
+		path {
+			stroke-width: 0.12rem;
+		}
+	}
+}

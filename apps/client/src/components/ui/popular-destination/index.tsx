@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import ArrowIcon from '@/assets/arrow-down.svg';
+import ArrowIcon from '@/assets/arrow.svg';
 import styles from './style.module.scss';
 
 interface PopularDestinationProps {
@@ -32,7 +32,7 @@ const PopularDestination = (props: PopularDestinationProps) => {
 					</div>
 				</div>
 				<div>
-					<ArrowIcon />
+					<ArrowIcon className={styles.arrow} />
 				</div>
 			</div>
 		</div>

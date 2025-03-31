@@ -1,5 +1,5 @@
 import Image, { StaticImageData } from 'next/image';
-import ArrowIcon from '@/assets/arrow-down.svg';
+import ArrowIcon from '@/assets/arrow.svg';
 import styles from './region.module.scss';
 
 interface RegionProps {
@@ -33,7 +33,7 @@ const Region = (props: RegionProps) => {
 						</div>
 					</div>
 					<div>
-						<ArrowIcon />
+						<ArrowIcon className={styles.arrow} />
 					</div>
 				</div>
 			</div>

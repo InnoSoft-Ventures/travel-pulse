@@ -1,0 +1,69 @@
+.countryContainer {
+	margin-top: -47px;
+	padding: 0 40px 40px;
+
+	.heroSection {
+		background: var(--purple-gradient);
+		color: white;
+		padding: 80px 40px 120px;
+		border-bottom-left-radius: 50px;
+
+		h1 {
+			font-size: 40px;
+			margin-bottom: 16px;
+		}
+
+		p {
+			font-size: 18px;
+			line-height: 1.5;
+			max-width: 600px;
+		}
+	}
+
+	.breadcrumbNav {
+		margin-bottom: 30px;
+	}
+
+	.content {
+		background: #fff;
+		padding: 0 40px 60px;
+	}
+
+	.flexLayout {
+		display: flex;
+		gap: 30px;
+		align-items: flex-start;
+		margin-top: 50px;
+
+		.imageContainer {
+		}
+
+		.countryImage {
+			border-radius: 75px 75px 75px 0;
+			width: 440px;
+			height: 570px;
+			object-fit: cover;
+		}
+
+		.searchBox {
+			margin-top: 20px;
+			display: flex;
+			gap: 10px;
+
+			input {
+				padding: 10px;
+				border: 1px solid #ccc;
+				border-radius: 6px;
+			}
+
+			button {
+				padding: 10px 16px;
+				background: var(--purple);
+				color: white;
+				border: none;
+				border-radius: 6px;
+				cursor: pointer;
+			}
+		}
+	}
+}
