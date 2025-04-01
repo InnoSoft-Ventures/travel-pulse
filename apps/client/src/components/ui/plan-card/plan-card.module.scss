@@ -1,0 +1,84 @@
+@import '../../../styles/mixins';
+
+.planCard {
+	@include gradient-border(1px);
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22);
+	border-radius: 15px;
+	padding: 15px 15px 18px;
+	position: relative;
+	width: 280px;
+
+	.badge {
+		position: relative;
+		top: -34px;
+		z-index: 2;
+		display: flex;
+		justify-content: center;
+		max-width: 80%;
+		width: 100%;
+		margin: 0 auto;
+
+		> div {
+			@include gradient-border(1px, #efeafd);
+			color: var(--dark-purple);
+			font-style: italic;
+			padding: 6px 16px;
+			border-radius: 12px;
+			font-size: 16px;
+			width: 100%;
+			text-align: center;
+		}
+	}
+
+	.info {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		margin-top: -8px;
+	}
+
+	.row {
+		display: flex;
+		justify-content: space-between;
+		font-size: 15px;
+		align-items: center;
+		font-weight: 400;
+		color: var(--dark-purple);
+
+		strong {
+			font-weight: 600;
+		}
+	}
+
+	.networkData {
+		display: inline-flex;
+		align-items: center;
+		column-gap: 7px;
+	}
+
+	hr {
+		margin: 11px 0 13px;
+		border: none;
+		height: 1px;
+		background: #c7c2e6;
+	}
+
+	.actions {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		a {
+			font-weight: 500;
+			text-decoration: underline;
+			color: var(--dark-purple);
+			font-size: 13px;
+		}
+
+		button {
+			max-width: 100px;
+			width: 100%;
+			box-shadow: none;
+		}
+	}
+}

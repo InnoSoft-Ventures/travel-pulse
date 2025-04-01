@@ -2,7 +2,15 @@ import styles from './country.module.scss';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import toronto from '@/assets/toronto_bg.jpg';
-import { Breadcrumb, DestinationHeader, Title } from '@/components/ui';
+import {
+	Breadcrumb,
+	CompatibilityChecker,
+	DatePicker,
+	DestinationHeader,
+	PlanCard,
+	Title,
+} from '@/components/ui';
+import { plans } from './plans';
 
 interface Props {
 	params: { country: string };
@@ -49,23 +57,43 @@ const CountryPage = ({ params }: Props) => {
 								className={styles.countryImage}
 							/>
 						</div>
-						<div>
-							<ul>
-								<li>
-									<strong>Affordable data plans</strong> —
-									starting from <strong>$3.99 USD</strong>
-								</li>
-								<li>
-									Reliable connection from the best networks.
-								</li>
-								<li>You keep your original number.</li>
-								<li>
-									Compatible with eSIM-enabled smartphones.
-								</li>
-							</ul>
+						<div className={styles.textContainer}>
+							<div className={styles.contentNote}>
+								Note: Before making a purchase, make sure your
+								device is eSIM compatible and not network
+								locked.
+							</div>
+							<div className={styles.benefitsContainer}>
+								<ul className={styles.benefitsList}>
+									<li>
+										<span>Affordable data plans</span> —
+										starting from <strong>$3.99 USD</strong>
+									</li>
+									<li>
+										Reliable connection from the best
+										networks.
+									</li>
+									<li>You keep your original number.</li>
+									<li>
+										Compatible with eSIM-enabled
+										smartphones.
+									</li>
+								</ul>
+
+								<div className={styles.compatibilityCheck}>
+									<CompatibilityChecker />
+								</div>
+							</div>
 							<div className={styles.searchBox}>
-								<input type="date" /> to <input type="date" />
-								<button>Search</button>
+								<DatePicker />
+							</div>
+
+							<div className={styles.plansContainer}>
+								<div className={styles.plans}>
+									{plans.map((plan, index) => (
+										<PlanCard key={`plan-${index}`} />
+									))}
+								</div>
 							</div>
 						</div>
 					</div>

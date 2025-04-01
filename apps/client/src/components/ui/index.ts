@@ -9,3 +9,5 @@ export * from './region';
 export * from './layout/top-nav';
 export * from './layout/destination-cards';
 export * from './layout/footer';
+export * from './compatibility-checker';
+export * from './plan-card';

@@ -2,3 +2,4 @@ export * from './button';
 export * from './input';
 export * from './title';
 export * from './breadcrumb';
+export * from './date-picker';

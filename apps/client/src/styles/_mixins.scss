@@ -1,0 +1,8 @@
+$pink-purple-gradient: linear-gradient(315deg, #ff73b6 0%, #5901b1 100%);
+
+@mixin gradient-border($border-width: 2px, $bg: #f8f8ff) {
+	border: #{$border-width} solid transparent;
+	background-image: linear-gradient($bg, $bg), $pink-purple-gradient;
+	background-origin: border-box;
+	background-clip: padding-box, border-box;
+}

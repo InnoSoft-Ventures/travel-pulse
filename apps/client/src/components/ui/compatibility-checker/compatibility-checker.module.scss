@@ -1,0 +1,22 @@
+.compatibilityCheckBtn {
+	border: 1px solid #8e8e8e;
+	background-color: #fff;
+	color: var(--dark-purple);
+	border-radius: 15px;
+	padding: 0px 12px;
+	height: 38px;
+	width: 100%;
+	max-width: 172px;
+	font-size: 12px;
+	font-weight: 500;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 7px;
+	transition: background-color 0.2s ease-in-out;
+	cursor: pointer;
+
+	&:hover {
+		background-color: #f7f7f7;
+	}
+}

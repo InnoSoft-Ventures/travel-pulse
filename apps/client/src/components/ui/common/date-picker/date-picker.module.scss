@@ -1,0 +1,38 @@
+.datePickerContainer {
+	.datePickerInputContainer {
+		display: flex;
+		align-items: center;
+		column-gap: 19px;
+	}
+
+	.datePickerInput {
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22);
+		background: #f8f8ff;
+		border: 2px solid transparent;
+		background-image: var(--pink-purple-gradient);
+		background-origin: border-box;
+		background-clip: padding-box, border-box;
+		border-radius: 15px;
+
+		> input {
+			font-size: 13px;
+			font-weight: 400;
+			color: var(--dark-purple);
+		}
+	}
+
+	.searchBtn {
+		border-radius: 15px;
+	}
+
+	.travelingNote {
+		color: var(--dark-purple);
+		font-size: 13px;
+		padding-top: 8px;
+		font-weight: 400;
+
+		> span {
+			font-weight: 600;
+		}
+	}
+}
