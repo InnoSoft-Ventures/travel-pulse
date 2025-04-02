@@ -1,0 +1,43 @@
+@import '../../../../styles/mixins';
+
+.planTabsWrapper {
+	display: flex;
+	justify-content: center;
+
+	.tabs {
+		position: relative;
+		display: flex;
+		background: #3a2081;
+		border-radius: 20px;
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+		overflow: hidden;
+		width: fit-content;
+	}
+
+	.tab {
+		padding: 14px 32px;
+		font-size: 12px;
+		font-weight: 500;
+		background: transparent;
+		color: white;
+		border: none;
+		cursor: pointer;
+		z-index: 1;
+		position: relative;
+		transition: color 0.3s ease;
+	}
+
+	.active {
+		color: white;
+	}
+
+	.indicator {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		background: $pink-purple-gradient;
+		border-radius: 20px;
+		transition: left 0.3s ease;
+		z-index: 0;
+	}
+}

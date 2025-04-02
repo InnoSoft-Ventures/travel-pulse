@@ -4,8 +4,10 @@ import {
 	DestinationCards,
 	DestinationHeader,
 	Title,
+	PlanTabs,
 } from '@/components/ui';
 import DUMMY_DESTINATIONS from 'app/data';
+import { PlanTabsEnum } from '../../../constants';
 
 import styles from './local.module.scss';
 
@@ -32,19 +34,21 @@ const LocalDestinationsPage = () => {
 					<DestinationCards data={DUMMY_DESTINATIONS} />
 				</div>
 
-				<div>
-					<Title position="center" size="size40">
-						Stay connected globally
-					</Title>
-					<Title
-						position="center"
-						size="size16"
-						className={styles.subTitle}
-					>
-						Enjoy reliable service and uninterrupted data no matter
-						where your journey takes you. TravelPulse has got you
-						covered.
-					</Title>
+				<Title position="center" size="size40">
+					Stay connected globally
+				</Title>
+				<Title
+					position="center"
+					size="size16"
+					className={styles.subTitle}
+				>
+					Enjoy reliable service and uninterrupted data no matter
+					where your journey takes you. TravelPulse has got you
+					covered.
+				</Title>
+
+				<div className={styles.planTabsContainer}>
+					<PlanTabs activePlan={PlanTabsEnum.Global} />
 				</div>
 
 				<div className={styles.popularDestinationContainer}>
