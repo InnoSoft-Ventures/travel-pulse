@@ -1,0 +1,27 @@
+.modal {
+	max-width: 100%;
+}
+
+@media (min-width: 640px) {
+	.smallSize {
+		max-width: 425px;
+	}
+}
+
+@media (min-width: 768px) {
+	.mediumSize {
+		max-width: 600px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.largeSize {
+		max-width: 900px;
+	}
+}
+
+@media (min-width: 1280px) {
+	.xlSize {
+		max-width: 1300px;
+	}
+}

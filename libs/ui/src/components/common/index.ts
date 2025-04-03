@@ -4,3 +4,5 @@ export * from './title';
 export * from './breadcrumb';
 export * from './date-picker';
 export * from './plan-tabs';
+export * from './alert-dialog';
+export * from './modal';

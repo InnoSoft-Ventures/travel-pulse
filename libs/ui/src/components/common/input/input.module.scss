@@ -24,11 +24,11 @@
 	}
 
 	&.defaultSize {
-		@apply h-[42px];
+		height: 42px;
 	}
 
 	&.largeSize {
-		@apply h-[50px];
+		height: 50px;
 	}
 
 	input {
