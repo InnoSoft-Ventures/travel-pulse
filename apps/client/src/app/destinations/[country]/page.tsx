@@ -9,7 +9,7 @@ import {
 	DestinationHeader,
 	PlanCard,
 	Title,
-} from '@/components/ui';
+} from '@travelpulse/ui';
 import { plans } from './plans';
 
 interface Props {

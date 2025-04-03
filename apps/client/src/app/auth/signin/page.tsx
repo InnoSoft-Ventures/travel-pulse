@@ -1,12 +1,12 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button, Input, Logo } from '@/components/ui';
+import { Button, Input, Logo } from '@travelpulse/ui';
 
 import MailIcon from '@/assets/mail-icon.svg';
 import LockIcon from '@/assets/lock-icon.svg';
 import GoogleIcon from '@/assets/google.svg';
-import InternetBg from '@/public/assets/internet-img.jpg';
+import InternetBg from '@/assets/internet-img.jpg';
 
 import styles from './login.module.scss';
 

@@ -1,5 +1,5 @@
 {
-  "name": "@libs/services",
+  "name": "@travelpulse/services",
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",
@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@libs/api-service": "workspace:^",
+    "@travelpulse/api-service": "workspace:^",
     "rabbitmq-client": "^4.6.0",
     "rxjs": "^7.8.1"
   }

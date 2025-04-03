@@ -5,11 +5,11 @@ import {
 	DestinationHeader,
 	Title,
 	PlanTabs,
-} from '@/components/ui';
-import DUMMY_DESTINATIONS from 'app/data';
-import { PlanTabsEnum } from '../../../constants';
+} from '@travelpulse/ui';
+import DUMMY_DESTINATIONS from '../../data';
 
 import styles from './local.module.scss';
+import { UIPlanTabs } from '@travelpulse/interfaces';
 
 export const metadata: Metadata = {
 	title: 'Local Destination - TravelPulse',
@@ -48,7 +48,7 @@ const LocalDestinationsPage = () => {
 				</Title>
 
 				<div className={styles.planTabsContainer}>
-					<PlanTabs activePlan={PlanTabsEnum.Global} />
+					<PlanTabs activePlan={UIPlanTabs.Global} />
 				</div>
 
 				<div className={styles.popularDestinationContainer}>

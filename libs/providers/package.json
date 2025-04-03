@@ -1,5 +1,5 @@
 {
-  "name": "@libs/providers",
+  "name": "@travelpulse/providers",
   "version": "1.0.0",
   "description": "Providers for the service",
   "scripts": {
@@ -9,8 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@libs/api-service": "workspace:^",
-    "@libs/interfaces": "workspace:^"
+    "@travelpulse/api-service": "workspace:^",
+    "@travelpulse/interfaces": "workspace:^"
   },
   "devDependencies": {
     "@types/node": "^22.7.2"

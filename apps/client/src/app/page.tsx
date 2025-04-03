@@ -5,7 +5,7 @@ import {
 	FeatureCard,
 	Title,
 	DestinationCards,
-} from '@/components/ui';
+} from '@travelpulse/ui';
 
 // Icons
 import Characters from '@/assets/characters.svg';

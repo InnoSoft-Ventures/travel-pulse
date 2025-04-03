@@ -19,6 +19,18 @@ $lightGrey: var(--light-grey);
 		align-items: center;
 	}
 
+	@media (min-width: 1577px) {
+		.contentContainer {
+			max-width: 1300px;
+			margin: 0 auto;
+			padding: 0;
+		}
+
+		.homeContentContainer {
+			justify-content: space-between;
+		}
+	}
+
 	.headerText {
 		max-width: 580px;
 	}

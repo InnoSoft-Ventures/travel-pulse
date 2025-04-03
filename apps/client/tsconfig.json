@@ -1,22 +1,13 @@
 {
 	"extends": "@config/tsconfig/next.json",
 	"compilerOptions": {
-		"baseUrl": "src/",
+		"baseUrl": ".",
 		"paths": {
-			"@/components/*": [
-				"components/*"
-			],
 			"@/assets/*": [
-				"public/assets/*"
+				"@travelpulse/ui/assets/*"
 			],
 			"@/styles/*": [
-				"styles/*"
-			],
-			"@/public/*": [
-				"public/*"
-			],
-			"@/lib/*": [
-				"lib/*"
+				"@travelpulse/ui/styles/*"
 			],
 		},
 		"plugins": [

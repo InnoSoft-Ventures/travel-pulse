@@ -5,7 +5,8 @@
 		"iccid",
 		"imsis",
 		"msisdn",
-		"qrcode"
+		"qrcode",
+		"travelpulse"
 	],
 	"tailwindCSS.experimental.classRegex": [
 		[

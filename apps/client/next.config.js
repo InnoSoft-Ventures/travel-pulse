@@ -6,9 +6,10 @@ module.exports = {
 	reactStrictMode: true,
 	sassOptions: {
 		includePaths: [path.join(__dirname, 'styles')],
-		additionalData: `@import "src/styles/_mixins.scss";`,
 	},
 	webpack(config) {
+		config.resolve.alias['@/assets'] = path.resolve(__dirname, '../../libs/ui/src/assets');
+		config.resolve.alias['@/styles'] = path.resolve(__dirname, '../../libs/ui/src/styles');
 		config.module.rules.push({
 			test: /\.svg$/,
 			oneOf: [

@@ -1,5 +1,5 @@
 {
-  "name": "@libs/api-service",
+  "name": "@travelpulse/api-service",
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",
@@ -9,8 +9,8 @@
   "keywords": [],
   "author": "ClarityHR Team",
   "dependencies": {
-    "@libs/interfaces": "workspace:^",
-    "@libs/middlewares": "workspace:^",
+    "@travelpulse/interfaces": "workspace:^",
+    "@travelpulse/middlewares": "workspace:^",
     "axios": "^1.7.2",
     "express": "^4.19.2"
   },
