@@ -1,8 +1,12 @@
+'use client';
+
+import { useState } from 'react';
 import styles from './country.module.scss';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import toronto from '@/assets/toronto_bg.jpg';
 import {
+	PlanDetailModal,
 	Breadcrumb,
 	CompatibilityChecker,
 	DatePicker,
@@ -11,6 +15,7 @@ import {
 	Title,
 } from '@travelpulse/ui';
 import { plans } from './plans';
+import { UIPlan } from '@travelpulse/interfaces';
 
 interface Props {
 	params: { country: string };
@@ -19,6 +24,8 @@ interface Props {
 const CountryPage = ({ params }: Props) => {
 	const { country } = params;
 
+	const [selectedPlan, setSelectedPlan] = useState<UIPlan | null>(null);
+
 	const formattedCountry = country.charAt(0).toUpperCase() + country.slice(1);
 
 	// You’ll later replace this with a real API or static data
@@ -26,6 +33,10 @@ const CountryPage = ({ params }: Props) => {
 		country.toLowerCase()
 	);
 	if (!isCountryAvailable) return notFound();
+
+	const handlePlanDetails = (plan: UIPlan) => {
+		setSelectedPlan(plan);
+	};
 
 	return (
 		<>
@@ -91,7 +102,13 @@ const CountryPage = ({ params }: Props) => {
 							<div className={styles.plansContainer}>
 								<div className={styles.plans}>
 									{plans.map((plan, index) => (
-										<PlanCard key={`plan-${index}`} />
+										<PlanCard
+											details={plan}
+											showPlanDetails={() =>
+												handlePlanDetails(plan)
+											}
+											key={`plan-${index}`}
+										/>
 									))}
 								</div>
 							</div>
@@ -99,6 +116,11 @@ const CountryPage = ({ params }: Props) => {
 					</div>
 				</section>
 			</div>
+
+			<PlanDetailModal
+				open={!!selectedPlan}
+				onClose={() => setSelectedPlan(null)}
+			/>
 		</>
 	);
 };

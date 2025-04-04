@@ -1,10 +1,17 @@
 import React from 'react';
-import Link from 'next/link';
 import { Button } from '../common';
 import styles from './plan-card.module.scss';
 import Network5GIcon from '../../assets/network-5g.svg';
+import { UIPlan } from '@travelpulse/interfaces';
 
-export function PlanCard() {
+interface PlanCardProps {
+	details: UIPlan;
+	showPlanDetails: () => void;
+}
+
+export function PlanCard(props: PlanCardProps) {
+	const { details, showPlanDetails } = props;
+
 	return (
 		<div className={styles.planCard}>
 			<div className={styles.badge}>
@@ -14,10 +21,10 @@ export function PlanCard() {
 			<div className={styles.info}>
 				<div className={styles.row}>
 					<span className={styles.networkData}>
-						<Network5GIcon /> <strong>10 GB</strong>
+						<Network5GIcon /> <strong>{details.data}</strong>
 					</span>
 					<span>
-						<strong>$15.00</strong> USD
+						<strong>${details.price}</strong> USD
 					</span>
 				</div>
 
@@ -29,7 +36,7 @@ export function PlanCard() {
 				<div className={styles.row}>
 					<span>Validity</span>
 					<span>
-						<strong>15 Days</strong>
+						<strong>{details.duration}</strong>
 					</span>
 				</div>
 
@@ -43,8 +50,13 @@ export function PlanCard() {
 				<hr />
 
 				<div className={styles.actions}>
-					<Link href="#">Plan details</Link>
-					<Button>Buy Now</Button>
+					<button
+						onClick={showPlanDetails}
+						className={styles.planDetailsBtn}
+					>
+						Plan details
+					</button>
+					<Button className={styles.buyNowBtn}>Buy Now</Button>
 				</div>
 			</div>
 		</div>

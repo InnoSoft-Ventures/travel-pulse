@@ -68,14 +68,14 @@
 		justify-content: space-between;
 		align-items: center;
 
-		a {
+		.planDetailsBtn {
 			font-weight: 500;
 			text-decoration: underline;
 			color: var(--dark-purple);
 			font-size: 13px;
 		}
 
-		button {
+		.buyNowBtn {
 			max-width: 100px;
 			width: 100%;
 			box-shadow: none;

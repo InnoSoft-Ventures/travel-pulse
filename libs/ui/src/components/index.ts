@@ -11,3 +11,4 @@ export * from './layout/destination-cards';
 export * from './layout/footer';
 export * from './compatibility-checker';
 export * from './plan-card';
+export * from './plan-detail-modal';

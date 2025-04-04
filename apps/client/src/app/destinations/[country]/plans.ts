@@ -1,4 +1,6 @@
-export const plans = [
+import { UIPlan } from '@travelpulse/interfaces';
+
+export const plans: UIPlan[] = [
 	{
 		id: 1,
 		name: 'Basic Plan',
