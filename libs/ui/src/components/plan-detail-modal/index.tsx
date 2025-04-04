@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseModal } from '../common';
+import { Modal } from '../common';
 
 import styles from './plan-detail-modal.module.scss';
 
@@ -12,12 +12,13 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 	const { open, onClose } = props;
 
 	return (
-		<BaseModal
+		<Modal
 			open={open}
 			size="large"
 			onCancel={() => onClose()}
 			title="Plan details"
 			description="Africa eSIM - 1GB for 7 days"
+			showFooter={false}
 		>
 			<div className={styles.planModal}>
 				<div className={styles.gridContainer}>
@@ -130,7 +131,7 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 					<button className={styles.buyButton}>Buy Now</button>
 				</div>
 			</div>
-		</BaseModal>
+		</Modal>
 	);
 }
 

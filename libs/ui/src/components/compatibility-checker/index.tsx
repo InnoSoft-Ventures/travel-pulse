@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import PhoneCheck from '../../assets/phone-check.svg';
 import styles from './compatibility-checker.module.scss';
-import { BaseModal } from '../common/modal';
+import { Modal } from '../common/modal';
 
 function CompatibilityChecker() {
 	const [showModal, setShowModal] = useState(false);
@@ -20,10 +20,13 @@ function CompatibilityChecker() {
 				<PhoneCheck />
 			</button>
 
-			<BaseModal
+			<Modal
 				open={showModal}
 				size="large"
 				onCancel={() => {
+					setShowModal(false);
+				}}
+				onOk={() => {
 					setShowModal(false);
 				}}
 				title="Check your device compatibility"
