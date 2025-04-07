@@ -1,7 +1,8 @@
 import React from 'react';
-import { Modal } from '../common';
+import { Button, Counter, DatePicker, Modal } from '../common';
 
 import styles from './plan-detail-modal.module.scss';
+import { Countries, dummyCountries } from '../countries';
 
 interface PlanDetailModalProps {
 	open: boolean;
@@ -11,16 +12,21 @@ interface PlanDetailModalProps {
 function PlanDetailModal(props: PlanDetailModalProps) {
 	const { open, onClose } = props;
 
+	const [quantity, setQuantity] = React.useState<number>(1);
+
 	return (
 		<Modal
 			open={open}
 			size="large"
 			onCancel={() => onClose()}
-			title="Plan details"
-			description="Africa eSIM - 1GB for 7 days"
 			showFooter={false}
+			className={styles.planModalContainer}
 		>
 			<div className={styles.planModal}>
+				<div className={styles.header}>
+					<h2>Plan details</h2>
+					<p>Africa eSIM - 1Gb for 7 days</p>
+				</div>
 				<div className={styles.gridContainer}>
 					{/* Features Section */}
 					<div className={styles.section}>
@@ -44,12 +50,12 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 							<li>
 								Speed: <strong>4G/LTE/5G</strong>
 							</li>
-							<li>
-								Hotspot Sharing:{' '}
-								<span>
+							<li className={styles.flexColumn}>
+								<span>Hotspot Sharing</span>
+								<div>
 									Includes the ability to share the connection
 									via hotspot.
-								</span>
+								</div>
 							</li>
 						</ul>
 					</div>
@@ -58,12 +64,12 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 					<div className={styles.section}>
 						<h4>Additional Info</h4>
 						<ul className={styles.infoList}>
-							<li>
-								Activation Policy:{' '}
-								<span>
-									Starts when connected to network, or after
-									60 days
-								</span>
+							<li className={styles.flexColumn}>
+								<span>Activation Policy</span>
+								<div>
+									Plan starts automatically when connected to
+									network, or after 60 days
+								</div>
 							</li>
 							<li>
 								Top-up option: <strong>Available</strong>
@@ -75,60 +81,60 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 								eKYC (Verification):{' '}
 								<strong>Not required</strong>
 							</li>
-							<li>
-								Extra Info:{' '}
-								<span>
-									Restrictions apply to usage in Turkey (91+
-									days)
-								</span>
+							<li className={styles.flexColumn}>
+								<span>Extra Info:</span>
+								<div>
+									Restrictions apply to extended usage(over 91
+									days) in Turkey according to the local
+									legislation.
+								</div>
 							</li>
 						</ul>
 					</div>
 				</div>
 
-				{/* Supported Countries */}
-				<div className={styles.section}>
-					<h4>Supported Countries</h4>
-					<input
-						type="text"
-						placeholder="Search"
-						className={styles.searchInput}
-					/>
-					<ul className={styles.countryList}>
-						<li>🇧🇬 Bulgaria</li>
-						<li>🇿🇦 South Africa</li>
-						<li>🇦🇹 Austria</li>
-						{/* ... more countries as needed */}
-					</ul>
-				</div>
-
-				{/* Configure Plan */}
-				<div className={styles.section}>
-					<h4>Configure your plan</h4>
-					<div className={styles.travelerInput}>
-						<span>How many travellers are you buying for?</span>
-						<div className={styles.counter}>
-							<button>-</button>
-							<span>4</span>
-							<button>+</button>
-						</div>
+				<div className={styles.gridContainer}>
+					{/* Supported Countries */}
+					<div className={styles.section}>
+						<h4>Supported Countries</h4>
+						<Countries data={dummyCountries} />
 					</div>
-					<div className={styles.datePicker}>
-						<span>Plan Activation Day</span>
-						<input
-							type="text"
-							readOnly
-							value="2024-09-18 to 2024-09-25"
-						/>
+
+					{/* Configure Plan */}
+					<div className={styles.section}>
+						<h4>Configure your plan</h4>
+						<div className={styles.travelerInput}>
+							<div className={styles.title}>
+								How many travelers are you buying for?
+							</div>
+							<Counter
+								value={quantity}
+								onChange={(value) => setQuantity(value)}
+								maxValue={100}
+								minValue={1}
+							/>
+						</div>
+						<div className={styles.datePicker}>
+							<div className={styles.title}>
+								Plan Activation Day
+							</div>
+							<DatePicker
+								hideSearchBtn
+								inputClassName={styles.dataInput}
+							/>
+						</div>
 					</div>
 				</div>
 
 				{/* Total & Button */}
 				<div className={styles.footer}>
-					<div className={styles.total}>
-						Total: <strong>$15.00 USD</strong>
+					<div>
+						<div className={styles.total}>
+							<span>Total:</span>
+							<strong>$15.00 USD</strong>
+						</div>
+						<Button className={styles.buyButton}>Buy Now</Button>
 					</div>
-					<button className={styles.buyButton}>Buy Now</button>
 				</div>
 			</div>
 		</Modal>

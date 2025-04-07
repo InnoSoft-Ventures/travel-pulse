@@ -47,10 +47,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 		return (
 			<label
 				htmlFor={id}
-				className={cn(
-					inputVariants({ variant, size, className }),
-					className
-				)}
+				className={cn(inputVariants({ variant, size }), className)}
 			>
 				{icon && <div>{icon}</div>}
 				<input
