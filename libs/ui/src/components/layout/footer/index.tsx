@@ -23,11 +23,11 @@ const Footer = () => {
 			</div>
 
 			<div className={styles.right}>
-				<Link href="/">Partner with Us</Link>
-				<Link href="/">About Us</Link>
-				<Link href="/">Help Center</Link>
-				<Link href="/">Careers</Link>
-				<Link href="/">Privacy Policy</Link>
+				<Link href="/partner-with-us">Partner with Us</Link>
+				<Link href="/about">About Us</Link>
+				<Link href="/help">Help Center</Link>
+				<Link href="/careers">Careers</Link>
+				<Link href="/privacy-policy">Privacy Policy</Link>
 			</div>
 		</footer>
 	);

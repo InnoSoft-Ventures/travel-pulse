@@ -1,13 +1,19 @@
 {
-  "name": "travel-core",
+  "name": "travel-pulse",
   "version": "1.0.0",
   "description": "",
   "scripts": {
-		"web:dev": "export NODE_ENV='development' && pnpm run --filter @travel-pulse/client dev",
-		"server:dev": "pnpm run --filter @travel-pulse/api dev",
+    "web:dev": "export NODE_ENV='development' && pnpm run --filter @travel-pulse/client dev",
+    "server:dev": "pnpm run --filter @travel-pulse/api dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@config/eslint": "workspace:^",
+    "@config/prettier": "workspace:^",
+    "@config/tsconfig": "workspace:^",
+    "typescript": "^5.8.3"
+  }
 }

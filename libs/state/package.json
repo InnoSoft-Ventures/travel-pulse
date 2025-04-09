@@ -1,0 +1,15 @@
+{
+  "name": "@travelpulse/state",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "types": "index.ts",
+  "private": true,
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.2.3",
+    "react-redux": "^9.1.0",
+    "redux-persist": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/redux-persist": "^4.3.1"
+  }
+}

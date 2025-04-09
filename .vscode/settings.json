@@ -5,6 +5,7 @@
 		"iccid",
 		"imsis",
 		"msisdn",
+		"persistor",
 		"qrcode",
 		"travelpulse",
 		"xlarge"
