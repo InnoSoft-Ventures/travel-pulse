@@ -61,7 +61,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 		<div className={cn(styles.container, containerClassName)}>
 			<label
 				htmlFor={id}
-				className={cn(inputVariants({ variant, size }), inputClassName)}
+				className={cn(
+					inputVariants({ variant, size }),
+					inputClassName,
+					type === 'password' ? styles.addPadding : ''
+				)}
 			>
 				{icon && <div>{icon}</div>}
 				<input type={inputType} id={id} ref={ref} {...rest} />
