@@ -1,7 +1,12 @@
+'use client';
+
 import * as React from 'react';
 import styles from './input.module.scss';
 import { cva, VariantProps } from 'class-variance-authority';
 import { cn } from '../../../utils';
+
+import EyeClosed from '../../../assets/eye-closed.svg';
+import EyeOpened from '../../../assets/eye-opened.svg';
 
 const inputVariants = cva(styles.inputContainer, {
 	variants: {
@@ -48,6 +53,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 		...rest
 	} = props;
 
+	const [showPassword, setShowPassword] = React.useState(false);
+
+	const inputType = type === 'password' && showPassword ? 'text' : type;
+
 	return (
 		<div className={cn(styles.container, containerClassName)}>
 			<label
@@ -55,8 +64,19 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 				className={cn(inputVariants({ variant, size }), inputClassName)}
 			>
 				{icon && <div>{icon}</div>}
-				<input type={type} id={id} ref={ref} {...rest} />
-				{lastIcon && <div>{lastIcon}</div>}
+				<input type={inputType} id={id} ref={ref} {...rest} />
+
+				{type !== 'password' && lastIcon && <div>{lastIcon}</div>}
+
+				{type === 'password' && (
+					<button
+						type="button"
+						className={styles.passwordIcon}
+						onClick={() => setShowPassword((prev) => !prev)}
+					>
+						{!showPassword ? <EyeOpened /> : <EyeClosed />}
+					</button>
+				)}
 			</label>
 			{error && <div className={styles.error}>{error}</div>}
 		</div>

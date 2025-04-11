@@ -5,9 +5,31 @@ import { Button, Input, Logo } from '@travelpulse/ui';
 import LockIcon from '@/assets/lock-icon.svg';
 import InternetBg from '@/assets/internet-img.jpg';
 
-import styles from './login.module.scss';
+import styles from './new-password.module.scss';
+import {
+	NewPasswordFormValues,
+	NewPasswordSchema,
+	useForm,
+} from '@travelpulse/ui/forms';
 
 export default function NewPasswordPage() {
+	const {
+		formState: { errors },
+		formSubmit,
+		register,
+		isLoading,
+	} = useForm(NewPasswordSchema, {
+		mode: 'all',
+	});
+
+	const onSubmit = (data: NewPasswordFormValues, done: () => void) => {
+		console.log('New password', data);
+
+		setTimeout(() => {
+			done();
+		}, 3000);
+	};
+
 	return (
 		<div className={styles.newPasswordContainer}>
 			<div>
@@ -28,23 +50,31 @@ export default function NewPasswordPage() {
 							<p className={styles.subtitle}>
 								Enter your new password.
 							</p>
-							<form action="">
+							<form onSubmit={formSubmit(onSubmit)}>
 								<Input
 									variant="secondary"
 									type="password"
 									placeholder="Password"
 									icon={<LockIcon />}
 									containerClassName={styles.authInput}
+									{...register('password')}
+									error={errors.password?.message}
 								/>
 								<Input
 									variant="secondary"
 									type="password"
-									placeholder="Password"
+									placeholder="Confirm Password"
 									icon={<LockIcon />}
 									containerClassName={styles.authInput}
+									{...register('confirmPassword')}
+									error={errors.confirmPassword?.message}
 								/>
 
-								<Button className={styles.signInBtn}>
+								<Button
+									className={styles.signInBtn}
+									type="submit"
+									loading={isLoading}
+								>
 									Reset Password
 								</Button>
 							</form>

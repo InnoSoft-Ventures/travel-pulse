@@ -1,13 +1,15 @@
 .container {
+	width: 100%;
+	max-width: 380px;
+
 	.inputContainer {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		width: 100%;
-		max-width: 380px;
 		padding: 0 1rem;
 		padding-right: 0;
-		border-radius: 20px;
+		border-radius: 15px;
 		column-gap: 10px;
 
 		&.default {
@@ -26,7 +28,7 @@
 		}
 
 		&.defaultSize {
-			height: 42px;
+			height: 45px;
 		}
 
 		&.largeSize {
@@ -48,6 +50,10 @@
 				color: var(--light-purple);
 			}
 		}
+	}
+
+	.passwordIcon {
+		color: var(--dark-purple);
 	}
 
 	.error {

@@ -1,16 +1,33 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button, Input, Logo } from '@travelpulse/ui';
+import { Button, GoogleAuth, Input, Logo } from '@travelpulse/ui';
 
 import MailIcon from '@/assets/mail-icon.svg';
 import LockIcon from '@/assets/lock-icon.svg';
-import GoogleIcon from '@/assets/google.svg';
 import InternetBg from '@/assets/internet-img.jpg';
 
 import styles from './login.module.scss';
+import { LoginFormValues, LoginSchema, useForm } from '@travelpulse/ui/forms';
 
 export default function LoginPage() {
+	const {
+		formSubmit,
+		register,
+		isLoading,
+		formState: { errors },
+	} = useForm(LoginSchema, {
+		mode: 'all',
+	});
+
+	const onSubmit = async (data: LoginFormValues, done: () => void) => {
+		console.log('Form submitted:', data);
+
+		setTimeout(() => {
+			done();
+		}, 3000);
+	};
+
 	return (
 		<div className={styles.loginContainer}>
 			<div>
@@ -27,10 +44,7 @@ export default function LoginPage() {
 					</div>
 					<div className={styles.formContainer}>
 						<div className={styles.innerFormContainer}>
-							<Button className={styles.googleBtn}>
-								<GoogleIcon />
-								Sign in with Google
-							</Button>
+							<GoogleAuth>Sign in with Google</GoogleAuth>
 							<div className={styles.divider}>
 								<span>or sign in with</span>
 							</div>
@@ -38,13 +52,15 @@ export default function LoginPage() {
 							<p className={styles.subtitle}>
 								Enter your details to access your eSIM.
 							</p>
-							<form action="">
+							<form onSubmit={formSubmit(onSubmit)}>
 								<Input
 									variant="secondary"
 									type="email"
 									placeholder="Email address"
 									icon={<MailIcon />}
 									containerClassName={styles.authInput}
+									{...register('email')}
+									error={errors.email?.message}
 								/>
 								<Input
 									variant="secondary"
@@ -52,6 +68,8 @@ export default function LoginPage() {
 									placeholder="Password"
 									icon={<LockIcon />}
 									containerClassName={styles.authInput}
+									{...register('password')}
+									error={errors.password?.message}
 								/>
 
 								<div className={styles.forgotPassword}>
@@ -61,7 +79,11 @@ export default function LoginPage() {
 									</Link>
 								</div>
 
-								<Button className={styles.signInBtn}>
+								<Button
+									type="submit"
+									loading={isLoading}
+									className={styles.signInBtn}
+								>
 									Sign In
 								</Button>
 							</form>

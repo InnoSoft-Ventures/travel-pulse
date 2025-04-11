@@ -45,25 +45,6 @@ $darkPurple: var(--dark-purple);
 		width: 100%;
 	}
 
-	.googleBtn {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 10px;
-		background: #ebebeb !important;
-		box-shadow: 0 3px 4px rgb(0 0 0 / 13%),
-			0 0.7px 1.5px -1px rgb(0 0 0 / 45%);
-		width: 100%;
-		padding: 12px;
-		font-weight: 400;
-		color: #000;
-
-		svg {
-			width: 20px;
-			height: 20px;
-		}
-	}
-
 	.divider {
 		margin: 20px 0;
 		text-align: center;

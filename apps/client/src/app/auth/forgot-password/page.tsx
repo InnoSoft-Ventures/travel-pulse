@@ -7,8 +7,24 @@ import MailIcon from '@/assets/mail-icon.svg';
 import InternetBg from '@/assets/internet-img.jpg';
 
 import styles from './forgot-password.module.scss';
+import { EmailFormValues, EmailSchema, useForm } from '@travelpulse/ui/forms';
 
 export default function ForgotPasswordPage() {
+	const {
+		formState: { errors },
+		isLoading,
+		formSubmit,
+		register,
+	} = useForm(EmailSchema);
+
+	const onSubmit = (data: EmailFormValues, done: () => void) => {
+		console.log('Forgot password', data);
+
+		setTimeout(() => {
+			done();
+		}, 3000);
+	};
+
 	return (
 		<div className={styles.forgotPasswordContainer}>
 			<div>
@@ -29,16 +45,22 @@ export default function ForgotPasswordPage() {
 							<p className={styles.subtitle}>
 								Enter your email address to reset your password.
 							</p>
-							<form action="">
+							<form onSubmit={formSubmit(onSubmit)}>
 								<Input
 									variant="secondary"
 									type="email"
 									placeholder="Email address"
 									icon={<MailIcon />}
 									containerClassName={styles.authInput}
+									{...register('email')}
+									error={errors.email?.message}
 								/>
 
-								<Button className={styles.forgotPasswordBtn}>
+								<Button
+									type="submit"
+									loading={isLoading}
+									className={styles.forgotPasswordBtn}
+								>
 									Reset Password
 								</Button>
 							</form>

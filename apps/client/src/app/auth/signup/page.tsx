@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button, Input, Logo } from '@travelpulse/ui';
+import { Button, GoogleAuth, Input, Logo } from '@travelpulse/ui';
 import {
 	RegisterFormValues,
 	RegisterSchema,
@@ -47,10 +47,7 @@ export default function SignupPage() {
 					</div>
 					<div className={styles.formContainer}>
 						<div className={styles.innerFormContainer}>
-							<Button className={styles.googleBtn}>
-								<GoogleIcon />
-								Sign up with Google
-							</Button>
+							<GoogleAuth>Sign up with Google</GoogleAuth>
 							<div className={styles.divider}>
 								<span>or sign up with</span>
 							</div>
