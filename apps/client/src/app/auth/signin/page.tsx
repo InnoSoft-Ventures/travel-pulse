@@ -44,14 +44,14 @@ export default function LoginPage() {
 									type="email"
 									placeholder="Email address"
 									icon={<MailIcon />}
-									className={styles.authInput}
+									containerClassName={styles.authInput}
 								/>
 								<Input
 									variant="secondary"
 									type="password"
 									placeholder="Password"
 									icon={<LockIcon />}
-									className={styles.authInput}
+									containerClassName={styles.authInput}
 								/>
 
 								<div className={styles.forgotPassword}>

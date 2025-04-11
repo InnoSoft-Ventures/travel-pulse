@@ -1,9 +1,9 @@
-import React from 'react';
+import * as React from 'react';
 import styles from './input.module.scss';
 import { cva, VariantProps } from 'class-variance-authority';
 import { cn } from '../../../utils';
 
-const inputVariants = cva(styles.container, {
+const inputVariants = cva(styles.inputContainer, {
 	variants: {
 		variant: {
 			default: styles.default,
@@ -20,48 +20,48 @@ const inputVariants = cva(styles.container, {
 	},
 });
 
-interface InputProps extends VariantProps<typeof inputVariants> {
-	id?: string;
-	name?: string;
+interface InputProps
+	extends Omit<
+			React.InputHTMLAttributes<HTMLInputElement>,
+			'size' | 'className'
+		>,
+		VariantProps<typeof inputVariants> {
+	inputClassName?: string;
+	containerClassName?: string;
 	type?: 'search' | 'text' | 'password' | 'email';
-	placeholder?: string;
-	className?: string;
 	icon?: React.ReactNode;
 	lastIcon?: React.ReactNode;
+	error?: string;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-	(props: InputProps, ref) => {
-		const {
-			id,
-			name,
-			type = 'text',
-			placeholder,
-			icon,
-			lastIcon,
-			className,
-			variant,
-			size,
-		} = props;
+const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+	const {
+		id,
+		type = 'text',
+		icon,
+		lastIcon,
+		inputClassName,
+		containerClassName,
+		variant,
+		size,
+		error,
+		...rest
+	} = props;
 
-		return (
+	return (
+		<div className={cn(styles.container, containerClassName)}>
 			<label
 				htmlFor={id}
-				className={cn(inputVariants({ variant, size }), className)}
+				className={cn(inputVariants({ variant, size }), inputClassName)}
 			>
 				{icon && <div>{icon}</div>}
-				<input
-					type={type}
-					id={id}
-					ref={ref}
-					name={name}
-					placeholder={placeholder}
-				/>
+				<input type={type} id={id} ref={ref} {...rest} />
 				{lastIcon && <div>{lastIcon}</div>}
 			</label>
-		);
-	}
-);
+			{error && <div className={styles.error}>{error}</div>}
+		</div>
+	);
+});
 
 Input.displayName = 'Input';
 

@@ -34,14 +34,14 @@ export default function NewPasswordPage() {
 									type="password"
 									placeholder="Password"
 									icon={<LockIcon />}
-									className={styles.authInput}
+									containerClassName={styles.authInput}
 								/>
 								<Input
 									variant="secondary"
 									type="password"
 									placeholder="Password"
 									icon={<LockIcon />}
-									className={styles.authInput}
+									containerClassName={styles.authInput}
 								/>
 
 								<Button className={styles.signInBtn}>

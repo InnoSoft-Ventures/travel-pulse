@@ -2,6 +2,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button, Input, Logo } from '@travelpulse/ui';
+import {
+	RegisterFormValues,
+	RegisterSchema,
+	useForm,
+} from '@travelpulse/ui/forms';
 
 import MailIcon from '@/assets/mail-icon.svg';
 import LockIcon from '@/assets/lock-icon.svg';
@@ -11,6 +16,21 @@ import InternetBg from '@/assets/internet-img.jpg';
 import styles from './signup.module.scss';
 
 export default function SignupPage() {
+	const {
+		register,
+		formSubmit,
+		isLoading,
+		formState: { errors },
+	} = useForm(RegisterSchema);
+
+	const onHandleSubmit = (data: RegisterFormValues, done: () => void) => {
+		console.log(data);
+
+		setTimeout(() => {
+			done();
+		}, 3000);
+	};
+
 	return (
 		<div className={styles.signupContainer}>
 			<div>
@@ -38,27 +58,42 @@ export default function SignupPage() {
 							<p className={styles.subtitle}>
 								Enter your details to access your eSIM.
 							</p>
-							<form action="">
+							<form onSubmit={formSubmit(onHandleSubmit)}>
 								<Input
 									variant="secondary"
 									type="text"
-									placeholder="Full name"
+									placeholder="First name"
 									icon={<MailIcon />}
-									className={styles.authInput}
+									error={errors.firstName?.message}
+									containerClassName={styles.authInput}
+									{...register('firstName')}
+								/>
+								<Input
+									variant="secondary"
+									type="text"
+									placeholder="Last name"
+									icon={<MailIcon />}
+									error={errors.lastName?.message}
+									containerClassName={styles.authInput}
+									{...register('lastName')}
 								/>
 								<Input
 									variant="secondary"
 									type="email"
 									placeholder="Email address"
 									icon={<MailIcon />}
-									className={styles.authInput}
+									containerClassName={styles.authInput}
+									error={errors.email?.message}
+									{...register('email')}
 								/>
 								<Input
 									variant="secondary"
 									type="password"
 									placeholder="Password"
 									icon={<LockIcon />}
-									className={styles.authInput}
+									containerClassName={styles.authInput}
+									error={errors.password?.message}
+									{...register('password')}
 								/>
 
 								<div className={styles.forgotPassword}>
@@ -72,7 +107,11 @@ export default function SignupPage() {
 									</Link>
 								</div>
 
-								<Button className={styles.signUpBtn}>
+								<Button
+									type="submit"
+									loading={isLoading}
+									className={styles.signUpBtn}
+								>
 									Sign Up
 								</Button>
 							</form>

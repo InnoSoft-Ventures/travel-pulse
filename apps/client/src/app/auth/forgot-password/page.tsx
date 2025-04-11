@@ -35,7 +35,7 @@ export default function ForgotPasswordPage() {
 									type="email"
 									placeholder="Email address"
 									icon={<MailIcon />}
-									className={styles.authInput}
+									containerClassName={styles.authInput}
 								/>
 
 								<Button className={styles.forgotPasswordBtn}>
