@@ -17,3 +17,16 @@ export interface UserSessionData {
 	user: UserResponseData;
 	token: string;
 }
+
+export interface UserDataDAO {
+	user: {
+		accountId: number;
+		firstName: string;
+		lastName: string;
+		email: string;
+		registrationDate: string;
+	};
+	token: {
+		accessToken: string;
+	};
+}

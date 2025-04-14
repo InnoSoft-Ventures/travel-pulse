@@ -10,23 +10,33 @@ import InternetBg from '@/assets/internet-img.jpg';
 import styles from './login.module.scss';
 import { useForm } from '@travelpulse/ui/forms';
 import { LoginFormValues, LoginSchema } from '@travelpulse/interfaces/schemas';
+import { loginUser } from '@travelpulse/ui/thunks';
+import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
 	const {
 		formSubmit,
 		register,
-		isLoading,
 		formState: { errors },
 	} = useForm(LoginSchema, {
 		mode: 'all',
 	});
 
-	const onSubmit = async (data: LoginFormValues, done: () => void) => {
-		console.log('Form submitted:', data);
+	const { status } = useAppSelector((state) => state.auth);
 
-		setTimeout(() => {
-			done();
-		}, 3000);
+	const dispatch = useAppDispatch();
+
+	const router = useRouter();
+
+	const onSubmit = async (data: LoginFormValues) => {
+		try {
+			await dispatch(loginUser(data)).unwrap();
+
+			router.push('/');
+		} catch (error) {
+			console.error('Login failed:', error);
+		}
 	};
 
 	return (
@@ -82,7 +92,7 @@ export default function LoginPage() {
 
 								<Button
 									type="submit"
-									loading={isLoading}
+									loading={status === 'loading'}
 									className={styles.signInBtn}
 								>
 									Sign In

@@ -8,11 +8,17 @@
     ".": {
       "import": "./index.ts"
     },
-		"./forms": {
+    "./forms": {
       "import": "./src/forms/index.ts"
     },
-		"./utils": {
-			"import": "./src/utils/index.ts"
+    "./utils": {
+      "import": "./src/utils/index.ts"
+    },
+		"./state": {
+			"import": "./src/store/state.ts"
+		},
+		"./thunks": {
+			"import": "./src/store/thunks/index.ts"
 		},
     "./assets/*": "./src/assets/*",
     "./styles/*": "./src/styles/*"
@@ -22,6 +28,7 @@
     "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-alert-dialog": "^1.1.6",
     "@travelpulse/interfaces": "workspace:^",
+    "@travelpulse/state": "workspace:^",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.487.0",

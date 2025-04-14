@@ -12,7 +12,6 @@
     "@config/prettier": "workspace:^",
     "@config/tsconfig": "workspace:^",
     "@travelpulse/interfaces": "workspace:^",
-    "@travelpulse/state": "workspace:^",
     "@travelpulse/ui": "workspace:^",
     "next": "14.2.11",
     "react": "^18",

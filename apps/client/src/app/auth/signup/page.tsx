@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Button, GoogleAuth, Input, Logo } from '@travelpulse/ui';
 import { useForm } from '@travelpulse/ui/forms';
 
-import { registerUser } from '@travelpulse/state/thunks';
+import { registerUser } from '@travelpulse/ui/thunks';
 
 import MailIcon from '@/assets/mail-icon.svg';
 import LockIcon from '@/assets/lock-icon.svg';
@@ -15,8 +15,8 @@ import {
 	RegisterFormValues,
 	RegisterSchema,
 } from '@travelpulse/interfaces/schemas';
-import { useAppDispatch, useAppSelector } from '@travelpulse/state';
-import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
+import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
 	const {
@@ -26,17 +26,19 @@ export default function SignupPage() {
 	} = useForm(RegisterSchema);
 
 	const dispatch = useAppDispatch();
-	const { status, error } = useAppSelector((state) => state.auth);
+	const { status } = useAppSelector((state) => state.auth);
 
-	useEffect(() => {
-		console.log('Status:', status);
-		console.log('Error:', error);
-	}, [status, error]);
+	const router = useRouter();
 
 	const onHandleSubmit = async (data: RegisterFormValues) => {
 		try {
-			const response = await dispatch(registerUser(data)).unwrap();
-			console.log(response);
+			await dispatch(registerUser(data)).unwrap();
+
+			// @TODO - Redirect to verify email page
+			// router.push('/auth/verify-email');
+
+			// For now, redirect to the login page
+			router.push('/auth/signin');
 		} catch (error) {
 			console.error('Registration failed:', error);
 		}

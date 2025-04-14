@@ -5,7 +5,7 @@ import {
 	AppStore,
 	makeStore,
 	PersistGate,
-} from '@travelpulse/state';
+} from '@travelpulse/ui/state';
 import { useRef } from 'react';
 
 export default function StoreProvider({
@@ -19,6 +19,9 @@ export default function StoreProvider({
 	if (!ref.current) {
 		ref.current = store.store;
 	}
+
+	// Uncomment this to clear the store on each reload
+	// store.persistor.purge();
 
 	return (
 		<ReduxProvider store={ref.current}>

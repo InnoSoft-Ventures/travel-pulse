@@ -1,4 +1,4 @@
-interface SuccessResponse<Result> {
+export interface SuccessResponse<Result> {
 	success: true;
 	statusCode: number;
 	message: string;

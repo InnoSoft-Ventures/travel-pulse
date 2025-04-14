@@ -6,12 +6,15 @@ import { Button } from '../../common/button';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Logo } from '../../logo';
+import { sessionValid, useAppSelector } from '@travelpulse/state';
 
 const TopNav = () => {
 	const router = useRouter();
 
+	const isLoggedIn = useAppSelector(sessionValid);
+
 	const onAuthNavigate = () => {
-		router.push('/auth/signin');
+		router.push(isLoggedIn ? '/dashboard' : '/auth/signin');
 	};
 
 	return (
@@ -28,7 +31,7 @@ const TopNav = () => {
 						</div>
 						<div>
 							<Button size="sm" onClick={onAuthNavigate}>
-								Sign In / Sign Up
+								{isLoggedIn ? 'Dashboard' : 'Sign In / Sign Up'}
 							</Button>
 						</div>
 					</div>

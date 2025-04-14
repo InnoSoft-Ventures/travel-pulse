@@ -4,6 +4,9 @@
   "main": "index.ts",
   "types": "index.ts",
   "private": true,
+	"scripts": {
+		"purge": "tsc purge.ts"
+	},
 	"exports": {
     ".": {
       "import": "./index.ts"

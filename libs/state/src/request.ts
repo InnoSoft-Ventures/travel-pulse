@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { getUserFromLocalStorage } from './storage';
 
 // Define your API base URL
-const baseURL = 'http://localhost:3001/';
+const baseURL = 'http://localhost:4000/';
 
 const axiosInstance = axios.create({
 	baseURL,
@@ -26,6 +26,20 @@ axiosInstance.interceptors.request.use((config) => {
 
 	return config;
 });
+
+axiosInstance.interceptors.response.use(
+	(response) => ({
+		...response,
+		data: { ...response.data, statusCode: response.status },
+	}),
+	(error: AxiosError) => {
+		if (error.response) {
+			return Promise.reject(error.response.data);
+		}
+
+		return Promise.reject(error);
+	}
+);
 
 const ApiService = axiosInstance;
 
