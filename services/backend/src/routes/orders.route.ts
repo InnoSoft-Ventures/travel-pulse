@@ -1,5 +1,5 @@
 import express from 'express';
-import { errorHandler, validateData } from '@libs/middlewares';
+import { errorHandler, validateData } from '@travelpulse/middlewares';
 import { makeOrder } from '../controllers/orders.controller';
 import { OrderPayloadSchema } from '../schema/order.schema';
 

@@ -1,12 +1,12 @@
-import { InternalException } from '@libs/middlewares';
+import { InternalException } from '@travelpulse/middlewares';
 import dbConnect from '../db';
 import Order from '../db/models/Order';
 import OrderItem, { OrderItemCreationAttributes } from '../db/models/OrderItem';
-import { OrderStatus, SOMETHING_WENT_WRONG } from '@libs/interfaces';
+import { OrderStatus, SOMETHING_WENT_WRONG } from '@travelpulse/interfaces';
 import Package from '../db/models/Package';
 import { OrderPayload } from '../schema/order.schema';
 import { Request } from 'express';
-import { ProviderFactory, ProviderFactoryData } from '@libs/providers';
+import { ProviderFactory, ProviderFactoryData } from '@travelpulse/providers';
 import ProviderOrder from '../db/models/ProviderOrder';
 import { Transaction } from 'sequelize';
 

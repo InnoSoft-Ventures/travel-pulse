@@ -8,8 +8,8 @@ import {
 	errorResponse,
 	HTTP_STATUS_CODES,
 	successResponse,
-} from '@libs/middlewares';
-import { SOMETHING_WENT_WRONG } from '@libs/interfaces';
+} from '@travelpulse/middlewares';
+import { SOMETHING_WENT_WRONG } from '@travelpulse/interfaces';
 import dbConnect from '../db';
 
 export const getMultipleRegions = async (_req: Request, res: Response) => {

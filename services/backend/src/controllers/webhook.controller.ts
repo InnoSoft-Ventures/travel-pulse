@@ -1,6 +1,6 @@
-import { ProviderIdentity } from '@libs/interfaces';
-import { successResponse } from '@libs/middlewares';
-import { Airalo } from '@libs/providers';
+import { ProviderIdentity } from '@travelpulse/interfaces';
+import { successResponse } from '@travelpulse/middlewares';
+import { Airalo } from '@travelpulse/providers';
 import { Request, Response } from 'express';
 import { processAsyncOrders } from '../services/process-async-orders';
 

@@ -1,5 +1,5 @@
-import { errorResponse } from '@libs/middlewares';
-import { secureAiraloWebhook } from '@libs/providers';
+import { errorResponse } from '@travelpulse/middlewares';
+import { secureAiraloWebhook } from '@travelpulse/providers';
 import { NextFunction, Request, Response } from 'express';
 
 export const secureWebhookMiddleware = async (

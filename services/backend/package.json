@@ -3,9 +3,9 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"dev": "nodemon .",
+		"dev": "export NODE_ENV='development' && nodemon .",
 		"start": "node dist/index.js",
-		"sq-cli": "npx sequelize-cli",
+		"sq-cli": "npx sequelize-cli --env development",
 		"build": "tsc",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
@@ -30,6 +30,7 @@
 		"express": "^4.19.2",
 		"helmet": "^7.1.0",
 		"mysql2": "^3.11.2",
+		"pg": "^8.14.1",
 		"sequelize": "^6.37.3",
 		"zod": "^3.23.8"
 	},

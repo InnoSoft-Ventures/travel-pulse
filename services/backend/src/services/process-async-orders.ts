@@ -3,9 +3,12 @@ import {
 	ProviderIdentity,
 	OrderStatus,
 	SimStatus,
-} from '@libs/interfaces';
-import { BadRequestException, InternalException } from '@libs/middlewares';
-import { AiraloAsyncOrderResponse } from '@libs/providers';
+} from '@travelpulse/interfaces';
+import {
+	BadRequestException,
+	InternalException,
+} from '@travelpulse/middlewares';
+import { AiraloAsyncOrderResponse } from '@travelpulse/providers';
 import ProviderOrder, {
 	ProviderOrderCreationAttributes,
 } from '../db/models/ProviderOrder';

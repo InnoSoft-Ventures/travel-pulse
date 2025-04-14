@@ -1,36 +1,36 @@
-import { NotFoundException } from "./../exceptions/not-found";
-import { UnauthorizedException } from "./../exceptions/validation";
-import { NextFunction, Request, Response } from "express";
-import * as jwt from "jsonwebtoken";
-import fs from "fs";
-import path from "path";
+import { NotFoundException } from './../exceptions/not-found';
+import { UnauthorizedException } from './../exceptions/validation';
+import { NextFunction, Request, Response } from 'express';
+import * as jwt from 'jsonwebtoken';
+import fs from 'fs';
+import path from 'path';
 
 import {
 	ERROR_CODE,
 	SOMETHING_WENT_WRONG,
 	SessionToken,
-} from "@libs/interfaces";
-import { HTTP_STATUS_CODES } from "../exceptions";
-import { errorResponse } from "../httpResponse";
+} from '@travelpulse/interfaces';
+import { HTTP_STATUS_CODES } from '../exceptions';
+import { errorResponse } from '../httpResponse';
 
 export const getTokenKey = (
 	servicePath: string,
-	keyType: "public" | "private",
+	keyType: 'public' | 'private'
 ) => {
 	try {
 		let link = servicePath;
 
-		if (process.env.NODE_ENV === "test") {
-			link = __dirname + "/../../../services/auth-service/src";
+		if (process.env.NODE_ENV === 'test') {
+			link = __dirname + '/../../../services/auth-service/src';
 		}
 
-		const keyPath = path.resolve(link, "secrets", keyType + ".pem");
+		const keyPath = path.resolve(link, 'secrets', keyType + '.pem');
 
-		return fs.readFileSync(keyPath, "utf8");
+		return fs.readFileSync(keyPath, 'utf8');
 	} catch (err) {
-		console.error("getTokenKey:", err);
+		console.error('getTokenKey:', err);
 
-		return "";
+		return '';
 	}
 };
 
@@ -42,18 +42,23 @@ export const getTokenKey = (
 export const authMiddleware = (
 	req: Request,
 	_res: Response,
-	next: NextFunction,
+	next: NextFunction
 ) => {
 	// Extract bearer token from the request headers
-	const token = (req.headers["service-token"] as string | undefined)?.split(
-		" ",
+	const token = (req.headers['service-token'] as string | undefined)?.split(
+		' '
 	)[1];
 
 	const SERVICE_COMMUNICATION_TOKEN =
-		process.env.SERVICE_COMMUNICATION_TOKEN || "";
+		process.env.SERVICE_COMMUNICATION_TOKEN || '';
 
 	if (!SERVICE_COMMUNICATION_TOKEN) {
-		next(new NotFoundException("Service communication token not found!", null));
+		next(
+			new NotFoundException(
+				'Service communication token not found!',
+				null
+			)
+		);
 	}
 
 	// Verify the token
@@ -66,7 +71,7 @@ export const authMiddleware = (
 
 		next();
 	} catch (error) {
-		console.error("authMiddleware:", error);
+		console.error('authMiddleware:', error);
 
 		next(new UnauthorizedException());
 	}
@@ -75,7 +80,7 @@ export const authMiddleware = (
 export const tokenSigning = (
 	data: string | object | Buffer,
 	secret: jwt.Secret,
-	options?: jwt.SignOptions,
+	options?: jwt.SignOptions
 ) => {
 	return jwt.sign(data, secret, options);
 };
@@ -83,7 +88,7 @@ export const tokenSigning = (
 export const tokenVerification = (
 	token: string,
 	secret: jwt.Secret,
-	options?: jwt.VerifyOptions,
+	options?: jwt.VerifyOptions
 ) => {
 	return jwt.verify(token, secret, options) as SessionToken;
 };
@@ -92,45 +97,45 @@ export function signToken<T extends string | object | Buffer>(
 	servicePath: string,
 	data: T,
 	options?: {
-		expiresIn: jwt.SignOptions["expiresIn"];
-	},
+		expiresIn: jwt.SignOptions['expiresIn'];
+	}
 ) {
-	const secret = getTokenKey(servicePath, "private");
+	const secret = getTokenKey(servicePath, 'private');
 
 	if (!secret) {
-		throw new NotFoundException("Token secret not found!", null);
+		throw new NotFoundException('Token secret not found!', null);
 	}
 
 	return tokenSigning(data, secret, {
-		algorithm: "RS256",
-		expiresIn: options?.expiresIn || "10d",
+		algorithm: 'RS256',
+		expiresIn: options?.expiresIn || '10d',
 	});
 }
 
 export function verifyToken<T>(servicePath: string, token: string) {
-	const secret = getTokenKey(servicePath, "public");
+	const secret = getTokenKey(servicePath, 'public');
 
 	if (!secret) {
-		console.error("validateToken: Token secret not found!");
+		console.error('validateToken: Token secret not found!');
 
 		throw new UnauthorizedException({
-			error: "Token not found!",
+			error: 'Token not found!',
 			code: ERROR_CODE.INVALID_TOKEN,
 		});
 	}
 
 	try {
 		return tokenVerification(token, secret, {
-			algorithms: ["RS256"],
+			algorithms: ['RS256'],
 		}) as T;
 	} catch (error) {
-		console.error("verifyToken:", error);
+		console.error('verifyToken:', error);
 
 		let errorObj = error;
 
 		if (error instanceof (jwt.TokenExpiredError || jwt.JsonWebTokenError)) {
 			errorObj = {
-				error: "Invalid/Expired token",
+				error: 'Invalid/Expired token',
 				code: ERROR_CODE.INVALID_TOKEN,
 			};
 		}
@@ -146,36 +151,38 @@ export const extractToken = (
 	servicePath: string,
 	req: Request,
 	res: Response,
-	next: NextFunction,
+	next: NextFunction
 ) => {
 	const authHeader = req.headers.authorization;
 
 	if (!authHeader) {
-		console.error("extractToken: Authorization header not found!");
+		console.error('extractToken: Authorization header not found!');
 
 		return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json(
-			errorResponse("Unauthorized access", {
-				error: "Authorization header not found",
-			}),
+			errorResponse('Unauthorized access', {
+				error: 'Authorization header not found',
+			})
 		);
 	}
 
-	const token = authHeader.split(" ")[1];
+	const token = authHeader.split(' ')[1];
 
 	if (!token) {
-		console.error("extractToken: Token not found in the Authorization header!");
+		console.error(
+			'extractToken: Token not found in the Authorization header!'
+		);
 
 		return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json(
-			errorResponse("Unauthorized access", {
-				error: "Token not found",
-			}),
+			errorResponse('Unauthorized access', {
+				error: 'Token not found',
+			})
 		);
 	}
 
-	const secret = getTokenKey(servicePath, "public");
+	const secret = getTokenKey(servicePath, 'public');
 
 	if (!secret) {
-		console.error("extractToken: Token secret not configured!");
+		console.error('extractToken: Token secret not configured!');
 
 		return res
 			.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
@@ -185,17 +192,17 @@ export const extractToken = (
 	try {
 		// @ts-ignore
 		req.user = tokenVerification(token, secret, {
-			algorithms: ["RS256"],
+			algorithms: ['RS256'],
 		});
 
 		return next();
 	} catch (error) {
-		console.error("extractToken: Token verification failed!", error);
+		console.error('extractToken: Token verification failed!', error);
 
 		return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json(
-			errorResponse("Unauthorized access", {
-				error: "Invalid token",
-			}),
+			errorResponse('Unauthorized access', {
+				error: 'Invalid token',
+			})
 		);
 	}
 };
@@ -205,7 +212,7 @@ export const extractToken = (
  */
 export const routeMiddleware = (servicePath: string) => {
 	return (req: Request, res: Response, next: NextFunction) => {
-		if (req.url.includes("/internal")) {
+		if (req.url.includes('/internal')) {
 			return authMiddleware(req, res, next);
 		}
 

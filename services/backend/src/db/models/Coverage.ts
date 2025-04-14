@@ -1,7 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
 import Operator from './Operator';
-import { AiraloCoverage } from '@libs/providers';
+import { AiraloCoverage } from '@travelpulse/providers';
 
 export interface CoverageAttributes {
 	id: number;

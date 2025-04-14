@@ -1,4 +1,4 @@
-import { HTTP_STATUS_CODES, successResponse } from '@libs/middlewares';
+import { HTTP_STATUS_CODES, successResponse } from '@travelpulse/middlewares';
 import { Request, Response } from 'express';
 import { createOrderService } from '../services/orders.service';
 

@@ -1,15 +1,15 @@
-import express from "express";
-import compression from "compression";
+import express from 'express';
+import compression from 'compression';
 
-import helmet from "helmet";
-import routes from "./routes";
-import cors from "cors";
-import * as dotenv from "dotenv";
+import helmet from 'helmet';
+import routes from './routes';
+import cors from 'cors';
+import * as dotenv from 'dotenv';
 import {
 	NotFoundException,
 	errorMiddleware,
 	logger,
-} from '@libs/middlewares';
+} from '@travelpulse/middlewares';
 
 dotenv.config();
 

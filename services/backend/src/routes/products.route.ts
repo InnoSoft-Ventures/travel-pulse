@@ -1,5 +1,5 @@
 import express from 'express';
-import { errorHandler } from '@libs/middlewares';
+import { errorHandler } from '@travelpulse/middlewares';
 import {
 	getGlobalPackages,
 	getMultipleRegions,

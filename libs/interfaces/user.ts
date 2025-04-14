@@ -5,3 +5,15 @@ export interface SessionToken {
 }
 
 export type SignToken = SessionToken;
+
+export interface UserResponseData {
+	userId: number;
+	username: string;
+	email: string;
+	picture: string;
+}
+
+export interface UserSessionData {
+	user: UserResponseData;
+	token: string;
+}

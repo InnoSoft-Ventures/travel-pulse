@@ -8,7 +8,8 @@ import LockIcon from '@/assets/lock-icon.svg';
 import InternetBg from '@/assets/internet-img.jpg';
 
 import styles from './login.module.scss';
-import { LoginFormValues, LoginSchema, useForm } from '@travelpulse/ui/forms';
+import { useForm } from '@travelpulse/ui/forms';
+import { LoginFormValues, LoginSchema } from '@travelpulse/interfaces/schemas';
 
 export default function LoginPage() {
 	const {

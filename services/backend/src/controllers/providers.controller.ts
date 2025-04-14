@@ -1,12 +1,12 @@
-import { Airalo, AiraloPackageWithCountryId } from '@libs/providers';
+import { Airalo, AiraloPackageWithCountryId } from '@travelpulse/providers';
 import { Request, Response } from 'express';
 import Country from '../db/models/Country';
 import Operator from '../db/models/Operator';
 import Package, { PackageCreationAttributes } from '../db/models/Package';
 import Coverage from '../db/models/Coverage';
 import Bottleneck from 'bottleneck';
-import { ProviderIdentity } from '@libs/interfaces';
-import { errorResponse } from '@libs/middlewares';
+import { ProviderIdentity } from '@travelpulse/interfaces';
+import { errorResponse } from '@travelpulse/middlewares';
 import Continent from '../db/models/Continent';
 
 export const authenticate = async (_req: Request, res: Response) => {

@@ -6,11 +6,11 @@ import LockIcon from '@/assets/lock-icon.svg';
 import InternetBg from '@/assets/internet-img.jpg';
 
 import styles from './new-password.module.scss';
+import { useForm } from '@travelpulse/ui/forms';
 import {
 	NewPasswordFormValues,
 	NewPasswordSchema,
-	useForm,
-} from '@travelpulse/ui/forms';
+} from '@travelpulse/interfaces/schemas';
 
 export default function NewPasswordPage() {
 	const {

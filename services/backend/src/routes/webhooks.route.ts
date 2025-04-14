@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
-import { errorHandler } from '@libs/middlewares';
+import { errorHandler } from '@travelpulse/middlewares';
 import { asyncOrders, optIn } from '../controllers/webhook.controller';
-import { ProviderIdentity } from '@libs/interfaces';
+import { ProviderIdentity } from '@travelpulse/interfaces';
 // import { secureWebhookMiddleware } from '../middlewares/webhook.middleware';
 
 const router = express.Router();

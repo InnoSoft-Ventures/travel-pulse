@@ -2,33 +2,44 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button, GoogleAuth, Input, Logo } from '@travelpulse/ui';
-import {
-	RegisterFormValues,
-	RegisterSchema,
-	useForm,
-} from '@travelpulse/ui/forms';
+import { useForm } from '@travelpulse/ui/forms';
+
+import { registerUser } from '@travelpulse/state/thunks';
 
 import MailIcon from '@/assets/mail-icon.svg';
 import LockIcon from '@/assets/lock-icon.svg';
-import GoogleIcon from '@/assets/google.svg';
 import InternetBg from '@/assets/internet-img.jpg';
 
 import styles from './signup.module.scss';
+import {
+	RegisterFormValues,
+	RegisterSchema,
+} from '@travelpulse/interfaces/schemas';
+import { useAppDispatch, useAppSelector } from '@travelpulse/state';
+import { useEffect } from 'react';
 
 export default function SignupPage() {
 	const {
 		register,
 		formSubmit,
-		isLoading,
 		formState: { errors },
 	} = useForm(RegisterSchema);
 
-	const onHandleSubmit = (data: RegisterFormValues, done: () => void) => {
-		console.log(data);
+	const dispatch = useAppDispatch();
+	const { status, error } = useAppSelector((state) => state.auth);
 
-		setTimeout(() => {
-			done();
-		}, 3000);
+	useEffect(() => {
+		console.log('Status:', status);
+		console.log('Error:', error);
+	}, [status, error]);
+
+	const onHandleSubmit = async (data: RegisterFormValues) => {
+		try {
+			const response = await dispatch(registerUser(data)).unwrap();
+			console.log(response);
+		} catch (error) {
+			console.error('Registration failed:', error);
+		}
 	};
 
 	return (
@@ -106,7 +117,7 @@ export default function SignupPage() {
 
 								<Button
 									type="submit"
-									loading={isLoading}
+									loading={status === 'loading'}
 									className={styles.signUpBtn}
 								>
 									Sign Up

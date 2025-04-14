@@ -1,0 +1,16 @@
+{
+	"extends": "@config/tsconfig/base.json",
+	"compilerOptions": {
+		"baseUrl": "./",
+		"paths": {
+			"@travelpulse/interfaces": ["index.ts"],
+      "@travelpulse/interfaces/schemas": ["schemas/index.ts"],
+		},
+	},
+	"include": [
+		"**/*.ts",
+	],
+	"exclude": [
+		"node_modules"
+	]
+}

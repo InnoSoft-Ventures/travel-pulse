@@ -4,9 +4,9 @@ import {
 	ProviderOrderStatus,
 	ProviderIdentity,
 	PackageType,
-} from '@libs/interfaces';
+} from '@travelpulse/interfaces';
 import Order from './Order';
-import { AiraloInstallationGuide } from '@libs/providers';
+import { AiraloInstallationGuide } from '@travelpulse/providers';
 
 export interface ProviderOrderAttributes {
 	id: number;

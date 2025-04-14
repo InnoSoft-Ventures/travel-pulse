@@ -7,7 +7,8 @@ import MailIcon from '@/assets/mail-icon.svg';
 import InternetBg from '@/assets/internet-img.jpg';
 
 import styles from './forgot-password.module.scss';
-import { EmailFormValues, EmailSchema, useForm } from '@travelpulse/ui/forms';
+import { useForm } from '@travelpulse/ui/forms';
+import { EmailFormValues, EmailSchema } from '@travelpulse/interfaces/schemas';
 
 export default function ForgotPasswordPage() {
 	const {

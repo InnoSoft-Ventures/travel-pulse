@@ -4,12 +4,24 @@
   "main": "index.ts",
   "types": "index.ts",
   "private": true,
+	"exports": {
+    ".": {
+      "import": "./index.ts"
+    },
+		"./thunks": {
+      "import": "./src/thunks/index.ts"
+    }
+  },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.3",
+    "@travelpulse/interfaces": "workspace:^",
+    "axios": "^1.7.2",
     "react-redux": "^9.1.0",
     "redux-persist": "^6.0.0"
   },
   "devDependencies": {
+    "@config/tsconfig": "workspace:^",
+    "@types/node": "^22.14.0",
     "@types/redux-persist": "^4.3.1"
   }
 }

@@ -1,6 +1,6 @@
 import express from 'express';
 import { authenticate, getPackages } from '../controllers/providers.controller';
-import { errorHandler } from '@libs/middlewares';
+import { errorHandler } from '@travelpulse/middlewares';
 
 const router = express.Router();
 

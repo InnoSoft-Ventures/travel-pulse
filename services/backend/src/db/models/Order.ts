@@ -1,7 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
 import User from './User';
-import { OrderStatus } from '@libs/interfaces';
+import { OrderStatus } from '@travelpulse/interfaces';
 
 export interface OrderAttributes {
 	id: number;

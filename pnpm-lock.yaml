@@ -132,7 +132,15 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
 
-  libs/interfaces: {}
+  libs/interfaces:
+    dependencies:
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@config/tsconfig':
+        specifier: workspace:^
+        version: link:../../configs/tsconfig
 
   libs/middlewares:
     dependencies:
@@ -192,6 +200,12 @@ importers:
       '@reduxjs/toolkit':
         specifier: ^2.2.3
         version: 2.6.1(react-redux@9.2.0(@types/react@19.1.0)(react@19.1.0)(redux@5.0.1))(react@19.1.0)
+      '@travelpulse/interfaces':
+        specifier: workspace:^
+        version: link:../interfaces
+      axios:
+        specifier: ^1.7.2
+        version: 1.7.7
       react-redux:
         specifier: ^9.1.0
         version: 9.2.0(@types/react@19.1.0)(react@19.1.0)(redux@5.0.1)
@@ -199,6 +213,12 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0(react@19.1.0)(redux@5.0.1)
     devDependencies:
+      '@config/tsconfig':
+        specifier: workspace:^
+        version: link:../../configs/tsconfig
+      '@types/node':
+        specifier: ^22.14.0
+        version: 22.14.0
       '@types/redux-persist':
         specifier: ^4.3.1
         version: 4.3.1(react@19.1.0)(redux@5.0.1)
@@ -317,9 +337,12 @@ importers:
       mysql2:
         specifier: ^3.11.2
         version: 3.11.2
+      pg:
+        specifier: ^8.14.1
+        version: 8.14.1
       sequelize:
         specifier: ^6.37.3
-        version: 6.37.3(mysql2@3.11.2)
+        version: 6.37.3(mysql2@3.11.2)(pg@8.14.1)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -4063,8 +4086,42 @@ packages:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
 
+  pg-cloudflare@1.1.1:
+    resolution: {integrity: sha512-xWPagP/4B6BgFO+EKz3JONXv3YDgvkbVrGw2mTo3D6tVDQRh1e7cqVGvyR3BE+eQgAvx1XhW/iEASj4/jCWl3Q==}
+
   pg-connection-string@2.6.4:
     resolution: {integrity: sha512-v+Z7W/0EO707aNMaAEfiGnGL9sxxumwLl2fJvCQtMn9Fxsg+lPpPkdcyBSv/KFgpGdYkMfn+EI1Or2EHjpgLCA==}
+
+  pg-connection-string@2.7.0:
+    resolution: {integrity: sha512-PI2W9mv53rXJQEOb8xNR8lH7Hr+EKa6oJa38zsK0S/ky2er16ios1wLKhZyxzD7jUReiWokc9WK5nxSnC7W1TA==}
+
+  pg-int8@1.0.1:
+    resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
+    engines: {node: '>=4.0.0'}
+
+  pg-pool@3.8.0:
+    resolution: {integrity: sha512-VBw3jiVm6ZOdLBTIcXLNdSotb6Iy3uOCwDGFAksZCXmi10nyRvnP2v3jl4d+IsLYRyXf6o9hIm/ZtUzlByNUdw==}
+    peerDependencies:
+      pg: '>=8.0'
+
+  pg-protocol@1.8.0:
+    resolution: {integrity: sha512-jvuYlEkL03NRvOoyoRktBK7+qU5kOvlAwvmrH8sr3wbLrOdVWsRxQfz8mMy9sZFsqJ1hEWNfdWKI4SAmoL+j7g==}
+
+  pg-types@2.2.0:
+    resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
+    engines: {node: '>=4'}
+
+  pg@8.14.1:
+    resolution: {integrity: sha512-0TdbqfjwIun9Fm/r89oB7RFQ0bLgduAhiIqIXOsyKoiC/L54DbuAAzIEN/9Op0f1Po9X7iCPXGoa/Ah+2aI8Xw==}
+    engines: {node: '>= 8.0.0'}
+    peerDependencies:
+      pg-native: '>=3.0.1'
+    peerDependenciesMeta:
+      pg-native:
+        optional: true
+
+  pgpass@1.0.5:
+    resolution: {integrity: sha512-FdW9r/jQZhSeohs1Z3sI1yxFQNFvMcnmfuj4WBMUTxOrAyLMaTcE1aAMBiTlbMNaXvBCQuVi0R7hd8udDSP7ug==}
 
   picocolors@1.1.0:
     resolution: {integrity: sha512-TQ92mBOW0l3LeMeyLV6mzy/kWr8lkd/hp3mTg7wYK7zJhuBStmGMBG0BdeDZS/dZx1IukaX6Bk11zcln25o1Aw==}
@@ -4136,6 +4193,22 @@ packages:
   postcss@8.4.45:
     resolution: {integrity: sha512-7KTLTdzdZZYscUc65XmjFiB73vBhBfbPztCYdUNvlaso9PrzjzcmjqBPR0lNGkcVlcO4BjiO5rK/qNz+XAen1Q==}
     engines: {node: ^10 || ^12 || >=14}
+
+  postgres-array@2.0.0:
+    resolution: {integrity: sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==}
+    engines: {node: '>=4'}
+
+  postgres-bytea@1.0.0:
+    resolution: {integrity: sha512-xy3pmLuQqRBZBXDULy7KbaitYqLcmxigw14Q5sj8QBVLqEwXfeybIKVWiqAXTlcvdvb0+xkOtDbfQMOf4lST1w==}
+    engines: {node: '>=0.10.0'}
+
+  postgres-date@1.0.7:
+    resolution: {integrity: sha512-suDmjLVQg78nMK2UZ454hAG+OAW+HQPZ6n++TNDUX+L0+uUlLywnoxJKDou51Zm+zTCjrCl0Nq6J9C5hP9vK/Q==}
+    engines: {node: '>=0.10.0'}
+
+  postgres-interval@1.2.0:
+    resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
+    engines: {node: '>=0.10.0'}
 
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
@@ -4539,6 +4612,10 @@ packages:
   source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
+
+  split2@4.2.0:
+    resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
+    engines: {node: '>= 10.x'}
 
   sprintf-js@1.0.3:
     resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
@@ -4980,6 +5057,10 @@ packages:
   write-file-atomic@4.0.2:
     resolution: {integrity: sha512-7KxauUdBmSdWnmpaGFg+ppNjKF8uNLry8LyzjauQDOVONfFLNKrKvQOxZ/VuTIcS/gge/YNahf5RIIQWTSarlg==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
+
+  xtend@4.0.2:
+    resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
+    engines: {node: '>=0.4'}
 
   y18n@5.0.8:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
@@ -6046,7 +6127,7 @@ snapshots:
   '@jest/console@29.7.0':
     dependencies:
       '@jest/types': 29.6.3
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       chalk: 4.1.2
       jest-message-util: 29.7.0
       jest-util: 29.7.0
@@ -6059,14 +6140,14 @@ snapshots:
       '@jest/test-result': 29.7.0
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       ci-info: 3.9.0
       exit: 0.1.2
       graceful-fs: 4.2.11
       jest-changed-files: 29.7.0
-      jest-config: 29.7.0(@types/node@20.16.5)(ts-node@10.9.2(@types/node@20.16.5)(typescript@5.5.4))
+      jest-config: 29.7.0(@types/node@22.14.0)(ts-node@10.9.2(@types/node@20.16.5)(typescript@5.5.4))
       jest-haste-map: 29.7.0
       jest-message-util: 29.7.0
       jest-regex-util: 29.6.3
@@ -6091,7 +6172,7 @@ snapshots:
     dependencies:
       '@jest/fake-timers': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       jest-mock: 29.7.0
 
   '@jest/expect-utils@29.7.0':
@@ -6109,7 +6190,7 @@ snapshots:
     dependencies:
       '@jest/types': 29.6.3
       '@sinonjs/fake-timers': 10.3.0
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       jest-message-util: 29.7.0
       jest-mock: 29.7.0
       jest-util: 29.7.0
@@ -6131,7 +6212,7 @@ snapshots:
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
       '@jridgewell/trace-mapping': 0.3.25
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       chalk: 4.1.2
       collect-v8-coverage: 1.0.2
       exit: 0.1.2
@@ -6201,7 +6282,7 @@ snapshots:
       '@jest/schemas': 29.6.3
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       '@types/yargs': 17.0.33
       chalk: 4.1.2
 
@@ -6689,7 +6770,7 @@ snapshots:
 
   '@types/bcrypt@5.0.2':
     dependencies:
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
 
   '@types/bcryptjs@2.4.6': {}
 
@@ -6698,7 +6779,7 @@ snapshots:
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
 
   '@types/compression@1.7.5':
     dependencies:
@@ -6706,15 +6787,15 @@ snapshots:
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
 
   '@types/continuation-local-storage@3.2.7':
     dependencies:
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
 
   '@types/cors@2.8.17':
     dependencies:
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
 
   '@types/debug@4.1.12':
     dependencies:
@@ -6722,7 +6803,7 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.5':
     dependencies:
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       '@types/qs': 6.9.15
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -6736,7 +6817,7 @@ snapshots:
 
   '@types/graceful-fs@4.1.9':
     dependencies:
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
 
   '@types/http-errors@2.0.4': {}
 
@@ -6761,7 +6842,7 @@ snapshots:
 
   '@types/jsonwebtoken@9.0.6':
     dependencies:
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
 
   '@types/lodash@4.17.7': {}
 
@@ -6769,7 +6850,7 @@ snapshots:
 
   '@types/morgan@1.9.9':
     dependencies:
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
 
   '@types/ms@0.7.34': {}
 
@@ -6822,7 +6903,7 @@ snapshots:
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
 
   '@types/sequelize@4.28.20':
     dependencies:
@@ -6834,7 +6915,7 @@ snapshots:
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       '@types/send': 0.17.4
 
   '@types/stack-utils@2.0.3': {}
@@ -8793,7 +8874,7 @@ snapshots:
       '@jest/expect': 29.7.0
       '@jest/test-result': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       chalk: 4.1.2
       co: 4.6.0
       dedent: 1.5.3
@@ -8863,6 +8944,37 @@ snapshots:
       - babel-plugin-macros
       - supports-color
 
+  jest-config@29.7.0(@types/node@22.14.0)(ts-node@10.9.2(@types/node@20.16.5)(typescript@5.5.4)):
+    dependencies:
+      '@babel/core': 7.25.2
+      '@jest/test-sequencer': 29.7.0
+      '@jest/types': 29.6.3
+      babel-jest: 29.7.0(@babel/core@7.25.2)
+      chalk: 4.1.2
+      ci-info: 3.9.0
+      deepmerge: 4.3.1
+      glob: 7.2.3
+      graceful-fs: 4.2.11
+      jest-circus: 29.7.0
+      jest-environment-node: 29.7.0
+      jest-get-type: 29.6.3
+      jest-regex-util: 29.6.3
+      jest-resolve: 29.7.0
+      jest-runner: 29.7.0
+      jest-util: 29.7.0
+      jest-validate: 29.7.0
+      micromatch: 4.0.8
+      parse-json: 5.2.0
+      pretty-format: 29.7.0
+      slash: 3.0.0
+      strip-json-comments: 3.1.1
+    optionalDependencies:
+      '@types/node': 22.14.0
+      ts-node: 10.9.2(@types/node@20.16.5)(typescript@5.5.4)
+    transitivePeerDependencies:
+      - babel-plugin-macros
+      - supports-color
+
   jest-diff@29.7.0:
     dependencies:
       chalk: 4.1.2
@@ -8887,7 +8999,7 @@ snapshots:
       '@jest/environment': 29.7.0
       '@jest/fake-timers': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       jest-mock: 29.7.0
       jest-util: 29.7.0
 
@@ -8897,7 +9009,7 @@ snapshots:
     dependencies:
       '@jest/types': 29.6.3
       '@types/graceful-fs': 4.1.9
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       anymatch: 3.1.3
       fb-watchman: 2.0.2
       graceful-fs: 4.2.11
@@ -8936,7 +9048,7 @@ snapshots:
   jest-mock@29.7.0:
     dependencies:
       '@jest/types': 29.6.3
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       jest-util: 29.7.0
 
   jest-pnp-resolver@1.2.3(jest-resolve@29.7.0):
@@ -8971,7 +9083,7 @@ snapshots:
       '@jest/test-result': 29.7.0
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       chalk: 4.1.2
       emittery: 0.13.1
       graceful-fs: 4.2.11
@@ -8999,7 +9111,7 @@ snapshots:
       '@jest/test-result': 29.7.0
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       chalk: 4.1.2
       cjs-module-lexer: 1.4.0
       collect-v8-coverage: 1.0.2
@@ -9045,7 +9157,7 @@ snapshots:
   jest-util@29.7.0:
     dependencies:
       '@jest/types': 29.6.3
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       chalk: 4.1.2
       ci-info: 3.9.0
       graceful-fs: 4.2.11
@@ -9064,7 +9176,7 @@ snapshots:
     dependencies:
       '@jest/test-result': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       emittery: 0.13.1
@@ -9073,7 +9185,7 @@ snapshots:
 
   jest-worker@29.7.0:
     dependencies:
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
       jest-util: 29.7.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
@@ -9593,7 +9705,42 @@ snapshots:
 
   path-type@4.0.0: {}
 
+  pg-cloudflare@1.1.1:
+    optional: true
+
   pg-connection-string@2.6.4: {}
+
+  pg-connection-string@2.7.0: {}
+
+  pg-int8@1.0.1: {}
+
+  pg-pool@3.8.0(pg@8.14.1):
+    dependencies:
+      pg: 8.14.1
+
+  pg-protocol@1.8.0: {}
+
+  pg-types@2.2.0:
+    dependencies:
+      pg-int8: 1.0.1
+      postgres-array: 2.0.0
+      postgres-bytea: 1.0.0
+      postgres-date: 1.0.7
+      postgres-interval: 1.2.0
+
+  pg@8.14.1:
+    dependencies:
+      pg-connection-string: 2.7.0
+      pg-pool: 3.8.0(pg@8.14.1)
+      pg-protocol: 1.8.0
+      pg-types: 2.2.0
+      pgpass: 1.0.5
+    optionalDependencies:
+      pg-cloudflare: 1.1.1
+
+  pgpass@1.0.5:
+    dependencies:
+      split2: 4.2.0
 
   picocolors@1.1.0: {}
 
@@ -9662,6 +9809,16 @@ snapshots:
       nanoid: 3.3.7
       picocolors: 1.1.0
       source-map-js: 1.2.1
+
+  postgres-array@2.0.0: {}
+
+  postgres-bytea@1.0.0: {}
+
+  postgres-date@1.0.7: {}
+
+  postgres-interval@1.2.0:
+    dependencies:
+      xtend: 4.0.2
 
   prelude-ls@1.2.1: {}
 
@@ -9971,7 +10128,7 @@ snapshots:
 
   sequelize-pool@7.1.0: {}
 
-  sequelize@6.37.3(mysql2@3.11.2):
+  sequelize@6.37.3(mysql2@3.11.2)(pg@8.14.1):
     dependencies:
       '@types/debug': 4.1.12
       '@types/validator': 13.12.1
@@ -9991,6 +10148,7 @@ snapshots:
       wkx: 0.5.0
     optionalDependencies:
       mysql2: 3.11.2
+      pg: 8.14.1
     transitivePeerDependencies:
       - supports-color
 
@@ -10059,6 +10217,8 @@ snapshots:
       source-map: 0.6.1
 
   source-map@0.6.1: {}
+
+  split2@4.2.0: {}
 
   sprintf-js@1.0.3: {}
 
@@ -10563,7 +10723,7 @@ snapshots:
 
   wkx@0.5.0:
     dependencies:
-      '@types/node': 20.16.5
+      '@types/node': 22.14.0
 
   word-wrap@1.2.5: {}
 
@@ -10585,6 +10745,8 @@ snapshots:
     dependencies:
       imurmurhash: 0.1.4
       signal-exit: 3.0.7
+
+  xtend@4.0.2: {}
 
   y18n@5.0.8: {}
 

@@ -1,4 +1,8 @@
-import { ACCOUNT_EVENTS, AUTH_EVENTS, bootstrapRabbitMQ } from '@libs/services';
+import {
+	ACCOUNT_EVENTS,
+	AUTH_EVENTS,
+	bootstrapRabbitMQ,
+} from '@travelpulse/services';
 
 import { msgConsumer } from './consumers/consumer';
 

@@ -1,7 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
 import ProviderOrder from './ProviderOrder';
-import { ApnType, SimStatus } from '@libs/interfaces';
+import { ApnType, SimStatus } from '@travelpulse/interfaces';
 
 type SimAPNSettings = {
 	[key: string]: {

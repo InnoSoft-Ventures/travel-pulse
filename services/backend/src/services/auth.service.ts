@@ -1,6 +1,6 @@
-import { SignToken } from '@libs/interfaces';
+import { SignToken } from '@travelpulse/interfaces';
 import { comparePassword, hashPassword } from '../utils/hash';
-import { BadRequestException, signToken } from '@libs/middlewares';
+import { BadRequestException, signToken } from '@travelpulse/middlewares';
 import User from '../db/models/User';
 import { SignInType, SignUpType } from '../schema/auth.schema';
 

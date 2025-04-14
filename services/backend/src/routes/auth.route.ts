@@ -1,5 +1,5 @@
 import express from 'express';
-import { errorHandler, validateData } from '@libs/middlewares';
+import { errorHandler, validateData } from '@travelpulse/middlewares';
 import { SignInSchema, SignUpSchema } from '../schema/auth.schema';
 import { loginUser, registerUser } from '../controllers/auth.controller';
 

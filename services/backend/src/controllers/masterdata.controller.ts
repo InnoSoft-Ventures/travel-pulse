@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { APIRequest } from '@libs/api-service';
+import { APIRequest } from '@travelpulse/api-service';
 import dbConnect from '../db';
 import { QueryTypes } from 'sequelize';
 import Continent from '../db/models/Continent';

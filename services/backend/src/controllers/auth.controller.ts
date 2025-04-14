@@ -2,7 +2,7 @@
 
 import { Request, Response } from 'express';
 import { loginService, registerService } from '../services/auth.service';
-import { HTTP_STATUS_CODES, successResponse } from '@libs/middlewares';
+import { HTTP_STATUS_CODES, successResponse } from '@travelpulse/middlewares';
 
 export const registerUser = async (req: Request, res: Response) => {
 	const results = await registerService(req.body);

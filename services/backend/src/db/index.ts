@@ -10,7 +10,8 @@ const dbConnect = new Sequelize({
 	...configs,
 });
 
-dbConnect.authenticate()
+dbConnect
+	.authenticate()
 	.then(() => {
 		console.log('Connected to the database');
 	})

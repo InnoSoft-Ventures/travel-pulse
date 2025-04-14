@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
-import { PackageType, ProviderIdentity } from '@libs/interfaces';
+import { PackageType, ProviderIdentity } from '@travelpulse/interfaces';
 
 export interface PackageAttributes {
 	id: number;
