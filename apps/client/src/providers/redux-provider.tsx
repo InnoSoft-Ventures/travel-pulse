@@ -1,6 +1,6 @@
 'use client';
 
-import { ToastProvider } from '@travelpulse/ui';
+import { getResponsivePlacement, ToastProvider } from '@travelpulse/ui';
 import { UIProvider } from '@travelpulse/ui';
 import {
 	ReduxProvider,
@@ -18,6 +18,8 @@ export default function StoreProvider({
 	const ref = useRef<AppStore | undefined>(undefined);
 	const store = makeStore();
 
+	const toastPlacement = 'top-center';
+
 	if (!ref.current) {
 		ref.current = store.store;
 	}
@@ -29,7 +31,10 @@ export default function StoreProvider({
 		<ReduxProvider store={ref.current}>
 			<PersistGate loading={null} persistor={store.persistor}>
 				<UIProvider>
-					<ToastProvider />
+					<ToastProvider
+						placement={toastPlacement}
+						toastOffset={toastPlacement.includes('top') ? 60 : 0}
+					/>
 					{children}
 				</UIProvider>
 			</PersistGate>
