@@ -11,8 +11,10 @@
   "dependencies": {
     "@config/prettier": "workspace:^",
     "@config/tsconfig": "workspace:^",
+    "@heroui/react": "^2.7.6",
     "@travelpulse/interfaces": "workspace:^",
     "@travelpulse/ui": "workspace:^",
+    "framer-motion": "^12.7.4",
     "next": "14.2.11",
     "react": "^18",
     "react-dom": "^18",

@@ -1,11 +1,12 @@
+'use client';
 import React from 'react';
 import { Hero } from '../layout/hero';
 import { Input } from '../common/input';
 import styles from './style.module.scss';
 import LocationIcon from '../../assets/location.svg';
-import CalendarIcon from '../../assets/calendar.svg';
 import SearchIcon from '../../assets/white-search.svg';
 import { Button } from '../common/button';
+import { Calendar } from '../common/calendar';
 
 interface DestinationHeaderProps {
 	title: string;
@@ -19,6 +20,7 @@ interface DestinationHeaderProps {
 
 const DestinationHeader = (props: DestinationHeaderProps) => {
 	const { title, subTitle, enableSearch = true } = props;
+
 	return (
 		<Hero>
 			<div className={styles.destinationContainer}>
@@ -36,13 +38,14 @@ const DestinationHeader = (props: DestinationHeaderProps) => {
 							size="large"
 							placeholder="Where do you need internet?"
 						/>
-						<Input
-							icon={<CalendarIcon />}
-							type="text"
+						<Calendar
+							id="date-picker"
 							size="large"
-							id="arrival-departure-date"
-							name="arrival-departure-date"
+							onChange={(dates) => {
+								console.log(dates);
+							}}
 							placeholder="Arrival & Departure"
+							containerClassName={styles.datePickerInput}
 						/>
 						<div>
 							<Button

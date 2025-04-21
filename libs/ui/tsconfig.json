@@ -11,6 +11,7 @@
       "@travelpulse/ui/utils": ["src/utils/index.ts"],
 			"@travelpulse/ui/state": ["src/store/state.ts"],
 			"@travelpulse/ui/thunks": ["src/store/thunks/index.ts"],
+			"@travelpulse/ui/theme": ["src/theme.ts"],
 		},
 	},
 	"include": [

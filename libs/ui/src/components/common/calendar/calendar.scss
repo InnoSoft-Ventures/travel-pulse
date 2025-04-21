@@ -1,0 +1,90 @@
+.flatpickr-calendar {
+	box-shadow: 0px 1px 5px 2px hsl(0deg 0% 0% / 17%);
+
+	.flatpickr-day {
+		font-size: 14px;
+		font-family: Poppins, sans-serif;
+		color: var(--dark-purple);
+		font-weight: 400;
+		cursor: pointer;
+
+		&:hover {
+			background: #d0c0fd;
+			border: 1px solid #d0c0fd;
+			box-shadow: none;
+		}
+
+		&.selected {
+			border: 1px solid var(--purple-gradient);
+			color: #fff;
+			background-image: linear-gradient(275deg, #eb61a3 0%, #953bef 100%);
+			box-shadow: none !important;
+
+			&.nextMonthDay,
+			&.prevMonthDay {
+				border: 1px solid var(--purple-gradient);
+				color: #fff;
+				background-image: linear-gradient(
+					275deg,
+					#eb61a3 0%,
+					#953bef 100%
+				);
+				box-shadow: none !important;
+			}
+
+			&:hover {
+				border-color: var(--purple-gradient);
+			}
+		}
+
+		&.startRange {
+			border: 1px solid var(--purple-gradient);
+			color: #fff;
+			background-image: linear-gradient(275deg, #eb61a3 0%, #953bef 100%);
+			box-shadow: none !important;
+		}
+
+		&.endRange {
+			border: 1px solid var(--purple-gradient);
+			color: #fff;
+			box-shadow: none !important;
+			background-image: linear-gradient(135deg, #eb61a3 0%, #953bef 100%);
+		}
+
+		&.today:not(.inRange),
+		&.today:not(.inRange):hover {
+			// background: #d0c0fd;
+			// border: 1px solid #d0c0fd !important;
+			box-shadow: none;
+			color: var(--dark-purple);
+			border: 1px solid transparent !important;
+			background-image: linear-gradient(#f2eff8, #e5e1f3),
+				linear-gradient(315deg, #ff73b6 0%, #5901b1 100%);
+			background-origin: border-box;
+			background-clip: padding-box, border-box;
+		}
+
+		&.inRange,
+		&.today.inRange,
+		&.today.inRange:hover {
+			background: #d0c0fd;
+			border: 1px solid #d0c0fd;
+			box-shadow: none;
+			color: var(--dark-purple);
+		}
+	}
+
+	.flatpickr-monthDropdown-months {
+		font-size: 15px;
+		vertical-align: middle;
+		color: var(--dark-purple);
+		font-weight: 400;
+	}
+
+	input.cur-year {
+		font-size: 15px;
+		font-family: Poppins, sans-serif;
+		color: var(--dark-purple);
+		font-weight: 400;
+	}
+}

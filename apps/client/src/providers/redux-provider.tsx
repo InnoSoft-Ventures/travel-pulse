@@ -1,5 +1,7 @@
 'use client';
 
+import { ToastProvider } from '@travelpulse/ui';
+import { UIProvider } from '@travelpulse/ui';
 import {
 	ReduxProvider,
 	AppStore,
@@ -26,7 +28,10 @@ export default function StoreProvider({
 	return (
 		<ReduxProvider store={ref.current}>
 			<PersistGate loading={null} persistor={store.persistor}>
-				{children}
+				<UIProvider>
+					<ToastProvider />
+					{children}
+				</UIProvider>
 			</PersistGate>
 		</ReduxProvider>
 	);

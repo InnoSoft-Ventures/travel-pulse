@@ -4,14 +4,14 @@
   "main": "index.ts",
   "types": "index.ts",
   "private": true,
-	"scripts": {
-		"purge": "tsc purge.ts"
-	},
-	"exports": {
+  "scripts": {
+    "purge": "tsc purge.ts"
+  },
+  "exports": {
     ".": {
       "import": "./index.ts"
     },
-		"./thunks": {
+    "./thunks": {
       "import": "./src/thunks/index.ts"
     }
   },
@@ -24,7 +24,6 @@
   },
   "devDependencies": {
     "@config/tsconfig": "workspace:^",
-    "@types/node": "^22.14.0",
-    "@types/redux-persist": "^4.3.1"
+    "@types/node": "^22.14.0"
   }
 }

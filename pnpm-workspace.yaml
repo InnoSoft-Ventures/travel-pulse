@@ -3,4 +3,7 @@ packages:
   - services/*
   - libs/*
   - configs/*
-  - "!**/test/**"
+  - '!**/test/**'
+onlyBuiltDependencies:
+  - '@heroui/shared-utils'
+  - es5-ext

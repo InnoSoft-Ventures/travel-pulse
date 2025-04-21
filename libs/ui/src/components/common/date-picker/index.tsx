@@ -1,10 +1,9 @@
 import React from 'react';
 import { Button } from '../button';
-import { Input } from '../input';
-import CalendarIcon from '../../../assets/calendar.svg';
 import SearchIcon from '../../../assets/white-search.svg';
 import styles from './date-picker.module.scss';
 import { cn } from '../../../utils';
+import { Calendar } from '../calendar';
 
 interface DatePickerProps {
 	inputClassName?: string;
@@ -19,23 +18,23 @@ interface DatePickerProps {
 
 function DatePicker(props: DatePickerProps) {
 	const {
-		inputClassName,
 		btnClassName,
 		hideSearchBtn = false,
 		showTravelingNote = true,
 	} = props;
 
+	const [dates, setDates] = React.useState<Date[]>([new Date()]);
+
 	return (
 		<div className={styles.datePickerContainer}>
 			<div className={styles.datePickerInputContainer}>
-				<Input
-					icon={<CalendarIcon />}
-					type="text"
-					size="large"
+				<Calendar
 					id="date-picker"
-					name="date-picker"
-					placeholder="2024-09-18 to 2024-09-25"
-					className={cn(styles.datePickerInput, inputClassName)}
+					size="large"
+					value={dates}
+					onClose={setDates}
+					placeholder="Select dates"
+					containerClassName={styles.datePickerInput}
 				/>
 
 				{!hideSearchBtn && (

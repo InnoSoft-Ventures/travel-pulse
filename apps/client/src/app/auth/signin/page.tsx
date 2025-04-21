@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button, GoogleAuth, Input, Logo } from '@travelpulse/ui';
+import { Button, GoogleAuth, Input, Logo, addToast } from '@travelpulse/ui';
 
 import MailIcon from '@/assets/mail-icon.svg';
 import LockIcon from '@/assets/lock-icon.svg';
@@ -13,6 +13,7 @@ import { LoginFormValues, LoginSchema } from '@travelpulse/interfaces/schemas';
 import { loginUser } from '@travelpulse/ui/thunks';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function LoginPage() {
 	const {
@@ -33,6 +34,11 @@ export default function LoginPage() {
 		try {
 			await dispatch(loginUser(data)).unwrap();
 
+			addToast({
+				color: 'success',
+				title: 'Login Successful',
+				description: 'You have successfully logged in.',
+			});
 			router.push('/');
 		} catch (error) {
 			console.error('Login failed:', error);
