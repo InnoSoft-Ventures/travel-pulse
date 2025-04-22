@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
 
 								<Button
 									type="submit"
-									loading={isLoading}
+									isLoading={isLoading}
 									className={styles.forgotPasswordBtn}
 								>
 									Reset Password

@@ -20,14 +20,15 @@
     "./thunks": {
       "import": "./src/store/thunks/index.ts"
     },
-		"./theme": {
-			"import": "./src/theme.ts"
-		},
+    "./theme": {
+      "import": "./src/theme.ts"
+    },
     "./assets/*": "./src/assets/*",
     "./styles/*": "./src/styles/*"
   },
   "dependencies": {
     "@config/tsconfig": "workspace:^",
+    "@heroui/button": "^2.2.17",
     "@heroui/system": "^2.4.13",
     "@heroui/theme": "^2.4.13",
     "@heroui/toast": "^2.0.7",

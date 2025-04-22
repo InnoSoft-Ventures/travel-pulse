@@ -33,7 +33,7 @@ export default function StoreProvider({
 				<UIProvider>
 					<ToastProvider
 						placement={toastPlacement}
-						toastOffset={toastPlacement.includes('top') ? 60 : 0}
+						toastOffset={toastPlacement.includes('top') ? 20 : 0}
 					/>
 					{children}
 				</UIProvider>

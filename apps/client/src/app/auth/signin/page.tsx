@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button, GoogleAuth, Input, Logo } from '@travelpulse/ui';
+import { Button, GoogleAuth, Input, Logo, toast } from '@travelpulse/ui';
 
 import MailIcon from '@/assets/mail-icon.svg';
 import LockIcon from '@/assets/lock-icon.svg';
@@ -35,6 +35,11 @@ export default function LoginPage() {
 
 			router.push('/');
 		} catch (error) {
+			toast.error({
+				title: 'Login failed',
+				description: 'Please check your credentials and try again.',
+			});
+
 			console.error('Login failed:', error);
 		}
 	};
@@ -92,7 +97,7 @@ export default function LoginPage() {
 
 								<Button
 									type="submit"
-									loading={status === 'loading'}
+									isLoading={status === 'loading'}
 									className={styles.signInBtn}
 								>
 									Sign In

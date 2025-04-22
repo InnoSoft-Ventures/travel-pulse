@@ -77,7 +77,7 @@ Country.init(
 		currencySymbol: {
 			allowNull: false,
 			field: 'currency_symbol',
-			type: DataTypes.STRING(5),
+			type: DataTypes.STRING,
 		},
 		continentId: {
 			allowNull: false,

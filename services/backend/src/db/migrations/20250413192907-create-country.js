@@ -43,7 +43,7 @@ module.exports = {
       },
       currency_symbol: {
         allowNull: false,
-        type: Sequelize.STRING(5),
+        type: Sequelize.STRING,
       },
       continent_id: {
         allowNull: false,

@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button, GoogleAuth, Input, Logo } from '@travelpulse/ui';
+import { Button, GoogleAuth, Input, Logo, toast } from '@travelpulse/ui';
 import { useForm } from '@travelpulse/ui/forms';
 
 import { registerUser } from '@travelpulse/ui/thunks';
@@ -40,6 +40,11 @@ export default function SignupPage() {
 			// For now, redirect to the login page
 			router.push('/auth/signin');
 		} catch (error) {
+			toast.error({
+				title: 'Registration failed',
+				// @ts-ignore
+				description: error || 'Please try again later.',
+			});
 			console.error('Registration failed:', error);
 		}
 	};
@@ -119,7 +124,7 @@ export default function SignupPage() {
 
 								<Button
 									type="submit"
-									loading={status === 'loading'}
+									isLoading={status === 'loading'}
 									className={styles.signUpBtn}
 								>
 									Sign Up

@@ -73,7 +73,7 @@ export default function NewPasswordPage() {
 								<Button
 									className={styles.signInBtn}
 									type="submit"
-									loading={isLoading}
+									isLoading={isLoading}
 								>
 									Reset Password
 								</Button>

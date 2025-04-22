@@ -196,13 +196,16 @@ type CountryTemp = {
 export const processCountries = async (_req: Request, res: Response) => {
 	try {
 		let data: (typeof S)[] = [];
-		const cacheData = await dbConnect.query('SELECT data FROM temp', {
-			type: QueryTypes.SELECT,
-		});
+		const cacheData = await dbConnect.query(
+			'SELECT data FROM country_data_cache',
+			{
+				type: QueryTypes.SELECT,
+			}
+		);
 
 		if (cacheData.length > 0) {
 			// @ts-ignore
-			data = JSON.parse(cacheData[0].data) as (typeof S)[];
+			data = cacheData[0].data as (typeof S)[];
 
 			console.log('Fetching countries data from the cache');
 		} else {
@@ -217,8 +220,13 @@ export const processCountries = async (_req: Request, res: Response) => {
 
 		const countries: Record<string, CountryTemp[]> = {};
 
+		// const limit = 10;
+		let count = 0;
 		data.forEach((country) => {
 			if (!country.capital) return;
+
+			// if (count >= limit) return;
+			count++;
 
 			const data = {
 				name: {
@@ -246,7 +254,7 @@ export const processCountries = async (_req: Request, res: Response) => {
 		if (cacheData.length === 0) {
 			await dbConnect.query(
 				{
-					query: 'INSERT INTO temp (data) VALUES (?)',
+					query: 'INSERT INTO country_data_cache (data) VALUES (?)',
 					values: [JSON.stringify(data)],
 				},
 				{ type: QueryTypes.INSERT }

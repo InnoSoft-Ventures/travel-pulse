@@ -11,6 +11,10 @@
 	border-radius: 15px;
 	transition: background-image 1s ease-in-out;
 
+	&:disabled {
+		opacity: 0.6 !important;
+	}
+
 	&.default {
 		background: var(--purple-gradient);
 	}

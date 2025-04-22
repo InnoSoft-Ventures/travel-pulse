@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import styles from './button.module.scss';
 import { cn } from '../../../utils';
+import styles from './button.module.scss';
+import {
+	Button as HeroUIButton,
+	ButtonProps as HeroUIButtonProps,
+} from '@heroui/button';
 
 const buttonVariants = cva(styles.btn, {
 	variants: {
@@ -15,7 +19,6 @@ const buttonVariants = cva(styles.btn, {
 			default: styles.defaultSize,
 			sm: styles.smallSize,
 			lg: styles.largeSize,
-			icon: 'h-10 w-10',
 		},
 	},
 	defaultVariants: {
@@ -25,32 +28,42 @@ const buttonVariants = cva(styles.btn, {
 });
 
 export interface ButtonProps
-	extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-		VariantProps<typeof buttonVariants> {
-	loading?: boolean;
+	extends VariantProps<typeof buttonVariants>,
+		Omit<HeroUIButtonProps, 'variant' | 'size' | 'spinnerPlacement'> {
 	icon?: React.ReactNode;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-	(
-		{ className, variant, size, loading = false, icon, children, ...props },
-		ref
-	) => {
-		return (
-			<button
-				className={cn(buttonVariants({ variant, size, className }))}
-				ref={ref}
-				disabled={loading || props.disabled}
-				{...props}
-			>
-				{loading && <div>Loading</div>}
-				{icon && <span className={styles.icon}>{icon}</span>}
+	(props, ref) => {
+		const {
+			className,
+			variant,
+			size,
+			isLoading,
+			icon,
+			startContent,
+			endContent,
+			disableRipple,
+			children,
+			...rest
+		} = props;
 
-				{!loading && <div className={styles.content}>{children}</div>}
-			</button>
+		return (
+			<HeroUIButton
+				ref={ref}
+				className={cn(buttonVariants({ variant, size }), className)}
+				disableRipple={disableRipple}
+				isLoading={isLoading}
+				startContent={startContent}
+				endContent={endContent}
+				{...rest}
+			>
+				{children}
+			</HeroUIButton>
 		);
 	}
 );
+
 Button.displayName = 'Button';
 
 export { Button };
