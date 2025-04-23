@@ -5,6 +5,7 @@
 		"heroui",
 		"iccid",
 		"imsis",
+		"masterdata",
 		"msisdn",
 		"persistor",
 		"qrcode",
