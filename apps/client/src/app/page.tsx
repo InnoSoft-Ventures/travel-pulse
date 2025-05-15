@@ -1,3 +1,5 @@
+'use client';
+
 import {
 	Hero,
 	Input,
@@ -5,12 +7,14 @@ import {
 	FeatureCard,
 	Title,
 	DestinationCards,
+	Curve,
 } from '@travelpulse/ui';
 
 // Icons
 import Characters from '@/assets/characters.svg';
 import YellowStar from '@/assets/yellow-star.svg';
 import SearchIcon from '@/assets/search.svg';
+import whiteWave from '@/assets/white wave (down).svg';
 import WhiteSearchIcon from '@/assets/white-search.svg';
 import InfoIcon from '@/assets/info.svg';
 import LocationIcon from '@/assets/location.svg';
@@ -20,6 +24,12 @@ import styles from './home.module.scss';
 import DUMMY_DESTINATIONS from './data';
 
 export default function HomePage() {
+	const scrollToDestination = () => {
+		const element = document.getElementById('destination-section');
+		if (element) {
+			element.scrollIntoView({ behavior: 'smooth' });
+		}
+	};
 	return (
 		<>
 			<Hero>
@@ -48,6 +58,7 @@ export default function HomePage() {
 									<Button
 										variant="secondary"
 										className={styles.searchBtn}
+										onClick={scrollToDestination}
 									>
 										Explore eSIMs for 200+ Countries
 									</Button>
@@ -60,89 +71,62 @@ export default function HomePage() {
 					</div>
 				</div>
 			</Hero>
-			<main className={styles.homeMain}>
-				<Title
-					dualColor="primary"
-					size="size45"
-					className={styles.mainTitle}
-					position="center"
-				>
-					What’s your next <span>destination?</span>
-				</Title>
-				<Title
-					size="size16"
-					position="center"
-					className={styles.mainSubTitle}
-				>
-					Pick a prepaid eSIM data plan for your upcoming trip
-				</Title>
 
-				<div className={styles.homePackageContainer}>
-					<div className={styles.homePackageSearch}>
-						<Input
-							icon={<LocationIcon />}
-							size="large"
-							variant="secondary"
-							placeholder="Where do you need internet?"
-						/>
-						<Input
-							icon={<CalendarIcon />}
-							lastIcon={
-								<button className={styles.infoIconBtn}>
-									<InfoIcon />
-								</button>
-							}
-							size="large"
-							variant="secondary"
-							placeholder="Arrival & Departure"
-						/>
-						<Button size="lg">
-							<WhiteSearchIcon />
-							Search
-						</Button>
-					</div>
-				</div>
-
-				<div className={styles.popularDestinationContainer}>
-					<Title size="size20" className={styles.popularDestination}>
-						Popular destinations
-					</Title>
-
-					<DestinationCards
-						data={DUMMY_DESTINATIONS}
-						destinationType="popular"
-					/>
-
-					<div className="text-center">
-						<Button variant="outline" className={styles.seeAllBtn}>
-							See all 200+ countries
-						</Button>
-					</div>
-				</div>
-				<div className={styles.multipleRegionsContainer}>
-					<div className={styles.stayConnected}></div>
-					<Title dualColor="primary" size="size40" position="center">
-						<span>Stay Connected</span> Across All Your Travel
-						Adventures
+			<div id="destination-section">
+				<main className={styles.homeMain}>
+					<Title
+						dualColor="primary"
+						size="size45"
+						className={styles.mainTitle}
+						position="center"
+					>
+						What’s your next <span>destination?</span>
 					</Title>
 					<Title
 						size="size16"
 						position="center"
 						className={styles.mainSubTitle}
 					>
-						Which top destinations will you be going to?
+						Pick a prepaid eSIM data plan for your upcoming trip
 					</Title>
+
+					<div className={styles.homePackageContainer}>
+						<div className={styles.homePackageSearch}>
+							<Input
+								icon={<LocationIcon />}
+								size="large"
+								variant="secondary"
+								placeholder="Where do you need internet?"
+							/>
+							<Input
+								icon={<CalendarIcon />}
+								lastIcon={
+									<button className={styles.infoIconBtn}>
+										<InfoIcon />
+									</button>
+								}
+								size="large"
+								variant="secondary"
+								placeholder="Arrival & Departure"
+							/>
+							<Button size="lg">
+								<WhiteSearchIcon />
+								Search
+							</Button>
+						</div>
+					</div>
+
 					<div className={styles.popularDestinationContainer}>
 						<Title
 							size="size20"
 							className={styles.popularDestination}
 						>
-							Exploring Multiple Regions
+							Popular destinations
 						</Title>
 
 						<DestinationCards
 							data={DUMMY_DESTINATIONS}
-							destinationType="regions"
+							destinationType="popular"
 						/>
 
 						<div className="text-center">
@@ -150,26 +134,73 @@ export default function HomePage() {
 								variant="outline"
 								className={styles.seeAllBtn}
 							>
-								View all regions
+								See all 200+ countries
 							</Button>
 						</div>
 					</div>
-				</div>
+					<div className={styles.multipleRegionsContainer}>
+						<div className={styles.stayConnected}></div>
+						<Title
+							dualColor="primary"
+							size="size40"
+							position="center"
+						>
+							<span>Stay Connected</span> Across All Your Travel
+							Adventures
+						</Title>
+						<Title
+							size="size16"
+							position="center"
+							className={styles.mainSubTitle}
+						>
+							Which top destinations will you be going to?
+						</Title>
+						<div className={styles.popularDestinationContainer}>
+							<Title
+								size="size20"
+								className={styles.popularDestination}
+							>
+								Exploring Multiple Regions
+							</Title>
 
-				<div className={styles.choosingContainer}>
-					<Title position="center" className={styles.title}>
-						Why choose TravelPulse?
-					</Title>
-					<div className={styles.featureListContainer}>
-						<div>
-							<FeatureCard />
-							<FeatureCard />
-							<FeatureCard />
-							<FeatureCard />
+							<DestinationCards
+								data={DUMMY_DESTINATIONS}
+								destinationType="regions"
+							/>
+
+							<div className="text-center">
+								<Button
+									variant="outline"
+									className={styles.seeAllBtn}
+								>
+									View all regions
+								</Button>
+							</div>
 						</div>
 					</div>
-				</div>
-			</main>
+
+					<div className={styles.choosingContainer}>
+						<Title position="center" className={styles.title}>
+							Why choose TravelPulse?
+						</Title>
+						<div className={styles.featureListContainer}>
+							<div>
+								<FeatureCard />
+								<FeatureCard />
+								<FeatureCard />
+								<FeatureCard />
+							</div>
+						</div>
+					</div>
+
+					<div className={styles.chooseHowContainer}>
+						<Curve variant="secondary" />
+						<Title position={'center'} className={styles.title}>
+							How TravelPulse eSIM works
+						</Title>
+					</div>
+				</main>
+			</div>
 		</>
 	);
 }

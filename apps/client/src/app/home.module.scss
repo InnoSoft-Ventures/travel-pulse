@@ -150,4 +150,16 @@ $lightGrey: var(--light-grey);
 			}
 		}
 	}
+
+	.chooseHowContainer {
+		margin-top: 109px;
+		padding-top: 122px;
+		position: relative;
+		background: linear-gradient(
+			282.38deg,
+			#e7e4f9 2.23%,
+			#f9f2f7 65.06%,
+			#ffffff 97.77%
+		);
+	}
 }

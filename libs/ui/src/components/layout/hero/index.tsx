@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { TopNav } from '../top-nav';
 import ArtLines from './art-lines.svg';
-import WhiteCurve from '../../../assets/white-wave.svg';
 import styles from './hero.module.scss';
+import { Curve } from '../../curve';
 
 interface HeroProp {
 	children: React.ReactNode;
@@ -22,9 +22,7 @@ const Hero = (props: HeroProp) => {
 				/>
 			</div>
 			{children}
-			<div className={styles.curve}>
-				<WhiteCurve />
-			</div>
+			<Curve />
 		</header>
 	);
 };
