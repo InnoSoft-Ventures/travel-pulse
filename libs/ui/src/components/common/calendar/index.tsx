@@ -58,6 +58,7 @@ interface CalendarProps extends VariantProps<typeof calendarVariants> {
 	value?: Date[];
 	defaultValue?: string;
 	placeholder?: string;
+	required?: boolean;
 }
 
 function Calendar(props: CalendarProps) {
@@ -65,6 +66,7 @@ function Calendar(props: CalendarProps) {
 		id,
 		lastIcon,
 		inputClassName,
+		required,
 		containerClassName,
 		error,
 		onChange,
@@ -112,6 +114,7 @@ function Calendar(props: CalendarProps) {
 						allowInput,
 						conjunction,
 					}}
+					required={required}
 					value={value}
 					placeholder={placeholder}
 					defaultValue={defaultValue}

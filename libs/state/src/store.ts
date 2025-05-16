@@ -13,6 +13,7 @@ export const makeStore = () => {
 
 	const store = configureStore({
 		reducer: persistedReducer,
+		// @ts-ignore
 		devTools: process.env.NODE_ENV !== 'production',
 		middleware: (getDefaultMiddleware) =>
 			getDefaultMiddleware({

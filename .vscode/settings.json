@@ -25,5 +25,7 @@
 	"css.customData": [
 		".vscode/tailwind.json"
 	],
-	"github.copilot.editor.enableAutoCompletions": true
+	"github.copilot.editor.enableAutoCompletions": true,
+	"typescript.preferences.importModuleSpecifier": "relative",
+  "javascript.preferences.importModuleSpecifier": "relative"
 }

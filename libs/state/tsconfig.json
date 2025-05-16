@@ -1,6 +1,5 @@
 {
 	"extends": "@config/tsconfig/base.json",
-	"moduleResolution": "bundler",
 	"compilerOptions": {
 		"baseUrl": "./",
 		"paths": {

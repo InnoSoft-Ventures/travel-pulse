@@ -25,7 +25,7 @@ const inputVariants = cva(styles.inputContainer, {
 	},
 });
 
-interface InputProps
+export interface InputProps
 	extends Omit<
 			React.InputHTMLAttributes<HTMLInputElement>,
 			'size' | 'className'

@@ -33,6 +33,8 @@ axiosInstance.interceptors.response.use(
 		data: { ...response.data, statusCode: response.status },
 	}),
 	(error: AxiosError) => {
+		console.error('API Error:', error);
+
 		if (error.response) {
 			return Promise.reject(error.response.data);
 		}

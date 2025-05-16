@@ -13,3 +13,4 @@ export * from './compatibility-checker';
 export * from './plan-card';
 export * from './plan-detail-modal';
 export * from './google-login';
+export * from './search-and-calendar';

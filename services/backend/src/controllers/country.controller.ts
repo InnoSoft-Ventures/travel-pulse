@@ -56,21 +56,21 @@ export const countrySearch = async (req: Request, res: Response) => {
 	}
 };
 
-export const getCountry = async (_req: Request, res: Response) => {
-	try {
-		// const { country } = req.params;
-		// const countries = await fetchCountriesFromAPI();
+// export const getCountry = async (req: Request, res: Response) => {
+// 	try {
+// 		const { country } = req.params;
+// 		const countries = await fetchCountriesFromAPI();
 
-		// if (country) {
-		// 	const filteredCountries = countries.filter((c) =>
-		// 		c.name.toLowerCase().includes(country.toLowerCase())
-		// 	);
-		// 	return res.status(200).json(filteredCountries);
-		// }
+// 		if (country) {
+// 			const filteredCountries = countries.filter((c) =>
+// 				c.name.toLowerCase().includes(country.toLowerCase())
+// 			);
+// 			return res.status(200).json(filteredCountries);
+// 		}
 
-		return res.status(200).json([]);
-	} catch (error) {
-		console.error('Error fetching countries:', error);
-		return res.status(500).json({ error: 'Internal Server Error' });
-	}
-};
+// 		return res.status(200).json([]);
+// 	} catch (error) {
+// 		console.error('Error fetching countries:', error);
+// 		return res.status(500).json({ error: 'Internal Server Error' });
+// 	}
+// };

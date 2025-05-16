@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RegisterFormValues } from '@travelpulse/interfaces/schemas';
 import { forgotPassword, loginUser, registerUser } from '../thunks/auth.thunk';
+import { StateStatus } from '@travelpulse/interfaces';
 
 interface AuthState {
 	register: RegisterFormValues;
-	status: 'idle' | 'loading' | 'succeeded' | 'failed';
+	status: StateStatus;
 	error: string | null;
 }
 

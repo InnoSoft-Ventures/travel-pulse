@@ -29,9 +29,7 @@ const buttonVariants = cva(styles.btn, {
 
 export interface ButtonProps
 	extends VariantProps<typeof buttonVariants>,
-		Omit<HeroUIButtonProps, 'variant' | 'size' | 'spinnerPlacement'> {
-	icon?: React.ReactNode;
-}
+		Omit<HeroUIButtonProps, 'variant' | 'size' | 'spinnerPlacement'> {}
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 	(props, ref) => {
@@ -40,7 +38,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 			variant,
 			size,
 			isLoading,
-			icon,
 			startContent,
 			endContent,
 			disableRipple,
