@@ -69,13 +69,12 @@ export default function HomePage() {
 									for travelers and digital nomads.
 								</h2>
 								<div className={styles.searchContainer}>
-									<Input
-										icon={<SearchIcon />}
-										type="search"
-										id="header-search"
-										name="destination-search"
-										placeholder="Search your destination for 200+ countries and regions"
-									/>
+									<Button
+										variant="secondary"
+										className={styles.searchBtn}
+									>
+										Explore eSIMs for 200+ Countries
+									</Button>
 								</div>
 							</div>
 							<div>

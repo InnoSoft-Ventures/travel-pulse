@@ -59,6 +59,14 @@ $lightGrey: var(--light-grey);
 
 	.searchContainer {
 		margin-bottom: 100px;
+
+		.searchBtn {
+			border-radius: 20px;
+			width: 100%;
+			max-width: 275px;
+			height: 42px;
+			background-color: #fff;
+		}
 	}
 }
 
