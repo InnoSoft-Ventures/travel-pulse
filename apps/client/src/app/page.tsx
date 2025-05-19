@@ -101,7 +101,10 @@ export default function HomePage() {
 							<Input
 								icon={<CalendarIcon />}
 								lastIcon={
-									<button className={styles.infoIconBtn}>
+									<button
+										className={styles.infoIconBtn}
+										title="More information"
+									>
 										<InfoIcon />
 									</button>
 								}
