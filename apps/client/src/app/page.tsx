@@ -8,28 +8,50 @@ import {
 	Title,
 	DestinationCards,
 	Curve,
+	SearchAndCalendar,
 } from '@travelpulse/ui';
 
 // Icons
 import Characters from '@/assets/characters.svg';
 import YellowStar from '@/assets/yellow-star.svg';
 import SearchIcon from '@/assets/search.svg';
-import whiteWave from '@/assets/white wave (down).svg';
-import WhiteSearchIcon from '@/assets/white-search.svg';
-import InfoIcon from '@/assets/info.svg';
-import LocationIcon from '@/assets/location.svg';
-import CalendarIcon from '@/assets/calendar.svg';
 
 import styles from './home.module.scss';
 import DUMMY_DESTINATIONS from './data';
+import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
+import { useEffect } from 'react';
+import {
+	getMultipleRegions,
+	getPopularDestinations,
+} from '@travelpulse/ui/thunks';
 
 export default function HomePage() {
+	const { popularDestinations, multipleRegions } = useAppSelector(
+		(state) => state.products
+	);
+
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		dispatch(
+			getPopularDestinations({
+				size: 6,
+			})
+		);
+		dispatch(
+			getMultipleRegions({
+				size: 6,
+			})
+		);
+	}, [dispatch]);
+
 	const scrollToDestination = () => {
 		const element = document.getElementById('destination-section');
 		if (element) {
 			element.scrollIntoView({ behavior: 'smooth' });
 		}
 	};
+
 	return (
 		<>
 			<Hero>
@@ -91,32 +113,10 @@ export default function HomePage() {
 					</Title>
 
 					<div className={styles.homePackageContainer}>
-						<div className={styles.homePackageSearch}>
-							<Input
-								icon={<LocationIcon />}
-								size="large"
-								variant="secondary"
-								placeholder="Where do you need internet?"
-							/>
-							<Input
-								icon={<CalendarIcon />}
-								lastIcon={
-									<button
-										className={styles.infoIconBtn}
-										title="More information"
-									>
-										<InfoIcon />
-									</button>
-								}
-								size="large"
-								variant="secondary"
-								placeholder="Arrival & Departure"
-							/>
-							<Button size="lg">
-								<WhiteSearchIcon />
-								Search
-							</Button>
-						</div>
+						<SearchAndCalendar
+							inputVariant="secondary"
+							className={styles.homePackageSearch}
+						/>
 					</div>
 
 					<div className={styles.popularDestinationContainer}>
@@ -128,8 +128,9 @@ export default function HomePage() {
 						</Title>
 
 						<DestinationCards
-							data={DUMMY_DESTINATIONS}
+							data={popularDestinations.list}
 							destinationType="popular"
+							isLoading={popularDestinations.status === 'loading'}
 						/>
 
 						<div className="text-center">
@@ -167,8 +168,9 @@ export default function HomePage() {
 							</Title>
 
 							<DestinationCards
-								data={DUMMY_DESTINATIONS}
+								data={multipleRegions.list}
 								destinationType="regions"
+								isLoading={multipleRegions.status === 'loading'}
 							/>
 
 							<div className="text-center">
