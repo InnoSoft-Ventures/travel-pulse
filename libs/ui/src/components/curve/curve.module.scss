@@ -1,0 +1,20 @@
+.curveContainer {
+	position: absolute;
+	z-index: 2;
+	bottom: -20px;
+	left: 0;
+	width: 100%;
+
+	svg {
+		width: 100%;
+	}
+
+	&.secondaryCurve {
+		bottom: unset;
+		top: -74px;
+
+		svg {
+			transform: rotate(180deg);
+		}
+	}
+}

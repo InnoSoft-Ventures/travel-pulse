@@ -6,8 +6,8 @@ import axios, {
 	Method,
 } from "axios";
 import { SERVICE, SERVICE_NAME } from "./service-urls";
-import { ResponseData } from "@libs/interfaces";
-import { tokenSigning } from "@libs/middlewares";
+import { ResponseData } from "@travelpulse/interfaces";
+import { tokenSigning } from "@travelpulse/middlewares";
 import { ServiceDiscovery } from "./serviceDiscovery";
 
 type RequestHeaders = Partial<
