@@ -39,7 +39,7 @@ export const getMultipleRegions = createAsyncThunk(
 		try {
 			const response = await ApiService.get<
 				ResponseData<CountryProduct[]>
-			>(`/products/multiple-regions`, {
+			>(`/products/regions`, {
 				params: {
 					size: params?.size,
 				},

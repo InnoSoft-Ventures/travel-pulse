@@ -1,22 +1,22 @@
-import { AiraloAccessToken } from "./types";
+import { AiraloAccessToken } from './types';
 import {
 	AIRALO_ACCESS_TOKEN,
 	AIRALO_API_URL,
 	AIRALO_CLIENT_ID,
 	AIRALO_CLIENT_SECRET,
 	AIRALO_GRANT_TYPE,
-} from "./../config";
-import { APIRequest } from "@libs/api-service";
+} from './../config';
+import { APIRequest } from '@travelpulse/api-service';
 
 export class AiraloBase {
-	private token: string = "";
+	private token: string = '';
 	public request: typeof APIRequest;
 
 	public constructor() {
 		this.request = APIRequest;
 
 		if (!AIRALO_ACCESS_TOKEN) {
-			throw new Error("Airalo API token is missing");
+			throw new Error('Airalo API token is missing');
 		}
 
 		this.token = AIRALO_ACCESS_TOKEN;
@@ -33,7 +33,7 @@ export class AiraloBase {
 	/**
 	 * Authenticate with the API to obtain the token
 	 */
-	public async authenticate(): Promise<AiraloAccessToken["data"]> {
+	public async authenticate(): Promise<AiraloAccessToken['data']> {
 		const URL = `${AIRALO_API_URL}/token`;
 		const data = {
 			client_id: AIRALO_CLIENT_ID,
@@ -42,16 +42,21 @@ export class AiraloBase {
 		};
 
 		try {
-			const response = await this.request.post<AiraloAccessToken>(URL, data);
+			const response = await this.request.post<AiraloAccessToken>(
+				URL,
+				data
+			);
 
 			if (response.status !== 200) {
-				throw new Error("Failed to retrieve access token from response");
+				throw new Error(
+					'Failed to retrieve access token from response'
+				);
 			}
 
 			return response.data.data;
 		} catch (error) {
-			console.error("Authentication failed:", error);
-			throw new Error("Unable to authenticate with Airalo API");
+			console.error('Authentication failed:', error);
+			throw new Error('Unable to authenticate with Airalo API');
 		}
 	}
 }

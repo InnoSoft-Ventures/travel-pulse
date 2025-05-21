@@ -1,6 +1,8 @@
 {
 	"editor.formatOnSave": true,
 	"cSpell.words": [
+		"Airalo",
+		"esim",
 		"esimaccess",
 		"heroui",
 		"iccid",
@@ -9,6 +11,7 @@
 		"msisdn",
 		"persistor",
 		"qrcode",
+		"rechargeability",
 		"travelpulse",
 		"xlarge"
 	],

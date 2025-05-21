@@ -1,13 +1,13 @@
-import { AiraloBase } from "./base";
+import { AiraloBase } from './base';
 import {
 	AiraloNotification,
 	AiraloOrderRequest,
 	AiraloOrderResponse,
 	AiraloPackageResponse,
-} from "./types";
-import { AxiosError } from "@libs/api-service";
-import { AIRALO_API_URL } from "../config";
-import { SOMETHING_WENT_WRONG } from "@libs/interfaces";
+} from './types';
+import { AxiosError } from '@travelpulse/api-service';
+import { AIRALO_API_URL } from '../config';
+import { SOMETHING_WENT_WRONG } from '@travelpulse/interfaces';
 
 export class Airalo extends AiraloBase {
 	private static instance: Airalo;
@@ -26,24 +26,27 @@ export class Airalo extends AiraloBase {
 
 	// Fetch available packages
 	public async getPackages(
-		type: "local" | "global",
+		type: 'local' | 'global',
 		page: number,
 		limit = 50,
-		country?: string,
+		country?: string
 	) {
 		try {
 			const URL = `${AIRALO_API_URL}/packages`;
-			const response = await this.request.get<AiraloPackageResponse>(URL, {
-				params: {
-					page,
-					"filter[type]": type,
-					limit,
-					"filter[country]": country,
-				},
-			});
+			const response = await this.request.get<AiraloPackageResponse>(
+				URL,
+				{
+					params: {
+						page,
+						'filter[type]': type,
+						limit,
+						'filter[country]': country,
+					},
+				}
+			);
 
 			if (response.status !== 200) {
-				throw new Error("Failed to retrieve packages from response");
+				throw new Error('Failed to retrieve packages from response');
 			}
 
 			const packages = response.data.data.map((pkg) => {
@@ -80,12 +83,12 @@ export class Airalo extends AiraloBase {
 			};
 		} catch (error) {
 			if (error instanceof AxiosError) {
-				console.error("Failed to fetch packages:", error.name);
+				console.error('Failed to fetch packages:', error.name);
 			} else if (error instanceof Error) {
-				console.error("Error:", error.message);
+				console.error('Error:', error.message);
 			}
 
-			throw new Error("Unable to retrieve packages from Airalo API");
+			throw new Error('Unable to retrieve packages from Airalo API');
 		}
 	}
 
@@ -100,13 +103,13 @@ export class Airalo extends AiraloBase {
 		try {
 			const response = await this.request.post(
 				`${AIRALO_API_URL}/notifications/opt-in`,
-				data,
+				data
 			);
 
 			return response.data;
 		} catch (error) {
-			console.error("Failed to opt-in:", error);
-			throw new Error("Unable to opt-in from Airalo API");
+			console.error('Failed to opt-in:', error);
+			throw new Error('Unable to opt-in from Airalo API');
 		}
 	}
 
@@ -129,18 +132,18 @@ export class Airalo extends AiraloBase {
 					quantity: data.quantity,
 					type: data.type,
 					description: description,
-				},
+				}
 			);
 
 			if (response.status === 202) {
 				return { success: true, data: response.data.data };
 			}
 
-			console.log("Airalo Order Error:", response.data.data);
+			console.log('Airalo Order Error:', response.data.data);
 
 			return { success: false, error: response.data.data };
 		} catch (error) {
-			console.error("Airalo API: Failed to order package:", error);
+			console.error('Airalo API: Failed to order package:', error);
 
 			return { success: false, error: SOMETHING_WENT_WRONG };
 		}

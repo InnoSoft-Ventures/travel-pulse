@@ -144,6 +144,14 @@ export const getRegionPackages = async (req: Request, res: Response) => {
 	}
 };
 
+export const getPopularDestinations = async (_req: Request, res: Response) => {
+	try {
+	} catch (error) {
+		console.error('Error in getPopularDestinations', error);
+		res.status(500).json(errorResponse(SOMETHING_WENT_WRONG));
+	}
+};
+
 export const getGlobalPackages = async (_req: Request, res: Response) => {
 	try {
 		const globalPackages = await Operator.findAll({

@@ -1,6 +1,6 @@
-import { PackageType, ProviderIdentity } from "@libs/interfaces";
-import { Airalo } from "./airalo";
-import { BadRequestException } from "../middlewares";
+import { PackageType, ProviderIdentity } from '@travelpulse/interfaces';
+import { Airalo } from './airalo';
+import { BadRequestException } from '../middlewares';
 
 export interface ProviderFactoryData {
 	packageId: string;
@@ -29,9 +29,9 @@ export class ProviderFactory {
 	}
 
 	private async airaloProvider(
-		data: ProviderFactoryData,
+		data: ProviderFactoryData
 	): Promise<ProviderOrderResponse> {
-		console.log("Processing item for Airalo");
+		console.log('Processing item for Airalo');
 
 		const instance = Airalo.getInstance();
 
@@ -43,8 +43,8 @@ export class ProviderFactory {
 			});
 
 			if (!response.data) {
-				console.error("Error from Airalo", response.error);
-				throw new Error("Error from Airalo");
+				console.error('Error from Airalo', response.error);
+				throw new Error('Error from Airalo');
 			}
 
 			return {
@@ -57,13 +57,13 @@ export class ProviderFactory {
 		} catch (error) {
 			throw new BadRequestException(
 				`Failed to complete order for Airalo: ${error}`,
-				error,
+				error
 			);
 		}
 	}
 
 	private getProviderFunction(
-		provider: ProviderIdentity,
+		provider: ProviderIdentity
 	): (data: ProviderFactoryData) => Promise<ProviderOrderResponse> {
 		switch (provider) {
 			case ProviderIdentity.AIRALO:
@@ -72,13 +72,13 @@ export class ProviderFactory {
 			default:
 				throw new BadRequestException(
 					`Unsupported provider: ${provider}`,
-					null,
+					null
 				);
 		}
 	}
 
 	async processOrder(): Promise<ProviderOrderResponse[]> {
-		console.log("Processing order", this.data);
+		console.log('Processing order', this.data);
 
 		// Process all provider orders concurrently
 		const providerOrderPromises = this.data.map(async (item) => {
@@ -88,12 +88,14 @@ export class ProviderFactory {
 		});
 
 		try {
-			const providerOrderResponses = await Promise.all(providerOrderPromises);
-			console.log("Order processed", providerOrderResponses);
+			const providerOrderResponses = await Promise.all(
+				providerOrderPromises
+			);
+			console.log('Order processed', providerOrderResponses);
 
 			return providerOrderResponses;
 		} catch (error) {
-			console.error("Error processing order:", error);
+			console.error('Error processing order:', error);
 			throw error;
 		}
 	}
