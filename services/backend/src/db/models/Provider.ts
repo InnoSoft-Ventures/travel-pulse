@@ -20,8 +20,18 @@ export interface ProviderAttributes {
 
 type ProviderCreationAttributes = Optional<
 	ProviderAttributes,
-	'id' | 'accessToken' | 'expiresIn' | 'createdAt'
->;
+	| 'id'
+	| 'enabled'
+	| 'accessToken'
+	| 'expiresIn'
+	| 'tokenType'
+	| 'grantType'
+	| 'clientId'
+	| 'clientSecret'
+	| 'createdAt'
+> & {
+	identityName: ProviderIdentity;
+};
 
 class Provider extends Model<ProviderAttributes, ProviderCreationAttributes> {
 	public id!: number;
@@ -60,32 +70,32 @@ Provider.init(
 		},
 		accessToken: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 			field: 'access_token',
 		},
 		expiresIn: {
 			type: DataTypes.INTEGER,
-			allowNull: false,
+			allowNull: true,
 			field: 'expires_in',
 		},
 		tokenType: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 			field: 'token_type',
 		},
 		grantType: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 			field: 'grant_type',
 		},
 		clientId: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 			field: 'client_id',
 		},
 		clientSecret: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 			field: 'client_secret',
 		},
 		createdAt: {

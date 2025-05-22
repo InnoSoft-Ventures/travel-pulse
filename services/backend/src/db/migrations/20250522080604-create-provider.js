@@ -25,27 +25,27 @@ module.exports = {
 			},
 			access_token: {
 				type: Sequelize.STRING,
-				allowNull: false,
+				allowNull: true,
 			},
 			expires_in: {
 				type: Sequelize.INTEGER,
-				allowNull: false,
+				allowNull: true,
 			},
 			token_type: {
 				type: Sequelize.STRING,
-				allowNull: false,
+				allowNull: true,
 			},
 			grant_type: {
 				type: Sequelize.STRING,
-				allowNull: false,
+				allowNull: true,
 			},
 			client_id: {
 				type: Sequelize.STRING,
-				allowNull: false,
+				allowNull: true,
 			},
 			client_secret: {
 				type: Sequelize.STRING,
-				allowNull: false,
+				allowNull: true,
 			},
 			created_at: {
 				type: Sequelize.DATE,
