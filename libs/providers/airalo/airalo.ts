@@ -5,9 +5,16 @@ import {
 	AiraloOrderResponse,
 	AiraloPackageResponse,
 } from './types';
-import { AxiosError } from '@travelpulse/api-service';
-import { AIRALO_API_URL } from '../config';
+import { APIRequest, AxiosError } from '@travelpulse/api-service';
 import { SOMETHING_WENT_WRONG } from '@travelpulse/interfaces';
+
+import { AiraloAccessToken } from './types';
+import {
+	AIRALO_API_URL,
+	AIRALO_CLIENT_ID,
+	AIRALO_CLIENT_SECRET,
+	AIRALO_GRANT_TYPE,
+} from '../config';
 
 export class Airalo extends AiraloBase {
 	private static instance: Airalo;
@@ -146,6 +153,53 @@ export class Airalo extends AiraloBase {
 			console.error('Airalo API: Failed to order package:', error);
 
 			return { success: false, error: SOMETHING_WENT_WRONG };
+		}
+	}
+}
+
+export class AiraloAuthenticated {
+	private request: typeof APIRequest;
+	private static instance: AiraloAuthenticated;
+
+	constructor() {
+		this.request = APIRequest;
+	}
+
+	// Singleton Pattern - ensures only one instance is created
+	public static getInstance(): AiraloAuthenticated {
+		if (!AiraloAuthenticated.instance) {
+			AiraloAuthenticated.instance = new AiraloAuthenticated();
+		}
+		return AiraloAuthenticated.instance;
+	}
+
+	/**
+	 * Authenticate with the API to obtain the token
+	 */
+	public async authenticate(): Promise<AiraloAccessToken['data']> {
+		const URL = `${AIRALO_API_URL}/token`;
+		const data = {
+			client_id: AIRALO_CLIENT_ID,
+			client_secret: AIRALO_CLIENT_SECRET,
+			grant_type: AIRALO_GRANT_TYPE,
+		};
+
+		try {
+			const response = await this.request.post<AiraloAccessToken>(
+				URL,
+				data
+			);
+
+			if (response.status !== 200) {
+				throw new Error(
+					'Failed to retrieve access token from response'
+				);
+			}
+
+			return response.data.data;
+		} catch (error) {
+			console.error('Authentication failed:', error);
+			throw new Error('Unable to authenticate with Airalo API');
 		}
 	}
 }

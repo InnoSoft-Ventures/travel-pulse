@@ -1,4 +1,8 @@
-import { Airalo, AiraloPackageWithCountryId } from '@travelpulse/providers';
+import {
+	Airalo,
+	AiraloAuthenticated,
+	AiraloPackageWithCountryId,
+} from '@travelpulse/providers';
 import { Request, Response } from 'express';
 import Country from '../db/models/Country';
 import Operator from '../db/models/Operator';
@@ -11,7 +15,7 @@ import Continent from '../db/models/Continent';
 
 export const authenticate = async (_req: Request, res: Response) => {
 	try {
-		const airalo = Airalo.getInstance();
+		const airalo = AiraloAuthenticated.getInstance();
 
 		res.status(200).json({
 			message: 'Authenticated successfully',

@@ -1,11 +1,4 @@
-import { AiraloAccessToken } from './types';
-import {
-	AIRALO_ACCESS_TOKEN,
-	AIRALO_API_URL,
-	AIRALO_CLIENT_ID,
-	AIRALO_CLIENT_SECRET,
-	AIRALO_GRANT_TYPE,
-} from './../config';
+import { AIRALO_ACCESS_TOKEN } from '../config';
 import { APIRequest } from '@travelpulse/api-service';
 
 export class AiraloBase {
@@ -28,35 +21,5 @@ export class AiraloBase {
 			}
 			return config;
 		});
-	}
-
-	/**
-	 * Authenticate with the API to obtain the token
-	 */
-	public async authenticate(): Promise<AiraloAccessToken['data']> {
-		const URL = `${AIRALO_API_URL}/token`;
-		const data = {
-			client_id: AIRALO_CLIENT_ID,
-			client_secret: AIRALO_CLIENT_SECRET,
-			grant_type: AIRALO_GRANT_TYPE,
-		};
-
-		try {
-			const response = await this.request.post<AiraloAccessToken>(
-				URL,
-				data
-			);
-
-			if (response.status !== 200) {
-				throw new Error(
-					'Failed to retrieve access token from response'
-				);
-			}
-
-			return response.data.data;
-		} catch (error) {
-			console.error('Authentication failed:', error);
-			throw new Error('Unable to authenticate with Airalo API');
-		}
 	}
 }

@@ -7,7 +7,6 @@
 		"start": "node dist/index.js",
 		"sq-cli": "npx sequelize-cli --env development",
 		"build": "tsc",
-		"artifacts": "node ./src/db/scripts/run-sql-artifacts.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {

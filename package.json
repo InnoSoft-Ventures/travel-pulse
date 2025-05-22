@@ -7,9 +7,9 @@
     "server:dev": "pnpm run --filter @travel-pulse/api dev",
 		"setup:db": "docker-compose up -d --remove-orphans",
 		"setup:db:stop": "docker-compose down",
-		"setup:artifacts": "pnpm run --filter @travel-pulse/api artifacts",
 		"db:migrate": "pnpm run --filter @travel-pulse/api sq-cli db:migrate",
-		"setup:server": "npm run setup:db && npm run db:migrate && npm run setup:artifacts && npm run server:dev",
+		"db:seeder": "pnpm run --filter @travel-pulse/api sq-cli db:seed:all",
+		"setup:server": "npm run setup:db && npm run db:migrate && npm run db:seeder && npm run server:dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
