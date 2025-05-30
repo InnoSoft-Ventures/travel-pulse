@@ -1,0 +1,50 @@
+.SecFeatureCard {
+	// padding: 2rem 1rem;
+	transition: all 0.3s ease;
+	cursor: pointer;
+
+	.iconContainer {
+		display: flex;
+		justify-content: center;
+		margin-bottom: 21px;
+	}
+
+	.infoContainer {
+		.title {
+			padding: 10px 0;
+			font-size: 24px;
+			font-weight: 600;
+			color: var(--dark-purple);
+		}
+
+		.description {
+			font-size: 16px;
+			font-weight: 100;
+			color: #5e5e7f;
+		}
+	}
+
+	&.secondary {
+		padding: 2rem 1rem;
+		background-color: #fff;
+		border-radius: 20px;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+		min-height: 275px;
+
+		.infoContainer {
+			.title {
+				padding: 0;
+				font-size: 18px;
+				text-align: center;
+				margin-bottom: 12px;
+			}
+
+			.description {
+				text-align: center;
+				line-height: 20px;
+				font-size: 15px;
+				color: var(--dark-purple);
+			}
+		}
+	}
+}
