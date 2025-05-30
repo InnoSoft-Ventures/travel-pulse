@@ -2,13 +2,18 @@ import { InternalException } from '@travelpulse/middlewares';
 import dbConnect from '../db';
 import Order from '../db/models/Order';
 import OrderItem, { OrderItemCreationAttributes } from '../db/models/OrderItem';
-import { OrderStatus, SOMETHING_WENT_WRONG } from '@travelpulse/interfaces';
+import {
+	OrderStatus,
+	ProviderFactoryData,
+	SOMETHING_WENT_WRONG,
+} from '@travelpulse/interfaces';
 import Package from '../db/models/Package';
 import { OrderPayload } from '../schema/order.schema';
 import { Request } from 'express';
-import { ProviderFactory, ProviderFactoryData } from '@travelpulse/providers';
+import { ProviderFactory } from '@travelpulse/providers';
 import ProviderOrder from '../db/models/ProviderOrder';
 import { Transaction } from 'sequelize';
+import { providerTokenHandler } from './provider-token.service';
 
 const fetchPackages = async (packageIds: number[]) => {
 	console.log('Fetching packages');
@@ -82,7 +87,11 @@ const processProviderOrders = async (
 	transact: Transaction
 ) => {
 	console.log('Processing provider orders');
-	const provider = new ProviderFactory(providerOrderDataPreparation);
+
+	const provider = new ProviderFactory(
+		providerOrderDataPreparation,
+		providerTokenHandler
+	);
 	const providerOrders = await provider.processOrder();
 
 	const providerOrderList = providerOrders.map((item) => ({

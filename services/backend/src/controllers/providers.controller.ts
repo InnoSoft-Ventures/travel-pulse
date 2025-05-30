@@ -1,7 +1,9 @@
 import {
 	Airalo,
-	AiraloAuthenticated,
+	ProviderAuthenticate,
 	AiraloPackageWithCountryId,
+	AIRALO_API_URL,
+	ProviderAccessToken,
 } from '@travelpulse/providers';
 import { Request, Response } from 'express';
 import Country from '../db/models/Country';
@@ -10,23 +12,64 @@ import Package, { PackageCreationAttributes } from '../db/models/Package';
 import Coverage from '../db/models/Coverage';
 import Bottleneck from 'bottleneck';
 import { ProviderIdentity } from '@travelpulse/interfaces';
-import { errorResponse } from '@travelpulse/middlewares';
+import {
+	errorResponse,
+	InternalException,
+	successResponse,
+} from '@travelpulse/middlewares';
 import Continent from '../db/models/Continent';
+import Provider from '../db/models/Provider';
+import { findProvider } from '../services/provider.service';
 
-export const authenticate = async (_req: Request, res: Response) => {
+export const airaloAuthenticate = async (_req: Request, res: Response) => {
 	try {
-		const airalo = AiraloAuthenticated.getInstance();
+		const airalo = ProviderAuthenticate.getInstance();
 
-		res.status(200).json({
-			message: 'Authenticated successfully',
-			data: await airalo.authenticate(),
+		const apiURL = `${AIRALO_API_URL}/token`;
+
+		const providerDetails = await findProvider(ProviderIdentity.AIRALO);
+
+		const data = await airalo.authenticate<ProviderAccessToken>(
+			ProviderIdentity.AIRALO,
+			apiURL,
+			{
+				clientId: providerDetails.clientId,
+				clientSecret: providerDetails.clientSecret,
+				grantType: providerDetails.grantType,
+			}
+		);
+
+		if (!data) {
+			throw new InternalException(
+				'Failed to authenticate with Airalo API',
+				{}
+			);
+		}
+
+		const { data: airaloSessionData } = data;
+
+		// Save the authentication token to the database
+		const [, updated] = await Provider.upsert({
+			name: ProviderIdentity.AIRALO,
+			identityName:
+				ProviderIdentity.AIRALO.toLowerCase() as ProviderIdentity,
+			accessToken: airaloSessionData.access_token,
+			expiresIn: airaloSessionData.expires_in,
+			tokenType: airaloSessionData.token_type,
+			issuedAt: new Date(),
 		});
+
+		res.status(201).json(
+			successResponse({
+				message: `Authenticated successfully ${updated ? 'updated' : 'saved'}`,
+			})
+		);
 	} catch (error) {
 		console.error('Failed to authenticate with Airalo API:', error);
 
-		res.status(500).json({
-			message: 'Failed to authenticate with Airalo API',
-		});
+		res.status(500).json(
+			errorResponse('Failed to authenticate with Airalo API')
+		);
 	}
 };
 
@@ -44,7 +87,7 @@ const limitedFetch = limiter.wrap(
 
 const missingCountries = new Map<string, string>();
 
-const getPackageList = async (
+const getAiraloPackageList = async (
 	packageType: 'local' | 'global',
 	airalo: Airalo,
 	data: {
@@ -171,7 +214,7 @@ const getPackageList = async (
 	}
 
 	if (packages.meta.next) {
-		await getPackageList(packageType, airalo, data, page + 1);
+		await getAiraloPackageList(packageType, airalo, data, page + 1);
 	} else {
 		console.log(' Finished fetching all packages');
 	}
@@ -206,7 +249,7 @@ async function getData() {
 	return { countryCodes, continentCodes };
 }
 
-export const getPackages = async (req: Request, res: Response) => {
+export const getAiraloPackages = async (req: Request, res: Response) => {
 	const { type } = req.query;
 
 	if (!['local', 'global'].includes(type as string)) {
@@ -219,11 +262,14 @@ export const getPackages = async (req: Request, res: Response) => {
 			);
 	}
 
-	const airalo = Airalo.getInstance();
+	// Get Airalo accessToken from DB
+	const getAiraloData = await findProvider(ProviderIdentity.AIRALO);
+
+	const airalo = Airalo.getInstance(getAiraloData.accessToken);
 
 	const dataInfo = await getData();
 
-	await getPackageList(type as 'local' | 'global', airalo, dataInfo, 1);
+	await getAiraloPackageList(type as 'local' | 'global', airalo, dataInfo, 1);
 
 	return res
 		.status(200)

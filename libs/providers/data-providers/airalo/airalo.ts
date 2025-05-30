@@ -1,32 +1,32 @@
 import { AiraloBase } from './base';
 import {
 	AiraloNotification,
+	AiraloNotificationType,
 	AiraloOrderRequest,
 	AiraloOrderResponse,
 	AiraloPackageResponse,
 } from './types';
-import { APIRequest, AxiosError } from '@travelpulse/api-service';
-import { SOMETHING_WENT_WRONG } from '@travelpulse/interfaces';
-
-import { AiraloAccessToken } from './types';
+import { AxiosError } from '@travelpulse/api-service';
 import {
-	AIRALO_API_URL,
-	AIRALO_CLIENT_ID,
-	AIRALO_CLIENT_SECRET,
-	AIRALO_GRANT_TYPE,
-} from '../config';
+	ProviderFactoryData,
+	ProviderOrderResponse,
+	ProviderStrategy,
+	SOMETHING_WENT_WRONG,
+} from '@travelpulse/interfaces';
 
-export class Airalo extends AiraloBase {
+import { AIRALO_API_URL } from '../../config';
+
+export class Airalo extends AiraloBase implements ProviderStrategy {
 	private static instance: Airalo;
 
-	private constructor() {
-		super();
+	private constructor(accessToken: string) {
+		super(accessToken);
 	}
 
 	// Singleton Pattern - ensures only one instance is created
-	public static getInstance(): Airalo {
+	public static getInstance(accessToken: string): Airalo {
 		if (!Airalo.instance) {
-			Airalo.instance = new Airalo();
+			Airalo.instance = new Airalo(accessToken);
 		}
 		return Airalo.instance;
 	}
@@ -121,13 +121,38 @@ export class Airalo extends AiraloBase {
 	}
 
 	/**
+	 * Opt-out for Airalo notifications.
+	 *
+	 * @param type - The type of notification to opt-out from.
+	 * @returns The response data from the Airalo API.
+	 * @throws Error if unable to opt-in from Airalo API.
+	 */
+	public async optOut(type: AiraloNotificationType) {
+		try {
+			const response = await this.request.post(
+				`${AIRALO_API_URL}/notifications/opt-out`,
+				{
+					type,
+				}
+			);
+
+			console.log('Opt-out:', type, response.data);
+
+			return response.data;
+		} catch (error) {
+			console.error('Failed to opt-out:', error);
+			throw new Error('Unable to opt-out from Airalo API');
+		}
+	}
+
+	/**
 	 * Creates an order for a package from Airalo.
 	 *
 	 * @param data - The data required to create the order.
 	 * @returns The response data containing the order details.
 	 * @throws An error if the order creation fails.
 	 */
-	public async createOrder(data: AiraloOrderRequest) {
+	private async createAiraloOrder(data: AiraloOrderRequest) {
 		try {
 			const description = `${data.quantity} x ${data.type} - ${data.packageId}`;
 
@@ -155,51 +180,29 @@ export class Airalo extends AiraloBase {
 			return { success: false, error: SOMETHING_WENT_WRONG };
 		}
 	}
-}
 
-export class AiraloAuthenticated {
-	private request: typeof APIRequest;
-	private static instance: AiraloAuthenticated;
+	public async createOrder(
+		data: ProviderFactoryData
+	): Promise<ProviderOrderResponse> {
+		console.log('Processing item for Airalo');
 
-	constructor() {
-		this.request = APIRequest;
-	}
+		const response = await this.createAiraloOrder({
+			quantity: data.quantity,
+			packageId: data.packageId,
+			type: data.type,
+		});
 
-	// Singleton Pattern - ensures only one instance is created
-	public static getInstance(): AiraloAuthenticated {
-		if (!AiraloAuthenticated.instance) {
-			AiraloAuthenticated.instance = new AiraloAuthenticated();
+		if (!response.success || !response.data) {
+			console.error('Error from Airalo', response.error);
+			throw new Error('Error from Airalo');
 		}
-		return AiraloAuthenticated.instance;
-	}
 
-	/**
-	 * Authenticate with the API to obtain the token
-	 */
-	public async authenticate(): Promise<AiraloAccessToken['data']> {
-		const URL = `${AIRALO_API_URL}/token`;
-		const data = {
-			client_id: AIRALO_CLIENT_ID,
-			client_secret: AIRALO_CLIENT_SECRET,
-			grant_type: AIRALO_GRANT_TYPE,
+		return {
+			externalRequestId: response.data.request_id,
+			provider: data.provider,
+			dataAmount: data.dataAmount,
+			voice: data.voice,
+			text: data.text,
 		};
-
-		try {
-			const response = await this.request.post<AiraloAccessToken>(
-				URL,
-				data
-			);
-
-			if (response.status !== 200) {
-				throw new Error(
-					'Failed to retrieve access token from response'
-				);
-			}
-
-			return response.data.data;
-		} catch (error) {
-			console.error('Authentication failed:', error);
-			throw new Error('Unable to authenticate with Airalo API');
-		}
 	}
 }

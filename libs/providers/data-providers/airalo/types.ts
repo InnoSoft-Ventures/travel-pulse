@@ -115,13 +115,18 @@ export interface AiraloPackageResponse {
 	};
 }
 
-export interface AiraloAccessToken {
+export interface ProviderAccessToken {
 	data: {
 		token_type: string;
 		expires_in: number;
 		access_token: string;
 	};
 }
+
+export type AiraloNotificationType =
+	| 'async_orders'
+	| 'webhook_low_data'
+	| 'webhook_credit_limit';
 
 export interface AiraloOrderNotification {
 	type: 'async_orders';

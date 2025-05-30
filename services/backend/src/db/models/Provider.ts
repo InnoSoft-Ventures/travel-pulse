@@ -7,6 +7,7 @@ import { ProviderIdentity } from '@travelpulse/interfaces';
 export interface ProviderAttributes {
 	id: number;
 	name: string;
+	/** Unique Identity name */
 	identityName: ProviderIdentity;
 	enabled: boolean;
 	accessToken: string;
@@ -15,6 +16,7 @@ export interface ProviderAttributes {
 	grantType: string;
 	clientId: string;
 	clientSecret: string;
+	issuedAt: Date;
 	createdAt: Date;
 }
 
@@ -28,6 +30,7 @@ type ProviderCreationAttributes = Optional<
 	| 'grantType'
 	| 'clientId'
 	| 'clientSecret'
+	| 'issuedAt'
 	| 'createdAt'
 > & {
 	identityName: ProviderIdentity;
@@ -44,6 +47,7 @@ class Provider extends Model<ProviderAttributes, ProviderCreationAttributes> {
 	public grantType!: string;
 	public clientId!: string;
 	public clientSecret!: string;
+	public issuedAt!: Date;
 	public createdAt!: Date;
 }
 
@@ -69,7 +73,7 @@ Provider.init(
 			defaultValue: true,
 		},
 		accessToken: {
-			type: DataTypes.STRING,
+			type: DataTypes.JSON,
 			allowNull: true,
 			field: 'access_token',
 		},
@@ -97,6 +101,11 @@ Provider.init(
 			type: DataTypes.STRING,
 			allowNull: true,
 			field: 'client_secret',
+		},
+		issuedAt: {
+			type: DataTypes.DATE,
+			allowNull: true,
+			field: 'issued_at',
 		},
 		createdAt: {
 			type: DataTypes.DATE,

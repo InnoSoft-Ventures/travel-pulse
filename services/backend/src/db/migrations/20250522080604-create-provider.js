@@ -24,7 +24,7 @@ module.exports = {
 				defaultValue: true,
 			},
 			access_token: {
-				type: Sequelize.STRING,
+				type: Sequelize.JSON,
 				allowNull: true,
 			},
 			expires_in: {
@@ -45,6 +45,10 @@ module.exports = {
 			},
 			client_secret: {
 				type: Sequelize.STRING,
+				allowNull: true,
+			},
+			issued_at: {
+				type: Sequelize.DATE,
 				allowNull: true,
 			},
 			created_at: {
