@@ -7,6 +7,7 @@ export interface PackageAttributes {
 	provider: ProviderIdentity;
 	operatorId: number;
 	externalPackageId: string;
+	/** This could be sim or data */
 	type: PackageType;
 	title: string;
 	price: number;
