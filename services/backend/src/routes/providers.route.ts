@@ -8,6 +8,6 @@ import { errorHandler } from '@travelpulse/middlewares';
 const router = express.Router();
 
 router.post('/airalo/token', errorHandler(airaloAuthenticate));
-router.get('/airalo', errorHandler(getAiraloPackages));
+router.get('/airalo/packages', errorHandler(getAiraloPackages));
 
 export default router;

@@ -5,11 +5,16 @@
   "scripts": {
     "web:dev": "pnpm run --filter @travel-pulse/client dev",
     "server:dev": "pnpm run --filter @travel-pulse/api dev",
+		"servers": "pnpm run server:dev && pnpm run mcp:dev",
 		"setup:db": "docker-compose up -d --remove-orphans",
 		"setup:db:stop": "docker-compose down",
 		"db:migrate": "pnpm run --filter @travel-pulse/api sq-cli db:migrate",
 		"db:seeder": "pnpm run --filter @travel-pulse/api sq-cli db:seed:all",
 		"setup:server": "npm run setup:db && npm run db:migrate && npm run db:seeder && npm run server:dev",
+		"mcp:dev": "pnpm run --filter @travel-pulse/mcp-server dev",
+    "mcp:start": "pnpm run --filter @travel-pulse/mcp-server start",
+    "mcp:build": "pnpm run --filter @travel-pulse/mcp-server build",
+    "mcp:setup": "pnpm run setup:db && pnpm run mcp:dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

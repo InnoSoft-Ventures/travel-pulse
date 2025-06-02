@@ -3208,4 +3208,28 @@ VALUES (
 		'Euro',
 		'€',
 		7
+	),
+	(
+		247 'Macao',
+		'Macao Special Administrative Region of China',
+		'MO',
+		'MAC',
+		'UTC+08:00',
+		'https://flagcdn.com/mo.svg',
+		'Macanese',
+		'Macanese Pataca',
+		'MOP$',
+		5
+	),
+	(
+		248 'Netherlands Antilles',
+		'Netherlands Antilles',
+		'AN',
+		'ANT',
+		'UTC−04:00',
+		'https://flagcdn.com/an.svg',
+		'Dutch Antillean',
+		'Netherlands Antillean guilder',
+		'ƒ',
+		9
 	);

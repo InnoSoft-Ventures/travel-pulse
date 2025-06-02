@@ -17,6 +17,7 @@ module.exports = {
 		port: DB_PORT,
 		host: DB_HOST,
 		dialect: DB_DIALECT,
+		migrationStorageTableName: 'migrations',
 	},
 	test: {
 		username: DB_USER,
@@ -24,5 +25,6 @@ module.exports = {
 		database: DB_DATABASE,
 		host: DB_HOST,
 		dialect: DB_DIALECT,
+		migrationStorageTableName: 'migrations',
 	},
 };

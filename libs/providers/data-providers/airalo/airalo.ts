@@ -53,6 +53,7 @@ export class Airalo extends AiraloBase implements ProviderStrategy {
 			);
 
 			if (response.status !== 200) {
+				console.error('Error:', response.data);
 				throw new Error('Failed to retrieve packages from response');
 			}
 

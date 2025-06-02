@@ -20,6 +20,7 @@ import {
 import Continent from '../db/models/Continent';
 import Provider from '../db/models/Provider';
 import { findProvider } from '../services/provider.service';
+import { providerTokenHandler } from '../services/provider-token.service';
 
 export const airaloAuthenticate = async (_req: Request, res: Response) => {
 	try {
@@ -263,9 +264,9 @@ export const getAiraloPackages = async (req: Request, res: Response) => {
 	}
 
 	// Get Airalo accessToken from DB
-	const getAiraloData = await findProvider(ProviderIdentity.AIRALO);
+	const token = await providerTokenHandler(ProviderIdentity.AIRALO);
 
-	const airalo = Airalo.getInstance(getAiraloData.accessToken);
+	const airalo = Airalo.getInstance(token);
 
 	const dataInfo = await getData();
 
