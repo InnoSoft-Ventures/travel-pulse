@@ -21,6 +21,7 @@ import Continent from '../db/models/Continent';
 import Provider from '../db/models/Provider';
 import { findProvider } from '../services/provider.service';
 import { providerTokenHandler } from '../services/provider-token.service';
+import { buildAliasToContinentIdMap } from '../utils/data';
 
 export const airaloAuthenticate = async (_req: Request, res: Response) => {
 	try {
@@ -93,7 +94,7 @@ const getAiraloPackageList = async (
 	airalo: Airalo,
 	data: {
 		countryCodes: Record<string, number>;
-		continentCodes: Record<string, number>;
+		continentCodes: Map<string, number>;
 	},
 	page: number
 ) => {
@@ -123,13 +124,10 @@ const getAiraloPackageList = async (
 
 	// Process Operators and Packages
 	for (const pkg of packagesWithCountryId) {
-		console.log(
-			'Processing package',
-			pkg.title,
-			continentCodes[JSON.stringify([pkg.slug])],
-			JSON.stringify([pkg.slug]),
-			'\n'
-		);
+		let continentId = continentCodes.get(pkg.slug) || null;
+
+		console.log('Processing package', pkg.title, pkg.slug, '\n');
+
 		const operatorRecords = pkg.operators.map((operator) => {
 			const type =
 				operator.type === 'global'
@@ -137,10 +135,9 @@ const getAiraloPackageList = async (
 						? 'global'
 						: 'regional'
 					: 'local';
-			let continentId = null;
-			const continentInfo = continentCodes[JSON.stringify([pkg.slug])];
-			if (type !== 'local' && continentInfo) {
-				continentId = continentInfo;
+
+			if (type === 'local') {
+				continentId = null;
 			}
 
 			return {
@@ -225,8 +222,12 @@ async function getData() {
 	const [countries, continents] = await Promise.all([
 		Country.findAll({
 			attributes: ['id', 'iso2'],
+			order: [['id', 'ASC']],
 		}),
-		Continent.findAll(),
+		Continent.findAll({
+			attributes: ['id', 'aliasList'],
+			order: [['id', 'ASC']],
+		}),
 	]);
 
 	const countryCodes = countries.reduce<Record<string, number>>(
@@ -238,14 +239,7 @@ async function getData() {
 		{}
 	);
 
-	const continentCodes = continents.reduce<Record<string, number>>(
-		(acc, continent) => {
-			acc[continent.aliasList.toString()] = continent.id;
-
-			return acc;
-		},
-		{}
-	);
+	const continentCodes = buildAliasToContinentIdMap(continents);
 
 	return { countryCodes, continentCodes };
 }

@@ -54,7 +54,7 @@ export interface AiraloOperator {
 	apn_type: string;
 	apn_value: string | null;
 	is_roaming: boolean;
-	info: string[];
+	info: string[] | null;
 	image?: {
 		width: number;
 		height: number;
