@@ -15,3 +15,4 @@ export * from './plan-detail-modal';
 export * from './google-login';
 export * from './search-and-calendar';
 export * from './curve';
+export * from './SectionCard';
