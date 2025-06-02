@@ -2,6 +2,7 @@
 	// padding: 2rem 1rem;
 	transition: all 0.3s ease;
 	cursor: pointer;
+	flex: 1;
 
 	.iconContainer {
 		display: flex;
@@ -45,6 +46,11 @@
 				font-size: 15px;
 				color: var(--dark-purple);
 			}
+		}
+
+		.hexagonBackground {
+			display: flex;
+			justify-content: center;
 		}
 	}
 }

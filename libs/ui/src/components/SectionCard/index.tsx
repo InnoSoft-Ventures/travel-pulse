@@ -19,7 +19,9 @@ const SectionCard = (props: SectionCardProps) => {
 	return (
 		<div className={`${styles.SecFeatureCard} ${cardStyles}`}>
 			<div className={styles.IconContainer}>
-				<Hexagon icon={icon} />
+				<div className={styles.hexagonBackground}>
+					<Hexagon icon={icon} />
+				</div>
 				<div className={styles.infoContainer}>
 					<div className={styles.title}>{title}</div>
 					<div className={styles.description}>{description}</div>

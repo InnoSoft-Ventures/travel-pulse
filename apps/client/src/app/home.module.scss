@@ -125,7 +125,7 @@ $lightGrey: var(--light-grey);
 		}
 
 		.featureListContainer {
-			max-width: 1306px;
+			max-width: 1190px;
 			margin: 0 auto;
 			position: relative;
 
@@ -144,7 +144,7 @@ $lightGrey: var(--light-grey);
 				display: flex;
 				position: relative;
 				z-index: 1;
-				gap: 40px;
+				gap: 26px;
 			}
 		}
 	}
@@ -168,10 +168,9 @@ $lightGrey: var(--light-grey);
 		}
 
 		.secFeatureListContainer {
-			max-width: 1306px;
+			max-width: 1156px;
 			margin: 0 auto;
 			position: relative;
-			padding-left: 50px;
 
 			&::before {
 				content: '';
@@ -188,13 +187,15 @@ $lightGrey: var(--light-grey);
 				position: relative;
 				padding: 30px 0;
 				z-index: 1;
-				gap: 40px;
+				gap: 45px;
 			}
 		}
 
 		.textCenter {
+			justify-content: center;
+			padding-bottom: 80px !important;
+
 			.AllDestinations {
-				margin: 0 32rem;
 				color: #fff;
 				background: var(--purple-gradient);
 			}
