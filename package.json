@@ -14,6 +14,7 @@
     "mcp:dev": "pnpm run --filter @travel-pulse/mcp-server dev",
     "mcp:start": "pnpm run --filter @travel-pulse/mcp-server start",
     "mcp:build": "pnpm run --filter @travel-pulse/mcp-server build",
+		"mcp:query": "pnpm run --filter @travel-pulse/mcp-server mcp-query",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

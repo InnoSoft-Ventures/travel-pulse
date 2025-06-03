@@ -29,16 +29,36 @@ app.get('/health', (_, res) => {
 // Generic query endpoint
 app.post('/query', async (req, res) => {
 	try {
-		const { query, params = [] } = req.body;
+		const { encodedQuery, params = [] } = req.body;
+
+		let finalQuery = '';
+
+		// Decode Base64 query if provided
+		try {
+			finalQuery = Buffer.from(encodedQuery, 'base64').toString('utf-8');
+
+			console.log(`Decoded query: ${finalQuery}`);
+		} catch (decodeError: any) {
+			return res.status(400).json({
+				error: 'Invalid Base64 encoding',
+				details: decodeError.message,
+			});
+		}
+
+		if (!finalQuery) {
+			return res
+				.status(400)
+				.json({ error: 'No query provided after decoding.' });
+		}
 
 		// Basic security check - only allow SELECT queries
-		if (!query.trim().toLowerCase().startsWith('select')) {
+		if (!finalQuery.trim().toLowerCase().startsWith('select')) {
 			return res
 				.status(400)
 				.json({ error: 'Only SELECT queries are allowed' });
 		}
 
-		const result = await pool.query(query, params);
+		const result = await pool.query(finalQuery, params);
 		return res.json(result.rows);
 	} catch (error) {
 		console.error('Error executing query:', error);
