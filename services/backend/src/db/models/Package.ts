@@ -1,6 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
 import { PackageType, ProviderIdentity } from '@travelpulse/interfaces';
+import Operator from './Operator';
 
 export interface PackageAttributes {
 	id: number;
@@ -23,6 +24,7 @@ export interface PackageAttributes {
 	netPrice: number | null;
 	createdAt: Date;
 	updatedAt: Date;
+	operator?: Operator;
 }
 
 export type PackageCreationAttributes = Optional<
@@ -48,6 +50,8 @@ class Package extends Model<PackageAttributes, PackageCreationAttributes> {
 	public voice!: number;
 	public text!: number;
 	public netPrice!: number;
+
+	public operator?: Operator;
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
 }

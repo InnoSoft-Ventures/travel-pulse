@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 // import Package from '../db/models/Package';
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import Operator from '../db/models/Operator';
 import Continent from '../db/models/Continent';
 import {
@@ -9,72 +9,123 @@ import {
 	HTTP_STATUS_CODES,
 	successResponse,
 } from '@travelpulse/middlewares';
-import { SOMETHING_WENT_WRONG } from '@travelpulse/interfaces';
+import { RegionExplore, SOMETHING_WENT_WRONG } from '@travelpulse/interfaces';
 import dbConnect from '../db';
+import Package from '../db/models/Package';
 
 export const getMultipleRegions = async (_req: Request, res: Response) => {
 	try {
-		const queryPackageType = 'local';
-
-		const regions = await Operator.findAll({
-			where: {
-				type: {
-					[Op.ne]: queryPackageType,
-				},
-			},
+		// Get aggregated data for regional packages grouped by continent
+		const regionalAggregations = await Package.findAll({
 			attributes: [
-				'id',
-				'title',
-				'type',
-				'esimType',
-				'apnType',
-				'esimType',
+				// Group by continent and get aggregate values
+				[Sequelize.col('operator->continent.name'), 'name'],
+				[Sequelize.fn('MIN', Sequelize.col('price')), 'price'],
+				[Sequelize.fn('ANY_VALUE', Sequelize.col('data')), 'data'],
+				[Sequelize.fn('ANY_VALUE', Sequelize.col('amount')), 'amount'],
+				// [Sequelize.fn('MAX', Sequelize.col('amount')), 'amount'],
+				// [Sequelize.fn('MAX', Sequelize.col('day')), 'days'],
+				[
+					Sequelize.fn(
+						'ANY_VALUE',
+						Sequelize.col('operator->continent.id')
+					),
+					'regionId',
+				],
+				[Sequelize.col('operator.id'), 'operatorId'],
 			],
 			include: [
 				{
-					association: 'continent',
-					attributes: ['name'],
-				},
-				{
-					association: 'packages',
-					attributes: [
-						'title',
-						'price',
-						'amount',
-						'day',
-						'data',
-						'isUnlimited',
+					model: Operator,
+					as: 'operator',
+					attributes: [],
+					where: {
+						type: 'regional',
+					},
+					include: [
+						{
+							model: Continent,
+							as: 'continent',
+							attributes: [],
+							required: false,
+						},
 					],
-					limit: 3,
-					order: [
-						['price', 'ASC'],
-						['amount', 'DESC'],
-						['day', 'ASC'],
-					],
+					required: true,
 				},
 			],
+			where: {
+				'$operator->continent.name$': {
+					[Op.not]: null,
+				},
+			},
+			group: [
+				'operator->continent.name',
+				'operator->continent.id',
+				'operator.id',
+			],
+			order: [[Sequelize.col('operator->continent.name'), 'ASC']],
+			limit: 8,
 		});
 
-		const packagesWithPrices = regions.map((region) => {
-			const continentName = region.getDataValue('continent')?.name;
-			const packageItem = region.getDataValue('packages');
-
-			return {
-				id: region.id,
-				title: region.title,
-				type: region.type,
-				esimType: region.esimType,
-				apnType: region.apnType,
-				continentName,
-				package: packageItem,
-			};
+		// Get aggregated data for global packages
+		const globalAggregation = await Package.findAll({
+			attributes: [
+				[Sequelize.literal("'Global'"), 'name'],
+				[Sequelize.fn('MIN', Sequelize.col('price')), 'price'],
+				[Sequelize.fn('ANY_VALUE', Sequelize.col('data')), 'data'],
+				[Sequelize.fn('ANY_VALUE', Sequelize.col('amount')), 'amount'],
+				// [Sequelize.fn('MAX', Sequelize.col('amount')), 'amount'],
+				// [Sequelize.fn('MAX', Sequelize.col('day')), 'days'],
+				[Sequelize.literal('null'), 'regionId'],
+				[Sequelize.col('operator.id'), 'operatorId'],
+			],
+			include: [
+				{
+					model: Operator,
+					as: 'operator',
+					attributes: [],
+					where: {
+						type: 'global',
+					},
+					required: true,
+				},
+			],
+			group: ['operator.id'],
 		});
 
-		res.status(200).json(successResponse(packagesWithPrices));
+		// Combine and format the results
+		const results: RegionExplore[] = regionalAggregations.map(
+			(agg: any) => ({
+				name: agg.getDataValue('name'),
+				operatorId: agg.getDataValue('operatorId'),
+				regionId: agg.getDataValue('regionId'),
+				price: agg.getDataValue('price'),
+				data: agg.getDataValue('data'),
+				amount: agg.getDataValue('amount'),
+				type: 'regional',
+			})
+		);
+
+		// Add the global aggregation result if it exists
+		if (globalAggregation.length > 0) {
+			const globalData: any = globalAggregation[0].get();
+			results.push({
+				name: globalData.name,
+				operatorId: globalData.operatorId,
+				regionId: globalData.regionId,
+				price: globalData.price,
+				data: globalData.data,
+				amount: globalData.amount,
+				type: 'global',
+			});
+		}
+
+		res.status(HTTP_STATUS_CODES.OK).json(successResponse(results));
 	} catch (error) {
-		console.log('Error in getMultipleRegions', error);
-
-		res.status(500).json(errorResponse(SOMETHING_WENT_WRONG));
+		console.error('Error in getMixedRandomPackages', error);
+		res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json(
+			errorResponse(SOMETHING_WENT_WRONG)
+		);
 	}
 };
 

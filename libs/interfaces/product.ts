@@ -1,4 +1,4 @@
-import { ApnType } from "./enums";
+import { ApnType } from './enums';
 
 export interface SIM {
 	id: number;
@@ -15,7 +15,7 @@ export interface SIM {
 	is_roaming: boolean;
 	confirmation_code: string | null;
 	apn: {
-		[key in "ios" | "android"]: {
+		[key in 'ios' | 'android']: {
 			apn_type: string;
 			apn_value: string | null;
 		};
@@ -24,4 +24,14 @@ export interface SIM {
 	direct_apple_installation_url: string;
 }
 
-export type SimPackageType = "local" | "global" | "regional";
+export type SimPackageType = 'local' | 'global' | 'regional';
+
+export interface RegionExplore {
+	name: string;
+	operatorId: string;
+	regionId: number | null;
+	price: string;
+	data: string;
+	amount: number;
+	type: string;
+}

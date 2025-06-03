@@ -2,8 +2,8 @@ import express from 'express';
 import { errorHandler } from '@travelpulse/middlewares';
 import {
 	getGlobalPackages,
-	getMultipleRegions,
 	getPopularDestinations,
+	getMultipleRegions,
 	getRegionPackages,
 } from '../controllers/products.controller';
 
