@@ -10,6 +10,7 @@
     "setup:db:stop": "docker-compose down",
     "db:migrate": "pnpm run --filter @travel-pulse/api sq-cli db:migrate",
     "db:seeder": "pnpm run --filter @travel-pulse/api sq-cli db:seed:all",
+		"db:sq-cli": "pnpm run --filter @travel-pulse/api sq-cli",
     "setup:server": "npm run setup:db && npm run db:migrate && npm run db:seeder && npm run servers",
     "mcp:dev": "pnpm run --filter @travel-pulse/mcp-server dev",
     "mcp:start": "pnpm run --filter @travel-pulse/mcp-server start",

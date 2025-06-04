@@ -5,6 +5,7 @@ import {
 	getPopularDestinations,
 	getMultipleRegions,
 	getRegionPackages,
+	getLocalPackages,
 } from '../controllers/products.controller';
 
 const router = express.Router();
@@ -13,5 +14,6 @@ router.get('/regions', errorHandler(getMultipleRegions));
 router.get('/regions/:regionSlug', errorHandler(getRegionPackages));
 router.get('/global', errorHandler(getGlobalPackages));
 router.get('/popular-destinations', errorHandler(getPopularDestinations));
+router.get('/local/:countrySlug', errorHandler(getLocalPackages));
 
 export default router;
