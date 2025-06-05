@@ -23,8 +23,10 @@ import Country from '../db/models/Country';
  * 1. Regional packages: Groups by continent, gets min price, and sample data/amount
  * 2. Global packages: Gets aggregated data for all global packages
  */
-export const getMultipleRegions = async (_req: Request, res: Response) => {
+export const getMultipleRegions = async (req: Request, res: Response) => {
 	try {
+		const { size } = req.query;
+
 		// Get aggregated data for regional packages grouped by continent
 		const regionalAggregations = await Package.findAll({
 			attributes: [
@@ -74,7 +76,7 @@ export const getMultipleRegions = async (_req: Request, res: Response) => {
 				'operator.id',
 			],
 			order: [[Sequelize.col('operator->continent.name'), 'ASC']],
-			limit: 8,
+			limit: size ? parseInt(size as string, 10) : undefined,
 		});
 
 		// Get aggregated data for global packages
@@ -153,8 +155,10 @@ export const getMultipleRegions = async (_req: Request, res: Response) => {
  * giving users an idea of where they can find the cheapest options.
  * @TODO Get real popularity data to replace this placeholder logic.
  */
-export const getPopularDestinations = async (_req: Request, res: Response) => {
+export const getPopularDestinations = async (req: Request, res: Response) => {
 	try {
+		const { size } = req.query;
+
 		// Find the cheapest package for each country
 		const [results] = await dbConnect.query(`
 			SELECT c.name, c.flag, MIN(p.price) AS price
@@ -164,7 +168,7 @@ export const getPopularDestinations = async (_req: Request, res: Response) => {
 			GROUP BY c.id, c.name, c.flag
 			HAVING MIN(p.price) IS NOT NULL
 			ORDER BY price ASC
-			LIMIT 6;
+			${size ? `LIMIT ${parseInt(size as string, 10)}` : ''};
 		`);
 
 		res.json(successResponse(results));
