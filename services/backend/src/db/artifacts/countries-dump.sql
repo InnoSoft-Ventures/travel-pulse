@@ -9,7 +9,8 @@ INSERT INTO countries(
 		demonym,
 		currency_name,
 		currency_symbol,
-		continent_id
+		continent_id,
+		slug
 	)
 VALUES (
 		1,
@@ -22,9 +23,10 @@ VALUES (
 		'Motswana',
 		'Botswana pula',
 		'P',
-		1
+		1,
+		'botswana'
 	),
-	(
+(
 		2,
 		'Republic of the Congo',
 		'Republic of the Congo',
@@ -35,9 +37,10 @@ VALUES (
 		'Congolese',
 		'Central African CFA franc',
 		'Fr',
-		1
+		1,
+		'republic-of-the-congo'
 	),
-	(
+(
 		3,
 		'Tanzania',
 		'United Republic of Tanzania',
@@ -48,9 +51,10 @@ VALUES (
 		'Tanzanian',
 		'Tanzanian shilling',
 		'Sh',
-		1
+		1,
+		'tanzania'
 	),
-	(
+(
 		4,
 		'Kenya',
 		'Republic of Kenya',
@@ -61,9 +65,10 @@ VALUES (
 		'Kenyan',
 		'Kenyan shilling',
 		'Sh',
-		1
+		1,
+		'kenya'
 	),
-	(
+(
 		5,
 		'Tunisia',
 		'Tunisian Republic',
@@ -74,9 +79,10 @@ VALUES (
 		'Tunisian',
 		'Tunisian dinar',
 		'د.ت',
-		1
+		1,
+		'tunisia'
 	),
-	(
+(
 		6,
 		'Cameroon',
 		'Republic of Cameroon',
@@ -87,9 +93,10 @@ VALUES (
 		'Cameroonian',
 		'Central African CFA franc',
 		'Fr',
-		1
+		1,
+		'cameroon'
 	),
-	(
+(
 		7,
 		'Ivory Coast',
 		'Republic of Côte d''Ivoire',
@@ -100,9 +107,10 @@ VALUES (
 		'Ivorian',
 		'West African CFA franc',
 		'Fr',
-		1
+		1,
+		'ivory-coast'
 	),
-	(
+(
 		8,
 		'Egypt',
 		'Arab Republic of Egypt',
@@ -113,9 +121,10 @@ VALUES (
 		'Egyptian',
 		'Egyptian pound',
 		'£',
-		1
+		1,
+		'egypt'
 	),
-	(
+(
 		9,
 		'Senegal',
 		'Republic of Senegal',
@@ -126,9 +135,10 @@ VALUES (
 		'Senegalese',
 		'West African CFA franc',
 		'Fr',
-		1
+		1,
+		'senegal'
 	),
-	(
+(
 		10,
 		'Cape Verde',
 		'Republic of Cabo Verde',
@@ -139,9 +149,10 @@ VALUES (
 		'Cape Verdian',
 		'Cape Verdean escudo',
 		'Esc',
-		1
+		1,
+		'cape-verde'
 	),
-	(
+(
 		11,
 		'South Africa',
 		'Republic of South Africa',
@@ -152,9 +163,10 @@ VALUES (
 		'South African',
 		'South African rand',
 		'R',
-		1
+		1,
+		'south-africa'
 	),
-	(
+(
 		12,
 		'Guinea',
 		'Republic of Guinea',
@@ -165,9 +177,10 @@ VALUES (
 		'Guinean',
 		'Guinean franc',
 		'Fr',
-		1
+		1,
+		'guinea'
 	),
-	(
+(
 		13,
 		'Chad',
 		'Republic of Chad',
@@ -178,9 +191,10 @@ VALUES (
 		'Chadian',
 		'Central African CFA franc',
 		'Fr',
-		1
+		1,
+		'chad'
 	),
-	(
+(
 		14,
 		'Saint Helena, Ascension and Tristan da Cunha',
 		'Saint Helena, Ascension and Tristan da Cunha',
@@ -191,9 +205,10 @@ VALUES (
 		'Saint Helenian',
 		'Pound sterling',
 		'£',
-		1
+		1,
+		'saint-helena-ascension-and-tristan-da-cunha'
 	),
-	(
+(
 		15,
 		'Morocco',
 		'Kingdom of Morocco',
@@ -204,9 +219,10 @@ VALUES (
 		'Moroccan',
 		'Moroccan dirham',
 		'د.م.',
-		1
+		1,
+		'morocco'
 	),
-	(
+(
 		16,
 		'Ghana',
 		'Republic of Ghana',
@@ -217,9 +233,10 @@ VALUES (
 		'Ghanaian',
 		'Ghanaian cedi',
 		'₵',
-		1
+		1,
+		'ghana'
 	),
-	(
+(
 		17,
 		'Seychelles',
 		'Republic of Seychelles',
@@ -230,9 +247,10 @@ VALUES (
 		'Seychellois',
 		'Seychellois rupee',
 		'₨',
-		1
+		1,
+		'seychelles'
 	),
-	(
+(
 		18,
 		'Ethiopia',
 		'Federal Democratic Republic of Ethiopia',
@@ -243,9 +261,10 @@ VALUES (
 		'Ethiopian',
 		'Ethiopian birr',
 		'Br',
-		1
+		1,
+		'ethiopia'
 	),
-	(
+(
 		19,
 		'Mauritania',
 		'Islamic Republic of Mauritania',
@@ -256,9 +275,10 @@ VALUES (
 		'Mauritanian',
 		'Mauritanian ouguiya',
 		'UM',
-		1
+		1,
+		'mauritania'
 	),
-	(
+(
 		20,
 		'Réunion',
 		'Réunion Island',
@@ -269,9 +289,10 @@ VALUES (
 		'Réunionese',
 		'Euro',
 		'€',
-		1
+		1,
+		'reunion'
 	),
-	(
+(
 		21,
 		'Somalia',
 		'Federal Republic of Somalia',
@@ -282,9 +303,10 @@ VALUES (
 		'Somali',
 		'Somali shilling',
 		'Sh',
-		1
+		1,
+		'somalia'
 	),
-	(
+(
 		22,
 		'Benin',
 		'Republic of Benin',
@@ -295,9 +317,10 @@ VALUES (
 		'Beninese',
 		'West African CFA franc',
 		'Fr',
-		1
+		1,
+		'benin'
 	),
-	(
+(
 		23,
 		'Sudan',
 		'Republic of the Sudan',
@@ -308,9 +331,10 @@ VALUES (
 		'Sudanese',
 		'Sudanese pound',
 		'ج.س',
-		1
+		1,
+		'sudan'
 	),
-	(
+(
 		24,
 		'Libya',
 		'State of Libya',
@@ -321,9 +345,10 @@ VALUES (
 		'Libyan',
 		'Libyan dinar',
 		'ل.د',
-		1
+		1,
+		'libya'
 	),
-	(
+(
 		25,
 		'Mali',
 		'Republic of Mali',
@@ -334,9 +359,10 @@ VALUES (
 		'Malian',
 		'West African CFA franc',
 		'Fr',
-		1
+		1,
+		'mali'
 	),
-	(
+(
 		26,
 		'Nigeria',
 		'Federal Republic of Nigeria',
@@ -347,9 +373,10 @@ VALUES (
 		'Nigerian',
 		'Nigerian naira',
 		'₦',
-		1
+		1,
+		'nigeria'
 	),
-	(
+(
 		27,
 		'Lesotho',
 		'Kingdom of Lesotho',
@@ -360,9 +387,10 @@ VALUES (
 		'Mosotho',
 		'Lesotho loti',
 		'L',
-		1
+		1,
+		'lesotho'
 	),
-	(
+(
 		28,
 		'Zambia',
 		'Republic of Zambia',
@@ -373,9 +401,10 @@ VALUES (
 		'Zambian',
 		'Zambian kwacha',
 		'ZK',
-		1
+		1,
+		'zambia'
 	),
-	(
+(
 		29,
 		'Gambia',
 		'Republic of the Gambia',
@@ -386,9 +415,10 @@ VALUES (
 		'Gambian',
 		'dalasi',
 		'D',
-		1
+		1,
+		'gambia'
 	),
-	(
+(
 		30,
 		'Sierra Leone',
 		'Republic of Sierra Leone',
@@ -399,9 +429,10 @@ VALUES (
 		'Sierra Leonean',
 		'Leone',
 		'Le',
-		1
+		1,
+		'sierra-leone'
 	),
-	(
+(
 		31,
 		'Mozambique',
 		'Republic of Mozambique',
@@ -412,9 +443,10 @@ VALUES (
 		'Mozambican',
 		'Mozambican metical',
 		'MT',
-		1
+		1,
+		'mozambique'
 	),
-	(
+(
 		32,
 		'Djibouti',
 		'Republic of Djibouti',
@@ -425,9 +457,10 @@ VALUES (
 		'Djibouti',
 		'Djiboutian franc',
 		'Fr',
-		1
+		1,
+		'djibouti'
 	),
-	(
+(
 		33,
 		'Niger',
 		'Republic of Niger',
@@ -438,9 +471,10 @@ VALUES (
 		'Nigerien',
 		'West African CFA franc',
 		'Fr',
-		1
+		1,
+		'niger'
 	),
-	(
+(
 		34,
 		'Madagascar',
 		'Republic of Madagascar',
@@ -451,9 +485,10 @@ VALUES (
 		'Malagasy',
 		'Malagasy ariary',
 		'Ar',
-		1
+		1,
+		'madagascar'
 	),
-	(
+(
 		35,
 		'Eritrea',
 		'State of Eritrea',
@@ -464,9 +499,10 @@ VALUES (
 		'Eritrean',
 		'Eritrean nakfa',
 		'Nfk',
-		1
+		1,
+		'eritrea'
 	),
-	(
+(
 		36,
 		'Guinea-Bissau',
 		'Republic of Guinea-Bissau',
@@ -477,9 +513,10 @@ VALUES (
 		'Guinea-Bissauan',
 		'West African CFA franc',
 		'Fr',
-		1
+		1,
+		'guinea-bissau'
 	),
-	(
+(
 		37,
 		'Gabon',
 		'Gabonese Republic',
@@ -490,9 +527,10 @@ VALUES (
 		'Gabonese',
 		'Central African CFA franc',
 		'Fr',
-		1
+		1,
+		'gabon'
 	),
-	(
+(
 		38,
 		'Rwanda',
 		'Republic of Rwanda',
@@ -503,9 +541,10 @@ VALUES (
 		'Rwandan',
 		'Rwandan franc',
 		'Fr',
-		1
+		1,
+		'rwanda'
 	),
-	(
+(
 		39,
 		'Togo',
 		'Togolese Republic',
@@ -516,9 +555,10 @@ VALUES (
 		'Togolese',
 		'West African CFA franc',
 		'Fr',
-		1
+		1,
+		'togo'
 	),
-	(
+(
 		40,
 		'South Sudan',
 		'Republic of South Sudan',
@@ -529,9 +569,10 @@ VALUES (
 		'South Sudanese',
 		'South Sudanese pound',
 		'£',
-		1
+		1,
+		'south-sudan'
 	),
-	(
+(
 		41,
 		'São Tomé and Príncipe',
 		'Democratic Republic of São Tomé and Príncipe',
@@ -542,9 +583,10 @@ VALUES (
 		'Sao Tomean',
 		'São Tomé and Príncipe dobra',
 		'Db',
-		1
+		1,
+		'sao-tome-and-principe'
 	),
-	(
+(
 		42,
 		'Comoros',
 		'Union of the Comoros',
@@ -555,9 +597,10 @@ VALUES (
 		'Comoran',
 		'Comorian franc',
 		'Fr',
-		1
+		1,
+		'comoros'
 	),
-	(
+(
 		43,
 		'Burkina Faso',
 		'Burkina Faso',
@@ -568,9 +611,10 @@ VALUES (
 		'Burkinabe',
 		'West African CFA franc',
 		'Fr',
-		1
+		1,
+		'burkina-faso'
 	),
-	(
+(
 		44,
 		'Algeria',
 		'People''s Democratic Republic of Algeria',
@@ -581,9 +625,10 @@ VALUES (
 		'Algerian',
 		'Algerian dinar',
 		'د.ج',
-		1
+		1,
+		'algeria'
 	),
-	(
+(
 		45,
 		'Central African Republic',
 		'Central African Republic',
@@ -594,9 +639,10 @@ VALUES (
 		'Central African',
 		'Central African CFA franc',
 		'Fr',
-		1
+		1,
+		'central-african-republic'
 	),
-	(
+(
 		46,
 		'Uganda',
 		'Republic of Uganda',
@@ -607,9 +653,10 @@ VALUES (
 		'Ugandan',
 		'Ugandan shilling',
 		'Sh',
-		1
+		1,
+		'uganda'
 	),
-	(
+(
 		47,
 		'Namibia',
 		'Republic of Namibia',
@@ -620,9 +667,10 @@ VALUES (
 		'Namibian',
 		'Namibian dollar',
 		'$',
-		1
+		1,
+		'namibia'
 	),
-	(
+(
 		48,
 		'Malawi',
 		'Republic of Malawi',
@@ -633,9 +681,10 @@ VALUES (
 		'Malawian',
 		'Malawian kwacha',
 		'MK',
-		1
+		1,
+		'malawi'
 	),
-	(
+(
 		49,
 		'DR Congo',
 		'Democratic Republic of the Congo',
@@ -646,9 +695,10 @@ VALUES (
 		'Congolese',
 		'Congolese franc',
 		'FC',
-		1
+		1,
+		'dr-congo'
 	),
-	(
+(
 		50,
 		'Equatorial Guinea',
 		'Republic of Equatorial Guinea',
@@ -659,9 +709,10 @@ VALUES (
 		'Equatorial Guinean',
 		'Central African CFA franc',
 		'Fr',
-		1
+		1,
+		'equatorial-guinea'
 	),
-	(
+(
 		51,
 		'Mauritius',
 		'Republic of Mauritius',
@@ -672,9 +723,10 @@ VALUES (
 		'Mauritian',
 		'Mauritian rupee',
 		'₨',
-		1
+		1,
+		'mauritius'
 	),
-	(
+(
 		52,
 		'Zimbabwe',
 		'Republic of Zimbabwe',
@@ -685,9 +737,10 @@ VALUES (
 		'Zimbabwean',
 		'Zimbabwean dollar',
 		'$',
-		1
+		1,
+		'zimbabwe'
 	),
-	(
+(
 		53,
 		'Burundi',
 		'Republic of Burundi',
@@ -698,9 +751,10 @@ VALUES (
 		'Burundian',
 		'Burundian franc',
 		'Fr',
-		1
+		1,
+		'burundi'
 	),
-	(
+(
 		54,
 		'Western Sahara',
 		'Sahrawi Arab Democratic Republic',
@@ -711,9 +765,10 @@ VALUES (
 		'Sahrawi',
 		'Algerian dinar',
 		'دج',
-		1
+		1,
+		'western-sahara'
 	),
-	(
+(
 		55,
 		'Mayotte',
 		'Department of Mayotte',
@@ -724,9 +779,10 @@ VALUES (
 		'Mahoran',
 		'Euro',
 		'€',
-		1
+		1,
+		'mayotte'
 	),
-	(
+(
 		56,
 		'Liberia',
 		'Republic of Liberia',
@@ -737,9 +793,10 @@ VALUES (
 		'Liberian',
 		'Liberian dollar',
 		'$',
-		1
+		1,
+		'liberia'
 	),
-	(
+(
 		57,
 		'Angola',
 		'Republic of Angola',
@@ -750,9 +807,10 @@ VALUES (
 		'Angolan',
 		'Angolan kwanza',
 		'Kz',
-		1
+		1,
+		'angola'
 	),
-	(
+(
 		58,
 		'Eswatini',
 		'Kingdom of Eswatini',
@@ -763,9 +821,10 @@ VALUES (
 		'Swazi',
 		'Swazi lilangeni',
 		'L',
-		1
+		1,
+		'eswatini'
 	),
-	(
+(
 		59,
 		'Tonga',
 		'Kingdom of Tonga',
@@ -776,9 +835,10 @@ VALUES (
 		'Tongan',
 		'Tongan paʻanga',
 		'T$',
-		2
+		2,
+		'tonga'
 	),
-	(
+(
 		60,
 		'Marshall Islands',
 		'Republic of the Marshall Islands',
@@ -789,9 +849,10 @@ VALUES (
 		'Marshallese',
 		'United States dollar',
 		'$',
-		2
+		2,
+		'marshall-islands'
 	),
-	(
+(
 		61,
 		'Solomon Islands',
 		'Solomon Islands',
@@ -802,9 +863,10 @@ VALUES (
 		'Solomon Islander',
 		'Solomon Islands dollar',
 		'$',
-		2
+		2,
+		'solomon-islands'
 	),
-	(
+(
 		62,
 		'Vanuatu',
 		'Republic of Vanuatu',
@@ -815,9 +877,10 @@ VALUES (
 		'Ni-Vanuatu',
 		'Vanuatu vatu',
 		'Vt',
-		2
+		2,
+		'vanuatu'
 	),
-	(
+(
 		63,
 		'Guam',
 		'Guam',
@@ -828,9 +891,10 @@ VALUES (
 		'Guamanian',
 		'United States dollar',
 		'$',
-		2
+		2,
+		'guam'
 	),
-	(
+(
 		64,
 		'Palau',
 		'Republic of Palau',
@@ -841,9 +905,10 @@ VALUES (
 		'Palauan',
 		'United States dollar',
 		'$',
-		2
+		2,
+		'palau'
 	),
-	(
+(
 		65,
 		'Northern Mariana Islands',
 		'Commonwealth of the Northern Mariana Islands',
@@ -854,9 +919,10 @@ VALUES (
 		'American',
 		'United States dollar',
 		'$',
-		2
+		2,
+		'northern-mariana-islands'
 	),
-	(
+(
 		66,
 		'Papua New Guinea',
 		'Independent State of Papua New Guinea',
@@ -867,9 +933,10 @@ VALUES (
 		'Papua New Guinean',
 		'Papua New Guinean kina',
 		'K',
-		2
+		2,
+		'papua-new-guinea'
 	),
-	(
+(
 		67,
 		'Australia',
 		'Commonwealth of Australia',
@@ -880,9 +947,10 @@ VALUES (
 		'Australian',
 		'Australian dollar',
 		'$',
-		2
+		2,
+		'australia'
 	),
-	(
+(
 		68,
 		'Fiji',
 		'Republic of Fiji',
@@ -893,9 +961,10 @@ VALUES (
 		'Fijian',
 		'Fijian dollar',
 		'$',
-		2
+		2,
+		'fiji'
 	),
-	(
+(
 		69,
 		'Tokelau',
 		'Tokelau',
@@ -906,9 +975,10 @@ VALUES (
 		'Tokelauan',
 		'New Zealand dollar',
 		'$',
-		2
+		2,
+		'tokelau'
 	),
-	(
+(
 		70,
 		'Kiribati',
 		'Independent and Sovereign Republic of Kiribati',
@@ -919,9 +989,10 @@ VALUES (
 		'I-Kiribati',
 		'Australian dollar',
 		'$',
-		2
+		2,
+		'kiribati'
 	),
-	(
+(
 		71,
 		'Samoa',
 		'Independent State of Samoa',
@@ -932,9 +1003,10 @@ VALUES (
 		'Samoan',
 		'Samoan tālā',
 		'T',
-		2
+		2,
+		'samoa'
 	),
-	(
+(
 		72,
 		'Micronesia',
 		'Federated States of Micronesia',
@@ -945,9 +1017,10 @@ VALUES (
 		'Micronesian',
 		'United States dollar',
 		'$',
-		2
+		2,
+		'micronesia'
 	),
-	(
+(
 		73,
 		'Timor-Leste',
 		'Democratic Republic of Timor-Leste',
@@ -958,9 +1031,10 @@ VALUES (
 		'East Timorese',
 		'United States dollar',
 		'$',
-		2
+		2,
+		'timor-leste'
 	),
-	(
+(
 		74,
 		'United States Minor Outlying Islands',
 		'United States Minor Outlying Islands',
@@ -971,9 +1045,10 @@ VALUES (
 		'American Islander',
 		'United States dollar',
 		'$',
-		2
+		2,
+		'united-states-minor-outlying-islands'
 	),
-	(
+(
 		75,
 		'American Samoa',
 		'American Samoa',
@@ -984,9 +1059,10 @@ VALUES (
 		'American Samoan',
 		'United States dollar',
 		'$',
-		2
+		2,
+		'american-samoa'
 	),
-	(
+(
 		76,
 		'Niue',
 		'Niue',
@@ -997,9 +1073,10 @@ VALUES (
 		'Niuean',
 		'New Zealand dollar',
 		'$',
-		2
+		2,
+		'niue'
 	),
-	(
+(
 		77,
 		'Wallis and Futuna',
 		'Territory of the Wallis and Futuna Islands',
@@ -1010,9 +1087,10 @@ VALUES (
 		'Wallis and Futuna Islander',
 		'CFP franc',
 		'₣',
-		2
+		2,
+		'wallis-and-futuna'
 	),
-	(
+(
 		78,
 		'Tuvalu',
 		'Tuvalu',
@@ -1023,9 +1101,10 @@ VALUES (
 		'Tuvaluan',
 		'Australian dollar',
 		'$',
-		2
+		2,
+		'tuvalu'
 	),
-	(
+(
 		79,
 		'Cook Islands',
 		'Cook Islands',
@@ -1036,9 +1115,10 @@ VALUES (
 		'Cook Islander',
 		'Cook Islands dollar',
 		'$',
-		2
+		2,
+		'cook-islands'
 	),
-	(
+(
 		80,
 		'Nauru',
 		'Republic of Nauru',
@@ -1049,9 +1129,10 @@ VALUES (
 		'Nauruan',
 		'Australian dollar',
 		'$',
-		2
+		2,
+		'nauru'
 	),
-	(
+(
 		81,
 		'French Polynesia',
 		'French Polynesia',
@@ -1062,9 +1143,10 @@ VALUES (
 		'French Polynesian',
 		'CFP franc',
 		'₣',
-		2
+		2,
+		'french-polynesia'
 	),
-	(
+(
 		82,
 		'New Zealand',
 		'New Zealand',
@@ -1075,9 +1157,10 @@ VALUES (
 		'New Zealander',
 		'New Zealand dollar',
 		'$',
-		2
+		2,
+		'new-zealand'
 	),
-	(
+(
 		83,
 		'Pitcairn Islands',
 		'Pitcairn Group of Islands',
@@ -1088,9 +1171,10 @@ VALUES (
 		'Pitcairn Islander',
 		'New Zealand dollar',
 		'$',
-		2
+		2,
+		'pitcairn-islands'
 	),
-	(
+(
 		84,
 		'Norfolk Island',
 		'Territory of Norfolk Island',
@@ -1101,9 +1185,10 @@ VALUES (
 		'Norfolk Islander',
 		'Australian dollar',
 		'$',
-		2
+		2,
+		'norfolk-island'
 	),
-	(
+(
 		85,
 		'New Caledonia',
 		'New Caledonia',
@@ -1114,9 +1199,10 @@ VALUES (
 		'New Caledonian',
 		'CFP franc',
 		'₣',
-		2
+		2,
+		'new-caledonia'
 	),
-	(
+(
 		86,
 		'Greece',
 		'Hellenic Republic',
@@ -1127,9 +1213,10 @@ VALUES (
 		'Greek',
 		'Euro',
 		'€',
-		3
+		3,
+		'greece'
 	),
-	(
+(
 		87,
 		'Belarus',
 		'Republic of Belarus',
@@ -1140,9 +1227,10 @@ VALUES (
 		'Belarusian',
 		'Belarusian ruble',
 		'Br',
-		3
+		3,
+		'belarus'
 	),
-	(
+(
 		88,
 		'Liechtenstein',
 		'Principality of Liechtenstein',
@@ -1153,9 +1241,10 @@ VALUES (
 		'Liechtensteiner',
 		'Swiss franc',
 		'Fr',
-		3
+		3,
+		'liechtenstein'
 	),
-	(
+(
 		89,
 		'Bosnia and Herzegovina',
 		'Bosnia and Herzegovina',
@@ -1166,9 +1255,10 @@ VALUES (
 		'Bosnian, Herzegovinian',
 		'Bosnia and Herzegovina convertible mark',
 		'KM',
-		3
+		3,
+		'bosnia-and-herzegovina'
 	),
-	(
+(
 		90,
 		'Estonia',
 		'Republic of Estonia',
@@ -1179,9 +1269,10 @@ VALUES (
 		'Estonian',
 		'Euro',
 		'€',
-		3
+		3,
+		'estonia'
 	),
-	(
+(
 		91,
 		'Poland',
 		'Republic of Poland',
@@ -1192,9 +1283,10 @@ VALUES (
 		'Polish',
 		'Polish złoty',
 		'zł',
-		3
+		3,
+		'poland'
 	),
-	(
+(
 		92,
 		'Moldova',
 		'Republic of Moldova',
@@ -1205,9 +1297,10 @@ VALUES (
 		'Moldovan',
 		'Moldovan leu',
 		'L',
-		3
+		3,
+		'moldova'
 	),
-	(
+(
 		93,
 		'Vatican City',
 		'Vatican City State',
@@ -1218,9 +1311,10 @@ VALUES (
 		'Vatican',
 		'Euro',
 		'€',
-		3
+		3,
+		'vatican-city'
 	),
-	(
+(
 		94,
 		'Montenegro',
 		'Montenegro',
@@ -1231,9 +1325,10 @@ VALUES (
 		'Montenegrin',
 		'Euro',
 		'€',
-		3
+		3,
+		'montenegro'
 	),
-	(
+(
 		95,
 		'Luxembourg',
 		'Grand Duchy of Luxembourg',
@@ -1244,9 +1339,10 @@ VALUES (
 		'Luxembourger',
 		'Euro',
 		'€',
-		3
+		3,
+		'luxembourg'
 	),
-	(
+(
 		96,
 		'Bulgaria',
 		'Republic of Bulgaria',
@@ -1257,9 +1353,10 @@ VALUES (
 		'Bulgarian',
 		'Bulgarian lev',
 		'лв',
-		3
+		3,
+		'bulgaria'
 	),
-	(
+(
 		97,
 		'Finland',
 		'Republic of Finland',
@@ -1270,9 +1367,10 @@ VALUES (
 		'Finnish',
 		'Euro',
 		'€',
-		3
+		3,
+		'finland'
 	),
-	(
+(
 		98,
 		'Iceland',
 		'Iceland',
@@ -1283,9 +1381,10 @@ VALUES (
 		'Icelander',
 		'Icelandic króna',
 		'kr',
-		3
+		3,
+		'iceland'
 	),
-	(
+(
 		99,
 		'Switzerland',
 		'Swiss Confederation',
@@ -1296,9 +1395,10 @@ VALUES (
 		'Swiss',
 		'Swiss franc',
 		'Fr.',
-		3
+		3,
+		'switzerland'
 	),
-	(
+(
 		100,
 		'Hungary',
 		'Hungary',
@@ -1309,9 +1409,10 @@ VALUES (
 		'Hungarian',
 		'Hungarian forint',
 		'Ft',
-		3
+		3,
+		'hungary'
 	),
-	(
+(
 		101,
 		'Netherlands',
 		'Kingdom of the Netherlands',
@@ -1322,9 +1423,10 @@ VALUES (
 		'Dutch',
 		'Euro',
 		'€',
-		3
+		3,
+		'netherlands'
 	),
-	(
+(
 		102,
 		'Portugal',
 		'Portuguese Republic',
@@ -1335,9 +1437,10 @@ VALUES (
 		'Portuguese',
 		'Euro',
 		'€',
-		3
+		3,
+		'portugal'
 	),
-	(
+(
 		103,
 		'Norway',
 		'Kingdom of Norway',
@@ -1348,9 +1451,10 @@ VALUES (
 		'Norwegian',
 		'Norwegian krone',
 		'kr',
-		3
+		3,
+		'norway'
 	),
-	(
+(
 		104,
 		'Ireland',
 		'Republic of Ireland',
@@ -1361,9 +1465,10 @@ VALUES (
 		'Irish',
 		'Euro',
 		'€',
-		3
+		3,
+		'ireland'
 	),
-	(
+(
 		105,
 		'Ukraine',
 		'Ukraine',
@@ -1374,9 +1479,10 @@ VALUES (
 		'Ukrainian',
 		'Ukrainian hryvnia',
 		'₴',
-		3
+		3,
+		'ukraine'
 	),
-	(
+(
 		106,
 		'Isle of Man',
 		'Isle of Man',
@@ -1387,9 +1493,10 @@ VALUES (
 		'Manx',
 		'British pound',
 		'£',
-		3
+		3,
+		'isle-of-man'
 	),
-	(
+(
 		107,
 		'Åland Islands',
 		'Åland Islands',
@@ -1400,9 +1507,10 @@ VALUES (
 		'Ålandish',
 		'Euro',
 		'€',
-		3
+		3,
+		'aland-islands'
 	),
-	(
+(
 		108,
 		'Italy',
 		'Italian Republic',
@@ -1413,9 +1521,10 @@ VALUES (
 		'Italian',
 		'Euro',
 		'€',
-		3
+		3,
+		'italy'
 	),
-	(
+(
 		109,
 		'Croatia',
 		'Republic of Croatia',
@@ -1426,9 +1535,10 @@ VALUES (
 		'Croatian',
 		'Euro',
 		'€',
-		3
+		3,
+		'croatia'
 	),
-	(
+(
 		110,
 		'Latvia',
 		'Republic of Latvia',
@@ -1439,9 +1549,10 @@ VALUES (
 		'Latvian',
 		'Euro',
 		'€',
-		3
+		3,
+		'latvia'
 	),
-	(
+(
 		111,
 		'Cyprus',
 		'Republic of Cyprus',
@@ -1452,9 +1563,10 @@ VALUES (
 		'Cypriot',
 		'Euro',
 		'€',
-		3
+		3,
+		'cyprus'
 	),
-	(
+(
 		112,
 		'Slovenia',
 		'Republic of Slovenia',
@@ -1465,9 +1577,10 @@ VALUES (
 		'Slovene',
 		'Euro',
 		'€',
-		3
+		3,
+		'slovenia'
 	),
-	(
+(
 		113,
 		'Andorra',
 		'Principality of Andorra',
@@ -1478,9 +1591,10 @@ VALUES (
 		'Andorran',
 		'Euro',
 		'€',
-		3
+		3,
+		'andorra'
 	),
-	(
+(
 		114,
 		'Slovakia',
 		'Slovak Republic',
@@ -1491,9 +1605,10 @@ VALUES (
 		'Slovak',
 		'Euro',
 		'€',
-		3
+		3,
+		'slovakia'
 	),
-	(
+(
 		115,
 		'Sweden',
 		'Kingdom of Sweden',
@@ -1504,9 +1619,10 @@ VALUES (
 		'Swedish',
 		'Swedish krona',
 		'kr',
-		3
+		3,
+		'sweden'
 	),
-	(
+(
 		116,
 		'Denmark',
 		'Kingdom of Denmark',
@@ -1517,9 +1633,10 @@ VALUES (
 		'Danish',
 		'Danish krone',
 		'kr',
-		3
+		3,
+		'denmark'
 	),
-	(
+(
 		117,
 		'Jersey',
 		'Bailiwick of Jersey',
@@ -1530,9 +1647,10 @@ VALUES (
 		'Channel Islander',
 		'British pound',
 		'£',
-		3
+		3,
+		'jersey'
 	),
-	(
+(
 		118,
 		'Kosovo',
 		'Republic of Kosovo',
@@ -1543,9 +1661,10 @@ VALUES (
 		'Kosovar',
 		'Euro',
 		'€',
-		3
+		3,
+		'kosovo'
 	),
-	(
+(
 		119,
 		'Belgium',
 		'Kingdom of Belgium',
@@ -1556,9 +1675,10 @@ VALUES (
 		'Belgian',
 		'Euro',
 		'€',
-		3
+		3,
+		'belgium'
 	),
-	(
+(
 		120,
 		'France',
 		'French Republic',
@@ -1569,9 +1689,10 @@ VALUES (
 		'French',
 		'Euro',
 		'€',
-		3
+		3,
+		'france'
 	),
-	(
+(
 		121,
 		'North Macedonia',
 		'Republic of North Macedonia',
@@ -1582,9 +1703,10 @@ VALUES (
 		'Macedonian',
 		'denar',
 		'den',
-		3
+		3,
+		'north-macedonia'
 	),
-	(
+(
 		122,
 		'Germany',
 		'Federal Republic of Germany',
@@ -1595,9 +1717,10 @@ VALUES (
 		'German',
 		'Euro',
 		'€',
-		3
+		3,
+		'germany'
 	),
-	(
+(
 		123,
 		'Monaco',
 		'Principality of Monaco',
@@ -1608,9 +1731,10 @@ VALUES (
 		'Monegasque',
 		'Euro',
 		'€',
-		3
+		3,
+		'monaco'
 	),
-	(
+(
 		124,
 		'Azerbaijan',
 		'Republic of Azerbaijan',
@@ -1621,9 +1745,10 @@ VALUES (
 		'Azerbaijani',
 		'Azerbaijani manat',
 		'₼',
-		3
+		3,
+		'azerbaijan'
 	),
-	(
+(
 		125,
 		'Austria',
 		'Republic of Austria',
@@ -1634,9 +1759,10 @@ VALUES (
 		'Austrian',
 		'Euro',
 		'€',
-		3
+		3,
+		'austria'
 	),
-	(
+(
 		126,
 		'Spain',
 		'Kingdom of Spain',
@@ -1647,9 +1773,10 @@ VALUES (
 		'Spanish',
 		'Euro',
 		'€',
-		3
+		3,
+		'spain'
 	),
-	(
+(
 		127,
 		'Russia',
 		'Russian Federation',
@@ -1660,9 +1787,10 @@ VALUES (
 		'Russian',
 		'Russian ruble',
 		'₽',
-		3
+		3,
+		'russia'
 	),
-	(
+(
 		128,
 		'Czechia',
 		'Czech Republic',
@@ -1673,9 +1801,10 @@ VALUES (
 		'Czech',
 		'Czech koruna',
 		'Kč',
-		3
+		3,
+		'czechia'
 	),
-	(
+(
 		129,
 		'Faroe Islands',
 		'Faroe Islands',
@@ -1686,9 +1815,10 @@ VALUES (
 		'Faroese',
 		'Danish krone',
 		'kr',
-		3
+		3,
+		'faroe-islands'
 	),
-	(
+(
 		130,
 		'San Marino',
 		'Republic of San Marino',
@@ -1699,9 +1829,10 @@ VALUES (
 		'Sammarinese',
 		'Euro',
 		'€',
-		3
+		3,
+		'san-marino'
 	),
-	(
+(
 		131,
 		'Malta',
 		'Republic of Malta',
@@ -1712,9 +1843,10 @@ VALUES (
 		'Maltese',
 		'Euro',
 		'€',
-		3
+		3,
+		'malta'
 	),
-	(
+(
 		132,
 		'Serbia',
 		'Republic of Serbia',
@@ -1725,9 +1857,10 @@ VALUES (
 		'Serbian',
 		'Serbian dinar',
 		'дин.',
-		3
+		3,
+		'serbia'
 	),
-	(
+(
 		133,
 		'Turkey',
 		'Republic of Turkey',
@@ -1738,9 +1871,10 @@ VALUES (
 		'Turkish',
 		'Turkish lira',
 		'₺',
-		3
+		3,
+		'turkey'
 	),
-	(
+(
 		134,
 		'Guernsey',
 		'Bailiwick of Guernsey',
@@ -1751,9 +1885,10 @@ VALUES (
 		'Channel Islander',
 		'British pound',
 		'£',
-		3
+		3,
+		'guernsey'
 	),
-	(
+(
 		135,
 		'Albania',
 		'Republic of Albania',
@@ -1764,9 +1899,10 @@ VALUES (
 		'Albanian',
 		'Albanian lek',
 		'L',
-		3
+		3,
+		'albania'
 	),
-	(
+(
 		136,
 		'United Kingdom',
 		'United Kingdom of Great Britain and Northern Ireland',
@@ -1777,9 +1913,10 @@ VALUES (
 		'British',
 		'British pound',
 		'£',
-		3
+		3,
+		'united-kingdom'
 	),
-	(
+(
 		137,
 		'Romania',
 		'Romania',
@@ -1790,9 +1927,10 @@ VALUES (
 		'Romanian',
 		'Romanian leu',
 		'lei',
-		3
+		3,
+		'romania'
 	),
-	(
+(
 		138,
 		'Gibraltar',
 		'Gibraltar',
@@ -1803,9 +1941,10 @@ VALUES (
 		'Gibraltar',
 		'Gibraltar pound',
 		'£',
-		3
+		3,
+		'gibraltar'
 	),
-	(
+(
 		139,
 		'Svalbard and Jan Mayen',
 		'Svalbard og Jan Mayen',
@@ -1816,9 +1955,10 @@ VALUES (
 		'Norwegian',
 		'krone',
 		'kr',
-		3
+		3,
+		'svalbard-and-jan-mayen'
 	),
-	(
+(
 		140,
 		'Lithuania',
 		'Republic of Lithuania',
@@ -1829,9 +1969,10 @@ VALUES (
 		'Lithuanian',
 		'Euro',
 		'€',
-		3
+		3,
+		'lithuania'
 	),
-	(
+(
 		141,
 		'Sint Maarten',
 		'Sint Maarten',
@@ -1842,9 +1983,10 @@ VALUES (
 		'St. Maartener',
 		'Netherlands Antillean guilder',
 		'ƒ',
-		4
+		4,
+		'sint-maarten'
 	),
-	(
+(
 		142,
 		'British Virgin Islands',
 		'Virgin Islands',
@@ -1855,9 +1997,10 @@ VALUES (
 		'Virgin Islander',
 		'United States dollar',
 		'$',
-		4
+		4,
+		'british-virgin-islands'
 	),
-	(
+(
 		143,
 		'Costa Rica',
 		'Republic of Costa Rica',
@@ -1868,9 +2011,10 @@ VALUES (
 		'Costa Rican',
 		'Costa Rican colón',
 		'₡',
-		4
+		4,
+		'costa-rica'
 	),
-	(
+(
 		144,
 		'Guatemala',
 		'Republic of Guatemala',
@@ -1881,9 +2025,10 @@ VALUES (
 		'Guatemalan',
 		'Guatemalan quetzal',
 		'Q',
-		4
+		4,
+		'guatemala'
 	),
-	(
+(
 		145,
 		'Grenada',
 		'Grenada',
@@ -1894,9 +2039,10 @@ VALUES (
 		'Grenadian',
 		'Eastern Caribbean dollar',
 		'$',
-		4
+		4,
+		'grenada'
 	),
-	(
+(
 		146,
 		'Honduras',
 		'Republic of Honduras',
@@ -1907,9 +2053,10 @@ VALUES (
 		'Honduran',
 		'Honduran lempira',
 		'L',
-		4
+		4,
+		'honduras'
 	),
-	(
+(
 		147,
 		'Nicaragua',
 		'Republic of Nicaragua',
@@ -1920,9 +2067,10 @@ VALUES (
 		'Nicaraguan',
 		'Nicaraguan córdoba',
 		'C$',
-		4
+		4,
+		'nicaragua'
 	),
-	(
+(
 		148,
 		'Cayman Islands',
 		'Cayman Islands',
@@ -1933,9 +2081,10 @@ VALUES (
 		'Caymanian',
 		'Cayman Islands dollar',
 		'$',
-		4
+		4,
+		'cayman-islands'
 	),
-	(
+(
 		149,
 		'United States Virgin Islands',
 		'Virgin Islands of the United States',
@@ -1946,9 +2095,10 @@ VALUES (
 		'Virgin Islander',
 		'United States dollar',
 		'$',
-		4
+		4,
+		'united-states-virgin-islands'
 	),
-	(
+(
 		150,
 		'Cuba',
 		'Republic of Cuba',
@@ -1959,9 +2109,10 @@ VALUES (
 		'Cuban',
 		'Cuban convertible peso',
 		'$',
-		4
+		4,
+		'cuba'
 	),
-	(
+(
 		151,
 		'Martinique',
 		'Martinique',
@@ -1972,9 +2123,10 @@ VALUES (
 		'Martinican',
 		'Euro',
 		'€',
-		4
+		4,
+		'martinique'
 	),
-	(
+(
 		152,
 		'Bermuda',
 		'Bermuda',
@@ -1985,9 +2137,10 @@ VALUES (
 		'Bermudian',
 		'Bermudian dollar',
 		'$',
-		4
+		4,
+		'bermuda'
 	),
-	(
+(
 		153,
 		'Greenland',
 		'Greenland',
@@ -1998,9 +2151,10 @@ VALUES (
 		'Greenlandic',
 		'krone',
 		'kr.',
-		4
+		4,
+		'greenland'
 	),
-	(
+(
 		154,
 		'Panama',
 		'Republic of Panama',
@@ -2011,9 +2165,10 @@ VALUES (
 		'Panamanian',
 		'Panamanian balboa',
 		'B/.',
-		4
+		4,
+		'panama'
 	),
-	(
+(
 		155,
 		'Aruba',
 		'Aruba',
@@ -2024,9 +2179,10 @@ VALUES (
 		'Aruban',
 		'Aruban florin',
 		'ƒ',
-		4
+		4,
+		'aruba'
 	),
-	(
+(
 		156,
 		'Canada',
 		'Canada',
@@ -2037,9 +2193,10 @@ VALUES (
 		'Canadian',
 		'Canadian dollar',
 		'$',
-		4
+		4,
+		'canada'
 	),
-	(
+(
 		157,
 		'Jamaica',
 		'Jamaica',
@@ -2050,9 +2207,10 @@ VALUES (
 		'Jamaican',
 		'Jamaican dollar',
 		'$',
-		4
+		4,
+		'jamaica'
 	),
-	(
+(
 		158,
 		'Curaçao',
 		'Country of Curaçao',
@@ -2063,9 +2221,10 @@ VALUES (
 		'Curaçaoan',
 		'Netherlands Antillean guilder',
 		'ƒ',
-		4
+		4,
+		'curacao'
 	),
-	(
+(
 		159,
 		'Antigua and Barbuda',
 		'Antigua and Barbuda',
@@ -2076,9 +2235,10 @@ VALUES (
 		'Antiguan, Barbudan',
 		'Eastern Caribbean dollar',
 		'$',
-		4
+		4,
+		'antigua-and-barbuda'
 	),
-	(
+(
 		160,
 		'Guadeloupe',
 		'Guadeloupe',
@@ -2089,9 +2249,10 @@ VALUES (
 		'Guadeloupian',
 		'Euro',
 		'€',
-		4
+		4,
+		'guadeloupe'
 	),
-	(
+(
 		161,
 		'United States',
 		'United States of America',
@@ -2102,9 +2263,10 @@ VALUES (
 		'American',
 		'United States dollar',
 		'$',
-		4
+		4,
+		'united-states'
 	),
-	(
+(
 		162,
 		'Saint Kitts and Nevis',
 		'Federation of Saint Christopher and Nevis',
@@ -2115,9 +2277,10 @@ VALUES (
 		'Kittitian or Nevisian',
 		'Eastern Caribbean dollar',
 		'$',
-		4
+		4,
+		'saint-kitts-and-nevis'
 	),
-	(
+(
 		163,
 		'Anguilla',
 		'Anguilla',
@@ -2128,9 +2291,10 @@ VALUES (
 		'Anguillian',
 		'Eastern Caribbean dollar',
 		'$',
-		4
+		4,
+		'anguilla'
 	),
-	(
+(
 		164,
 		'Montserrat',
 		'Montserrat',
@@ -2141,9 +2305,10 @@ VALUES (
 		'Montserratian',
 		'Eastern Caribbean dollar',
 		'$',
-		4
+		4,
+		'montserrat'
 	),
-	(
+(
 		165,
 		'Saint Vincent and the Grenadines',
 		'Saint Vincent and the Grenadines',
@@ -2154,9 +2319,10 @@ VALUES (
 		'Saint Vincentian',
 		'Eastern Caribbean dollar',
 		'$',
-		4
+		4,
+		'saint-vincent-and-the-grenadines'
 	),
-	(
+(
 		166,
 		'Caribbean Netherlands',
 		'Bonaire, Sint Eustatius and Saba',
@@ -2167,9 +2333,10 @@ VALUES (
 		'Dutch',
 		'United States dollar',
 		'$',
-		4
+		4,
+		'caribbean-netherlands'
 	),
-	(
+(
 		167,
 		'Saint Pierre and Miquelon',
 		'Saint Pierre and Miquelon',
@@ -2180,9 +2347,10 @@ VALUES (
 		'Saint-Pierrais, Miquelonnais',
 		'Euro',
 		'€',
-		4
+		4,
+		'saint-pierre-and-miquelon'
 	),
-	(
+(
 		168,
 		'El Salvador',
 		'Republic of El Salvador',
@@ -2193,9 +2361,10 @@ VALUES (
 		'Salvadoran',
 		'United States dollar',
 		'$',
-		4
+		4,
+		'el-salvador'
 	),
-	(
+(
 		169,
 		'Mexico',
 		'United Mexican States',
@@ -2206,9 +2375,10 @@ VALUES (
 		'Mexican',
 		'Mexican peso',
 		'$',
-		4
+		4,
+		'mexico'
 	),
-	(
+(
 		170,
 		'Haiti',
 		'Republic of Haiti',
@@ -2219,9 +2389,10 @@ VALUES (
 		'Haitian',
 		'Haitian gourde',
 		'G',
-		4
+		4,
+		'haiti'
 	),
-	(
+(
 		171,
 		'Belize',
 		'Belize',
@@ -2232,9 +2403,10 @@ VALUES (
 		'Belizean',
 		'Belize dollar',
 		'$',
-		4
+		4,
+		'belize'
 	),
-	(
+(
 		172,
 		'Puerto Rico',
 		'Commonwealth of Puerto Rico',
@@ -2245,9 +2417,10 @@ VALUES (
 		'Puerto Rican',
 		'United States dollar',
 		'$',
-		4
+		4,
+		'puerto-rico'
 	),
-	(
+(
 		173,
 		'Turks and Caicos Islands',
 		'Turks and Caicos Islands',
@@ -2258,9 +2431,10 @@ VALUES (
 		'Turks and Caicos Islander',
 		'United States dollar',
 		'$',
-		4
+		4,
+		'turks-and-caicos-islands'
 	),
-	(
+(
 		174,
 		'Saint Martin',
 		'Saint Martin',
@@ -2271,9 +2445,10 @@ VALUES (
 		'Saint Martin Islander',
 		'Euro',
 		'€',
-		4
+		4,
+		'saint-martin'
 	),
-	(
+(
 		175,
 		'Trinidad and Tobago',
 		'Republic of Trinidad and Tobago',
@@ -2284,9 +2459,10 @@ VALUES (
 		'Trinidadian',
 		'Trinidad and Tobago dollar',
 		'$',
-		4
+		4,
+		'trinidad-and-tobago'
 	),
-	(
+(
 		176,
 		'Saint Barthélemy',
 		'Collectivity of Saint Barthélemy',
@@ -2297,9 +2473,10 @@ VALUES (
 		'Saint Barthélemy Islander',
 		'Euro',
 		'€',
-		4
+		4,
+		'saint-barthelemy'
 	),
-	(
+(
 		177,
 		'Barbados',
 		'Barbados',
@@ -2310,9 +2487,10 @@ VALUES (
 		'Barbadian',
 		'Barbadian dollar',
 		'$',
-		4
+		4,
+		'barbados'
 	),
-	(
+(
 		178,
 		'Dominican Republic',
 		'Dominican Republic',
@@ -2323,9 +2501,10 @@ VALUES (
 		'Dominican',
 		'Dominican peso',
 		'$',
-		4
+		4,
+		'dominican-republic'
 	),
-	(
+(
 		179,
 		'Dominica',
 		'Commonwealth of Dominica',
@@ -2336,9 +2515,10 @@ VALUES (
 		'Dominican',
 		'Eastern Caribbean dollar',
 		'$',
-		4
+		4,
+		'dominica'
 	),
-	(
+(
 		180,
 		'Bahamas',
 		'Commonwealth of the Bahamas',
@@ -2349,9 +2529,10 @@ VALUES (
 		'Bahamian',
 		'Bahamian dollar',
 		'$',
-		4
+		4,
+		'bahamas'
 	),
-	(
+(
 		181,
 		'Saint Lucia',
 		'Saint Lucia',
@@ -2362,9 +2543,10 @@ VALUES (
 		'Saint Lucian',
 		'Eastern Caribbean dollar',
 		'$',
-		4
+		4,
+		'saint-lucia'
 	),
-	(
+(
 		182,
 		'Bahrain',
 		'Kingdom of Bahrain',
@@ -2375,9 +2557,10 @@ VALUES (
 		'Bahraini',
 		'Bahraini dinar',
 		'.د.ب',
-		5
+		5,
+		'bahrain'
 	),
-	(
+(
 		183,
 		'Qatar',
 		'State of Qatar',
@@ -2388,9 +2571,10 @@ VALUES (
 		'Qatari',
 		'Qatari riyal',
 		'ر.ق',
-		5
+		5,
+		'qatar'
 	),
-	(
+(
 		184,
 		'Jordan',
 		'Hashemite Kingdom of Jordan',
@@ -2401,9 +2585,10 @@ VALUES (
 		'Jordanian',
 		'Jordanian dinar',
 		'د.ا',
-		5
+		5,
+		'jordan'
 	),
-	(
+(
 		185,
 		'Malaysia',
 		'Malaysia',
@@ -2414,9 +2599,10 @@ VALUES (
 		'Malaysian',
 		'Malaysian ringgit',
 		'RM',
-		5
+		5,
+		'malaysia'
 	),
-	(
+(
 		186,
 		'Mongolia',
 		'Mongolia',
@@ -2427,9 +2613,10 @@ VALUES (
 		'Mongolian',
 		'Mongolian tögrög',
 		'₮',
-		5
+		5,
+		'mongolia'
 	),
-	(
+(
 		187,
 		'Nepal',
 		'Federal Democratic Republic of Nepal',
@@ -2440,9 +2627,10 @@ VALUES (
 		'Nepalese',
 		'Nepalese rupee',
 		'₨',
-		5
+		5,
+		'nepal'
 	),
-	(
+(
 		188,
 		'Lebanon',
 		'Lebanese Republic',
@@ -2453,9 +2641,10 @@ VALUES (
 		'Lebanese',
 		'Lebanese pound',
 		'ل.ل',
-		5
+		5,
+		'lebanon'
 	),
-	(
+(
 		189,
 		'Kyrgyzstan',
 		'Kyrgyz Republic',
@@ -2466,9 +2655,10 @@ VALUES (
 		'Kirghiz',
 		'Kyrgyzstani som',
 		'с',
-		5
+		5,
+		'kyrgyzstan'
 	),
-	(
+(
 		190,
 		'North Korea',
 		'Democratic People''s Republic of Korea',
@@ -2479,9 +2669,10 @@ VALUES (
 		'North Korean',
 		'North Korean won',
 		'₩',
-		5
+		5,
+		'north-korea'
 	),
-	(
+(
 		191,
 		'China',
 		'People''s Republic of China',
@@ -2492,9 +2683,10 @@ VALUES (
 		'Chinese',
 		'Chinese yuan',
 		'¥',
-		5
+		5,
+		'china'
 	),
-	(
+(
 		192,
 		'Kazakhstan',
 		'Republic of Kazakhstan',
@@ -2505,9 +2697,10 @@ VALUES (
 		'Kazakhstani',
 		'Kazakhstani tenge',
 		'₸',
-		5
+		5,
+		'kazakhstan'
 	),
-	(
+(
 		193,
 		'Bhutan',
 		'Kingdom of Bhutan',
@@ -2518,9 +2711,10 @@ VALUES (
 		'Bhutanese',
 		'Bhutanese ngultrum',
 		'Nu.',
-		5
+		5,
+		'bhutan'
 	),
-	(
+(
 		194,
 		'Hong Kong',
 		'Hong Kong Special Administrative Region of the People''s Republic of China',
@@ -2531,9 +2725,10 @@ VALUES (
 		'Hong Konger',
 		'Hong Kong dollar',
 		'$',
-		5
+		5,
+		'hong-kong'
 	),
-	(
+(
 		195,
 		'Tajikistan',
 		'Republic of Tajikistan',
@@ -2544,9 +2739,10 @@ VALUES (
 		'Tadzhik',
 		'Tajikistani somoni',
 		'ЅМ',
-		5
+		5,
+		'tajikistan'
 	),
-	(
+(
 		196,
 		'Christmas Island',
 		'Territory of Christmas Island',
@@ -2557,9 +2753,10 @@ VALUES (
 		'Christmas Islander',
 		'Australian dollar',
 		'$',
-		5
+		5,
+		'christmas-island'
 	),
-	(
+(
 		197,
 		'Laos',
 		'Lao People''s Democratic Republic',
@@ -2570,9 +2767,10 @@ VALUES (
 		'Laotian',
 		'Lao kip',
 		'₭',
-		5
+		5,
+		'laos'
 	),
-	(
+(
 		198,
 		'India',
 		'Republic of India',
@@ -2583,9 +2781,10 @@ VALUES (
 		'Indian',
 		'Indian rupee',
 		'₹',
-		5
+		5,
+		'india'
 	),
-	(
+(
 		199,
 		'British Indian Ocean Territory',
 		'British Indian Ocean Territory',
@@ -2596,9 +2795,10 @@ VALUES (
 		'Indian',
 		'United States dollar',
 		'$',
-		5
+		5,
+		'british-indian-ocean-territory'
 	),
-	(
+(
 		200,
 		'Iran',
 		'Islamic Republic of Iran',
@@ -2609,9 +2809,10 @@ VALUES (
 		'Iranian',
 		'Iranian rial',
 		'﷼',
-		5
+		5,
+		'iran'
 	),
-	(
+(
 		201,
 		'Saudi Arabia',
 		'Kingdom of Saudi Arabia',
@@ -2622,9 +2823,10 @@ VALUES (
 		'Saudi Arabian',
 		'Saudi riyal',
 		'ر.س',
-		5
+		5,
+		'saudi-arabia'
 	),
-	(
+(
 		202,
 		'Afghanistan',
 		'Islamic Republic of Afghanistan',
@@ -2635,9 +2837,10 @@ VALUES (
 		'Afghan',
 		'Afghan afghani',
 		'؋',
-		5
+		5,
+		'afghanistan'
 	),
-	(
+(
 		203,
 		'Uzbekistan',
 		'Republic of Uzbekistan',
@@ -2648,9 +2851,10 @@ VALUES (
 		'Uzbekistani',
 		'Uzbekistani soʻm',
 		'so''m',
-		5
+		5,
+		'uzbekistan'
 	),
-	(
+(
 		204,
 		'Maldives',
 		'Republic of the Maldives',
@@ -2661,9 +2865,10 @@ VALUES (
 		'Maldivan',
 		'Maldivian rufiyaa',
 		'.ރ',
-		5
+		5,
+		'maldives'
 	),
-	(
+(
 		205,
 		'Kuwait',
 		'State of Kuwait',
@@ -2674,9 +2879,10 @@ VALUES (
 		'Kuwaiti',
 		'Kuwaiti dinar',
 		'د.ك',
-		5
+		5,
+		'kuwait'
 	),
-	(
+(
 		206,
 		'Yemen',
 		'Republic of Yemen',
@@ -2687,9 +2893,10 @@ VALUES (
 		'Yemeni',
 		'Yemeni rial',
 		'﷼',
-		5
+		5,
+		'yemen'
 	),
-	(
+(
 		207,
 		'Cocos (Keeling) Islands',
 		'Territory of the Cocos (Keeling) Islands',
@@ -2700,9 +2907,10 @@ VALUES (
 		'Cocos Islander',
 		'Australian dollar',
 		'$',
-		5
+		5,
+		'cocos-keeling-islands'
 	),
-	(
+(
 		208,
 		'Syria',
 		'Syrian Arab Republic',
@@ -2713,9 +2921,10 @@ VALUES (
 		'Syrian',
 		'Syrian pound',
 		'£',
-		5
+		5,
+		'syria'
 	),
-	(
+(
 		209,
 		'Turkmenistan',
 		'Turkmenistan',
@@ -2726,9 +2935,10 @@ VALUES (
 		'Turkmen',
 		'Turkmenistan manat',
 		'm',
-		5
+		5,
+		'turkmenistan'
 	),
-	(
+(
 		210,
 		'Sri Lanka',
 		'Democratic Socialist Republic of Sri Lanka',
@@ -2739,9 +2949,10 @@ VALUES (
 		'Sri Lankan',
 		'Sri Lankan rupee',
 		'Rs  රු',
-		5
+		5,
+		'sri-lanka'
 	),
-	(
+(
 		211,
 		'Palestine',
 		'State of Palestine',
@@ -2752,9 +2963,10 @@ VALUES (
 		'Palestinian',
 		'Egyptian pound',
 		'E£',
-		5
+		5,
+		'palestine'
 	),
-	(
+(
 		212,
 		'Georgia',
 		'Georgia',
@@ -2765,9 +2977,10 @@ VALUES (
 		'Georgian',
 		'lari',
 		'₾',
-		5
+		5,
+		'georgia'
 	),
-	(
+(
 		213,
 		'Japan',
 		'Japan',
@@ -2778,9 +2991,10 @@ VALUES (
 		'Japanese',
 		'Japanese yen',
 		'¥',
-		5
+		5,
+		'japan'
 	),
-	(
+(
 		214,
 		'Philippines',
 		'Republic of the Philippines',
@@ -2791,9 +3005,10 @@ VALUES (
 		'Filipino',
 		'Philippine peso',
 		'₱',
-		5
+		5,
+		'philippines'
 	),
-	(
+(
 		215,
 		'Myanmar',
 		'Republic of the Union of Myanmar',
@@ -2804,9 +3019,10 @@ VALUES (
 		'Burmese',
 		'Burmese kyat',
 		'Ks',
-		5
+		5,
+		'myanmar'
 	),
-	(
+(
 		216,
 		'Israel',
 		'State of Israel',
@@ -2817,9 +3033,10 @@ VALUES (
 		'Israeli',
 		'Israeli new shekel',
 		'₪',
-		5
+		5,
+		'israel'
 	),
-	(
+(
 		217,
 		'Vietnam',
 		'Socialist Republic of Vietnam',
@@ -2830,9 +3047,10 @@ VALUES (
 		'Vietnamese',
 		'Vietnamese đồng',
 		'₫',
-		5
+		5,
+		'vietnam'
 	),
-	(
+(
 		218,
 		'Armenia',
 		'Republic of Armenia',
@@ -2843,9 +3061,10 @@ VALUES (
 		'Armenian',
 		'Armenian dram',
 		'֏',
-		5
+		5,
+		'armenia'
 	),
-	(
+(
 		219,
 		'Pakistan',
 		'Islamic Republic of Pakistan',
@@ -2856,9 +3075,10 @@ VALUES (
 		'Pakistani',
 		'Pakistani rupee',
 		'₨',
-		5
+		5,
+		'pakistan'
 	),
-	(
+(
 		220,
 		'Brunei',
 		'Nation of Brunei, Abode of Peace',
@@ -2869,9 +3089,10 @@ VALUES (
 		'Bruneian',
 		'Brunei dollar',
 		'$',
-		5
+		5,
+		'brunei'
 	),
-	(
+(
 		221,
 		'Taiwan',
 		'Republic of China (Taiwan)',
@@ -2882,9 +3103,10 @@ VALUES (
 		'Taiwanese',
 		'New Taiwan dollar',
 		'$',
-		5
+		5,
+		'taiwan'
 	),
-	(
+(
 		222,
 		'United Arab Emirates',
 		'United Arab Emirates',
@@ -2895,9 +3117,10 @@ VALUES (
 		'Emirati',
 		'United Arab Emirates dirham',
 		'د.إ',
-		5
+		5,
+		'united-arab-emirates'
 	),
-	(
+(
 		223,
 		'Iraq',
 		'Republic of Iraq',
@@ -2908,9 +3131,10 @@ VALUES (
 		'Iraqi',
 		'Iraqi dinar',
 		'ع.د',
-		5
+		5,
+		'iraq'
 	),
-	(
+(
 		224,
 		'Cambodia',
 		'Kingdom of Cambodia',
@@ -2921,9 +3145,10 @@ VALUES (
 		'Cambodian',
 		'Cambodian riel',
 		'៛',
-		5
+		5,
+		'cambodia'
 	),
-	(
+(
 		225,
 		'Singapore',
 		'Republic of Singapore',
@@ -2934,9 +3159,10 @@ VALUES (
 		'Singaporean',
 		'Singapore dollar',
 		'$',
-		5
+		5,
+		'singapore'
 	),
-	(
+(
 		226,
 		'Oman',
 		'Sultanate of Oman',
@@ -2947,9 +3173,10 @@ VALUES (
 		'Omani',
 		'Omani rial',
 		'ر.ع.',
-		5
+		5,
+		'oman'
 	),
-	(
+(
 		227,
 		'South Korea',
 		'Republic of Korea',
@@ -2960,9 +3187,10 @@ VALUES (
 		'South Korean',
 		'South Korean won',
 		'₩',
-		5
+		5,
+		'south-korea'
 	),
-	(
+(
 		228,
 		'Bangladesh',
 		'People''s Republic of Bangladesh',
@@ -2973,9 +3201,10 @@ VALUES (
 		'Bangladeshi',
 		'Bangladeshi taka',
 		'৳',
-		5
+		5,
+		'bangladesh'
 	),
-	(
+(
 		229,
 		'Indonesia',
 		'Republic of Indonesia',
@@ -2986,9 +3215,10 @@ VALUES (
 		'Indonesian',
 		'Indonesian rupiah',
 		'Rp',
-		5
+		5,
+		'indonesia'
 	),
-	(
+(
 		230,
 		'Thailand',
 		'Kingdom of Thailand',
@@ -2999,9 +3229,10 @@ VALUES (
 		'Thai',
 		'Thai baht',
 		'฿',
-		5
+		5,
+		'thailand'
 	),
-	(
+(
 		231,
 		'Paraguay',
 		'Republic of Paraguay',
@@ -3012,9 +3243,10 @@ VALUES (
 		'Paraguayan',
 		'Paraguayan guaraní',
 		'₲',
-		6
+		6,
+		'paraguay'
 	),
-	(
+(
 		232,
 		'Ecuador',
 		'Republic of Ecuador',
@@ -3025,9 +3257,10 @@ VALUES (
 		'Ecuadorean',
 		'United States dollar',
 		'$',
-		6
+		6,
+		'ecuador'
 	),
-	(
+(
 		233,
 		'Colombia',
 		'Republic of Colombia',
@@ -3038,9 +3271,10 @@ VALUES (
 		'Colombian',
 		'Colombian peso',
 		'$',
-		6
+		6,
+		'colombia'
 	),
-	(
+(
 		234,
 		'Guyana',
 		'Co-operative Republic of Guyana',
@@ -3051,9 +3285,10 @@ VALUES (
 		'Guyanese',
 		'Guyanese dollar',
 		'$',
-		6
+		6,
+		'guyana'
 	),
-	(
+(
 		235,
 		'Peru',
 		'Republic of Peru',
@@ -3064,9 +3299,10 @@ VALUES (
 		'Peruvian',
 		'Peruvian sol',
 		'S/',
-		6
+		6,
+		'peru'
 	),
-	(
+(
 		236,
 		'Uruguay',
 		'Oriental Republic of Uruguay',
@@ -3077,9 +3313,10 @@ VALUES (
 		'Uruguayan',
 		'Uruguayan peso',
 		'$',
-		6
+		6,
+		'uruguay'
 	),
-	(
+(
 		237,
 		'Argentina',
 		'Argentine Republic',
@@ -3090,9 +3327,10 @@ VALUES (
 		'Argentine',
 		'Argentine peso',
 		'$',
-		6
+		6,
+		'argentina'
 	),
-	(
+(
 		238,
 		'Chile',
 		'Republic of Chile',
@@ -3103,9 +3341,10 @@ VALUES (
 		'Chilean',
 		'Chilean peso',
 		'$',
-		6
+		6,
+		'chile'
 	),
-	(
+(
 		239,
 		'Bolivia',
 		'Plurinational State of Bolivia',
@@ -3116,9 +3355,10 @@ VALUES (
 		'Bolivian',
 		'Bolivian boliviano',
 		'Bs.',
-		6
+		6,
+		'bolivia'
 	),
-	(
+(
 		240,
 		'Falkland Islands',
 		'Falkland Islands',
@@ -3129,9 +3369,10 @@ VALUES (
 		'Falkland Islander',
 		'Falkland Islands pound',
 		'£',
-		6
+		6,
+		'falkland-islands'
 	),
-	(
+(
 		241,
 		'Venezuela',
 		'Bolivarian Republic of Venezuela',
@@ -3142,9 +3383,10 @@ VALUES (
 		'Venezuelan',
 		'Venezuelan bolívar soberano',
 		'Bs.S.',
-		6
+		6,
+		'venezuela'
 	),
-	(
+(
 		242,
 		'French Guiana',
 		'Guiana',
@@ -3155,9 +3397,10 @@ VALUES (
 		'Guianan',
 		'Euro',
 		'€',
-		6
+		6,
+		'french-guiana'
 	),
-	(
+(
 		243,
 		'Suriname',
 		'Republic of Suriname',
@@ -3168,9 +3411,10 @@ VALUES (
 		'Surinamer',
 		'Surinamese dollar',
 		'$',
-		6
+		6,
+		'suriname'
 	),
-	(
+(
 		244,
 		'Brazil',
 		'Federative Republic of Brazil',
@@ -3181,9 +3425,10 @@ VALUES (
 		'Brazilian',
 		'Brazilian real',
 		'R$',
-		6
+		6,
+		'brazil'
 	),
-	(
+(
 		245,
 		'South Georgia',
 		'South Georgia and the South Sandwich Islands',
@@ -3194,9 +3439,10 @@ VALUES (
 		'South Georgian South Sandwich Islander',
 		'British pound',
 		'£',
-		7
+		7,
+		'south-georgia'
 	),
-	(
+(
 		246,
 		'French Southern and Antarctic Lands',
 		'Territory of the French Southern and Antarctic Lands',
@@ -3207,5 +3453,34 @@ VALUES (
 		'French',
 		'Euro',
 		'€',
-		7
+		7,
+		'french-southern-and-antarctic-lands'
+	),
+(
+		247,
+		'Macau',
+		'Macau Special Administrative Region of China',
+		'MO',
+		'MAC',
+		'UTC+08:00',
+		'https://flagcdn.com/mo.svg',
+		'Macanese',
+		'Macanese Pataca',
+		'MOP$',
+		5,
+		'macau'
+	),
+(
+		248,
+		'Antilles',
+		'Netherlands Antilles',
+		'AN',
+		'ANT',
+		'UTC−04:00',
+		'https://flagcdn.com/an.svg',
+		'Dutch Antillean',
+		'Netherlands Antillean guilder',
+		'ƒ',
+		9,
+		'antilles'
 	);

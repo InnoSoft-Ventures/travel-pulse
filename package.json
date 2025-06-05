@@ -5,11 +5,17 @@
   "scripts": {
     "web:dev": "pnpm run --filter @travel-pulse/client dev",
     "server:dev": "pnpm run --filter @travel-pulse/api dev",
-		"setup:db": "docker-compose up -d --remove-orphans",
-		"setup:db:stop": "docker-compose down",
-		"setup:artifacts": "pnpm run --filter @travel-pulse/api artifacts",
-		"db:migrate": "pnpm run --filter @travel-pulse/api sq-cli db:migrate",
-		"setup:server": "npm run setup:db && npm run db:migrate && npm run setup:artifacts && npm run server:dev",
+    "servers": "concurrently -n API,MCP -c green,blue \"pnpm run server:dev\" \"pnpm run mcp:dev\"",
+    "setup:db": "docker-compose up -d --remove-orphans",
+    "setup:db:stop": "docker-compose down",
+    "db:migrate": "pnpm run --filter @travel-pulse/api sq-cli db:migrate",
+    "db:seeder": "pnpm run --filter @travel-pulse/api sq-cli db:seed:all",
+		"db:sq-cli": "pnpm run --filter @travel-pulse/api sq-cli",
+    "setup:server": "npm run setup:db && npm run db:migrate && npm run db:seeder && npm run servers",
+    "mcp:dev": "pnpm run --filter @travel-pulse/mcp-server dev",
+    "mcp:start": "pnpm run --filter @travel-pulse/mcp-server start",
+    "mcp:build": "pnpm run --filter @travel-pulse/mcp-server build",
+		"mcp:query": "pnpm run --filter @travel-pulse/mcp-server mcp-query",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -19,6 +25,7 @@
     "@config/eslint": "workspace:^",
     "@config/prettier": "workspace:^",
     "@config/tsconfig": "workspace:^",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "concurrently": "^9.1.2"
   }
 }

@@ -1,8 +1,8 @@
-import { SERVICE } from "@libs/api-service";
-import { RabbitMQService } from "./rabbitmq";
+import { SERVICE } from '@travelpulse/api-service';
+import { RabbitMQService } from './rabbitmq';
 
 export async function bootstrapRabbitMQ(
-	serviceName: SERVICE,
+	serviceName: SERVICE
 ): Promise<RabbitMQService> {
 	const rabbitMQService = RabbitMQService.getInstance(serviceName);
 
@@ -11,11 +11,11 @@ export async function bootstrapRabbitMQ(
 
 	// Close RabbitMQ connection on process exit
 
-	process.on("SIGINT", async () => {
+	process.on('SIGINT', async () => {
 		await rabbitMQService.close();
 	});
 
-	process.on("SIGTERM", async () => {
+	process.on('SIGTERM', async () => {
 		await rabbitMQService.close();
 	});
 

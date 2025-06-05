@@ -1,4 +1,4 @@
-import { PackageType, SIM } from "@libs/interfaces";
+import { PackageType, SIM } from '@travelpulse/interfaces';
 
 export interface AiraloCountry {
 	country_code: string;
@@ -46,7 +46,7 @@ export interface AiraloOperator {
 	style: string;
 	gradient_start: string;
 	gradient_end: string;
-	type: "local" | "global" | "regional";
+	type: 'local' | 'global' | 'regional';
 	is_prepaid: boolean;
 	title: string;
 	esim_type: string;
@@ -54,13 +54,13 @@ export interface AiraloOperator {
 	apn_type: string;
 	apn_value: string | null;
 	is_roaming: boolean;
-	info: string[];
+	info: string[] | null;
 	image?: {
 		width: number;
 		height: number;
 		url: string;
 	};
-	plan_type: "data" | "voice" | "data_voice";
+	plan_type: 'data' | 'voice' | 'data_voice';
 	activation_policy: string;
 	is_kyc_verify: boolean;
 	rechargeability: boolean;
@@ -115,7 +115,7 @@ export interface AiraloPackageResponse {
 	};
 }
 
-export interface AiraloAccessToken {
+export interface ProviderAccessToken {
 	data: {
 		token_type: string;
 		expires_in: number;
@@ -123,27 +123,32 @@ export interface AiraloAccessToken {
 	};
 }
 
+export type AiraloNotificationType =
+	| 'async_orders'
+	| 'webhook_low_data'
+	| 'webhook_credit_limit';
+
 export interface AiraloOrderNotification {
-	type: "async_orders";
+	type: 'async_orders';
 	webhook_url: string;
 }
 
 export interface AiraloLowDataNotification {
-	type: "webhook_low_data";
+	type: 'webhook_low_data';
 	webhook_url: string;
 	/** use this value to receive notification via email */
 	email_low_data: string;
 	email: string;
-	language: "en";
+	language: 'en';
 }
 
 export interface AiraloCreditLimitNotification {
-	type: "webhook_credit_limit";
+	type: 'webhook_credit_limit';
 	webhook_url: string;
 	/** receive notification via email */
 	email_credit_limit: string;
 	email: string;
-	language: "en";
+	language: 'en';
 }
 
 export type AiraloNotification =
@@ -165,18 +170,18 @@ export interface AiraloOrderResponse {
 }
 
 export type AiraloInstallationGuide = {
-	[key in "en"]: string;
+	[key in 'en']: string;
 };
 
 export type AiraloAsyncOrderResponse = {
 	data: {
-		"0": {
+		'0': {
 			data: {
 				text: null;
 				voice: null;
 			};
 		};
-		"1": {
+		'1': {
 			data: {
 				net_price: number;
 			};

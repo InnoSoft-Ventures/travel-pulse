@@ -5,6 +5,7 @@ import Continent from './Continent';
 export interface CountryAttributes {
 	id: number;
 	name: string;
+	slug: string;
 	officialName: string;
 	iso2: string;
 	iso3: string;
@@ -21,6 +22,7 @@ export type CountryCreationAttributes = Optional<CountryAttributes, 'id'>;
 class Country extends Model<CountryAttributes, CountryCreationAttributes> {
 	public id!: number;
 	public name!: string;
+	public slug!: string;
 	public officialName!: string;
 	public iso2!: string;
 	public iso3!: string;
@@ -43,6 +45,11 @@ Country.init(
 		name: {
 			allowNull: false,
 			type: DataTypes.STRING,
+		},
+		slug: {
+			allowNull: false,
+			type: DataTypes.STRING,
+			unique: true,
 		},
 		officialName: {
 			allowNull: false,

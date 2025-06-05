@@ -1,47 +1,47 @@
-export const SOMETHING_WENT_WRONG = "Something went wrong, please try again.";
+export const SOMETHING_WENT_WRONG = 'Something went wrong, please try again.';
 
-export const INVALID_CREDENTIALS = "Invalid credentials.";
+export const INVALID_CREDENTIALS = 'Invalid credentials.';
 export const ERROR_CODE = {
-	EMAIL_ALREADY_IN_USE: "email_already_in_use",
-	INVALID_TOKEN: "invalid_token",
-	INVALID_CREDENTIALS: "invalid_credentials",
+	EMAIL_ALREADY_IN_USE: 'email_already_in_use',
+	INVALID_TOKEN: 'invalid_token',
+	INVALID_CREDENTIALS: 'invalid_credentials',
 };
 
 export enum OrderStatus {
-	PENDING = "pending",
-	PROCESSING = "processing",
-	COMPLETED = "completed",
-	CANCELLED = "cancelled",
+	PENDING = 'pending',
+	PROCESSING = 'processing',
+	COMPLETED = 'completed',
+	CANCELLED = 'cancelled',
 }
 
 export enum ProviderOrderStatus {
-	PENDING = "pending",
-	PROCESSING = "processing",
-	COMPLETED = "completed",
-	CANCELLED = "cancelled",
+	PENDING = 'pending',
+	PROCESSING = 'processing',
+	COMPLETED = 'completed',
+	CANCELLED = 'cancelled',
 }
 
 export enum ProviderIdentity {
-	AIRALO = "airalo",
-	ESIMACCESS = "esimaccess",
+	AIRALO = 'Airalo',
+	ESIMACCESS = 'eSIMAccess',
 }
 
 export enum PackageType {
-	SIM = "sim",
+	SIM = 'sim',
 }
 
-export type ApnType = "automatic" | "manual";
+export type ApnType = 'automatic' | 'manual';
 
 export enum SimPackageTypeEnum {
-	LOCAL = "local",
-	GLOBAL = "global",
-	REGIONAL = "regional",
+	LOCAL = 'local',
+	GLOBAL = 'global',
+	REGIONAL = 'regional',
 }
 
 export enum SimStatus {
-	NOT_ACTIVE = "NOT_ACTIVE",
-	ACTIVE = "ACTIVE",
-	FINISHED = "FINISHED",
-	UNKNOWN = "UNKNOWN",
-	EXPIRED = "EXPIRED",
+	NOT_ACTIVE = 'NOT_ACTIVE',
+	ACTIVE = 'ACTIVE',
+	FINISHED = 'FINISHED',
+	UNKNOWN = 'UNKNOWN',
+	EXPIRED = 'EXPIRED',
 }
