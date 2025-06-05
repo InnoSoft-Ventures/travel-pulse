@@ -43,7 +43,7 @@ export default function HomePage() {
 		);
 		dispatch(
 			getMultipleRegions({
-				size: 6,
+				size: 8,
 			})
 		);
 	}, [dispatch]);
@@ -194,19 +194,19 @@ export default function HomePage() {
 						<div className={styles.featureListContainer}>
 							<div>
 								<SectionCard
-									varient="secondary"
+									variant="secondary"
 									icon={<SettingsIcon />}
 									title="Choose Your Package"
 									description="Select the perfect eSIM for your destination and data needs."
 								/>
 								<SectionCard
-									varient="secondary"
+									variant="secondary"
 									icon={<GlobeIcon />}
 									title="Choose Your Package"
 									description="Using your eSIM-compatible device to scan the QR code we send you via email and WhatsApp to quickly install your eSIM."
 								/>
 								<SectionCard
-									varient="secondary"
+									variant="secondary"
 									icon={<FeatherIcon />}
 									title="Choose Your Package"
 									description="When you arrive at your destination, switch to your eSIM
@@ -214,7 +214,7 @@ export default function HomePage() {
 						join the local network seamlessly."
 								/>
 								<SectionCard
-									varient="secondary"
+									variant="secondary"
 									icon={<FeatherIcon />}
 									title="Choose Your Package"
 									description="When you arrive at your destination, switch to your eSIM
