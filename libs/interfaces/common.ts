@@ -1,6 +1,7 @@
 export interface Country {
 	id: number;
 	name: string;
+	slug: string;
 	code: string;
 	iso2: string;
 	iso3: string;

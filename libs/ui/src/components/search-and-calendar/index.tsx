@@ -8,6 +8,7 @@ import SearchIcon from '../../assets/white-search.svg';
 import { cn } from '../../utils';
 import { useAppDispatch, useAppSelector } from '@travelpulse/state';
 import { Country } from '@travelpulse/interfaces';
+import { DATE_FORMAT, dateJs } from '@travelpulse/utils';
 import { getCountries, productSearch } from '@travelpulse/state/thunks';
 import { useFilter } from '@react-aria/i18n';
 import Select, { SelectItem } from '../common/select';
@@ -95,10 +96,12 @@ const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 				return;
 			}
 
-			const selectedDates = `${startDate.toISOString()} to ${endDate.toISOString()}`;
-
 			dispatch(
-				productSearch({ country: country.iso2, dates: selectedDates })
+				productSearch({
+					country: country.slug,
+					from: dateJs(startDate).format(DATE_FORMAT),
+					to: dateJs(endDate).format(DATE_FORMAT),
+				})
 			);
 		} catch (error) {
 			console.error('Error submitting form:', error);

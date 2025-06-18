@@ -38,6 +38,7 @@
     "@react-aria/i18n": "^3.12.8",
     "@travelpulse/interfaces": "workspace:^",
     "@travelpulse/state": "workspace:^",
+    "@travelpulse/utils": "workspace:^",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "flatpickr": "^4.6.13",
@@ -49,6 +50,7 @@
     "react-hook-form": "^7.55.0",
     "react-responsive-modal": "^6.4.2",
     "react-select": "^5.10.1",
+    "tailwind-merge": "^3.3.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

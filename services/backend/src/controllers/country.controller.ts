@@ -10,6 +10,7 @@ export const getCountries = async (_req: Request, res: Response) => {
 			attributes: [
 				'id',
 				'name',
+				'slug',
 				'iso2',
 				'iso3',
 				'timezone',
@@ -50,10 +51,10 @@ export const countrySearch = async (req: Request, res: Response) => {
 			},
 		});
 
-		return res.status(200).json(countries);
+		return res.status(200).json(successResponse(countries));
 	} catch (error) {
 		console.error('Error fetching countries:', error);
-		return res.status(500).json({ error: 'Internal Server Error' });
+		return res.status(500).json(errorResponse('Internal Server Error'));
 	}
 };
 

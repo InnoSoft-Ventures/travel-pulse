@@ -209,6 +209,9 @@ importers:
       '@travelpulse/interfaces':
         specifier: workspace:^
         version: link:../interfaces
+      '@travelpulse/utils':
+        specifier: workspace:^
+        version: link:../util
       axios:
         specifier: ^1.7.2
         version: 1.7.7
@@ -261,6 +264,9 @@ importers:
       '@travelpulse/state':
         specifier: workspace:^
         version: link:../state
+      '@travelpulse/utils':
+        specifier: workspace:^
+        version: link:../util
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -294,6 +300,9 @@ importers:
       react-select:
         specifier: ^5.10.1
         version: 5.10.1(@types/react@18.3.5)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)
+      tailwind-merge:
+        specifier: ^3.3.0
+        version: 3.3.0
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -329,6 +338,15 @@ importers:
         specifier: ^5.8.2
         version: 5.8.2
 
+  libs/util:
+    dependencies:
+      '@travelpulse/interfaces':
+        specifier: workspace:^
+        version: link:../interfaces
+      dayjs:
+        specifier: ^1.11.11
+        version: 1.11.13
+
   services/backend:
     dependencies:
       '@travelpulse/api-service':
@@ -346,6 +364,9 @@ importers:
       '@travelpulse/services':
         specifier: workspace:^
         version: link:../../libs/services
+      '@travelpulse/utils':
+        specifier: workspace:^
+        version: link:../../libs/util
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
@@ -358,9 +379,6 @@ importers:
       cors:
         specifier: ^2.8.5
         version: 2.8.5
-      dayjs:
-        specifier: ^1.11.11
-        version: 1.11.13
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
@@ -6498,6 +6516,9 @@ packages:
 
   tailwind-merge@2.5.4:
     resolution: {integrity: sha512-0q8cfZHMu9nuYP/b5Shb7Y7Sh1B7Nnl5GqNr1U+n2p6+mybvRtayrQ+0042Z5byvTA8ihjlP8Odo8/VnHbZu4Q==}
+
+  tailwind-merge@3.3.0:
+    resolution: {integrity: sha512-fyW/pEfcQSiigd5SNn0nApUOxx0zB/dm6UDU/rEwc2c3sX2smWUNbapHv+QRqLGVp9GWX3THIa7MUGPo+YkDzQ==}
 
   tailwind-variants@0.3.0:
     resolution: {integrity: sha512-ho2k5kn+LB1fT5XdNS3Clb96zieWxbStE9wNLK7D0AV64kdZMaYzAKo0fWl6fXLPY99ffF9oBJnIj5escEl/8A==}
@@ -15137,6 +15158,8 @@ snapshots:
       tslib: 2.7.0
 
   tailwind-merge@2.5.4: {}
+
+  tailwind-merge@3.3.0: {}
 
   tailwind-variants@0.3.0(tailwindcss@3.4.11(ts-node@10.9.2(@types/node@20.16.5)(typescript@5.5.4))):
     dependencies:

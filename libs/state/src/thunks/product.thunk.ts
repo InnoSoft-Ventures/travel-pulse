@@ -1,6 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import ApiService from '../request';
-import { CountryProduct, ResponseData } from '@travelpulse/interfaces';
+import {
+	CountryProduct,
+	PackageResults,
+	ResponseData,
+} from '@travelpulse/interfaces';
+import { errorHandler } from '@travelpulse/utils';
 
 export const getPopularDestinations = createAsyncThunk(
 	'products/getPopularDestinations',
@@ -18,7 +23,10 @@ export const getPopularDestinations = createAsyncThunk(
 
 			if (!results.success) {
 				return thunkAPI.rejectWithValue(
-					results.message || 'Failed to fetch popular destinations'
+					errorHandler(
+						results,
+						'Failed to fetch popular destinations'
+					)
 				);
 			}
 
@@ -27,7 +35,10 @@ export const getPopularDestinations = createAsyncThunk(
 			console.log('Error fetching popular destinations:', error);
 
 			return thunkAPI.rejectWithValue(
-				error.response?.data || 'Failed to fetch popular destinations'
+				errorHandler(
+					error,
+					'Unexpected error fetching popular destinations'
+				)
 			);
 		}
 	}
@@ -48,7 +59,7 @@ export const getMultipleRegions = createAsyncThunk(
 
 			if (!results.success) {
 				return thunkAPI.rejectWithValue(
-					results.message || 'Failed to fetch multiple regions'
+					errorHandler(results, 'Failed to fetch multiple regions')
 				);
 			}
 
@@ -57,7 +68,10 @@ export const getMultipleRegions = createAsyncThunk(
 			console.log('Error fetching multiple regions:', error);
 
 			return thunkAPI.rejectWithValue(
-				error.response?.data || 'Failed to fetch multiple regions'
+				errorHandler(
+					error,
+					'Unexpected error fetching multiple regions'
+				)
 			);
 		}
 	}
@@ -65,18 +79,22 @@ export const getMultipleRegions = createAsyncThunk(
 
 export const productSearch = createAsyncThunk(
 	'products/productSearch',
-	async (params: { country: string; dates: string }, thunkAPI) => {
+	async (params: { country: string; from: string; to: string }, thunkAPI) => {
 		try {
-			const response = await ApiService.get<
-				ResponseData<CountryProduct[]>
-			>(`/products/search`, {
-				params,
-			});
+			const response = await ApiService.get<ResponseData<PackageResults>>(
+				`/products/searc`,
+				{
+					params: {
+						...params,
+						to: '',
+					},
+				}
+			);
 			const results = response.data;
 
 			if (!results.success) {
 				return thunkAPI.rejectWithValue(
-					results.message || 'Failed to fetch product search'
+					errorHandler(results, 'Failed to fetch product search')
 				);
 			}
 
@@ -85,7 +103,7 @@ export const productSearch = createAsyncThunk(
 			console.log('Error fetching product search:', error);
 
 			return thunkAPI.rejectWithValue(
-				error.response?.data || 'Failed to fetch product search'
+				errorHandler(error, 'Failed to fetch product search')
 			);
 		}
 	}

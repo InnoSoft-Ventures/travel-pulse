@@ -8,7 +8,7 @@
 		},
 	},
 	"include": [
-		"**/*.ts",
+		"**/*.ts", "../util/src/errorHandler.ts",
 	],
 	"exclude": [
 		"node_modules"

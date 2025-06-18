@@ -1,5 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { CountryProduct, StateStatus } from '@travelpulse/interfaces';
+import {
+	CountryProduct,
+	PackageResults,
+	StateStatus,
+} from '@travelpulse/interfaces';
 import {
 	getMultipleRegions,
 	getPopularDestinations,
@@ -13,7 +17,7 @@ interface ProductState {
 		error: string | null;
 	};
 	productSearch: {
-		list: CountryProduct[];
+		data: PackageResults;
 		status: StateStatus;
 		error: string | null;
 	};
@@ -26,7 +30,10 @@ interface ProductState {
 
 const initialState: ProductState = {
 	productSearch: {
-		list: [],
+		data: {
+			destinations: null,
+			travelDuration: 0,
+		},
 		status: 'idle',
 		error: null,
 	},
@@ -83,10 +90,13 @@ const productSlice = createSlice({
 			})
 			.addCase(productSearch.fulfilled, (state, action) => {
 				state.productSearch.status = 'succeeded';
-				state.productSearch.list = action.payload;
+				state.productSearch.data = action.payload;
 			})
 			.addCase(productSearch.rejected, (state, action) => {
 				state.productSearch.status = 'failed';
+
+				console.log('Error in product search:', action.payload);
+
 				state.productSearch.error = action.payload as string;
 			});
 	},
