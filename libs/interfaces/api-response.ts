@@ -37,6 +37,9 @@ export interface ErrorResponse {
 	errors: ErrorDetails;
 }
 
+export type ErrorHandler = ErrorResponse | string;
+export type ErrorInstance = ErrorHandler | undefined;
+
 export type ResponseData<Result> = SuccessResponse<Result> | ErrorResponse;
 
 /** Type guard to check if an object is an ErrorResponse */

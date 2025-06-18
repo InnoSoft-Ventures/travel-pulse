@@ -3,6 +3,7 @@ import { RegisterFormValues } from '@travelpulse/interfaces/schemas';
 import ApiService from '../request';
 import { setUser } from '../features/user.slice';
 import { ResponseData, UserDataDAO } from '@travelpulse/interfaces';
+import { errorHandler } from '@travelpulse/utils';
 
 export const registerUser = createAsyncThunk(
 	'auth/registerUser',
@@ -16,7 +17,7 @@ export const registerUser = createAsyncThunk(
 
 			if (!results.success) {
 				return thunkAPI.rejectWithValue(
-					results.message || 'Registration failed'
+					errorHandler(results, 'Failed to register user')
 				);
 			}
 
@@ -27,7 +28,7 @@ export const registerUser = createAsyncThunk(
 			console.log('Registration error:', error);
 
 			return thunkAPI.rejectWithValue(
-				error.response?.data || 'Registration failed'
+				errorHandler(error, 'Unexpected error during registration')
 			);
 		}
 	}
@@ -45,7 +46,7 @@ export const loginUser = createAsyncThunk(
 
 			if (!results.success) {
 				return thunkAPI.rejectWithValue(
-					results.message || 'Signin failed'
+					errorHandler(results, 'Failed to login user')
 				);
 			}
 
@@ -56,7 +57,7 @@ export const loginUser = createAsyncThunk(
 			console.log('Signin error:', err);
 
 			return thunkAPI.rejectWithValue(
-				err.response?.data || 'Signin failed'
+				errorHandler(err, 'Unexpected error during signin')
 			);
 		}
 	}
@@ -70,7 +71,10 @@ export const forgotPassword = createAsyncThunk(
 			return res.data;
 		} catch (err: any) {
 			return thunkAPI.rejectWithValue(
-				err.response?.data || 'Failed to send reset email'
+				errorHandler(
+					err,
+					'Unexpected error during forgot password process'
+				)
 			);
 		}
 	}

@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import ApiService from '../request';
 import { Country, ResponseData } from '@travelpulse/interfaces';
+import { errorHandler } from '@travelpulse/utils';
 
 export const getCountries = createAsyncThunk(
 	'getAllCountries',
@@ -18,7 +19,7 @@ export const getCountries = createAsyncThunk(
 
 			if (!results.success) {
 				return thunkAPI.rejectWithValue(
-					results.message || 'Failed fetching countries'
+					errorHandler(results, 'Failed fetching countries')
 				);
 			}
 
@@ -27,7 +28,7 @@ export const getCountries = createAsyncThunk(
 			console.error('Failed fetching countries', error);
 
 			return thunkAPI.rejectWithValue(
-				error.response?.data || 'Failed fetching countries'
+				errorHandler(error, 'Unexpected error fetching countries')
 			);
 		}
 	}

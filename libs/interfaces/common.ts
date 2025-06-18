@@ -1,3 +1,5 @@
+import { ErrorInstance } from './api-response';
+
 export interface Country {
 	id: number;
 	name: string;
@@ -17,3 +19,17 @@ export interface CountryProduct extends Country {
 }
 
 export type StateStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
+
+// Generic state interface for list-based features
+export interface ListState<T> {
+	list: T[];
+	status: StateStatus;
+	error: ErrorInstance;
+}
+
+// Generic state interface for single-item features
+export interface ItemState<T> {
+	data: T;
+	status: StateStatus;
+	error: ErrorInstance;
+}

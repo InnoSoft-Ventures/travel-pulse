@@ -1,55 +1,37 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
 	CountryProduct,
+	ErrorHandler,
+	ItemState,
+	ListState,
 	PackageResults,
-	StateStatus,
 } from '@travelpulse/interfaces';
 import {
 	getMultipleRegions,
 	getPopularDestinations,
 	productSearch,
 } from '../thunks/product.thunk';
+import {
+	createInitialItemState,
+	createInitialListState,
+} from '@travelpulse/utils';
 
 interface ProductState {
-	popularDestinations: {
-		list: CountryProduct[];
-		status: StateStatus;
-		error: string | null;
-	};
-	productSearch: {
-		data: PackageResults;
-		status: StateStatus;
-		error: string | null;
-	};
-	multipleRegions: {
-		list: CountryProduct[];
-		status: StateStatus;
-		error: string | null;
-	};
+	popularDestinations: ListState<CountryProduct>;
+	multipleRegions: ListState<CountryProduct>;
+	productSearch: ItemState<PackageResults>;
 }
 
 const initialState: ProductState = {
-	productSearch: {
-		data: {
-			destinations: null,
-			travelDuration: 0,
-		},
-		status: 'idle',
-		error: null,
-	},
-	popularDestinations: {
-		list: [],
-		status: 'idle',
-		error: null,
-	},
-	multipleRegions: {
-		list: [],
-		status: 'idle',
-		error: null,
-	},
+	productSearch: createInitialItemState<PackageResults>({
+		destinations: null,
+		travelDuration: 0,
+	}),
+	popularDestinations: createInitialListState<CountryProduct>(),
+	multipleRegions: createInitialListState<CountryProduct>(),
 };
 
-const productSlice = createSlice({
+export const productsSlice = createSlice({
 	name: 'products',
 	initialState,
 	reducers: {},
@@ -58,7 +40,7 @@ const productSlice = createSlice({
 			// Popular Destinations
 			.addCase(getPopularDestinations.pending, (state) => {
 				state.popularDestinations.status = 'loading';
-				state.popularDestinations.error = null;
+				state.popularDestinations.error = undefined;
 			})
 			.addCase(getPopularDestinations.fulfilled, (state, action) => {
 				state.popularDestinations.status = 'succeeded';
@@ -66,13 +48,14 @@ const productSlice = createSlice({
 			})
 			.addCase(getPopularDestinations.rejected, (state, action) => {
 				state.popularDestinations.status = 'failed';
-				state.popularDestinations.error = action.payload as string;
+				state.popularDestinations.error =
+					action.payload as ErrorHandler;
 			})
 
 			// Multiple Regions
 			.addCase(getMultipleRegions.pending, (state) => {
 				state.multipleRegions.status = 'loading';
-				state.multipleRegions.error = null;
+				state.multipleRegions.error = undefined;
 			})
 			.addCase(getMultipleRegions.fulfilled, (state, action) => {
 				state.multipleRegions.status = 'succeeded';
@@ -80,13 +63,13 @@ const productSlice = createSlice({
 			})
 			.addCase(getMultipleRegions.rejected, (state, action) => {
 				state.multipleRegions.status = 'failed';
-				state.multipleRegions.error = action.payload as string;
+				state.multipleRegions.error = action.payload as ErrorHandler;
 			})
 
 			// Product Search
 			.addCase(productSearch.pending, (state) => {
 				state.productSearch.status = 'loading';
-				state.productSearch.error = null;
+				state.productSearch.error = undefined;
 			})
 			.addCase(productSearch.fulfilled, (state, action) => {
 				state.productSearch.status = 'succeeded';
@@ -94,13 +77,10 @@ const productSlice = createSlice({
 			})
 			.addCase(productSearch.rejected, (state, action) => {
 				state.productSearch.status = 'failed';
-
-				console.log('Error in product search:', action.payload);
-
-				state.productSearch.error = action.payload as string;
+				state.productSearch.error = action.payload as ErrorHandler;
 			});
 	},
 });
 
-export const {} = productSlice.actions;
-export default productSlice.reducer;
+export const {} = productsSlice.actions;
+export default productsSlice.reducer;
