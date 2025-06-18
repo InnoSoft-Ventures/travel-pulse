@@ -1,6 +1,6 @@
 'use client';
 
-import { getResponsivePlacement, ToastProvider } from '@travelpulse/ui';
+import { ToastProvider } from '@travelpulse/ui';
 import { UIProvider } from '@travelpulse/ui';
 import {
 	ReduxProvider,
