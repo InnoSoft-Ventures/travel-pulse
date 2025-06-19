@@ -37,18 +37,20 @@ export interface RegionExplore {
 }
 
 // Network types for coverage
-export interface Network {
+export interface OperatorNetwork {
 	name: string;
 	types: string[];
 }
 
 // Coverage information for a destination
-export interface Coverage {
-	data: { name: string; code: string; networks: Network[] };
+export interface OperatorCoverage {
+	name: string;
+	code: string;
+	networks: OperatorNetwork[];
 }
 
 // Package details
-export interface Package {
+export interface PackageInterface {
 	packageId: number;
 	title: string;
 	price: string;
@@ -59,23 +61,20 @@ export interface Package {
 	/** Validity period in days */
 	day: number;
 	isUnlimited: boolean;
-}
-
-// Destination information
-export interface Destination {
-	id: number;
-	title: string;
-	type: string;
-	esimType: string;
-	apnType: string;
-	packages: Package[];
-	coverage: Coverage[];
+	operator: {
+		id: number;
+		title: string;
+		type: string;
+		esimType: string;
+		apnType: string;
+	};
+	coverage: OperatorCoverage[];
 }
 
 // Main package search results
 export interface PackageResults {
-	/** List of available destinations with their packages */
-	destinations: Destination | null;
+	/** List of available packages with their operators */
+	packages: PackageInterface[] | null;
 	/** Duration of travel in days */
 	travelDuration: number;
 }

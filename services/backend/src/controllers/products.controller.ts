@@ -9,7 +9,11 @@ import {
 	HTTP_STATUS_CODES,
 	successResponse,
 } from '@travelpulse/middlewares';
-import { RegionExplore, SOMETHING_WENT_WRONG } from '@travelpulse/interfaces';
+import {
+	PackageInterface,
+	RegionExplore,
+	SOMETHING_WENT_WRONG,
+} from '@travelpulse/interfaces';
 import dbConnect from '../db';
 import Package from '../db/models/Package';
 import Country from '../db/models/Country';
@@ -400,11 +404,7 @@ export const searchProducts = async (req: Request, res: Response) => {
 		const endDate = dateJs(end);
 		const travelDuration = dateJs(endDate).diff(startDate, 'day');
 
-		console.log(
-			`Searching for packages in ${countrySlug} with travel days: ${travelDuration}`
-		);
-
-		// Query packages where package.day >= travelDuration
+		// Query operators and their packages
 		const operators = await Operator.findAll({
 			where: {
 				type: 'local',
@@ -415,6 +415,7 @@ export const searchProducts = async (req: Request, res: Response) => {
 				{
 					association: 'packages',
 					attributes: [
+						'id',
 						'title',
 						'price',
 						'amount',
@@ -441,9 +442,34 @@ export const searchProducts = async (req: Request, res: Response) => {
 			],
 		});
 
+		// Flatten packages and attach operator info
+		const packages: PackageInterface[] = operators
+			.flatMap((operator) => {
+				return (
+					operator.packages?.map((pkg: any) => ({
+						packageId: pkg.id,
+						title: pkg.title,
+						price: pkg.price,
+						amount: pkg.amount,
+						day: pkg.day,
+						data: pkg.data,
+						isUnlimited: pkg.isUnlimited,
+						operator: {
+							id: operator.id,
+							title: operator.title,
+							type: operator.type,
+							esimType: operator.esimType,
+							apnType: operator.apnType,
+						},
+						coverage: operator.coverage?.data || [],
+					})) || []
+				);
+			})
+			.filter((pkg) => Boolean(pkg));
+
 		return res.json(
 			successResponse({
-				destinations: operators,
+				packages,
 				travelDuration,
 			})
 		);

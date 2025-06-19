@@ -38,6 +38,7 @@ export interface AiraloNetwork {
 export interface AiraloCoverage {
 	/** Country ISO2 */
 	name: string;
+	code: string;
 	networks: AiraloNetwork[];
 }
 

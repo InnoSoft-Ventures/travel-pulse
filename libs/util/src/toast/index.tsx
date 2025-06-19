@@ -1,4 +1,5 @@
 import { addToast, ToastProvider } from '@heroui/toast';
+import styles from './toast.module.scss';
 
 type ToastType =
 	| 'success'
@@ -65,6 +66,9 @@ class ToastManager {
 			endContent,
 			variant,
 			color: type,
+			classNames: {
+				description: styles.description,
+			},
 		});
 	}
 

@@ -82,7 +82,7 @@ export const productSearch = createAsyncThunk(
 	async (params: { country: string; from: string; to: string }, thunkAPI) => {
 		try {
 			const response = await ApiService.get<ResponseData<PackageResults>>(
-				`/products/searc`,
+				`/products/search`,
 				{
 					params: {
 						...params,

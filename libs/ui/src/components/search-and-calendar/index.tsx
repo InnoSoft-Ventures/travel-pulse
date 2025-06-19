@@ -1,14 +1,14 @@
 'use client';
 import React, { useState } from 'react';
 import styles from './search-and-calendar.module.scss';
-import { Button, InputProps, toast } from '../common';
+import { Button, InputProps } from '../common';
 import LocationIcon from '../../assets/location.svg';
 import { Calendar } from '../common/calendar';
 import SearchIcon from '../../assets/white-search.svg';
 import { cn } from '../../utils';
 import { useAppDispatch, useAppSelector } from '@travelpulse/state';
 import { Country } from '@travelpulse/interfaces';
-import { DATE_FORMAT, dateJs } from '@travelpulse/utils';
+import { DATE_FORMAT, dateJs, toast } from '@travelpulse/utils';
 import { getCountries, productSearch } from '@travelpulse/state/thunks';
 import { useFilter } from '@react-aria/i18n';
 import Select, { SelectItem } from '../common/select';

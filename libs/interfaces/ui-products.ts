@@ -1,7 +1,7 @@
 export interface UIPlan {
 	id: number;
 	name: string;
-	price: number;
+	price: string;
 	data: string;
-	duration: string;
+	duration: number;
 }

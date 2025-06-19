@@ -11,7 +11,11 @@
   "license": "ISC",
   "packageManager": "pnpm@10.6.5",
   "dependencies": {
+    "@heroui/toast": "^2.0.7",
     "@travelpulse/interfaces": "workspace:^",
     "dayjs": "^1.11.11"
+  },
+  "devDependencies": {
+    "@config/tsconfig": "workspace:^"
   }
 }

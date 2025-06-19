@@ -29,9 +29,8 @@ import {
 } from '@travelpulse/ui/thunks';
 
 export default function HomePage() {
-	const { popularDestinations, multipleRegions } = useAppSelector(
-		(state) => state.products
-	);
+	const { popularDestinations, multipleRegions, productSearch } =
+		useAppSelector((state) => state.products);
 
 	const dispatch = useAppDispatch();
 
@@ -131,9 +130,20 @@ export default function HomePage() {
 						</Title>
 
 						<DestinationCards
-							data={popularDestinations.list}
-							destinationType="popular"
-							isLoading={popularDestinations.status === 'loading'}
+							data={
+								!productSearch.data.packages
+									? popularDestinations.list
+									: productSearch.data.packages
+							}
+							destinationType={
+								!productSearch.data.packages
+									? 'popular'
+									: 'search-results'
+							}
+							isLoading={
+								popularDestinations.status === 'loading' ||
+								productSearch.status === 'loading'
+							}
 						/>
 
 						<div className="text-center">

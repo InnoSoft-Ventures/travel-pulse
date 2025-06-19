@@ -14,6 +14,8 @@ import {
 import {
 	createInitialItemState,
 	createInitialListState,
+	formatApiErrorDescription,
+	toast,
 } from '@travelpulse/utils';
 
 interface ProductState {
@@ -24,7 +26,7 @@ interface ProductState {
 
 const initialState: ProductState = {
 	productSearch: createInitialItemState<PackageResults>({
-		destinations: null,
+		packages: null,
 		travelDuration: 0,
 	}),
 	popularDestinations: createInitialListState<CountryProduct>(),
@@ -77,7 +79,15 @@ export const productsSlice = createSlice({
 			})
 			.addCase(productSearch.rejected, (state, action) => {
 				state.productSearch.status = 'failed';
-				state.productSearch.error = action.payload as ErrorHandler;
+				const error = action.payload as ErrorHandler;
+
+				state.productSearch.error = error;
+
+				// Show error toast notification
+				toast.error({
+					title: 'Product Search Failed',
+					description: formatApiErrorDescription(error),
+				});
 			});
 	},
 });
