@@ -1,4 +1,4 @@
-import { Country } from './common';
+import { Continent, Country, CountryPackageInterface } from './common';
 import { ApnType } from './enums';
 
 export interface SIM {
@@ -64,7 +64,9 @@ export interface PackageInterface {
 	/** Plan type: `Data`, `Voice` or `Text` */
 	planType: string;
 	isUnlimited: boolean;
-	country: Pick<Country, 'id' | 'name' | 'slug' | 'flag'>;
+	continent?: Continent;
+	/** List of countries covered by this package */
+	countries: CountryPackageInterface[];
 	operator: {
 		id: number;
 		title: string;
@@ -79,6 +81,7 @@ export interface PackageInterface {
 export interface PackageResults {
 	/** List of available packages with their operators */
 	packages: PackageInterface[] | null;
+	destinationType: 'local' | 'global' | 'regional';
 	/** Duration of travel in days */
 	travelDuration: number;
 }

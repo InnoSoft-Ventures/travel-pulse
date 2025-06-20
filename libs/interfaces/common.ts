@@ -14,6 +14,17 @@ export interface Country {
 	currencySymbol: string;
 }
 
+export type CountryPackageInterface = Pick<
+	Country,
+	'id' | 'name' | 'slug' | 'flag'
+>;
+
+export interface Continent {
+	id: number;
+	name: string;
+	aliasList: string[];
+}
+
 export interface CountryProduct extends Country {
 	price: string;
 }

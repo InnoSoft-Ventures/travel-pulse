@@ -33,6 +33,7 @@ const initialState: ProductState = {
 	},
 	productSearch: createInitialItemState<PackageResults>({
 		packages: null,
+		destinationType: 'local',
 		travelDuration: 0,
 	}),
 	popularDestinations: createInitialListState<CountryProduct>(),

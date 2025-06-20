@@ -1,24 +1,12 @@
 import React from 'react';
-import { Country } from '@travelpulse/interfaces';
+import { CountryPackageInterface } from '@travelpulse/interfaces';
 
 import styles from './countries.module.scss';
 import { cn } from '../../utils';
-
-export const dummyCountries: Country[] = [
-	{ id: 1, name: 'Albania', code: 'AL', flag: '🇦🇱' },
-	{ id: 2, name: 'Bulgaria', code: 'BG', flag: '🇧🇬' },
-	{ id: 3, name: 'Canada', code: 'CA', flag: '🇨🇦' },
-	{ id: 4, name: 'Denmark', code: 'DK', flag: '🇩🇰' },
-	{ id: 5, name: 'Egypt', code: 'EG', flag: '🇪🇬' },
-	{ id: 6, name: 'France', code: 'FR', flag: '🇫🇷' },
-	{ id: 7, name: 'Germany', code: 'DE', flag: '🇩🇪' },
-	{ id: 8, name: 'Hungary', code: 'HU', flag: '🇭🇺' },
-	{ id: 9, name: 'India', code: 'IN', flag: '🇮🇳' },
-	{ id: 10, name: 'Japan', code: 'JP', flag: '🇯🇵' },
-];
+import Image from 'next/image';
 
 interface CountriesProps {
-	data: Country[];
+	data: CountryPackageInterface[];
 	/** Add custom height for list */
 	listHeight?: string;
 }
@@ -26,17 +14,29 @@ interface CountriesProps {
 const Countries = ({ data: countries, listHeight }: CountriesProps) => {
 	return (
 		<div className={styles.countriesContainer}>
-			<div className={styles.searchContainer}>
-				<input
-					type="text"
-					placeholder="Search"
-					className={styles.searchInput}
-				/>
-			</div>
+			{countries.length > 1 && (
+				<div className={styles.searchContainer}>
+					<input
+						type="text"
+						placeholder="Search"
+						className={styles.searchInput}
+						aria-label="Search countries"
+						autoFocus={false}
+					/>
+				</div>
+			)}
 			<ul className={cn(styles.countryList, listHeight)}>
 				{countries.map((country) => (
 					<li key={country.id}>
-						<div className={styles.flag}>{country.flag}</div>
+						<div className={styles.flag}>
+							<Image
+								src={country.flag}
+								alt={`${country.name} flag`}
+								width={36}
+								height={20}
+								className={styles.flagImage}
+							/>
+						</div>
 						<span className={styles.countryName}>
 							{country.name}
 						</span>

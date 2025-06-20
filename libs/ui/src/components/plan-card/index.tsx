@@ -12,11 +12,34 @@ interface PlanCardProps {
 export function PlanCard(props: PlanCardProps) {
 	const { packageDetails, showPlanDetails } = props;
 
+	let title = '';
+
+	if (packageDetails.continent) {
+		title = packageDetails.continent.name;
+	} else {
+		title = packageDetails.countries?.length
+			? packageDetails.countries[0].name
+			: '';
+	}
+
+	let coverage = '';
+
+	if (packageDetails.countries.length === 1) {
+		coverage = packageDetails.countries[0].name;
+	} else {
+		coverage =
+			packageDetails.countries.length > 1
+				? `${packageDetails.countries.length} countries`
+				: 'No coverage';
+	}
+
 	return (
 		<div className={styles.planCard}>
-			<div className={styles.badge}>
-				<div>{packageDetails.country.name}</div>
-			</div>
+			{title && (
+				<div className={styles.badge}>
+					<div>{title}</div>
+				</div>
+			)}
 
 			<div className={styles.info}>
 				<div className={styles.row}>
@@ -30,7 +53,7 @@ export function PlanCard(props: PlanCardProps) {
 
 				<div className={styles.row}>
 					<span>Coverage</span>
-					<span>{packageDetails.country.name}</span>
+					<span>{coverage}</span>
 				</div>
 
 				<div className={styles.row}>

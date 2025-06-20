@@ -11,6 +11,7 @@ import {
 } from '@travelpulse/middlewares';
 import {
 	PackageInterface,
+	PackageResults,
 	RegionExplore,
 	SOMETHING_WENT_WRONG,
 } from '@travelpulse/interfaces';
@@ -449,12 +450,14 @@ export const searchProducts = async (req: Request, res: Response) => {
 			],
 		});
 
-		const country = {
-			id: countryObj.id,
-			name: countryObj.name,
-			slug: countryObj.slug,
-			flag: countryObj.flag,
-		};
+		const countries = [
+			{
+				id: countryObj.id,
+				name: countryObj.name,
+				slug: countryObj.slug,
+				flag: countryObj.flag,
+			},
+		];
 
 		// Flatten packages and attach operator info
 		const packages: PackageInterface[] = operators
@@ -469,7 +472,7 @@ export const searchProducts = async (req: Request, res: Response) => {
 						data: pkg.data,
 						planType: getPlanServices(operator.planType),
 						isUnlimited: pkg.isUnlimited,
-						country,
+						countries,
 						operator: {
 							id: operator.id,
 							title: operator.title,
@@ -483,12 +486,13 @@ export const searchProducts = async (req: Request, res: Response) => {
 			})
 			.filter((pkg) => Boolean(pkg));
 
-		return res.json(
-			successResponse({
-				packages,
-				travelDuration,
-			})
-		);
+		const results: PackageResults = {
+			packages,
+			destinationType: 'local',
+			travelDuration,
+		};
+
+		return res.json(successResponse(results));
 	} catch (error) {
 		console.error('Error in searchProducts', error);
 		return res.status(500).json(errorResponse(SOMETHING_WENT_WRONG));
