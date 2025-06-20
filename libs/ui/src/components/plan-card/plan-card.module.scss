@@ -40,13 +40,14 @@
 	.row {
 		display: flex;
 		justify-content: space-between;
-		font-size: 15px;
+		font-size: 14px;
 		align-items: center;
 		font-weight: 400;
 		color: var(--dark-purple);
 
 		strong {
-			font-weight: 600;
+			font-weight: 500;
+			font-size: 14px;
 		}
 	}
 

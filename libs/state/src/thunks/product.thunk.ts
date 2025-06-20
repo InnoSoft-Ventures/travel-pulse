@@ -84,10 +84,7 @@ export const productSearch = createAsyncThunk(
 			const response = await ApiService.get<ResponseData<PackageResults>>(
 				`/products/search`,
 				{
-					params: {
-						...params,
-						to: '',
-					},
+					params,
 				}
 			);
 			const results = response.data;

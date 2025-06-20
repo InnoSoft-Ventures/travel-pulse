@@ -126,7 +126,9 @@ export default function HomePage() {
 							size="size20"
 							className={styles.popularDestination}
 						>
-							Popular destinations
+							{!productSearch.data.packages
+								? 'Popular destinations'
+								: 'Our best selling eSIMs'}
 						</Title>
 
 						<DestinationCards

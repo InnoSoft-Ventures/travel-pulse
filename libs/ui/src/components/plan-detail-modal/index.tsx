@@ -3,14 +3,17 @@ import { Button, Counter, DatePicker, Modal } from '../common';
 
 import styles from './plan-detail-modal.module.scss';
 import { Countries, dummyCountries } from '../countries';
+import { PackageInterface } from '@travelpulse/interfaces';
 
 interface PlanDetailModalProps {
 	open: boolean;
+	data: PackageInterface;
 	onClose: () => void;
 }
 
 function PlanDetailModal(props: PlanDetailModalProps) {
-	const { open, onClose } = props;
+	const { open, onClose, data } = props;
+	console.log('PlanDetailModal - data:', data);
 
 	const [quantity, setQuantity] = React.useState<number>(1);
 

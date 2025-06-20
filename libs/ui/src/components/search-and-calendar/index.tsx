@@ -6,8 +6,12 @@ import LocationIcon from '../../assets/location.svg';
 import { Calendar } from '../common/calendar';
 import SearchIcon from '../../assets/white-search.svg';
 import { cn } from '../../utils';
-import { useAppDispatch, useAppSelector } from '@travelpulse/state';
-import { Country } from '@travelpulse/interfaces';
+import {
+	setSearchData,
+	useAppDispatch,
+	useAppSelector,
+} from '@travelpulse/state';
+import { Country, SelectedSearchData } from '@travelpulse/interfaces';
 import { DATE_FORMAT, dateJs, toast } from '@travelpulse/utils';
 import { getCountries, productSearch } from '@travelpulse/state/thunks';
 import { useFilter } from '@react-aria/i18n';
@@ -18,17 +22,13 @@ interface SearchAndCalendarProps {
 	inputVariant?: InputProps['variant'];
 }
 
-interface SelectedData {
-	country: Country | null;
-	dates: Date[] | null;
-}
-
 const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 	const { className, inputVariant } = props;
 
 	const { status } = useAppSelector((state) => state.masterData.countries);
+	const { searchData } = useAppSelector((state) => state.products);
 
-	const [selectedData, setSelectedData] = useState<SelectedData>({
+	const [selectedData, setSelectedData] = useState<SelectedSearchData>({
 		country: null,
 		dates: null,
 	});
@@ -96,6 +96,18 @@ const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 				return;
 			}
 
+			const datesFormat = selectedData.dates
+				? selectedData.dates.map((date) =>
+						dateJs(date).format(DATE_FORMAT)
+				  )
+				: null;
+			dispatch(
+				setSearchData({
+					...selectedData,
+					dates: datesFormat,
+				})
+			);
+
 			dispatch(
 				productSearch({
 					country: country.slug,
@@ -122,6 +134,7 @@ const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 					loadOptions={filterCountries}
 					defaultOptions
 					isSearchable
+					defaultValue={searchData.country || null}
 					name="country-search"
 					placeholder="Where do you need internet?"
 					aria-label="Select an destination"

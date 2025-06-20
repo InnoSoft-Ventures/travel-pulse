@@ -1,3 +1,4 @@
+import { Country } from './common';
 import { ApnType } from './enums';
 
 export interface SIM {
@@ -60,7 +61,10 @@ export interface PackageInterface {
 	data: string;
 	/** Validity period in days */
 	day: number;
+	/** Plan type: `Data`, `Voice` or `Text` */
+	planType: string;
 	isUnlimited: boolean;
+	country: Pick<Country, 'id' | 'name' | 'slug' | 'flag'>;
 	operator: {
 		id: number;
 		title: string;
@@ -77,4 +81,14 @@ export interface PackageResults {
 	packages: PackageInterface[] | null;
 	/** Duration of travel in days */
 	travelDuration: number;
+}
+
+export interface SelectedSearchData {
+	country: Country | null;
+	dates: Date[] | null;
+}
+
+export interface SelectedSearchDataState
+	extends Omit<SelectedSearchData, 'dates'> {
+	dates: string[] | null;
 }

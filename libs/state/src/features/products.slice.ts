@@ -1,10 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
 	CountryProduct,
 	ErrorHandler,
 	ItemState,
 	ListState,
 	PackageResults,
+	SelectedSearchDataState,
 } from '@travelpulse/interfaces';
 import {
 	getMultipleRegions,
@@ -19,12 +20,17 @@ import {
 } from '@travelpulse/utils';
 
 interface ProductState {
+	searchData: SelectedSearchDataState;
 	popularDestinations: ListState<CountryProduct>;
 	multipleRegions: ListState<CountryProduct>;
 	productSearch: ItemState<PackageResults>;
 }
 
 const initialState: ProductState = {
+	searchData: {
+		country: null,
+		dates: null,
+	},
 	productSearch: createInitialItemState<PackageResults>({
 		packages: null,
 		travelDuration: 0,
@@ -36,7 +42,20 @@ const initialState: ProductState = {
 export const productsSlice = createSlice({
 	name: 'products',
 	initialState,
-	reducers: {},
+	reducers: {
+		setSearchData: (
+			state,
+			action: PayloadAction<SelectedSearchDataState>
+		) => {
+			state.searchData = action.payload;
+		},
+		resetSearchData: (state) => {
+			state.searchData = initialState.searchData;
+		},
+		resetProductSearch: (state) => {
+			state.productSearch = initialState.productSearch;
+		},
+	},
 	extraReducers: (builder) => {
 		builder
 			// Popular Destinations
@@ -92,5 +111,6 @@ export const productsSlice = createSlice({
 	},
 });
 
-export const {} = productsSlice.actions;
+export const { setSearchData, resetSearchData, resetProductSearch } =
+	productsSlice.actions;
 export default productsSlice.reducer;

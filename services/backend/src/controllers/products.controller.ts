@@ -18,7 +18,7 @@ import dbConnect from '../db';
 import Package from '../db/models/Package';
 import Country from '../db/models/Country';
 import { ProductSearch } from '../schema/product.schema';
-import { dateJs } from '@travelpulse/utils';
+import { dateJs, getPlanServices } from '@travelpulse/utils';
 
 /**
  * Retrieves a mixed collection of regional and global packages, aggregating data by continent.
@@ -410,7 +410,14 @@ export const searchProducts = async (req: Request, res: Response) => {
 				type: 'local',
 				countryId: countryObj.id,
 			},
-			attributes: ['id', 'title', 'type', 'esimType', 'apnType'],
+			attributes: [
+				'id',
+				'title',
+				'type',
+				'esimType',
+				'planType',
+				'apnType',
+			],
 			include: [
 				{
 					association: 'packages',
@@ -442,6 +449,13 @@ export const searchProducts = async (req: Request, res: Response) => {
 			],
 		});
 
+		const country = {
+			id: countryObj.id,
+			name: countryObj.name,
+			slug: countryObj.slug,
+			flag: countryObj.flag,
+		};
+
 		// Flatten packages and attach operator info
 		const packages: PackageInterface[] = operators
 			.flatMap((operator) => {
@@ -453,7 +467,9 @@ export const searchProducts = async (req: Request, res: Response) => {
 						amount: pkg.amount,
 						day: pkg.day,
 						data: pkg.data,
+						planType: getPlanServices(operator.planType),
 						isUnlimited: pkg.isUnlimited,
+						country,
 						operator: {
 							id: operator.id,
 							title: operator.title,

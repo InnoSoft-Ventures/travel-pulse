@@ -7,6 +7,7 @@ import africaImage from '../../../assets/africa.jpg';
 import { CountryProduct, PackageInterface } from '@travelpulse/interfaces';
 import { PlanCard } from '../../plan-card';
 import { PlanDetailModal } from '../../plan-detail-modal';
+import { cn } from '../../../utils';
 
 interface DestinationCardsProps {
 	data: CountryProduct[] | PackageInterface[];
@@ -26,7 +27,12 @@ function DestinationCards(props: DestinationCardsProps) {
 		useState<PackageInterface | null>(null);
 
 	return (
-		<div className={styles.popularDestinationCards}>
+		<div
+			className={cn(
+				styles.popularDestinationCards,
+				destinationType === 'search-results' && styles.searchResults
+			)}
+		>
 			{!isLoading &&
 				destinationType !== 'search-results' &&
 				(data as CountryProduct[]).map((destination, index) => {
@@ -61,22 +67,19 @@ function DestinationCards(props: DestinationCardsProps) {
 					return (
 						<PlanCard
 							key={`search-result-pkg-${pkg.packageId}-${index}`}
-							details={{
-								id: pkg.packageId,
-								name: pkg.title,
-								price: pkg.price,
-								data: pkg.data,
-								duration: pkg.day,
-							}}
+							packageDetails={pkg}
 							showPlanDetails={() => setSelectedPackage(pkg)}
 						/>
 					);
 				})}
 
-			<PlanDetailModal
-				open={!!selectedPackage}
-				onClose={() => setSelectedPackage(null)}
-			/>
+			{selectedPackage && (
+				<PlanDetailModal
+					open={!!selectedPackage}
+					data={selectedPackage}
+					onClose={() => setSelectedPackage(null)}
+				/>
+			)}
 
 			{isLoading && (
 				<div className={styles.loadingContainer}>

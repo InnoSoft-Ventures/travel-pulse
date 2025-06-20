@@ -2,48 +2,48 @@ import React from 'react';
 import { Button } from '../common';
 import styles from './plan-card.module.scss';
 import Network5GIcon from '../../assets/network-5g.svg';
-import { UIPlan } from '@travelpulse/interfaces';
+import { PackageInterface } from '@travelpulse/interfaces';
 
 interface PlanCardProps {
-	details: UIPlan;
+	packageDetails: PackageInterface;
 	showPlanDetails: () => void;
 }
 
 export function PlanCard(props: PlanCardProps) {
-	const { details, showPlanDetails } = props;
+	const { packageDetails, showPlanDetails } = props;
 
 	return (
 		<div className={styles.planCard}>
 			<div className={styles.badge}>
-				<div>South Africa</div>
+				<div>{packageDetails.country.name}</div>
 			</div>
 
 			<div className={styles.info}>
 				<div className={styles.row}>
 					<span className={styles.networkData}>
-						<Network5GIcon /> <strong>{details.data}</strong>
+						<Network5GIcon /> <strong>{packageDetails.data}</strong>
 					</span>
 					<span>
-						<strong>${details.price}</strong> USD
+						<strong>${packageDetails.price}</strong> USD
 					</span>
 				</div>
 
 				<div className={styles.row}>
 					<span>Coverage</span>
-					<span>South Africa</span>
+					<span>{packageDetails.country.name}</span>
 				</div>
 
 				<div className={styles.row}>
 					<span>Validity</span>
 					<span>
-						<strong>{details.duration}</strong>
+						<strong>{packageDetails.day} day(s)</strong>
 					</span>
 				</div>
 
 				<div className={styles.row}>
 					<span>Service</span>
 					<span>
-						<strong>Data Only</strong>
+						<strong>{packageDetails.planType}</strong>
 					</span>
 				</div>
 
