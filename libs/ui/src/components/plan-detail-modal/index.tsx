@@ -62,9 +62,7 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 							</li>
 							<li>
 								Data:
-								<strong>
-									{data.data || data.amount || 'N/A'}
-								</strong>
+								<strong>{data.data || 'N/A'}</strong>
 							</li>
 							<li>
 								Price:
@@ -83,14 +81,11 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 								</strong>
 							</li>
 							<li>
-								Speed: <strong>N/A</strong>
+								Speed: <strong>{data.speed}</strong>
 							</li>
 							<li className={styles.flexColumn}>
 								<span>Hotspot Sharing</span>
-								<div>
-									{/* Not in data */} Includes the ability to
-									share the connection via hotspot.
-								</div>
+								<div>{data.hotspotSharing}</div>
 							</li>
 						</ul>
 					</div>
@@ -189,7 +184,7 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 									? `$${(
 											(Number(data.price) || 0) * quantity
 									  ).toFixed(2)} USD`
-									: 'N/A'}
+									: 0}
 							</strong>
 						</div>
 						<Button className={styles.buyButton}>Buy Now</Button>

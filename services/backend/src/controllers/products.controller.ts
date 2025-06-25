@@ -19,7 +19,8 @@ import dbConnect from '../db';
 import Package from '../db/models/Package';
 import Country from '../db/models/Country';
 import { ProductSearch } from '../schema/product.schema';
-import { dateJs, getPlanServices } from '@travelpulse/utils';
+import { dateJs } from '@travelpulse/utils';
+import { constructPackageDetails } from '../utils/data';
 
 /**
  * Retrieves a mixed collection of regional and global packages, aggregating data by continent.
@@ -418,6 +419,11 @@ export const searchProducts = async (req: Request, res: Response) => {
 				'esimType',
 				'planType',
 				'apnType',
+				'activationPolicy',
+				'rechargeability',
+				'isKycVerify',
+				'info',
+				'otherInfo',
 			],
 			include: [
 				{
@@ -459,30 +465,10 @@ export const searchProducts = async (req: Request, res: Response) => {
 			},
 		];
 
-		// Flatten packages and attach operator info
+		// Flatten packages and attach operator info, including additional features
 		const packages: PackageInterface[] = operators
 			.flatMap((operator) => {
-				return (
-					operator.packages?.map((pkg: any) => ({
-						packageId: pkg.id,
-						title: pkg.title,
-						price: pkg.price,
-						amount: pkg.amount,
-						day: pkg.day,
-						data: pkg.data,
-						planType: getPlanServices(operator.planType),
-						isUnlimited: pkg.isUnlimited,
-						countries,
-						operator: {
-							id: operator.id,
-							title: operator.title,
-							type: operator.type,
-							esimType: operator.esimType,
-							apnType: operator.apnType,
-						},
-						coverage: operator.coverage?.data || [],
-					})) || []
-				);
+				return constructPackageDetails(operator, countries);
 			})
 			.filter((pkg) => Boolean(pkg));
 

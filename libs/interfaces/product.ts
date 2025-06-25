@@ -74,6 +74,11 @@ export interface PackageInterface {
 		esimType: string;
 		apnType: string;
 	};
+	activationPolicy: string;
+	topupOption: string;
+	eKYC: string;
+	speed: string;
+	hotspotSharing: string;
 	coverage: OperatorCoverage[];
 }
 

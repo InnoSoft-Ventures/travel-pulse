@@ -8,10 +8,10 @@ export const ProductSearchSchema = z
 				invalid_type_error: 'Country must be a string',
 				required_error: 'Country is required',
 			})
-			.min(2, 'Country must be at least 2 characters long')
-			.max(50, 'Country must be at most 50 characters long')
 			.trim()
-			.toLowerCase(),
+			.toUpperCase()
+			.min(2, 'Country must be at least 2 characters long')
+			.max(50, 'Country must be at most 50 characters long'),
 		from: z
 			.string({
 				required_error: 'Start date is required',

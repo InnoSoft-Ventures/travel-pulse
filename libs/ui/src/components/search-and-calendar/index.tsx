@@ -26,7 +26,7 @@ const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 	const { className, inputVariant } = props;
 
 	const { status } = useAppSelector((state) => state.masterData.countries);
-	const { searchData } = useAppSelector((state) => state.products);
+	// const { searchData } = useAppSelector((state) => state.products);
 
 	const [selectedData, setSelectedData] = useState<SelectedSearchData>({
 		country: null,
@@ -134,7 +134,6 @@ const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 					loadOptions={filterCountries}
 					defaultOptions
 					isSearchable
-					defaultValue={searchData.country || null}
 					name="country-search"
 					placeholder="Where do you need internet?"
 					aria-label="Select an destination"

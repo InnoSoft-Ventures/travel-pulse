@@ -1,4 +1,10 @@
+import {
+	CountryPackageInterface,
+	PackageInterface,
+} from '@travelpulse/interfaces';
 import Continent from '../db/models/Continent';
+import Operator from '../db/models/Operator';
+import { getPlanServices } from '@travelpulse/utils';
 
 /**
  * Builds a map from continent alias (string) to continent ID (number).
@@ -23,4 +29,138 @@ export function buildAliasToContinentIdMap(
 	}
 
 	return aliasToId;
+}
+
+/**
+ * Utility to extract speed from info array
+ */
+export function extractSpeed(info: any): string {
+	if (!Array.isArray(info)) return '3G';
+
+	const speedRegex =
+		/speed|\d+G|LTE|\d+ ?Mbps|throttle|reduced|limited|maximum|max speed|high speed|unlimited speed/i;
+	const comboRegex = /((?:5G|4G|3G|LTE)(?:\s*\/\s*(?:5G|4G|3G|LTE))+)/i;
+	const singleRegex = /(5G|4G|3G|LTE|\d+ ?Mbps)/i;
+	const fallbackRegex =
+		/(\d+G|LTE|\d+ ?Mbps|throttle[\w ]*|reduced speed|limited speed|max(?:imum)? speed|high speed|unlimited speed)/i;
+
+	const speedLine = info.find((line: string) => speedRegex.test(line));
+
+	if (speedLine) {
+		const comboMatch = speedLine.match(comboRegex);
+		if (comboMatch) return comboMatch[0].replace(/\s+/g, '');
+		const singleMatch = speedLine.match(singleRegex);
+		if (singleMatch) return singleMatch[0];
+		const fallbackMatch = speedLine.match(fallbackRegex);
+		return fallbackMatch ? fallbackMatch[0] : speedLine;
+	}
+
+	return '3G';
+}
+
+/**
+ * Utility to extract hotspot sharing info
+ */
+export function extractHotspot(info: any, otherInfo: any): string {
+	const hotspotRegex =
+		/hotspot|tether|share data|wifi sharing|wi[- ]?fi sharing/i;
+	if (
+		(typeof otherInfo === 'string' && hotspotRegex.test(otherInfo)) ||
+		(Array.isArray(info) &&
+			info.some((line: string) => hotspotRegex.test(line)))
+	) {
+		return 'Hotspotting is supported — share your connection across devices.';
+	}
+	return 'Hotspotting is disabled — enjoy connection on a single device.';
+}
+
+/**
+ * Returns a user-friendly activation policy label based on the given type.
+ *
+ * @param type - The activation type retrieved from the database.
+ * Possible values: 'first-usage', 'immediate', 'manual', 'delayed', 'scheduled', or null.
+ *
+ * @returns A readable phrase describing the activation policy.
+ *
+ * @example
+ * getActivationPolicyLabel('first-usage'); // "Activates on first use."
+ * getActivationPolicyLabel(null);         // "Activation policy not specified."
+ */
+export function getActivationPolicyLabel(type: string | null): string {
+	switch (type) {
+		case 'first-usage':
+			return 'Activates on first use.';
+		case 'immediate':
+			return 'Activates immediately after purchase.';
+		case 'manual':
+			return 'Requires manual activation.';
+		case 'delayed':
+			return 'Activates within 24–48 hours.';
+		case 'scheduled':
+			return 'Activates on a scheduled date.';
+		case null:
+		case 'n/a':
+		default:
+			return 'Activation policy not specified.';
+	}
+}
+
+export function constructPackageDetails(
+	operator: Operator,
+	countries: CountryPackageInterface[]
+): PackageInterface[] {
+	// Always ensure info is an array and otherInfo is a string or null
+	const info = Array.isArray(operator.info)
+		? operator.info
+		: typeof operator.info === 'string'
+			? [operator.info]
+			: [];
+	const otherInfo =
+		typeof operator.otherInfo === 'string' ? operator.otherInfo : null;
+
+	const speed = extractSpeed(info);
+	const hotspotSharing = extractHotspot(info, otherInfo);
+
+	return (
+		operator.packages?.map((pkg: any) => {
+			return {
+				packageId: pkg.id,
+				title: pkg.title,
+				price: pkg.price,
+				amount: pkg.amount,
+				day: pkg.day,
+				data: pkg.data,
+				planType: getPlanServices(operator.planType),
+				isUnlimited: pkg.isUnlimited,
+				countries,
+				operator: {
+					id: operator.id,
+					title: operator.title,
+					type: operator.type,
+					esimType: operator.esimType,
+					apnType: operator.apnType,
+					info: info,
+					otherInfo: otherInfo,
+				},
+				activationPolicy: getActivationPolicyLabel(
+					operator.activationPolicy || null
+				),
+				topupOption:
+					typeof operator.rechargeability === 'boolean'
+						? operator.rechargeability
+							? 'Rechargeable'
+							: 'Not Rechargeable'
+						: 'Not Specified',
+				eKYC:
+					typeof operator.isKycVerify === 'boolean'
+						? operator.isKycVerify
+							? 'Required'
+							: 'Not Required'
+						: 'Not Specified',
+				speed,
+				hotspotSharing,
+				coverage: operator.coverage?.data || [],
+			};
+		}) || []
+	);
 }
