@@ -1,57 +1,68 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { CountryProduct, StateStatus } from '@travelpulse/interfaces';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+	CountryProduct,
+	ErrorHandler,
+	ItemState,
+	ListState,
+	PackageResults,
+	SelectedSearchDataState,
+} from '@travelpulse/interfaces';
 import {
 	getMultipleRegions,
 	getPopularDestinations,
 	productSearch,
 } from '../thunks/product.thunk';
+import {
+	createInitialItemState,
+	createInitialListState,
+	formatApiErrorDescription,
+	toast,
+} from '@travelpulse/utils';
 
 interface ProductState {
-	popularDestinations: {
-		list: CountryProduct[];
-		status: StateStatus;
-		error: string | null;
-	};
-	productSearch: {
-		list: CountryProduct[];
-		status: StateStatus;
-		error: string | null;
-	};
-	multipleRegions: {
-		list: CountryProduct[];
-		status: StateStatus;
-		error: string | null;
-	};
+	searchData: SelectedSearchDataState;
+	popularDestinations: ListState<CountryProduct>;
+	multipleRegions: ListState<CountryProduct>;
+	productSearch: ItemState<PackageResults>;
 }
 
 const initialState: ProductState = {
-	productSearch: {
-		list: [],
-		status: 'idle',
-		error: null,
+	searchData: {
+		country: null,
+		dates: null,
 	},
-	popularDestinations: {
-		list: [],
-		status: 'idle',
-		error: null,
-	},
-	multipleRegions: {
-		list: [],
-		status: 'idle',
-		error: null,
-	},
+	productSearch: createInitialItemState<PackageResults>({
+		packages: null,
+		destinationType: 'local',
+		travelDuration: 0,
+	}),
+	popularDestinations: createInitialListState<CountryProduct>(),
+	multipleRegions: createInitialListState<CountryProduct>(),
 };
 
-const productSlice = createSlice({
+export const productsSlice = createSlice({
 	name: 'products',
 	initialState,
-	reducers: {},
+	reducers: {
+		setSearchData: (
+			state,
+			action: PayloadAction<SelectedSearchDataState>
+		) => {
+			state.searchData = action.payload;
+		},
+		resetSearchData: (state) => {
+			state.searchData = initialState.searchData;
+		},
+		resetProductSearch: (state) => {
+			state.productSearch = initialState.productSearch;
+		},
+	},
 	extraReducers: (builder) => {
 		builder
 			// Popular Destinations
 			.addCase(getPopularDestinations.pending, (state) => {
 				state.popularDestinations.status = 'loading';
-				state.popularDestinations.error = null;
+				state.popularDestinations.error = undefined;
 			})
 			.addCase(getPopularDestinations.fulfilled, (state, action) => {
 				state.popularDestinations.status = 'succeeded';
@@ -59,13 +70,14 @@ const productSlice = createSlice({
 			})
 			.addCase(getPopularDestinations.rejected, (state, action) => {
 				state.popularDestinations.status = 'failed';
-				state.popularDestinations.error = action.payload as string;
+				state.popularDestinations.error =
+					action.payload as ErrorHandler;
 			})
 
 			// Multiple Regions
 			.addCase(getMultipleRegions.pending, (state) => {
 				state.multipleRegions.status = 'loading';
-				state.multipleRegions.error = null;
+				state.multipleRegions.error = undefined;
 			})
 			.addCase(getMultipleRegions.fulfilled, (state, action) => {
 				state.multipleRegions.status = 'succeeded';
@@ -73,24 +85,33 @@ const productSlice = createSlice({
 			})
 			.addCase(getMultipleRegions.rejected, (state, action) => {
 				state.multipleRegions.status = 'failed';
-				state.multipleRegions.error = action.payload as string;
+				state.multipleRegions.error = action.payload as ErrorHandler;
 			})
 
 			// Product Search
 			.addCase(productSearch.pending, (state) => {
 				state.productSearch.status = 'loading';
-				state.productSearch.error = null;
+				state.productSearch.error = undefined;
 			})
 			.addCase(productSearch.fulfilled, (state, action) => {
 				state.productSearch.status = 'succeeded';
-				state.productSearch.list = action.payload;
+				state.productSearch.data = action.payload;
 			})
 			.addCase(productSearch.rejected, (state, action) => {
 				state.productSearch.status = 'failed';
-				state.productSearch.error = action.payload as string;
+				const error = action.payload as ErrorHandler;
+
+				state.productSearch.error = error;
+
+				// Show error toast notification
+				toast.error({
+					title: 'Product Search Failed',
+					description: formatApiErrorDescription(error),
+				});
 			});
 	},
 });
 
-export const {} = productSlice.actions;
-export default productSlice.reducer;
+export const { setSearchData, resetSearchData, resetProductSearch } =
+	productsSlice.actions;
+export default productsSlice.reducer;

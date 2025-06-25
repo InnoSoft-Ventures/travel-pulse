@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.scss';
-import { Footer } from '@travelpulse/ui';
+import { Footer, ThemeProvider } from '@travelpulse/ui';
 import ReduxProvider from '../providers/redux-provider';
 
 const geistSans = localFont({
@@ -31,9 +31,11 @@ export default function RootLayout({
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
 				<ReduxProvider>
-					{children}
+					<ThemeProvider>
+						{children}
 
-					<Footer />
+						<Footer />
+					</ThemeProvider>
 				</ReduxProvider>
 			</body>
 		</html>

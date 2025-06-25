@@ -1,21 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Country, StateStatus } from '@travelpulse/interfaces';
+import { Country, ErrorHandler, ListState } from '@travelpulse/interfaces';
 import { getCountries } from '../thunks/masterdata.thunk';
+import { createInitialListState } from '@travelpulse/utils';
 
 interface MasterDataState {
-	countries: {
-		list: Country[];
-		status: StateStatus;
-		error: string | null;
-	};
+	countries: ListState<Country>;
 }
 
 const initialState: MasterDataState = {
-	countries: {
-		list: [],
-		status: 'idle',
-		error: null,
-	},
+	countries: createInitialListState<Country>(),
 };
 
 const masterDataSlice = createSlice({
@@ -28,7 +21,7 @@ const masterDataSlice = createSlice({
 			// All countries
 			.addCase(getCountries.pending, (state) => {
 				state.countries.status = 'loading';
-				state.countries.error = null;
+				state.countries.error = undefined;
 			})
 			.addCase(getCountries.fulfilled, (state, action) => {
 				state.countries.status = 'succeeded';
@@ -36,7 +29,7 @@ const masterDataSlice = createSlice({
 			})
 			.addCase(getCountries.rejected, (state, action) => {
 				state.countries.status = 'failed';
-				state.countries.error = action.payload as string;
+				state.countries.error = action.payload as ErrorHandler;
 			});
 	},
 });

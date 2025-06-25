@@ -9,10 +9,18 @@ import {
 	HTTP_STATUS_CODES,
 	successResponse,
 } from '@travelpulse/middlewares';
-import { RegionExplore, SOMETHING_WENT_WRONG } from '@travelpulse/interfaces';
+import {
+	PackageInterface,
+	PackageResults,
+	RegionExplore,
+	SOMETHING_WENT_WRONG,
+} from '@travelpulse/interfaces';
 import dbConnect from '../db';
 import Package from '../db/models/Package';
 import Country from '../db/models/Country';
+import { ProductSearch } from '../schema/product.schema';
+import { dateJs } from '@travelpulse/utils';
+import { constructPackageDetails } from '../utils/data';
 
 /**
  * Retrieves a mixed collection of regional and global packages, aggregating data by continent.
@@ -23,8 +31,10 @@ import Country from '../db/models/Country';
  * 1. Regional packages: Groups by continent, gets min price, and sample data/amount
  * 2. Global packages: Gets aggregated data for all global packages
  */
-export const getMultipleRegions = async (_req: Request, res: Response) => {
+export const getMultipleRegions = async (req: Request, res: Response) => {
 	try {
+		const { size } = req.query;
+
 		// Get aggregated data for regional packages grouped by continent
 		const regionalAggregations = await Package.findAll({
 			attributes: [
@@ -74,7 +84,7 @@ export const getMultipleRegions = async (_req: Request, res: Response) => {
 				'operator.id',
 			],
 			order: [[Sequelize.col('operator->continent.name'), 'ASC']],
-			limit: 8,
+			limit: size ? parseInt(size as string, 10) : undefined,
 		});
 
 		// Get aggregated data for global packages
@@ -153,8 +163,10 @@ export const getMultipleRegions = async (_req: Request, res: Response) => {
  * giving users an idea of where they can find the cheapest options.
  * @TODO Get real popularity data to replace this placeholder logic.
  */
-export const getPopularDestinations = async (_req: Request, res: Response) => {
+export const getPopularDestinations = async (req: Request, res: Response) => {
 	try {
+		const { size } = req.query;
+
 		// Find the cheapest package for each country
 		const [results] = await dbConnect.query(`
 			SELECT c.name, c.flag, MIN(p.price) AS price
@@ -164,7 +176,7 @@ export const getPopularDestinations = async (_req: Request, res: Response) => {
 			GROUP BY c.id, c.name, c.flag
 			HAVING MIN(p.price) IS NOT NULL
 			ORDER BY price ASC
-			LIMIT 6;
+			${size ? `LIMIT ${parseInt(size as string, 10)}` : ''};
 		`);
 
 		res.json(successResponse(results));
@@ -177,11 +189,13 @@ export const getPopularDestinations = async (_req: Request, res: Response) => {
 /**
  * Returns all local packages for a specific country, using the country slug.
  *
- * @returns List of operators with their local packages and coverage for the country.
+ * @route GET /api/packages/local/:countrySlug
+ * @param {string} countrySlug - The slug of the country to fetch local packages for.
+ * @returns {Array} List of operators with their local packages and coverage for the country.
  */
 export const getLocalPackages = async (req: Request, res: Response) => {
 	const { countrySlug } = req.params;
-
+	const { startDate, endDate } = req.query;
 	try {
 		// Find the country by slug using the Country model
 		const country = await Country.findOne({ where: { slug: countrySlug } });
@@ -212,6 +226,15 @@ export const getLocalPackages = async (req: Request, res: Response) => {
 						['amount', 'DESC'],
 						['day', 'ASC'],
 					],
+					...(startDate && endDate
+						? {
+								where: {
+									day: {
+										[Op.gte]: 25,
+									},
+								},
+							}
+						: {}),
 				},
 				{
 					association: 'coverage',
@@ -306,6 +329,13 @@ export const getRegionPackages = async (req: Request, res: Response) => {
 	}
 };
 
+/**
+ * Retrieves all global packages available in the system.
+ * Global packages are those that are not tied to a specific country or region.
+ * The function fetches operators of type 'global' and their associated packages and coverage data.
+ *
+ * @TODO Still need to implement proper SQL query to fetch global packages.
+ */
 export const getGlobalPackages = async (_req: Request, res: Response) => {
 	try {
 		const globalPackages = await Operator.findAll({
@@ -351,5 +381,106 @@ export const getGlobalPackages = async (_req: Request, res: Response) => {
 		console.error('Error in getGlobalPackages', error);
 
 		res.status(500).json(errorResponse(SOMETHING_WENT_WRONG));
+	}
+};
+
+export const searchProducts = async (req: Request, res: Response) => {
+	try {
+		const {
+			country: countrySlug,
+			from: start,
+			to: end,
+		} = req.query as ProductSearch;
+
+		// Find country by slug
+		const countryObj = await Country.findOne({
+			where: { slug: countrySlug },
+		});
+
+		if (!countryObj) {
+			return res.status(404).json(errorResponse('Country not found'));
+		}
+
+		// Calculate the number of travel days (inclusive)
+		const startDate = dateJs(start);
+		const endDate = dateJs(end);
+		const travelDuration = dateJs(endDate).diff(startDate, 'day');
+
+		// Query operators and their packages
+		const operators = await Operator.findAll({
+			where: {
+				type: 'local',
+				countryId: countryObj.id,
+			},
+			attributes: [
+				'id',
+				'title',
+				'type',
+				'esimType',
+				'planType',
+				'apnType',
+				'activationPolicy',
+				'rechargeability',
+				'isKycVerify',
+				'info',
+				'otherInfo',
+			],
+			include: [
+				{
+					association: 'packages',
+					attributes: [
+						'id',
+						'title',
+						'price',
+						'amount',
+						'day',
+						'data',
+						'isUnlimited',
+					],
+					where: {
+						[Op.or]: [
+							{ day: { [Op.gte]: travelDuration } },
+							{ isUnlimited: true },
+						],
+					},
+				},
+				{
+					association: 'coverage',
+					attributes: ['data'],
+				},
+			],
+			order: [
+				['packages', 'price', 'ASC'],
+				['packages', 'amount', 'DESC'],
+				['packages', 'day', 'ASC'],
+			],
+		});
+
+		const countries = [
+			{
+				id: countryObj.id,
+				name: countryObj.name,
+				slug: countryObj.slug,
+				flag: countryObj.flag,
+			},
+		];
+
+		// Flatten packages and attach operator info, including additional features
+		const packages: PackageInterface[] = operators
+			.flatMap((operator) => {
+				return constructPackageDetails(operator, countries);
+			})
+			.filter((pkg) => Boolean(pkg));
+
+		const results: PackageResults = {
+			packages,
+			destinationType: 'local',
+			travelDuration,
+		};
+
+		return res.json(successResponse(results));
+	} catch (error) {
+		console.error('Error in searchProducts', error);
+		return res.status(500).json(errorResponse(SOMETHING_WENT_WRONG));
 	}
 };

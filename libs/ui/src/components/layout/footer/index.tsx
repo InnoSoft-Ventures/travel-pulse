@@ -4,16 +4,24 @@ import React from 'react';
 import Link from 'next/link';
 import styles from './footer.module.scss';
 import { Logo } from '../../logo';
+import { useTheme } from '../../../theme-context';
+import { cn } from '../../../utils';
 
 const Footer = () => {
+	const { theme } = useTheme();
+
 	return (
-		<footer className={styles.footer}>
+		<footer className={cn(styles.footer, styles[theme.footer])}>
 			<div className={styles.left}>
 				<div className={styles.logo}>
 					<Logo
 						iconStyle={{
-							top: '-7px',
+							top: theme.footer === 'dark' ? '-7px' : '0',
 						}}
+						color={theme.footer === 'dark' ? 'light' : 'dark'}
+						variant={
+							theme.footer === 'dark' ? 'primary' : 'secondary'
+						}
 					/>
 				</div>
 				<p className={styles.copyright}>

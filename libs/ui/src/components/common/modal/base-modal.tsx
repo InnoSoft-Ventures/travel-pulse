@@ -34,6 +34,7 @@ interface BaseModalProps extends VariantProps<typeof modalVariants> {
 	okText?: string;
 	cancelText?: string;
 	showCloseIcon?: boolean;
+	focusTrapped?: boolean;
 	center?: boolean;
 	className?: string;
 }
@@ -50,6 +51,7 @@ function BaseModal({
 	showCloseIcon = true,
 	center = true,
 	showFooter = true,
+	focusTrapped = true,
 	size,
 	className,
 }: BaseModalProps) {
@@ -60,6 +62,7 @@ function BaseModal({
 			center={center}
 			showCloseIcon={showCloseIcon}
 			closeIcon={<CloseIcon />}
+			focusTrapped={focusTrapped}
 			classNames={{
 				modal: cn(modalVariants({ size }), className),
 				overlay: styles.overlay,

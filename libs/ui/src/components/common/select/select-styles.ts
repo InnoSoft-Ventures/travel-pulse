@@ -1,6 +1,10 @@
 import { StylesConfig } from 'react-select';
 
 export const selectStyles: StylesConfig = {
+	menu: (css) => ({
+		...css,
+		zIndex: 1000,
+	}),
 	container: (css) => ({
 		...css,
 		width: '100%',

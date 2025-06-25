@@ -3,17 +3,17 @@ import styles from './style.module.scss';
 import { Hexagon } from '../hexagon';
 
 interface SectionCardProps {
-	varient?: 'primary' | 'secondary';
+	variant?: 'primary' | 'secondary';
 	title: string;
 	description: string;
 	icon: React.ReactNode;
 }
 
 const SectionCard = (props: SectionCardProps) => {
-	const { title, description, icon, varient = 'primary' } = props;
+	const { title, description, icon, variant = 'primary' } = props;
 	let cardStyles = '';
 
-	if (varient === 'secondary') {
+	if (variant === 'secondary') {
 		cardStyles = styles.secondary;
 	}
 	return (

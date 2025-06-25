@@ -2,60 +2,90 @@ import React from 'react';
 import { Button, Counter, DatePicker, Modal } from '../common';
 
 import styles from './plan-detail-modal.module.scss';
-import { Countries, dummyCountries } from '../countries';
+import { Countries } from '../countries';
+import { PackageInterface } from '@travelpulse/interfaces';
 
 interface PlanDetailModalProps {
 	open: boolean;
+	data: PackageInterface;
 	onClose: () => void;
 }
 
 function PlanDetailModal(props: PlanDetailModalProps) {
-	const { open, onClose } = props;
+	const { open, onClose, data } = props;
+	console.log('PlanDetailModal - data:', data);
 
 	const [quantity, setQuantity] = React.useState<number>(1);
+
+	const title = data.continent?.name
+		? data.continent.name
+		: Array.isArray(data.countries) && data.countries.length > 0
+		? data.countries[0].name
+		: 'Unknown';
+
+	let coverage = '';
+
+	if (data.countries.length === 1) {
+		coverage = data.countries[0].name;
+	} else {
+		coverage =
+			data.countries.length > 1
+				? `${data.countries.length} countries`
+				: 'No coverage';
+	}
 
 	return (
 		<Modal
 			open={open}
 			size="large"
 			onCancel={() => onClose()}
+			focusTrapped={false}
 			showFooter={false}
 			className={styles.planModalContainer}
 		>
 			<div className={styles.planModal}>
 				<div className={styles.header}>
 					<h2>Plan details</h2>
-					<p>Africa eSIM - 1Gb for 7 days</p>
+					<p>
+						{title} eSIM - {data.data || data.amount || 'N/A'} for{' '}
+						{data.day ? `${data.day} days` : 'N/A'}
+					</p>
 				</div>
 				<div className={styles.gridContainer}>
 					{/* Features Section */}
 					<div className={styles.section}>
 						<h4>Features</h4>
 						<ul className={styles.infoList}>
+							{/* Coverage: Not available in data */}
 							<li>
-								Coverage: <strong>135 countries</strong>
+								Coverage: <strong>{coverage}</strong>
 							</li>
 							<li>
-								Data: <strong>2 GB</strong>
+								Data:
+								<strong>{data.data || 'N/A'}</strong>
 							</li>
 							<li>
-								Price: <strong>$2.20 USD</strong>
+								Price:
+								<strong>
+									{data.price ? `$${data.price} USD` : 'N/A'}
+								</strong>
 							</li>
 							<li>
-								Plan type: <strong>Data only</strong>
+								Plan type:
+								<strong>{data.planType || 'N/A'}</strong>
 							</li>
 							<li>
-								Validity: <strong>7 days</strong>
+								Validity:
+								<strong>
+									{data.day ? `${data.day} days` : 'N/A'}
+								</strong>
 							</li>
 							<li>
-								Speed: <strong>4G/LTE/5G</strong>
+								Speed: <strong>{data.speed}</strong>
 							</li>
 							<li className={styles.flexColumn}>
 								<span>Hotspot Sharing</span>
-								<div>
-									Includes the ability to share the connection
-									via hotspot.
-								</div>
+								<div>{data.hotspotSharing}</div>
 							</li>
 						</ul>
 					</div>
@@ -67,26 +97,43 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 							<li className={styles.flexColumn}>
 								<span>Activation Policy</span>
 								<div>
-									Plan starts automatically when connected to
-									network, or after 60 days
+									{(data as any).activationPolicy || 'N/A'}
 								</div>
 							</li>
 							<li>
-								Top-up option: <strong>Available</strong>
+								Top-up option:{' '}
+								<strong>
+									{typeof (data as any).rechargeability ===
+									'boolean'
+										? (data as any).rechargeability
+											? 'Available'
+											: 'Not available'
+										: 'N/A'}
+								</strong>
 							</li>
 							<li>
-								Network: <strong>Available networks</strong>
+								Network:{' '}
+								<strong>
+									{(data as any).network || 'N/A'}
+								</strong>
 							</li>
 							<li>
 								eKYC (Verification):{' '}
-								<strong>Not required</strong>
+								<strong>
+									{typeof (data as any).isKycVerify ===
+									'boolean'
+										? (data as any).isKycVerify
+											? 'Required'
+											: 'Not required'
+										: 'N/A'}
+								</strong>
 							</li>
 							<li className={styles.flexColumn}>
 								<span>Extra Info:</span>
 								<div>
-									Restrictions apply to extended usage(over 91
-									days) in Turkey according to the local
-									legislation.
+									{/* Not in data */} Restrictions apply to
+									extended usage(over 91 days) in Turkey
+									according to the local legislation.
 								</div>
 							</li>
 						</ul>
@@ -97,7 +144,8 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 					{/* Supported Countries */}
 					<div className={styles.section}>
 						<h4>Supported Countries</h4>
-						<Countries data={dummyCountries} />
+						{/* Not in data, still using dummyCountries */}
+						<Countries data={data.countries} />
 					</div>
 
 					{/* Configure Plan */}
@@ -131,7 +179,13 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 					<div>
 						<div className={styles.total}>
 							<span>Total:</span>
-							<strong>$15.00 USD</strong>
+							<strong>
+								{data.price
+									? `$${(
+											(Number(data.price) || 0) * quantity
+									  ).toFixed(2)} USD`
+									: 0}
+							</strong>
 						</div>
 						<Button className={styles.buyButton}>Buy Now</Button>
 					</div>

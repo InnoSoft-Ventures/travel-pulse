@@ -5,4 +5,10 @@
 	margin-bottom: 45px;
 	flex-wrap: wrap;
 	justify-content: center;
+
+	&.searchResults {
+		justify-content: flex-start;
+		padding-top: 3rem;
+		gap: 3.28rem;
+	}
 }

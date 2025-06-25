@@ -1,13 +1,18 @@
 'use client';
 import React, { useState } from 'react';
 import styles from './search-and-calendar.module.scss';
-import { Button, InputProps, toast } from '../common';
+import { Button, InputProps } from '../common';
 import LocationIcon from '../../assets/location.svg';
 import { Calendar } from '../common/calendar';
 import SearchIcon from '../../assets/white-search.svg';
 import { cn } from '../../utils';
-import { useAppDispatch, useAppSelector } from '@travelpulse/state';
-import { Country } from '@travelpulse/interfaces';
+import {
+	setSearchData,
+	useAppDispatch,
+	useAppSelector,
+} from '@travelpulse/state';
+import { Country, SelectedSearchData } from '@travelpulse/interfaces';
+import { DATE_FORMAT, dateJs, toast } from '@travelpulse/utils';
 import { getCountries, productSearch } from '@travelpulse/state/thunks';
 import { useFilter } from '@react-aria/i18n';
 import Select, { SelectItem } from '../common/select';
@@ -17,17 +22,13 @@ interface SearchAndCalendarProps {
 	inputVariant?: InputProps['variant'];
 }
 
-interface SelectedData {
-	country: Country | null;
-	dates: Date[] | null;
-}
-
 const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 	const { className, inputVariant } = props;
 
 	const { status } = useAppSelector((state) => state.masterData.countries);
+	// const { searchData } = useAppSelector((state) => state.products);
 
-	const [selectedData, setSelectedData] = useState<SelectedData>({
+	const [selectedData, setSelectedData] = useState<SelectedSearchData>({
 		country: null,
 		dates: null,
 	});
@@ -95,10 +96,24 @@ const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 				return;
 			}
 
-			const selectedDates = `${startDate.toISOString()} to ${endDate.toISOString()}`;
+			const datesFormat = selectedData.dates
+				? selectedData.dates.map((date) =>
+						dateJs(date).format(DATE_FORMAT)
+				  )
+				: null;
+			dispatch(
+				setSearchData({
+					...selectedData,
+					dates: datesFormat,
+				})
+			);
 
 			dispatch(
-				productSearch({ country: country.iso2, dates: selectedDates })
+				productSearch({
+					country: country.slug,
+					from: dateJs(startDate).format(DATE_FORMAT),
+					to: dateJs(endDate).format(DATE_FORMAT),
+				})
 			);
 		} catch (error) {
 			console.error('Error submitting form:', error);

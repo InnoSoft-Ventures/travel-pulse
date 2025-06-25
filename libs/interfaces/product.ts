@@ -1,3 +1,4 @@
+import { Continent, Country, CountryPackageInterface } from './common';
 import { ApnType } from './enums';
 
 export interface SIM {
@@ -34,4 +35,68 @@ export interface RegionExplore {
 	data: string;
 	amount: number;
 	type: string;
+}
+
+// Network types for coverage
+export interface OperatorNetwork {
+	name: string;
+	types: string[];
+}
+
+// Coverage information for a destination
+export interface OperatorCoverage {
+	name: string;
+	code: string;
+	networks: OperatorNetwork[];
+}
+
+// Package details
+export interface PackageInterface {
+	packageId: number;
+	title: string;
+	price: string;
+	/** Amount of data in digits, i.e 2048 ~ 2GB */
+	amount: number;
+	/** Amount of data in units, e.g 2GB */
+	data: string;
+	/** Validity period in days */
+	day: number;
+	/** Plan type: `Data`, `Voice` or `Text` */
+	planType: string;
+	isUnlimited: boolean;
+	continent?: Continent;
+	/** List of countries covered by this package */
+	countries: CountryPackageInterface[];
+	operator: {
+		id: number;
+		title: string;
+		type: string;
+		esimType: string;
+		apnType: string;
+	};
+	activationPolicy: string;
+	topupOption: string;
+	eKYC: string;
+	speed: string;
+	hotspotSharing: string;
+	coverage: OperatorCoverage[];
+}
+
+// Main package search results
+export interface PackageResults {
+	/** List of available packages with their operators */
+	packages: PackageInterface[] | null;
+	destinationType: 'local' | 'global' | 'regional';
+	/** Duration of travel in days */
+	travelDuration: number;
+}
+
+export interface SelectedSearchData {
+	country: Country | null;
+	dates: Date[] | null;
+}
+
+export interface SelectedSearchDataState
+	extends Omit<SelectedSearchData, 'dates'> {
+	dates: string[] | null;
 }

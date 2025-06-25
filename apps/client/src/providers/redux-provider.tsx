@@ -1,6 +1,6 @@
 'use client';
 
-import { getResponsivePlacement, ToastProvider } from '@travelpulse/ui';
+import { ToastProvider } from '@travelpulse/utils';
 import { UIProvider } from '@travelpulse/ui';
 import {
 	ReduxProvider,
@@ -9,6 +9,7 @@ import {
 	PersistGate,
 } from '@travelpulse/ui/state';
 import { useRef } from 'react';
+import PurgeStoreButton from './PurgeStoreButton';
 
 export default function StoreProvider({
 	children,
@@ -24,9 +25,6 @@ export default function StoreProvider({
 		ref.current = store.store;
 	}
 
-	// Uncomment this to clear the store on each reload
-	// store.persistor.purge();
-
 	return (
 		<ReduxProvider store={ref.current}>
 			<PersistGate loading={null} persistor={store.persistor}>
@@ -35,6 +33,8 @@ export default function StoreProvider({
 						placement={toastPlacement}
 						toastOffset={toastPlacement.includes('top') ? 20 : 0}
 					/>
+
+					<PurgeStoreButton onPurge={store.persistor.purge} />
 					{children}
 				</UIProvider>
 			</PersistGate>
