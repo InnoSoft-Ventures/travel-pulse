@@ -16,3 +16,4 @@ export * from './google-login';
 export * from './search-and-calendar';
 export * from './curve';
 export * from './SectionCard';
+export * from './testimonial';

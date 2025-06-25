@@ -8,6 +8,7 @@ import {
 	Curve,
 	SearchAndCalendar,
 	SectionCard,
+	Testimonial,
 } from '@travelpulse/ui';
 
 // Icons
@@ -259,6 +260,27 @@ export default function HomePage() {
 									View all destinations
 								</Button>
 							</div>
+						</div>
+					</div>
+					<div className={styles.testimonialContainer}>
+						<Title
+							position="center"
+							size="size40"
+							className={styles.title}
+						>
+							Testimonials
+						</Title>
+						<Title
+							size="size16"
+							position="center"
+							className={styles.subTitle}
+						>
+							Real stories from satisfied eSIM customers
+						</Title>
+						<div className={styles.ellipse_2}></div>
+						<div className={styles.ellipse_6}></div>
+						<div className={styles.testimonialListContainer}>
+							<Testimonial />
 						</div>
 					</div>
 				</main>
