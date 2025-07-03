@@ -238,5 +238,17 @@ $lightGrey: var(--light-grey);
 			height: 262px;
 			width: 262px;
 		}
+
+		.ellipse_7 {
+			position: absolute;
+			width: 183px;
+			height: 183px;
+			z-index: 0;
+			left: 90px;
+			border-radius: 60%;
+			top: 466px;
+			background: linear-gradient(180deg, #5901b1 0%, #ff73b6 100%);
+			transform: rotate(-62.97deg);
+		}
 	}
 }

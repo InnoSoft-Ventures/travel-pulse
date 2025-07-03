@@ -278,7 +278,9 @@ export default function HomePage() {
 							Real stories from satisfied eSIM customers
 						</Title>
 						<div className={styles.ellipse_2}></div>
+						<div className={styles.ellipse_7}></div>
 						<div className={styles.ellipse_6}></div>
+
 						<div className={styles.testimonialListContainer}>
 							<Testimonial />
 						</div>
