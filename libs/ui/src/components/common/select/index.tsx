@@ -7,7 +7,7 @@ import ReactSelect, {
 	Props as ReactSelectProps,
 } from 'react-select';
 import AsyncSelect from 'react-select/async';
-import { selectStyles } from './select-styles';
+import { controlCSSObject, selectStyles } from './select-styles';
 import styles from './select.module.scss';
 import { Spinner } from '@heroui/spinner';
 
@@ -18,6 +18,8 @@ export interface SelectItem<T = any> {
 	label: string;
 	data?: T;
 }
+
+export type ControlVariant = 'primary' | 'secondary';
 
 interface ExtendedProps {
 	startContent?: React.ReactNode;
@@ -52,11 +54,12 @@ const Option = (props: OptionProps) => {
 	);
 };
 
-interface SelectProps
+export interface SelectProps
 	extends React.ComponentPropsWithoutRef<typeof ReactSelect>,
 		React.ComponentPropsWithoutRef<typeof AsyncSelect>,
 		ExtendedProps {
 	options?: SelectItem[];
+	controlVariant?: ControlVariant;
 	hideDropdownIndicator?: boolean;
 	hideIndicatorSeparator?: boolean;
 	loadOptions?: (inputValue: string) => Promise<SelectItem[]>;
@@ -68,6 +71,7 @@ const Select = (props: SelectProps) => {
 		loadOptions,
 		hideDropdownIndicator = false,
 		hideIndicatorSeparator = false,
+		controlVariant = 'primary',
 		...rest
 	} = props;
 
@@ -110,6 +114,25 @@ const Select = (props: SelectProps) => {
 
 	const SelectComponent = loadOptions ? AsyncSelect : ReactSelect;
 
+	let customStyles: typeof selectStyles = selectStyles;
+
+	if (controlVariant === 'secondary') {
+		customStyles = {
+			...selectStyles,
+			control: (base) => ({
+				...base,
+				...controlCSSObject,
+				boxShadow: '0 2px 4px rgba(0, 0, 0, 0.25)',
+				backgroundColor: '#fffefe',
+				border: '1px solid #fff',
+				'&:hover': {
+					border: '1px solid #fff',
+					backgroundColor: '#fffefe',
+				},
+			}),
+		};
+	}
+
 	return (
 		<SelectComponent
 			{...rest}
@@ -117,7 +140,7 @@ const Select = (props: SelectProps) => {
 			options={options}
 			loadOptions={loadOptions}
 			components={Components}
-			styles={selectStyles}
+			styles={customStyles}
 			// getOptionLabel={(e) => (
 			// 	<div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
 			// 		{e.startContent}

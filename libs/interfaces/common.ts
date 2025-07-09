@@ -1,4 +1,5 @@
 import { ErrorInstance } from './api-response';
+import { PackageInterface } from './product';
 
 export interface Country {
 	id: number;
@@ -22,12 +23,19 @@ export type CountryPackageInterface = Pick<
 export interface Continent {
 	id: number;
 	name: string;
+	slug?: string;
 	aliasList: string[];
 }
 
 export interface CountryProduct extends Country {
 	price: string;
 }
+
+export type CountryPackageType =
+	| CountryProduct[]
+	| PackageInterface[]
+	| CountryPackageInterface[]
+	| Continent[];
 
 export type StateStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
 

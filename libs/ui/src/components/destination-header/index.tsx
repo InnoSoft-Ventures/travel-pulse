@@ -26,7 +26,10 @@ const DestinationHeader = (props: DestinationHeaderProps) => {
 					<h2 className={styles.subTitle}>{subTitle}</h2>
 				</div>
 				{enableSearch && (
-					<SearchAndCalendar className={styles.searchContainer} />
+					<SearchAndCalendar
+						className={styles.searchContainer}
+						controlVariant="secondary"
+					/>
 				)}
 			</div>
 		</Hero>

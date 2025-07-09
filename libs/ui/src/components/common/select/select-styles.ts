@@ -1,4 +1,22 @@
-import { StylesConfig } from 'react-select';
+import { CSSObjectWithLabel, StylesConfig } from 'react-select';
+
+export const controlCSSObject: CSSObjectWithLabel = {
+	paddingLeft: '1rem',
+	minHeight: '50px',
+	borderRadius: '15px',
+	boxShadow: '0 2px 5px rgba(0, 0, 0, 0.22)',
+	border: '2px solid transparent',
+	backgroundImage: 'linear-gradient(white, white), var(--purple-gradient)',
+	backgroundOrigin: 'border-box',
+	backgroundClip: 'padding-box, border-box',
+	'&:hover': {
+		border: '2px solid transparent',
+		backgroundImage:
+			'linear-gradient(white, white), var(--purple-gradient)',
+		backgroundOrigin: 'border-box',
+		backgroundClip: 'padding-box, border-box',
+	},
+};
 
 export const selectStyles: StylesConfig = {
 	menu: (css) => ({
@@ -12,22 +30,7 @@ export const selectStyles: StylesConfig = {
 	}),
 	control: (css) => ({
 		...css,
-		paddingLeft: '1rem',
-		minHeight: '50px',
-		borderRadius: '15px',
-		boxShadow: '0 2px 5px rgba(0, 0, 0, 0.22)',
-		border: '2px solid transparent',
-		backgroundImage:
-			'linear-gradient(white, white), var(--purple-gradient)',
-		backgroundOrigin: 'border-box',
-		backgroundClip: 'padding-box, border-box',
-		'&:hover': {
-			border: '2px solid transparent',
-			backgroundImage:
-				'linear-gradient(white, white), var(--purple-gradient)',
-			backgroundOrigin: 'border-box',
-			backgroundClip: 'padding-box, border-box',
-		},
+		...controlCSSObject,
 	}),
 	clearIndicator: (css) => ({
 		...css,

@@ -34,6 +34,20 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 				: 'No coverage';
 	}
 
+	const renderNetworks = () => {
+		const { networks } = data;
+
+		if (networks.length === 0) {
+			return 'No network';
+		}
+
+		if (networks.length !== 1) {
+			return networks[0].name;
+		}
+
+		return <Button className={styles.viewNetworks}>View Networks</Button>;
+	};
+
 	return (
 		<Modal
 			open={open}
@@ -84,7 +98,7 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 								Speed: <strong>{data.speed}</strong>
 							</li>
 							<li className={styles.flexColumn}>
-								<span>Hotspot Sharing</span>
+								<span>Hotspot Sharing:</span>
 								<div>{data.hotspotSharing}</div>
 							</li>
 						</ul>
@@ -95,47 +109,29 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 						<h4>Additional Info</h4>
 						<ul className={styles.infoList}>
 							<li className={styles.flexColumn}>
-								<span>Activation Policy</span>
-								<div>
-									{(data as any).activationPolicy || 'N/A'}
-								</div>
+								<span>Activation Policy:</span>
+								<div>{data.activationPolicy}</div>
 							</li>
 							<li>
-								Top-up option:{' '}
-								<strong>
-									{typeof (data as any).rechargeability ===
-									'boolean'
-										? (data as any).rechargeability
-											? 'Available'
-											: 'Not available'
-										: 'N/A'}
-								</strong>
+								Top-up option:
+								<strong>{data.topupOption}</strong>
 							</li>
 							<li>
-								Network:{' '}
-								<strong>
-									{(data as any).network || 'N/A'}
-								</strong>
+								{data.networks.length > 1
+									? 'Networks'
+									: 'Network'}
+								:<strong>{renderNetworks()}</strong>
 							</li>
 							<li>
-								eKYC (Verification):{' '}
-								<strong>
-									{typeof (data as any).isKycVerify ===
-									'boolean'
-										? (data as any).isKycVerify
-											? 'Required'
-											: 'Not required'
-										: 'N/A'}
-								</strong>
+								eKYC (Verification):
+								<strong>{data.eKYC}</strong>
 							</li>
-							<li className={styles.flexColumn}>
-								<span>Extra Info:</span>
-								<div>
-									{/* Not in data */} Restrictions apply to
-									extended usage(over 91 days) in Turkey
-									according to the local legislation.
-								</div>
-							</li>
+							{data.operator.extraInfo && (
+								<li className={styles.flexColumn}>
+									<span>Extra Info:</span>
+									<div>{data.operator.extraInfo}</div>
+								</li>
+							)}
 						</ul>
 					</div>
 				</div>

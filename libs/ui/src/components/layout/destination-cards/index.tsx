@@ -1,21 +1,26 @@
 'use client';
 import React, { useState } from 'react';
-import { PopularDestination } from '../../popular-destination';
+import { DestinationCard } from '../../destination-card';
 import { Region } from '../../region';
 import styles from './destination-cards.module.scss';
 import africaImage from '../../../assets/africa.jpg';
-import { CountryProduct, PackageInterface } from '@travelpulse/interfaces';
+import {
+	CountryPackageType,
+	CountryProduct,
+	PackageInterface,
+} from '@travelpulse/interfaces';
 import { PlanCard } from '../../plan-card';
 import { PlanDetailModal } from '../../plan-detail-modal';
 import { cn } from '../../../utils';
 
 interface DestinationCardsProps {
-	data: CountryProduct[] | PackageInterface[];
+	data: CountryPackageType;
 	destinationType?:
 		| 'popular'
 		| 'regions'
 		| 'local'
 		| 'search-results'
+		| 'popular-countries'
 		| 'all';
 	isLoading?: boolean;
 }
@@ -38,12 +43,20 @@ function DestinationCards(props: DestinationCardsProps) {
 				(data as CountryProduct[]).map((destination, index) => {
 					switch (destinationType) {
 						case 'popular':
-						case 'local':
 							return (
-								<PopularDestination
+								<DestinationCard
 									key={`popular-destination-${index}`}
 									flagUrl={destination.flag}
 									price={destination.price}
+									countryName={destination.name}
+								/>
+							);
+						case 'local':
+							return (
+								<DestinationCard
+									key={`popular-destination-${index}`}
+									flagUrl={destination.flag}
+									slug={destination.slug}
 									countryName={destination.name}
 								/>
 							);

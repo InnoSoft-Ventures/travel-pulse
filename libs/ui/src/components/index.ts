@@ -4,7 +4,7 @@ export * from './feature-card';
 export * from './layout/hero';
 export * from './logo';
 export * from './hexagon';
-export * from './popular-destination';
+export * from './destination-card';
 export * from './region';
 export * from './layout/top-nav';
 export * from './layout/destination-cards';

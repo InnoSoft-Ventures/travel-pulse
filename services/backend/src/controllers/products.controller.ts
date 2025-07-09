@@ -394,7 +394,7 @@ export const searchProducts = async (req: Request, res: Response) => {
 
 		// Find country by slug
 		const countryObj = await Country.findOne({
-			where: { slug: countrySlug },
+			where: { slug: countrySlug.toLowerCase() },
 		});
 
 		if (!countryObj) {
@@ -418,7 +418,6 @@ export const searchProducts = async (req: Request, res: Response) => {
 				'type',
 				'esimType',
 				'planType',
-				'apnType',
 				'activationPolicy',
 				'rechargeability',
 				'isKycVerify',

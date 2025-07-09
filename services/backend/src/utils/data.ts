@@ -1,5 +1,6 @@
 import {
 	CountryPackageInterface,
+	OperatorCoverage,
 	PackageInterface,
 } from '@travelpulse/interfaces';
 import Continent from '../db/models/Continent';
@@ -89,13 +90,13 @@ export function extractHotspot(info: any, otherInfo: any): string {
 export function getActivationPolicyLabel(type: string | null): string {
 	switch (type) {
 		case 'first-usage':
-			return 'Activates on first use.';
+			return 'Activates when the eSIM connects to a mobile network in its coverage area. If you install the eSIM outside of the coverage area, you can connect to a network when you arrive.';
 		case 'immediate':
 			return 'Activates immediately after purchase.';
 		case 'manual':
 			return 'Requires manual activation.';
 		case 'delayed':
-			return 'Activates within 24–48 hours.';
+			return 'Activates within 24-48 hours.';
 		case 'scheduled':
 			return 'Activates on a scheduled date.';
 		case null:
@@ -105,62 +106,74 @@ export function getActivationPolicyLabel(type: string | null): string {
 	}
 }
 
+function extractNetworks(data: OperatorCoverage[]) {
+	return data.flatMap((coverage) => {
+		return coverage.networks;
+	});
+}
+
 export function constructPackageDetails(
 	operator: Operator,
 	countries: CountryPackageInterface[]
 ): PackageInterface[] {
+	if (!operator.packages) {
+		return [];
+	}
+
 	// Always ensure info is an array and otherInfo is a string or null
 	const info = Array.isArray(operator.info)
 		? operator.info
 		: typeof operator.info === 'string'
 			? [operator.info]
 			: [];
-	const otherInfo =
+	const extraInfo =
 		typeof operator.otherInfo === 'string' ? operator.otherInfo : null;
 
 	const speed = extractSpeed(info);
-	const hotspotSharing = extractHotspot(info, otherInfo);
+	const hotspotSharing = extractHotspot(info, extraInfo);
+	const networks = extractNetworks(operator.coverage?.data || []);
 
-	return (
-		operator.packages?.map((pkg: any) => {
-			return {
-				packageId: pkg.id,
-				title: pkg.title,
-				price: pkg.price,
-				amount: pkg.amount,
-				day: pkg.day,
-				data: pkg.data,
-				planType: getPlanServices(operator.planType),
-				isUnlimited: pkg.isUnlimited,
-				countries,
-				operator: {
-					id: operator.id,
-					title: operator.title,
-					type: operator.type,
-					esimType: operator.esimType,
-					apnType: operator.apnType,
-					info: info,
-					otherInfo: otherInfo,
-				},
-				activationPolicy: getActivationPolicyLabel(
-					operator.activationPolicy || null
-				),
-				topupOption:
-					typeof operator.rechargeability === 'boolean'
-						? operator.rechargeability
-							? 'Rechargeable'
-							: 'Not Rechargeable'
-						: 'Not Specified',
-				eKYC:
-					typeof operator.isKycVerify === 'boolean'
-						? operator.isKycVerify
-							? 'Required'
-							: 'Not Required'
-						: 'Not Specified',
-				speed,
-				hotspotSharing,
-				coverage: operator.coverage?.data || [],
-			};
-		}) || []
-	);
+	const data = operator.packages.map((pkg: any) => {
+		const details: PackageInterface = {
+			packageId: pkg.id,
+			title: pkg.title,
+			price: pkg.price,
+			amount: pkg.amount,
+			day: pkg.day,
+			data: pkg.data,
+			planType: getPlanServices(operator.planType),
+			isUnlimited: pkg.isUnlimited,
+			countries,
+			operator: {
+				id: operator.id,
+				title: operator.title,
+				type: operator.type,
+				esimType: operator.esimType,
+				extraInfo,
+			},
+			networks,
+			activationPolicy: getActivationPolicyLabel(
+				operator.activationPolicy || null
+			),
+			topupOption:
+				typeof operator.rechargeability === 'boolean'
+					? operator.rechargeability
+						? 'Available'
+						: 'Not Available'
+					: 'Not Specified',
+			eKYC:
+				typeof operator.isKycVerify === 'boolean'
+					? operator.isKycVerify
+						? 'Required'
+						: 'Not Required'
+					: 'Not Specified',
+			speed,
+			hotspotSharing,
+			coverage: operator.coverage?.data || [],
+		};
+
+		return details;
+	});
+
+	return data;
 }

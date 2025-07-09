@@ -15,15 +15,16 @@ import { Country, SelectedSearchData } from '@travelpulse/interfaces';
 import { DATE_FORMAT, dateJs, toast } from '@travelpulse/utils';
 import { getCountries, productSearch } from '@travelpulse/state/thunks';
 import { useFilter } from '@react-aria/i18n';
-import Select, { SelectItem } from '../common/select';
+import Select, { ControlVariant, SelectItem } from '../common/select';
 
 interface SearchAndCalendarProps {
 	className?: string;
 	inputVariant?: InputProps['variant'];
+	controlVariant?: ControlVariant;
 }
 
 const SearchAndCalendar = (props: SearchAndCalendarProps) => {
-	const { className, inputVariant } = props;
+	const { className, inputVariant, controlVariant } = props;
 
 	const { status } = useAppSelector((state) => state.masterData.countries);
 	// const { searchData } = useAppSelector((state) => state.products);
@@ -165,6 +166,7 @@ const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 							</div>
 						);
 					}}
+					controlVariant={controlVariant}
 				/>
 				<Calendar
 					id="date-picker"

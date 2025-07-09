@@ -72,8 +72,9 @@ export interface PackageInterface {
 		title: string;
 		type: string;
 		esimType: string;
-		apnType: string;
+		extraInfo: string | null;
 	};
+	networks: OperatorNetwork[];
 	activationPolicy: string;
 	topupOption: string;
 	eKYC: string;
