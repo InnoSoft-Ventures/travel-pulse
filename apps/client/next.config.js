@@ -25,4 +25,7 @@ module.exports = {
 
 		return config;
 	},
+	images: {
+		domains: ['randomuser.me'],
+	},
 };

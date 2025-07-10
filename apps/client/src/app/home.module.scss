@@ -201,4 +201,54 @@ $lightGrey: var(--light-grey);
 			}
 		}
 	}
+
+	.testimonialContainer {
+		position: relative;
+		background: rgba(40, 40, 66, 0.97);
+		.title {
+			padding: 7rem 0 1rem;
+			color: $lightGrey;
+		}
+
+		.subTitle {
+			color: $lightGrey;
+		}
+
+		.ellipse_2 {
+			width: 457px;
+			height: 457px;
+			border-radius: 50%;
+			position: absolute;
+			left: -145px;
+			top: -156px;
+			background: aliceblue;
+			opacity: 0.2;
+			filter: blur(200px);
+			z-index: 0;
+		}
+
+		.ellipse_6 {
+			position: absolute;
+			right: 132px;
+			top: 180px;
+			background: linear-gradient(180deg, #73d4ff 0%, #0167b1 100%);
+			transform: rotate(-62.97deg);
+			border-radius: 50%;
+			z-index: 0;
+			height: 262px;
+			width: 262px;
+		}
+
+		.ellipse_7 {
+			position: absolute;
+			width: 183px;
+			height: 183px;
+			z-index: 0;
+			left: 90px;
+			border-radius: 60%;
+			top: 466px;
+			background: linear-gradient(180deg, #5901b1 0%, #ff73b6 100%);
+			transform: rotate(-62.97deg);
+		}
+	}
 }
