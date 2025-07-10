@@ -42,5 +42,21 @@ export const testimonials: Testimonial[] = [
     logo: "Google",
 
   },
+  {
+    name: "Amanda Dopond",
+    title: "Johannesbung traveler",
+    text: "Switching to eSIM was a game-changer for me. I love the convenience of managing my plan directly from my phone without needing to handle physical SIM cards. It’s perfect for my frequent travel needs!",
+    image: "https://randomuser.me/api/portraits/men/22.jpg",
+    logo: "Google",
+
+  },
+  {
+    name: "Josoephine Smith",
+    title: "Western Cape traveler",
+    text: "Switching to eSIM was a game-changer for me. I love the convenience of managing my plan directly from my phone without needing to handle physical SIM cards. It’s perfect for my frequent travel needs!",
+    image: "https://randomuser.me/api/portraits/men/23.jpg",
+    logo: "Google",
+
+  },
 
 ];

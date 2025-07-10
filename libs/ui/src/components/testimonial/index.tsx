@@ -15,12 +15,31 @@ const Testimonial: React.FC = () => {
 		setCurrentIndex(index);
 	};
 
+	const handleNext = () => {
+		setCurrentIndex((prevIndex) =>
+			prevIndex < maxIndex ? prevIndex + 1 : 0
+		);
+	};
+
+	const handlePrev = () => {
+		setCurrentIndex((prevIndex) =>
+			prevIndex > 0 ? prevIndex - 1 : maxIndex
+		);
+	};
+
 	const start = currentIndex * 2;
 	const visibleTestimonials = testimonials.slice(start, start + 2);
 
 	return (
-		<>
-			<div className={styles.testimonialSection}>
+		<div className={styles.testimonialSection}>
+			<div className={styles.Wrapper}>
+				<button
+					onClick={handlePrev}
+					className={styles.navArrow}
+					aria-label="Previous"
+				>
+					&#10094;
+				</button>
 				<div className={styles.cardsContainer}>
 					{visibleTestimonials.map((testimonial, index) => (
 						<div key={index} className={styles.card}>
@@ -54,21 +73,29 @@ const Testimonial: React.FC = () => {
 					))}
 				</div>
 
-				<div className={styles.dots}>
-					{Array.from({ length: maxIndex + 1 }).map((_, index) => (
-						<button
-							key={index}
-							className={`${styles.dot} ${
-								index === currentIndex ? styles.activeDot : ''
-							}`}
-							onClick={() => handleDotClick(index)}
-							title={`Go to testimonial ${index + 1}`}
-							aria-label={`Go to testimonial ${index + 1}`}
-						/>
-					))}
-				</div>
+				<button
+					onClick={handleNext}
+					className={styles.navArrow}
+					aria-label="Next"
+				>
+					&#10095;
+				</button>
 			</div>
-		</>
+
+			<div className={styles.dots}>
+				{Array.from({ length: maxIndex + 1 }).map((_, index) => (
+					<button
+						key={index}
+						className={`${styles.dot} ${
+							index === currentIndex ? styles.activeDot : ''
+						}`}
+						onClick={() => handleDotClick(index)}
+						title={`Go to testimonial ${index + 1}`}
+						aria-label={`Go to testimonial ${index + 1}`}
+					/>
+				))}
+			</div>
+		</div>
 	);
 };
 

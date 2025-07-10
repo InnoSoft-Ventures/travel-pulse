@@ -2,6 +2,13 @@
 	padding: 4rem 2rem;
 }
 
+.Wrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
 .cardsContainer {
 	display: flex;
 	justify-content: center;
@@ -25,6 +32,10 @@
 	order: 1;
 	flex-grow: 1;
 	transition: all 0.3s ease;
+}
+
+.card:hover {
+	transform: translateY(-5px);
 }
 
 .top {
@@ -69,6 +80,20 @@
 		font-size: 14px;
 		color: #aaa;
 	}
+}
+
+.navArrow {
+	background: none;
+	border: none;
+	font-size: 2rem;
+	cursor: pointer;
+	color: #9ca3af;
+	padding: 0 1rem;
+	transition: color 0.2s;
+}
+
+.navArrow:hover {
+	color: #ffffff;
 }
 
 .dots {
