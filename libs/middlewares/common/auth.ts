@@ -131,14 +131,17 @@ export function verifyToken<T>(servicePath: string, token: string) {
 	} catch (error) {
 		console.error('verifyToken:', error);
 
-		let errorObj = error;
+                let errorObj = error;
 
-		if (error instanceof (jwt.TokenExpiredError || jwt.JsonWebTokenError)) {
-			errorObj = {
-				error: 'Invalid/Expired token',
-				code: ERROR_CODE.INVALID_TOKEN,
-			};
-		}
+                if (
+                        error instanceof jwt.TokenExpiredError ||
+                        error instanceof jwt.JsonWebTokenError
+                ) {
+                        errorObj = {
+                                error: 'Invalid/Expired token',
+                                code: ERROR_CODE.INVALID_TOKEN,
+                        };
+                }
 
 		throw new UnauthorizedException({
 			error: errorObj,

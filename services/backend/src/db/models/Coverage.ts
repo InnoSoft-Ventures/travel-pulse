@@ -1,12 +1,12 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
 import Operator from './Operator';
-import { AiraloCoverage } from '@travelpulse/providers';
+import { OperatorCoverage } from '@travelpulse/interfaces';
 
 export interface CoverageAttributes {
 	id: number;
 	operatorId: number;
-	data: AiraloCoverage[];
+	data: OperatorCoverage[];
 }
 
 export type CoverageCreationAttributes = Optional<CoverageAttributes, 'id'>;
@@ -14,7 +14,7 @@ export type CoverageCreationAttributes = Optional<CoverageAttributes, 'id'>;
 class Coverage extends Model<CoverageAttributes, CoverageCreationAttributes> {
 	public id!: number;
 	public operatorId!: number;
-	public data!: AiraloCoverage[];
+	public data!: OperatorCoverage[];
 }
 
 Coverage.init(

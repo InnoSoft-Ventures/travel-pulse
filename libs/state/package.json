@@ -18,6 +18,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.3",
     "@travelpulse/interfaces": "workspace:^",
+    "@travelpulse/utils": "workspace:^",
     "axios": "^1.7.2",
     "react-redux": "^9.1.0",
     "redux-persist": "^6.0.0"

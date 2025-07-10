@@ -1,21 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Country, StateStatus } from '@travelpulse/interfaces';
-import { getCountries } from '../thunks/masterdata.thunk';
+import {
+	Continent,
+	Country,
+	ErrorHandler,
+	ListState,
+} from '@travelpulse/interfaces';
+import {
+	getCountries,
+	getPopularCountries,
+	getRegions,
+} from '../thunks/masterdata.thunk';
+import { createInitialListState } from '@travelpulse/utils';
 
 interface MasterDataState {
-	countries: {
-		list: Country[];
-		status: StateStatus;
-		error: string | null;
-	};
+	countries: ListState<Country>;
+	popularCountries: ListState<Country>;
+	regions: ListState<Continent>;
 }
 
 const initialState: MasterDataState = {
-	countries: {
-		list: [],
-		status: 'idle',
-		error: null,
-	},
+	countries: createInitialListState<Country>(),
+	popularCountries: createInitialListState<Country>(),
+	regions: createInitialListState<Continent>(),
 };
 
 const masterDataSlice = createSlice({
@@ -28,7 +34,7 @@ const masterDataSlice = createSlice({
 			// All countries
 			.addCase(getCountries.pending, (state) => {
 				state.countries.status = 'loading';
-				state.countries.error = null;
+				state.countries.error = undefined;
 			})
 			.addCase(getCountries.fulfilled, (state, action) => {
 				state.countries.status = 'succeeded';
@@ -36,7 +42,35 @@ const masterDataSlice = createSlice({
 			})
 			.addCase(getCountries.rejected, (state, action) => {
 				state.countries.status = 'failed';
-				state.countries.error = action.payload as string;
+				state.countries.error = action.payload as ErrorHandler;
+			})
+
+			// Popular countries
+			.addCase(getPopularCountries.pending, (state) => {
+				state.popularCountries.status = 'loading';
+				state.popularCountries.error = undefined;
+			})
+			.addCase(getPopularCountries.fulfilled, (state, action) => {
+				state.popularCountries.status = 'succeeded';
+				state.popularCountries.list = action.payload;
+			})
+			.addCase(getPopularCountries.rejected, (state, action) => {
+				state.popularCountries.status = 'failed';
+				state.popularCountries.error = action.payload as ErrorHandler;
+			})
+
+			// Regions
+			.addCase(getRegions.pending, (state) => {
+				state.regions.status = 'loading';
+				state.regions.error = undefined;
+			})
+			.addCase(getRegions.fulfilled, (state, action) => {
+				state.regions.status = 'succeeded';
+				state.regions.list = action.payload;
+			})
+			.addCase(getRegions.rejected, (state, action) => {
+				state.regions.status = 'failed';
+				state.regions.error = action.payload as ErrorHandler;
 			});
 	},
 });

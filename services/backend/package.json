@@ -7,7 +7,6 @@
 		"start": "node dist/index.js",
 		"sq-cli": "npx sequelize-cli --env development",
 		"build": "tsc",
-		"artifacts": "node ./src/db/scripts/run-sql-artifacts.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
@@ -22,11 +21,11 @@
 		"@travelpulse/middlewares": "workspace:^",
 		"@travelpulse/providers": "workspace:^",
 		"@travelpulse/services": "workspace:^",
+		"@travelpulse/utils": "workspace:^",
 		"bcryptjs": "^2.4.3",
 		"bottleneck": "^2.19.5",
 		"compression": "^1.7.4",
 		"cors": "^2.8.5",
-		"dayjs": "^1.11.11",
 		"dotenv": "^16.4.5",
 		"express": "^4.19.2",
 		"helmet": "^7.1.0",

@@ -15,9 +15,9 @@ router.use('/data', masterDataRoute);
 router.use('/providers', providersRoute);
 router.use('/webhooks', webhooksRoute);
 
-router.use('/orders', ordersRoute);
-
 router.use('/products', productsRoute);
+
+router.use('/orders', ordersRoute);
 
 // Auth routes
 router.use('/auth', authRoute);

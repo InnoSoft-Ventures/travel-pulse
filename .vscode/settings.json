@@ -1,31 +1,29 @@
 {
 	"editor.formatOnSave": true,
 	"cSpell.words": [
+		"Airalo",
+		"demonym",
+		"esim",
 		"esimaccess",
 		"heroui",
+		"Hotspot",
 		"iccid",
 		"imsis",
 		"masterdata",
 		"msisdn",
 		"persistor",
 		"qrcode",
+		"rechargeability",
+		"topup",
 		"travelpulse",
 		"xlarge"
 	],
 	"tailwindCSS.experimental.classRegex": [
-		[
-			"cva\\(([^)]*)\\)",
-			"[\"'`]([^\"'`]*).*?[\"'`]"
-		],
-		[
-			"cx\\(([^)]*)\\)",
-			"(?:'|\"|`)([^']*)(?:'|\"|`)"
-		]
+		["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+		["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
 	],
-	"css.customData": [
-		".vscode/tailwind.json"
-	],
+	"css.customData": [".vscode/tailwind.json"],
 	"github.copilot.editor.enableAutoCompletions": true,
 	"typescript.preferences.importModuleSpecifier": "relative",
-  "javascript.preferences.importModuleSpecifier": "relative"
+	"javascript.preferences.importModuleSpecifier": "relative"
 }

@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import ApiService from '../request';
-import { Country, ResponseData } from '@travelpulse/interfaces';
+import { Continent, Country, ResponseData } from '@travelpulse/interfaces';
+import { errorHandler } from '@travelpulse/utils';
 
 export const getCountries = createAsyncThunk(
 	'getAllCountries',
@@ -18,7 +19,7 @@ export const getCountries = createAsyncThunk(
 
 			if (!results.success) {
 				return thunkAPI.rejectWithValue(
-					results.message || 'Failed fetching countries'
+					errorHandler(results, 'Failed fetching countries')
 				);
 			}
 
@@ -27,8 +28,47 @@ export const getCountries = createAsyncThunk(
 			console.error('Failed fetching countries', error);
 
 			return thunkAPI.rejectWithValue(
-				error.response?.data || 'Failed fetching countries'
+				errorHandler(error, 'Unexpected error fetching countries')
 			);
 		}
 	}
 );
+
+export const getPopularCountries = createAsyncThunk(
+	'getPopularCountries',
+	async () => {
+		try {
+			const response = await ApiService.get<ResponseData<Country[]>>(
+				'/data/popular-countries'
+			);
+			const results = response.data;
+
+			if (!results.success) {
+				throw new Error('Failed fetching popular countries');
+			}
+
+			return results.data;
+		} catch (error: any) {
+			console.error('Failed fetching popular countries', error);
+			throw error;
+		}
+	}
+);
+
+export const getRegions = createAsyncThunk('getRegions', async () => {
+	try {
+		const response = await ApiService.get<ResponseData<Continent[]>>(
+			'/data/regions'
+		);
+		const results = response.data;
+
+		if (!results.success) {
+			throw new Error('Failed fetching regions');
+		}
+
+		return results.data;
+	} catch (error: any) {
+		console.error('Failed fetching regions', error);
+		throw error;
+	}
+});

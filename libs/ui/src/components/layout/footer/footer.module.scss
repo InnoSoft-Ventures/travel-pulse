@@ -1,5 +1,4 @@
 .footer {
-	background: linear-gradient(90deg, #3a416f 0%, #141727 100%);
 	color: var(--light-grey);
 	display: flex;
 	justify-content: space-between;
@@ -21,7 +20,6 @@
 
 		.copyright {
 			font-size: 14px;
-			color: var(--light-grey);
 		}
 	}
 
@@ -39,6 +37,38 @@
 
 			&:hover {
 				opacity: 0.7;
+			}
+		}
+	}
+
+	&.light {
+		background: linear-gradient(90deg, #fbfbff 0%, #e2e5f6 100%);
+
+		.right {
+			a {
+				color: var(--dark-purple);
+			}
+		}
+
+		.left {
+			.copyright {
+				color: var(--dark-purple);
+			}
+		}
+	}
+
+	&.dark {
+		background: linear-gradient(90deg, #3a416f 0%, #141727 100%);
+
+		.right {
+			a {
+				color: var(--light-grey);
+			}
+		}
+
+		.left {
+			.copyright {
+				color: var(--light-grey);
 			}
 		}
 	}

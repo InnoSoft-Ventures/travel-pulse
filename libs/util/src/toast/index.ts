@@ -65,6 +65,9 @@ class ToastManager {
 			endContent,
 			variant,
 			color: type,
+			classNames: {
+				description: 'whitespace-pre-line',
+			},
 		});
 	}
 

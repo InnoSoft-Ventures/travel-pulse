@@ -25,7 +25,7 @@ export interface OperatorAttributes {
 	isKycVerify: boolean;
 	rechargeability: boolean;
 	otherInfo: string;
-	info: string[];
+	info: string[] | null;
 	continent?: Continent;
 	packages?: Package[];
 	coverage?: Coverage;
@@ -106,6 +106,7 @@ Operator.init(
 			allowNull: false,
 			type: DataTypes.STRING(255),
 		},
+		/** This could mean regional, local, global */
 		type: {
 			allowNull: true,
 			type: DataTypes.STRING(50),
@@ -139,7 +140,7 @@ Operator.init(
 			type: DataTypes.JSON,
 		},
 		info: {
-			allowNull: false,
+			allowNull: true,
 			type: DataTypes.JSON,
 		},
 		isRoaming: {

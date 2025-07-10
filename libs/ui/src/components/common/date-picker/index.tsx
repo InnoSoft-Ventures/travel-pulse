@@ -4,6 +4,7 @@ import SearchIcon from '../../../assets/white-search.svg';
 import styles from './date-picker.module.scss';
 import { cn } from '../../../utils';
 import { Calendar } from '../calendar';
+import { dateJs } from '@travelpulse/utils';
 
 interface DatePickerProps {
 	inputClassName?: string;
@@ -23,7 +24,11 @@ function DatePicker(props: DatePickerProps) {
 		showTravelingNote = true,
 	} = props;
 
-	const [dates, setDates] = React.useState<Date[]>([new Date()]);
+	const today = dateJs();
+	const [dates, setDates] = React.useState<Date[]>([
+		today.toDate(),
+		today.add(7, 'day').toDate(),
+	]);
 
 	return (
 		<div className={styles.datePickerContainer}>
