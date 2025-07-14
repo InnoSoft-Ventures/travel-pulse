@@ -1,13 +1,12 @@
 .popularDestinationCards {
 	display: flex;
-	gap: 20px;
+	gap: 20px 22px;
 	padding: 10px 0;
 	margin-bottom: 45px;
 	flex-wrap: wrap;
-	justify-content: center;
+	justify-content: flex-start;
 
 	&.searchResults {
-		justify-content: flex-start;
 		padding-top: 3rem;
 		gap: 3.28rem;
 	}
