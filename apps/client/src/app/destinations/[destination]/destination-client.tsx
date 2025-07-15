@@ -11,8 +11,8 @@ import {
 import styles from './destination.module.scss';
 import {
 	CountryPackageType,
-	UIPlanTabs,
-	UIPlanTabsMap,
+	UIPlanType,
+	UIPlanTypeMap,
 } from '@travelpulse/interfaces';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
 import { useEffect } from 'react';
@@ -37,16 +37,16 @@ const DestinationsPage = ({ params }: DestinationPageProps) => {
 
 	const copy = destinationCopy[destination];
 
-	let currentTab: UIPlanTabs = UIPlanTabs.Local;
+	let currentTab: UIPlanType = UIPlanType.Local;
 	switch (destination) {
 		case 'local':
-			currentTab = UIPlanTabs.Local;
+			currentTab = UIPlanType.Local;
 			break;
 		case 'regional':
-			currentTab = UIPlanTabs.Regional;
+			currentTab = UIPlanType.Regional;
 			break;
 		case 'global':
-			currentTab = UIPlanTabs.Global;
+			currentTab = UIPlanType.Global;
 			break;
 	}
 
@@ -77,8 +77,8 @@ const DestinationsPage = ({ params }: DestinationPageProps) => {
 		}
 	}, [dispatch, destination]);
 
-	const onTabClick = (plan: UIPlanTabs) => {
-		router.replace(UIPlanTabsMap[plan], {
+	const onTabClick = (plan: UIPlanType) => {
+		router.replace(UIPlanTypeMap[plan], {
 			scroll: false,
 		});
 	};
@@ -132,7 +132,12 @@ const DestinationsPage = ({ params }: DestinationPageProps) => {
 
 				<div className={styles.popularDestinationContainer}>
 					<Title size="size20">{copy.sectionTitle}</Title>
-					<DestinationCards data={data} destinationType="local" />
+					<DestinationCards
+						data={data}
+						destinationType={
+							destination === 'regional' ? 'region-link' : 'local'
+						}
+					/>
 					{copy.buttonText && (
 						<div className="text-center">
 							<Button

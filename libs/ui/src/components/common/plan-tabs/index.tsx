@@ -2,17 +2,17 @@
 
 import React, { useEffect, useState } from 'react';
 import styles from './plan-tabs.module.scss';
-import { UIPlanTabs } from '@travelpulse/interfaces';
+import { UIPlanType } from '@travelpulse/interfaces';
 
 const tabs = ['Local Plans', 'Regional Plans', 'Global Plans'] as const;
 
 interface PlanTabsProps {
-	activePlan?: UIPlanTabs;
-	onChange?: (plan: UIPlanTabs) => void;
+	activePlan?: UIPlanType;
+	onChange?: (plan: UIPlanType) => void;
 }
 
 export function PlanTabs({
-	activePlan = UIPlanTabs.Local,
+	activePlan = UIPlanType.Local,
 	onChange,
 }: PlanTabsProps) {
 	const [activeIndex, setActiveIndex] = useState(activePlan);

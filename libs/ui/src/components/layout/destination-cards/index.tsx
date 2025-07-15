@@ -12,12 +12,15 @@ import {
 import { PlanCard } from '../../plan-card';
 import { PlanDetailModal } from '../../plan-detail-modal';
 import { cn } from '../../../utils';
+import { useAppSelector } from '@travelpulse/state';
+import { dateJs } from '@travelpulse/utils';
 
 interface DestinationCardsProps {
 	data: CountryPackageType;
 	destinationType?:
 		| 'popular'
 		| 'regions'
+		| 'region-link'
 		| 'local'
 		| 'search-results'
 		| 'popular-countries'
@@ -30,6 +33,7 @@ function DestinationCards(props: DestinationCardsProps) {
 
 	const [selectedPackage, setSelectedPackage] =
 		useState<PackageInterface | null>(null);
+	const { dates } = useAppSelector((state) => state.metaData);
 
 	return (
 		<div
@@ -52,11 +56,16 @@ function DestinationCards(props: DestinationCardsProps) {
 								/>
 							);
 						case 'local':
+						case 'region-link':
 							return (
 								<DestinationCard
 									key={`popular-destination-${index}`}
 									flagUrl={destination.flag}
-									slug={destination.slug}
+									slugLink={
+										destinationType === 'local'
+											? `/${destination.slug}-esim`
+											: `/${destination.slug}-regional-esim`
+									}
 									countryName={destination.name}
 								/>
 							);
@@ -91,6 +100,8 @@ function DestinationCards(props: DestinationCardsProps) {
 				<PlanDetailModal
 					open={!!selectedPackage}
 					data={selectedPackage}
+					startDate={dateJs(dates.start)}
+					endDate={dateJs(dates.end)}
 					onClose={() => setSelectedPackage(null)}
 				/>
 			)}

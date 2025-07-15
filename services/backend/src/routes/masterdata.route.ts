@@ -4,6 +4,7 @@ import {
 	countrySearch,
 	getCountries,
 	getPopularCountries,
+	getRegion,
 	getRegions,
 	// getCountry,
 } from '../controllers/country.controller';
@@ -15,7 +16,7 @@ router.post('/parse', errorHandler(processCountries));
 router.get('/countries/search', errorHandler(countrySearch));
 router.get('/countries', errorHandler(getCountries));
 router.get('/regions', errorHandler(getRegions));
-// router.get('/countries/:country', errorHandler(getCountry));
+router.get('/regions/:regionSlug', errorHandler(getRegion));
 router.get('/popular-countries', errorHandler(getPopularCountries));
 
 export default router;

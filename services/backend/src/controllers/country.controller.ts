@@ -118,6 +118,53 @@ export const getRegions = async (req: Request, res: Response) => {
 	}
 };
 
+export const getRegion = async (req: Request, res: Response) => {
+	try {
+		const { regionSlug } = req.params;
+
+		const region = await Continent.findOne({
+			where: dbConnect.literal(
+				`alias_list::jsonb ? '${regionSlug.toLowerCase()}'`
+			),
+			include: [
+				{
+					model: Operator,
+					as: 'operators',
+					attributes: [],
+					required: false,
+					include: [
+						{
+							model: Package,
+							as: 'packages',
+							attributes: [],
+							required: false,
+						},
+					],
+				},
+			],
+			attributes: {
+				include: [
+					[
+						fn('MIN', col('operators->packages.price')),
+						'cheapestPackagePrice',
+					],
+				],
+			},
+			group: ['Continent.id', 'operators.id', 'operators->packages.id'],
+			subQuery: false,
+		});
+
+		if (!region) {
+			return res.status(404).json(errorResponse('Region not found'));
+		}
+
+		return res.status(200).json(successResponse(region));
+	} catch (error) {
+		console.error('Error fetching region:', error);
+		return res.status(500).json(errorResponse('Internal Server Error'));
+	}
+};
+
 export const getPopularCountries = async (_req: Request, res: Response) => {
 	try {
 		const limit = 18;

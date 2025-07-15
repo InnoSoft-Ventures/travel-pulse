@@ -30,8 +30,10 @@ export interface Styles {
 export interface Continent {
 	id: number;
 	name: string;
-	slug?: string;
+	slug: string;
 	aliasList: string[];
+	/** The cheapest package price available for the country */
+	cheapestPackagePrice?: string;
 }
 
 export interface CountryProduct extends Country {

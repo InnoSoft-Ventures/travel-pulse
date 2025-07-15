@@ -16,6 +16,12 @@ The MCP server acts as a middleware between clients and the PostgreSQL database,
 
 ### Installation
 
+To make sure you are running on latest node version, run command on root:
+
+```bash
+nvm use
+```
+
 ```bash
 cd services/mcp-server
 pnpm install
@@ -67,55 +73,38 @@ Content-Type: application/json
 -   Queries are executed with proper parameterization
 -   Results are returned in JSON format
 
-## Database Structure
+### MCP Query Tool
 
-The complete database schema can be found in `services/backend/src/db/migrations/`. Key tables include:
+You can also use the `mcp:query` script to query the database directly from the command line:
 
--   countries
--   operators
--   providers
--   users
+```bash
+pnpm run mcp:query "YOUR_SQL_QUERY"
+```
 
 ## Example Queries
 
 ### Find Country by ISO2
 
 ```bash
-curl -X POST http://localhost:3001/query \
-  -H "Content-Type: application/json" \
-  -d '{
-    "query": "SELECT * FROM countries WHERE iso2 = '\''ZA'\''"
-  }'
+pnpm run mcp:query "SELECT * FROM countries WHERE iso2 = 'ZA'"
 ```
 
 ### Find Operators by Country
 
 ```bash
-curl -X POST http://localhost:3001/query \
-  -H "Content-Type: application/json" \
-  -d '{
-    "query": "SELECT o.*, c.name as country_name FROM operators o JOIN countries c ON o.country_id = c.id WHERE c.id = 247"
-  }'
+pnpm run mcp:query "SELECT o.*, c.name as country_name FROM operators o JOIN countries c ON o.country_id = c.id WHERE c.id = 247"
 ```
 
 ### List Distinct Providers
 
 ```bash
-curl -X POST http://localhost:3001/query \
-  -H "Content-Type: application/json" \
-  -d '{
-    "query": "SELECT DISTINCT provider FROM operators ORDER BY provider"
-  }'
+pnpm run mcp:query "SELECT DISTINCT provider FROM operators ORDER BY provider"
 ```
 
 ### Check Table Structure
 
 ```bash
-curl -X POST http://localhost:3001/query \
-  -H "Content-Type: application/json" \
-  -d '{
-    "query": "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '\''table_name'\''"
-  }'
+pnpm run mcp:query "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'countries'"
 ```
 
 ## Current State

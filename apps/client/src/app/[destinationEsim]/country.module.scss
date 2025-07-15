@@ -52,6 +52,13 @@
 		.textContainer {
 			flex: 1;
 			padding-left: 45px;
+
+			.planState {
+				padding-top: 4rem;
+				font-size: 14px;
+				color: var(--dark-purple);
+				text-align: center;
+			}
 		}
 
 		.contentNote {

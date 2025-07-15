@@ -14,9 +14,14 @@ interface RegionProps {
 const Region = (props: RegionProps) => {
 	const { imageSrc, continentName, price, slug } = props;
 
+	const link =
+		slug.toLowerCase() === 'global'
+			? 'global-esim'
+			: `/${slug}-regional-esim`;
+
 	return (
 		<Link
-			href={`/regions/${slug}`}
+			href={link}
 			title={continentName}
 			className={styles.regionContainer}
 		>

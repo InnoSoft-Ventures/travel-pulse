@@ -11,16 +11,16 @@ import {
 	DestinationHeader,
 	Title,
 } from '@travelpulse/ui';
-import { Country, PackageInterface } from '@travelpulse/interfaces';
+import { Continent, Country, PackageInterface } from '@travelpulse/interfaces';
 import PlanList from './PlanList';
 import { dateJs } from '@travelpulse/utils';
 import { useAppSelector } from '@travelpulse/ui/state';
 
 interface Props {
-	country: Country;
+	destination: Country | Continent;
 }
 
-const CountryContent = ({ country }: Props) => {
+const DestinationEsimContent = ({ destination }: Props) => {
 	const { dates: selectedDates } = useAppSelector((state) => state.metaData);
 
 	const today = useMemo(() => dateJs(), []);
@@ -42,12 +42,12 @@ const CountryContent = ({ country }: Props) => {
 	return (
 		<>
 			<DestinationHeader
-				title={`eSIM plans for ${country.name}`}
+				title={`eSIM plans for ${destination.name}`}
 				subTitle={
 					<>
-						Discover <strong>{country.name}</strong> with seamless
-						connectivity — no roaming fees, no interruptions, and
-						effortless eSIM setup.
+						Discover <strong>{destination.name}</strong> with
+						seamless connectivity — no roaming fees, no
+						interruptions, and effortless eSIM setup.
 					</>
 				}
 			/>
@@ -56,14 +56,14 @@ const CountryContent = ({ country }: Props) => {
 					<Breadcrumb className={styles.breadcrumbNav} />
 					<Title size="size35">Available eSIM plans</Title>
 					<Title size="size16" className={styles.subTitle}>
-						Choose from our list of {country.name} eSIM plans
+						Choose from our list of {destination.name} eSIM plans
 					</Title>
 
 					<div className={styles.flexLayout}>
 						<div className={styles.imageContainer}>
 							<Image
 								src={toronto}
-								alt={`${country.name} tower`}
+								alt={`${destination.name} tower`}
 								width={300}
 								height={400}
 								className={styles.countryImage}
@@ -82,7 +82,9 @@ const CountryContent = ({ country }: Props) => {
 										{/* Fetch cheapest package price for this country */}
 										starting from{' '}
 										<strong>
-											${country.cheapestPackagePrice || 1}{' '}
+											$
+											{destination.cheapestPackagePrice ||
+												1}{' '}
 											USD
 										</strong>
 									</li>
@@ -104,7 +106,7 @@ const CountryContent = ({ country }: Props) => {
 
 							<Suspense fallback={<p>Loading plans...</p>}>
 								<PlanList
-									countrySlug={country.slug}
+									countrySlug={destination.slug}
 									handlePlanDetails={handlePlanDetails}
 									startDate={startDate}
 									endDate={endDate}
@@ -128,4 +130,4 @@ const CountryContent = ({ country }: Props) => {
 	);
 };
 
-export default CountryContent;
+export default DestinationEsimContent;

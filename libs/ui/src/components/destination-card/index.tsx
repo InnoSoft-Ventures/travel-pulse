@@ -8,12 +8,12 @@ import styles from './style.module.scss';
 interface DestinationCardProps {
 	flagUrl: string;
 	countryName: string;
-	slug?: string;
+	slugLink?: string;
 	price?: string;
 }
 
 const DestinationCard = (props: DestinationCardProps) => {
-	const { flagUrl, countryName, price, slug } = props;
+	const { flagUrl, countryName, price, slugLink } = props;
 
 	const cardContent = (
 		<div>
@@ -42,12 +42,12 @@ const DestinationCard = (props: DestinationCardProps) => {
 		</div>
 	);
 
-	if (slug) {
+	if (slugLink) {
 		return (
 			<Link
 				aria-label="Destination Card"
 				role="link"
-				href={`/${slug}`}
+				href={slugLink}
 				title={countryName}
 				className={styles.destinationCardContainer}
 			>

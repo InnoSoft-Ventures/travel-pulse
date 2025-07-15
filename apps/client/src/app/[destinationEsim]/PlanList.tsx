@@ -84,11 +84,11 @@ export default function PlanList({
 			</div>
 
 			{loading ? (
-				<p className="text-center">Loading plans...</p>
-			) : error ? (
-				<p className="text-center text-red-500">{error}</p>
+				<div className={styles.planState}>Loading plans...</div>
 			) : !plans?.packages?.length ? (
-				<p className="text-center">No plans available right now.</p>
+				<div className={styles.planState}>
+					No plans available right now.
+				</div>
 			) : (
 				<div className={styles.plansContainer}>
 					<div className={styles.plans}>

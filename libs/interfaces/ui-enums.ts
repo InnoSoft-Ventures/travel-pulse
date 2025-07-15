@@ -1,12 +1,12 @@
-export enum UIPlanTabs {
+export enum UIPlanType {
 	Local,
 	Regional,
 	Global,
 }
 
 // I want to assign the enum values to string literals
-export const UIPlanTabsMap: Record<UIPlanTabs, string> = {
-	[UIPlanTabs.Local]: 'local',
-	[UIPlanTabs.Regional]: 'regional',
-	[UIPlanTabs.Global]: 'global',
+export const UIPlanTypeMap: Record<UIPlanType, string> = {
+	[UIPlanType.Local]: 'local',
+	[UIPlanType.Regional]: 'regional',
+	[UIPlanType.Global]: 'global',
 };
