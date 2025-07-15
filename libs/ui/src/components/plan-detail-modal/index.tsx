@@ -1,58 +1,75 @@
-import React from 'react';
-import { Button, Counter, DatePicker, Modal } from '../common';
+'use client';
 
+import React, { useMemo, useState, useCallback } from 'react';
+import { Button, Counter, DatePicker, Modal } from '../common';
 import styles from './plan-detail-modal.module.scss';
 import { Countries } from '../countries';
 import { PackageInterface } from '@travelpulse/interfaces';
+import { updateDates, useAppDispatch } from '@travelpulse/state';
+import { dateJs, DateRange } from '@travelpulse/utils';
 
 interface PlanDetailModalProps {
 	open: boolean;
 	data: PackageInterface;
 	onClose: () => void;
+	startDate: dateJs.Dayjs;
+	endDate: dateJs.Dayjs;
 }
 
-function PlanDetailModal(props: PlanDetailModalProps) {
-	const { open, onClose, data } = props;
-	console.log('PlanDetailModal - data:', data);
+function PlanDetailModal({
+	open,
+	onClose,
+	data,
+	startDate,
+	endDate,
+}: PlanDetailModalProps) {
+	const [quantity, setQuantity] = useState<number>(1);
+	const dispatch = useAppDispatch();
 
-	const [quantity, setQuantity] = React.useState<number>(1);
+	const title = useMemo(() => {
+		if (data.continent?.name) return data.continent.name;
+		if (Array.isArray(data.countries) && data.countries.length > 0)
+			return data.countries[0].name;
+		return 'Unknown';
+	}, [data.continent, data.countries]);
 
-	const title = data.continent?.name
-		? data.continent.name
-		: Array.isArray(data.countries) && data.countries.length > 0
-		? data.countries[0].name
-		: 'Unknown';
+	const coverage = useMemo(() => {
+		if (!data.countries) return 'No coverage';
+		if (data.countries.length === 1) return data.countries[0].name;
+		if (data.countries.length > 1)
+			return `${data.countries.length} countries`;
+		return 'No coverage';
+	}, [data.countries]);
 
-	let coverage = '';
-
-	if (data.countries.length === 1) {
-		coverage = data.countries[0].name;
-	} else {
-		coverage =
-			data.countries.length > 1
-				? `${data.countries.length} countries`
-				: 'No coverage';
-	}
-
-	const renderNetworks = () => {
-		const { networks } = data;
-
-		if (networks.length === 0) {
-			return 'No network';
-		}
-
-		if (networks.length !== 1) {
-			return networks[0].name;
-		}
-
+	const renderNetworks = useCallback(() => {
+		const networks = data.networks || [];
+		if (networks.length === 0) return 'No network';
+		if (networks.length === 1) return networks[0].name;
 		return <Button className={styles.viewNetworks}>View Networks</Button>;
-	};
+	}, [data.networks]);
+
+	const setDates = useCallback(
+		(dates: DateRange) => {
+			dispatch(
+				updateDates({
+					start: dates.startDate.toISOString(),
+					end: dates.endDate.toISOString(),
+				})
+			);
+		},
+		[dispatch]
+	);
+
+	const total = useMemo(() => {
+		const price = Number(data.price || 0);
+		return `$${(price * quantity).toFixed(2)} USD`;
+	}, [data.price, quantity]);
 
 	return (
 		<Modal
 			open={open}
 			size="large"
-			onCancel={() => onClose()}
+			onCancel={onClose}
 			focusTrapped={false}
 			showFooter={false}
 			className={styles.planModalContainer}
@@ -65,41 +82,40 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 						{data.day ? `${data.day} days` : 'N/A'}
 					</p>
 				</div>
+
 				<div className={styles.gridContainer}>
-					{/* Features Section */}
+					{/* Features */}
 					<div className={styles.section}>
 						<h4>Features</h4>
 						<ul className={styles.infoList}>
-							{/* Coverage: Not available in data */}
 							<li>
 								Coverage: <strong>{coverage}</strong>
 							</li>
 							<li>
-								Data:
-								<strong>{data.data || 'N/A'}</strong>
+								Data: <strong>{data.data || 'N/A'}</strong>
 							</li>
 							<li>
-								Price:
+								Price:{' '}
 								<strong>
 									{data.price ? `$${data.price} USD` : 'N/A'}
 								</strong>
 							</li>
 							<li>
-								Plan type:
+								Plan type:{' '}
 								<strong>{data.planType || 'N/A'}</strong>
 							</li>
 							<li>
-								Validity:
+								Validity:{' '}
 								<strong>
 									{data.day ? `${data.day} days` : 'N/A'}
 								</strong>
 							</li>
 							<li>
-								Speed: <strong>{data.speed}</strong>
+								Speed: <strong>{data.speed || 'N/A'}</strong>
 							</li>
 							<li className={styles.flexColumn}>
 								<span>Hotspot Sharing:</span>
-								<div>{data.hotspotSharing}</div>
+								<div>{data.hotspotSharing || 'N/A'}</div>
 							</li>
 						</ul>
 					</div>
@@ -110,23 +126,23 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 						<ul className={styles.infoList}>
 							<li className={styles.flexColumn}>
 								<span>Activation Policy:</span>
-								<div>{data.activationPolicy}</div>
+								<div>{data.activationPolicy || 'N/A'}</div>
 							</li>
 							<li>
-								Top-up option:
-								<strong>{data.topupOption}</strong>
+								Top-up option:{' '}
+								<strong>{data.topupOption || 'N/A'}</strong>
 							</li>
 							<li>
-								{data.networks.length > 1
+								{(data.networks?.length || 0) > 1
 									? 'Networks'
 									: 'Network'}
 								:<strong>{renderNetworks()}</strong>
 							</li>
 							<li>
-								eKYC (Verification):
-								<strong>{data.eKYC}</strong>
+								eKYC (Verification):{' '}
+								<strong>{data.eKYC || 'N/A'}</strong>
 							</li>
-							{data.operator.extraInfo && (
+							{data.operator?.extraInfo && (
 								<li className={styles.flexColumn}>
 									<span>Extra Info:</span>
 									<div>{data.operator.extraInfo}</div>
@@ -140,11 +156,10 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 					{/* Supported Countries */}
 					<div className={styles.section}>
 						<h4>Supported Countries</h4>
-						{/* Not in data, still using dummyCountries */}
 						<Countries data={data.countries} />
 					</div>
 
-					{/* Configure Plan */}
+					{/* Configure */}
 					<div className={styles.section}>
 						<h4>Configure your plan</h4>
 						<div className={styles.travelerInput}>
@@ -153,7 +168,7 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 							</div>
 							<Counter
 								value={quantity}
-								onChange={(value) => setQuantity(value)}
+								onChange={setQuantity}
 								maxValue={100}
 								minValue={1}
 							/>
@@ -164,24 +179,23 @@ function PlanDetailModal(props: PlanDetailModalProps) {
 							</div>
 							<DatePicker
 								hideSearchBtn
+								dates={{
+									startDate,
+									endDate,
+								}}
+								setDates={setDates}
+								disabled
 								inputClassName={styles.dataInput}
 							/>
 						</div>
 					</div>
 				</div>
 
-				{/* Total & Button */}
 				<div className={styles.footer}>
 					<div>
 						<div className={styles.total}>
 							<span>Total:</span>
-							<strong>
-								{data.price
-									? `$${(
-											(Number(data.price) || 0) * quantity
-									  ).toFixed(2)} USD`
-									: 0}
-							</strong>
+							<strong>{total}</strong>
 						</div>
 						<Button className={styles.buyButton}>Buy Now</Button>
 					</div>

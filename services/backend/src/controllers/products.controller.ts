@@ -19,7 +19,7 @@ import dbConnect from '../db';
 import Package from '../db/models/Package';
 import Country from '../db/models/Country';
 import { ProductSearch } from '../schema/product.schema';
-import { dateJs } from '@travelpulse/utils';
+import { calculateTravelDays, dateJs } from '@travelpulse/utils';
 import { constructPackageDetails } from '../utils/data';
 
 /**
@@ -40,6 +40,7 @@ export const getMultipleRegions = async (req: Request, res: Response) => {
 			attributes: [
 				// Group by continent and get aggregate values
 				[Sequelize.col('operator->continent.name'), 'name'],
+				[Sequelize.col('operator->continent.alias_list'), 'aliasList'],
 				[Sequelize.fn('MIN', Sequelize.col('price')), 'price'],
 				[Sequelize.fn('ANY_VALUE', Sequelize.col('data')), 'data'],
 				[Sequelize.fn('ANY_VALUE', Sequelize.col('amount')), 'amount'],
@@ -115,15 +116,21 @@ export const getMultipleRegions = async (req: Request, res: Response) => {
 
 		// Combine and format the results
 		const results: RegionExplore[] = regionalAggregations.map(
-			(agg: any) => ({
-				name: agg.getDataValue('name'),
-				operatorId: agg.getDataValue('operatorId'),
-				regionId: agg.getDataValue('regionId'),
-				price: agg.getDataValue('price'),
-				data: agg.getDataValue('data'),
-				amount: agg.getDataValue('amount'),
-				type: 'regional',
-			})
+			(agg: any) => {
+				const aliasList = agg.getDataValue('aliasList');
+
+				return {
+					name: agg.getDataValue('name'),
+					operatorId: agg.getDataValue('operatorId'),
+					regionId: agg.getDataValue('regionId'),
+					price: agg.getDataValue('price'),
+					data: agg.getDataValue('data'),
+					amount: agg.getDataValue('amount'),
+					type: 'regional',
+					slug: aliasList[0],
+					aliasList,
+				};
+			}
 		);
 
 		// Add the global aggregation result if it exists
@@ -137,6 +144,8 @@ export const getMultipleRegions = async (req: Request, res: Response) => {
 				data: globalData.data,
 				amount: globalData.amount,
 				type: 'global',
+				slug: 'global',
+				aliasList: ['global'],
 			});
 		}
 
@@ -183,75 +192,6 @@ export const getPopularDestinations = async (req: Request, res: Response) => {
 	} catch (error) {
 		console.error('Error in getPopularDestinations', error);
 		res.status(500).json(errorResponse(SOMETHING_WENT_WRONG));
-	}
-};
-
-/**
- * Returns all local packages for a specific country, using the country slug.
- *
- * @route GET /api/packages/local/:countrySlug
- * @param {string} countrySlug - The slug of the country to fetch local packages for.
- * @returns {Array} List of operators with their local packages and coverage for the country.
- */
-export const getLocalPackages = async (req: Request, res: Response) => {
-	const { countrySlug } = req.params;
-	const { startDate, endDate } = req.query;
-	try {
-		// Find the country by slug using the Country model
-		const country = await Country.findOne({ where: { slug: countrySlug } });
-		if (!country) {
-			return res.status(404).json(errorResponse('Country not found'));
-		}
-
-		// Fetch local packages for the country
-		const localPackages = await Operator.findAll({
-			where: {
-				type: 'local',
-				countryId: country.id,
-			},
-			attributes: ['id', 'title', 'type', 'esimType', 'apnType'],
-			include: [
-				{
-					association: 'packages',
-					attributes: [
-						'title',
-						'price',
-						'amount',
-						'day',
-						'data',
-						'isUnlimited',
-					],
-					order: [
-						['price', 'ASC'],
-						['amount', 'DESC'],
-						['day', 'ASC'],
-					],
-					...(startDate && endDate
-						? {
-								where: {
-									day: {
-										[Op.gte]: 25,
-									},
-								},
-							}
-						: {}),
-				},
-				{
-					association: 'coverage',
-					attributes: ['data'],
-				},
-			],
-			order: [
-				['packages', 'price', 'ASC'],
-				['packages', 'amount', 'DESC'],
-				['packages', 'day', 'ASC'],
-			],
-		});
-
-		return res.json(successResponse(localPackages));
-	} catch (error) {
-		console.error('Error in getLocalPackages', error);
-		return res.status(500).json(errorResponse(SOMETHING_WENT_WRONG));
 	}
 };
 
@@ -384,6 +324,10 @@ export const getGlobalPackages = async (_req: Request, res: Response) => {
 	}
 };
 
+/**
+ * Returns all local packages for a specific country, using the country slug.
+ * @returns
+ */
 export const searchProducts = async (req: Request, res: Response) => {
 	try {
 		const {
@@ -404,7 +348,7 @@ export const searchProducts = async (req: Request, res: Response) => {
 		// Calculate the number of travel days (inclusive)
 		const startDate = dateJs(start);
 		const endDate = dateJs(end);
-		const travelDuration = dateJs(endDate).diff(startDate, 'day');
+		const travelDuration = calculateTravelDays(startDate, endDate);
 
 		// Query operators and their packages
 		const operators = await Operator.findAll({

@@ -47,7 +47,8 @@ const DestinationCard = (props: DestinationCardProps) => {
 			<Link
 				aria-label="Destination Card"
 				role="link"
-				href={`/destination/${slug}`}
+				href={`/${slug}`}
+				title={countryName}
 				className={styles.destinationCardContainer}
 			>
 				{cardContent}
@@ -60,6 +61,7 @@ const DestinationCard = (props: DestinationCardProps) => {
 			aria-label="Destination Card"
 			type="button"
 			role="button"
+			title={countryName}
 			className={styles.destinationCardContainer}
 		>
 			{cardContent}

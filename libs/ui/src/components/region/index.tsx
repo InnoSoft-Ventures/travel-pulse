@@ -2,18 +2,24 @@ import React from 'react';
 import Image, { StaticImageData } from 'next/image';
 import ArrowIcon from '../../assets/arrow.svg';
 import styles from './region.module.scss';
+import Link from 'next/link';
 
 interface RegionProps {
 	imageSrc: string | StaticImageData;
 	continentName: string;
+	slug: string;
 	price: string;
 }
 
 const Region = (props: RegionProps) => {
-	const { imageSrc, continentName, price } = props;
+	const { imageSrc, continentName, price, slug } = props;
 
 	return (
-		<div className={styles.regionContainer}>
+		<Link
+			href={`/regions/${slug}`}
+			title={continentName}
+			className={styles.regionContainer}
+		>
 			<div>
 				<div className={styles.image}>
 					<Image
@@ -38,7 +44,7 @@ const Region = (props: RegionProps) => {
 					</div>
 				</div>
 			</div>
-		</div>
+		</Link>
 	);
 };
 

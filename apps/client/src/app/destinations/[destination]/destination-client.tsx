@@ -70,7 +70,7 @@ const DestinationsPage = ({ params }: DestinationPageProps) => {
 				dispatch(getPopularCountries());
 				break;
 			case 'regional':
-				dispatch(getRegions());
+				dispatch(getRegions({}));
 				break;
 			case 'global':
 				break;

@@ -59,6 +59,7 @@ interface CalendarProps extends VariantProps<typeof calendarVariants> {
 	defaultValue?: string;
 	placeholder?: string;
 	required?: boolean;
+	disabled?: boolean;
 }
 
 function Calendar(props: CalendarProps) {
@@ -82,6 +83,7 @@ function Calendar(props: CalendarProps) {
 		allowInput = true,
 		conjunction = 'to',
 		placeholder = 'Select date',
+		disabled = false,
 	} = props;
 
 	const pickerInstance = useRef<Flatpickr>(null);
@@ -94,6 +96,7 @@ function Calendar(props: CalendarProps) {
 					calendarVariants({ variant, size }),
 					inputClassName
 				)}
+				aria-disabled={disabled}
 			>
 				<button
 					type="button"
@@ -103,6 +106,8 @@ function Calendar(props: CalendarProps) {
 						}
 					}}
 					className={styles.calendarIcon}
+					disabled={disabled}
+					aria-label="Open calendar"
 				>
 					<CalendarIcon />
 				</button>
@@ -118,6 +123,7 @@ function Calendar(props: CalendarProps) {
 					value={value}
 					placeholder={placeholder}
 					defaultValue={defaultValue}
+					disabled={disabled}
 					onMonthChange={(dates) => onMonthChange?.(dates)}
 					onYearChange={(dates) => onYearChange?.(dates)}
 					onClose={(dates) => onClose?.(dates)}

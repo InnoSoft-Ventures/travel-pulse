@@ -35,6 +35,8 @@ export interface RegionExplore {
 	data: string;
 	amount: number;
 	type: string;
+	slug: string;
+	aliasList: string[];
 }
 
 // Network types for coverage

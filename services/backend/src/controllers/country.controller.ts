@@ -1,8 +1,11 @@
 import { Request, Response } from 'express';
 import Country from '../db/models/Country';
-import { Op, Sequelize } from 'sequelize';
+import { Op, Sequelize, col, fn } from 'sequelize';
 import { errorResponse, successResponse } from '@travelpulse/middlewares';
 import Continent from '../db/models/Continent';
+import dbConnect from '../db';
+import Operator from '../db/models/Operator';
+import Package from '../db/models/Package';
 
 export const getCountries = async (_req: Request, res: Response) => {
 	try {
@@ -31,6 +34,24 @@ export const getCountries = async (_req: Request, res: Response) => {
 export const countrySearch = async (req: Request, res: Response) => {
 	try {
 		const searchQuery = String(req.query.query || '').trim();
+		let matchType = String(req.query.matchType || '').trim();
+
+		let countryNameQuery = {};
+
+		// Return country that matches exactly this search query otherwise nothing.
+		if (matchType === 'exact') {
+			countryNameQuery = Sequelize.where(
+				dbConnect.fn('lower', dbConnect.col('name')),
+				Op.eq,
+				searchQuery.toLowerCase()
+			);
+		} else {
+			countryNameQuery = {
+				name: {
+					[Op.iLike]: `%${searchQuery}%`,
+				},
+			};
+		}
 
 		if (!searchQuery) {
 			return res
@@ -39,11 +60,32 @@ export const countrySearch = async (req: Request, res: Response) => {
 		}
 
 		const countries = await Country.findAll({
-			where: {
-				name: {
-					[Op.iLike]: `%${searchQuery}%`,
+			where: countryNameQuery,
+			include: [
+				{
+					model: Operator,
+					as: 'operators',
+					attributes: [],
+					required: false,
+					include: [
+						{
+							model: Package,
+							as: 'packages',
+							attributes: [],
+							required: false,
+						},
+					],
 				},
+			],
+			attributes: {
+				include: [
+					[
+						fn('MIN', col('operators->packages.price')),
+						'cheapestPackagePrice',
+					],
+				],
 			},
+			group: ['Country.id'],
 		});
 
 		return res.status(200).json(successResponse(countries));
@@ -53,11 +95,14 @@ export const countrySearch = async (req: Request, res: Response) => {
 	}
 };
 
-export const getRegions = async (_req: Request, res: Response) => {
+export const getRegions = async (req: Request, res: Response) => {
 	try {
+		const size = Number(req.query.size) || 8; // Default to 8 if not provided
+
 		const regions = await Continent.findAll({
 			attributes: ['id', 'name', 'aliasList'],
 			order: [['name', 'ASC']],
+			limit: size,
 		});
 
 		const data = regions.map((region) => ({

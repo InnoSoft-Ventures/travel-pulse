@@ -1,12 +1,13 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
 
 // Reducers
 import user from './features/user.slice';
 import auth from './features/auth.slice';
 import masterData from './features/masterdata.slice';
 import products from './features/products.slice';
-import { persistReducer } from 'redux-persist';
+import metaData from './features/metadata.slice';
 
 const persistedProductsReducer = persistReducer(
 	{
@@ -22,4 +23,5 @@ export const rootReducer = combineReducers({
 	auth,
 	masterData,
 	products: persistedProductsReducer,
+	metaData,
 });

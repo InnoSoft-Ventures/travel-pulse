@@ -13,12 +13,19 @@ export interface Country {
 	demonym: string;
 	currencyName: string;
 	currencySymbol: string;
+
+	/** The cheapest package price available for the country */
+	cheapestPackagePrice?: string;
 }
 
 export type CountryPackageInterface = Pick<
 	Country,
 	'id' | 'name' | 'slug' | 'flag'
 >;
+
+export interface Styles {
+	readonly [key: string]: string;
+}
 
 export interface Continent {
 	id: number;

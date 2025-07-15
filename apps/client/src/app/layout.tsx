@@ -16,9 +16,10 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-	title: 'TravelPulse',
+	title: { default: 'TravelPulse', template: '%s | TravelPulse' },
 	description:
-		'TravelPulse eSIM Solutions - Stay connected while traveling with our eSIM plans. Explore local and international data plans for seamless connectivity.',
+		'Global eSIM connectivity—international - Stay connected while traveling with our eSIM plans. Explore local and international data plans for seamless connectivity.',
+	metadataBase: new URL('https://travelpulse.com'),
 };
 
 export default function RootLayout({

@@ -4,31 +4,43 @@ import SearchIcon from '../../../assets/white-search.svg';
 import styles from './date-picker.module.scss';
 import { cn } from '../../../utils';
 import { Calendar } from '../calendar';
-import { dateJs } from '@travelpulse/utils';
+import { calculateTravelDays, dateJs, DateRange } from '@travelpulse/utils';
 
 interface DatePickerProps {
 	inputClassName?: string;
 	btnClassName?: string;
+	dates: DateRange;
+	setDates: (dates: DateRange) => void;
 
 	/** @default false */
 	hideSearchBtn?: boolean;
 
 	/** @default true */
 	showTravelingNote?: boolean;
+	disabled?: boolean;
 }
 
 function DatePicker(props: DatePickerProps) {
 	const {
 		btnClassName,
+		dates,
+		setDates,
 		hideSearchBtn = false,
 		showTravelingNote = true,
+		disabled = false,
 	} = props;
 
-	const today = dateJs();
-	const [dates, setDates] = React.useState<Date[]>([
-		today.toDate(),
-		today.add(7, 'day').toDate(),
-	]);
+	const { startDate, endDate } = dates;
+
+	const days = calculateTravelDays(startDate, endDate);
+
+	const handleDates = (inputDates: Date[]) => {
+		const [start, end] = inputDates;
+		setDates({
+			startDate: dateJs(start),
+			endDate: dateJs(end),
+		});
+	};
 
 	return (
 		<div className={styles.datePickerContainer}>
@@ -36,8 +48,9 @@ function DatePicker(props: DatePickerProps) {
 				<Calendar
 					id="date-picker"
 					size="large"
-					value={dates}
-					onClose={setDates}
+					disabled={disabled}
+					value={[startDate?.toDate(), endDate?.toDate()]}
+					onClose={handleDates}
 					placeholder="Select dates"
 					containerClassName={styles.datePickerInput}
 				/>
@@ -46,7 +59,7 @@ function DatePicker(props: DatePickerProps) {
 					<div>
 						<Button
 							size="lg"
-							icon={<SearchIcon />}
+							startContent={<SearchIcon />}
 							className={cn(styles.searchBtn, btnClassName)}
 						>
 							Search
@@ -57,7 +70,7 @@ function DatePicker(props: DatePickerProps) {
 
 			{showTravelingNote && (
 				<div className={styles.travelingNote}>
-					You are traveling for <span>7 days</span>
+					You are traveling for <span>{days} days</span>
 				</div>
 			)}
 		</div>

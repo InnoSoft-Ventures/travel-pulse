@@ -66,6 +66,7 @@ function DestinationCards(props: DestinationCardsProps) {
 									key={`popular-destination-${index}`}
 									imageSrc={africaImage}
 									price={destination.price}
+									slug={destination.slug}
 									continentName={destination.name}
 								/>
 							);

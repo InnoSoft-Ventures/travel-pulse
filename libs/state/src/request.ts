@@ -63,4 +63,4 @@ export const logOut = () => {
 	window.location.reload();
 };
 
-export default ApiService;
+export { ApiService };
