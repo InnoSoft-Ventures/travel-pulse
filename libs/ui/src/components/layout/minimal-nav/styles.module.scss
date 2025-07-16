@@ -1,0 +1,49 @@
+.minimalNav {
+	height: 76px;
+	width: 100%;
+	display: block;
+
+	background: #fcfcfc;
+	border-bottom: 1px solid #dadada;
+
+	.inner {
+		height: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		padding: 0px 20px;
+		gap: 10px;
+
+		> div {
+			flex: none;
+			order: 0;
+			align-self: stretch;
+			flex-grow: 1;
+			align-items: center;
+			display: flex;
+		}
+
+		.right {
+			justify-content: flex-end;
+			column-gap: 20px;
+		}
+	}
+
+	.currency {
+		color: var(--dark-purple);
+		font-weight: 500;
+		font-size: 15px;
+	}
+
+	.dropdownBtnArrow {
+		rotate: 90deg;
+		color: var(--purple);
+		width: auto;
+		height: auto;
+
+		path {
+			stroke-width: 0.08rem;
+		}
+	}
+}

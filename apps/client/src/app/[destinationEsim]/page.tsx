@@ -94,8 +94,6 @@ export default async function DestinationEsimPage({
 
 	const destination = await fetchData(results);
 
-	console.log('Reds', destination, results);
-
 	if (!destination) notFound();
 
 	return (

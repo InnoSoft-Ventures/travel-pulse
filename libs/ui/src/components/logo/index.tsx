@@ -17,17 +17,26 @@ function Logo(props: LogoProps) {
 	const LogoNode = variant === 'primary' ? LogoSvg : LogoPurple;
 
 	return (
-		<Link href="/" className={`flex items-center h-full ${styles.logo}`}>
-			<div className={styles.logoIcon} style={iconStyle}>
-				<LogoNode alt="TravelPulse Logo" />
-			</div>
-			<div className={`${styles.logoName} ${textColor}`}>
-				TravelPulse -
-			</div>
-			<div className={`${styles.logoSlogan} ${textColor}`}>
-				Your eSIM Connection Hub
-			</div>
-		</Link>
+		<div className="relative">
+			<Link
+				href="/"
+				className={`flex items-center h-full ${styles.logo}`}
+			>
+				<div
+					className={styles.logoIcon}
+					data-variant={variant}
+					style={iconStyle}
+				>
+					<LogoNode alt="TravelPulse Logo" />
+				</div>
+				<div className={`${styles.logoName} ${textColor}`}>
+					TravelPulse -
+				</div>
+				<div className={`${styles.logoSlogan} ${textColor}`}>
+					Your eSIM Connection Hub
+				</div>
+			</Link>
+		</div>
 	);
 }
 

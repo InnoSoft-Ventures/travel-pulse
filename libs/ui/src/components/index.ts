@@ -1,14 +1,18 @@
 export * from './common';
+
+// Layouts
+export * from './layout/hero';
+export * from './layout/top-nav';
+export * from './layout/destination-cards';
+export * from './layout/footer';
+export * from './layout/minimal-nav';
+
 export * from './destination-header';
 export * from './feature-card';
-export * from './layout/hero';
 export * from './logo';
 export * from './hexagon';
 export * from './destination-card';
 export * from './region';
-export * from './layout/top-nav';
-export * from './layout/destination-cards';
-export * from './layout/footer';
 export * from './compatibility-checker';
 export * from './plan-card';
 export * from './plan-detail-modal';
