@@ -22,3 +22,4 @@ export * from './curve';
 export * from './SectionCard';
 export * from './testimonial';
 export * from './how-it-works';
+export * from './payment';

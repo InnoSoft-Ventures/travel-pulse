@@ -1,0 +1,21 @@
+.checkoutContainer {
+	.main {
+		margin: 0 auto;
+		padding: 0 15px;
+		max-width: 14850px;
+		padding-top: 30px;
+	}
+
+	.choosePaymentMethodTxt {
+		font-size: 15px;
+		color: var(--light-purple);
+	}
+
+	.paymentMethodsContainer {
+		max-width: 530px;
+		display: flex;
+		flex-direction: column;
+		row-gap: 20px;
+		margin-top: 25px;
+	}
+}
