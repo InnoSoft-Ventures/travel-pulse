@@ -20,7 +20,7 @@ export interface Country {
 
 export type CountryPackageInterface = Pick<
 	Country,
-	'id' | 'name' | 'slug' | 'flag'
+	'id' | 'name' | 'slug' | 'flag' | 'iso2'
 >;
 
 export interface Styles {

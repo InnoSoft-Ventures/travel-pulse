@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Country from '../db/models/Country';
 import { Op, Sequelize, col, fn } from 'sequelize';
 import { errorResponse, successResponse } from '@travelpulse/middlewares';
+import { Continent as ContinentInterface } from '@travelpulse/interfaces';
 import Continent from '../db/models/Continent';
 import dbConnect from '../db';
 import Operator from '../db/models/Operator';
@@ -158,7 +159,15 @@ export const getRegion = async (req: Request, res: Response) => {
 			return res.status(404).json(errorResponse('Region not found'));
 		}
 
-		return res.status(200).json(successResponse(region));
+		const data: ContinentInterface = {
+			id: region.id,
+			name: region.name,
+			slug: region.aliasList[0],
+			aliasList: region.aliasList,
+			cheapestPackagePrice: region.getDataValue('cheapestPackagePrice'),
+		};
+
+		return res.status(200).json(successResponse(data));
 	} catch (error) {
 		console.error('Error fetching region:', error);
 		return res.status(500).json(errorResponse('Internal Server Error'));

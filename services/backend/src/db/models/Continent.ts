@@ -7,6 +7,7 @@ export interface ContinentAttributes {
 	name: string;
 	aliasList: string[];
 	operators?: Operator[];
+	cheapestPackagePrice?: string;
 }
 
 export type ContinentCreationAttributes = Optional<ContinentAttributes, 'id'>;
@@ -19,6 +20,7 @@ class Continent extends Model<
 	public name!: string;
 	public aliasList!: string[];
 	public operators?: Operator[];
+	public cheapestPackagePrice?: string;
 }
 
 Continent.init(

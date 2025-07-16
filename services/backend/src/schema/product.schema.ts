@@ -3,15 +3,20 @@ import { z } from 'zod';
 
 export const ProductSearchSchema = z
 	.object({
-		country: z
+		query: z
 			.string({
-				invalid_type_error: 'Country must be a string',
-				required_error: 'Country is required',
+				invalid_type_error: 'Query must be a string',
+				required_error: 'Query is required',
 			})
 			.trim()
 			.toUpperCase()
-			.min(2, 'Country must be at least 2 characters long')
-			.max(50, 'Country must be at most 50 characters long'),
+			.min(2, 'Query must be at least 2 characters long')
+			.max(50, 'Query must be at most 50 characters long'),
+		targetDestination: z.enum(['local', 'regional', 'global'], {
+			invalid_type_error:
+				'Target destination must be one of: local, regional, global',
+			required_error: 'Target destination is required',
+		}),
 		from: z
 			.string({
 				required_error: 'Start date is required',

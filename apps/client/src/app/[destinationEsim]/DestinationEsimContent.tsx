@@ -11,16 +11,23 @@ import {
 	DestinationHeader,
 	Title,
 } from '@travelpulse/ui';
-import { Continent, Country, PackageInterface } from '@travelpulse/interfaces';
+import {
+	Continent,
+	Country,
+	PackageInterface,
+	UIPlanType,
+	UIPlanTypeMap,
+} from '@travelpulse/interfaces';
 import PlanList from './PlanList';
 import { dateJs } from '@travelpulse/utils';
 import { useAppSelector } from '@travelpulse/ui/state';
 
 interface Props {
 	destination: Country | Continent;
+	targetDestination: UIPlanType;
 }
 
-const DestinationEsimContent = ({ destination }: Props) => {
+const DestinationEsimContent = ({ destination, targetDestination }: Props) => {
 	const { dates: selectedDates } = useAppSelector((state) => state.metaData);
 
 	const today = useMemo(() => dateJs(), []);
@@ -53,7 +60,18 @@ const DestinationEsimContent = ({ destination }: Props) => {
 			/>
 			<div className={styles.countryContainer}>
 				<section className={styles.content}>
-					<Breadcrumb className={styles.breadcrumbNav} />
+					<Breadcrumb
+						className={styles.breadcrumbNav}
+						items={[
+							{
+								label: 'Destinations',
+								href: `/destinations/${UIPlanTypeMap[targetDestination]}`,
+							},
+							{
+								label: `${destination.name} eSIMs`,
+							},
+						]}
+					/>
 					<Title size="size35">Available eSIM plans</Title>
 					<Title size="size16" className={styles.subTitle}>
 						Choose from our list of {destination.name} eSIM plans
@@ -106,7 +124,8 @@ const DestinationEsimContent = ({ destination }: Props) => {
 
 							<Suspense fallback={<p>Loading plans...</p>}>
 								<PlanList
-									countrySlug={destination.slug}
+									targetDestination={targetDestination}
+									slug={destination.slug}
 									handlePlanDetails={handlePlanDetails}
 									startDate={startDate}
 									endDate={endDate}

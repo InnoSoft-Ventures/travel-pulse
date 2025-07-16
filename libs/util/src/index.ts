@@ -4,3 +4,4 @@ export * from './formatApiErrorDescription';
 export * from './handlers';
 export * from './getPlanServices';
 export * from './toast';
+export * from './strings';

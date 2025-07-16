@@ -10,7 +10,6 @@ import {
 	successResponse,
 } from '@travelpulse/middlewares';
 import {
-	PackageInterface,
 	PackageResults,
 	RegionExplore,
 	SOMETHING_WENT_WRONG,
@@ -19,7 +18,11 @@ import dbConnect from '../db';
 import Package from '../db/models/Package';
 import Country from '../db/models/Country';
 import { ProductSearch } from '../schema/product.schema';
-import { calculateTravelDays, dateJs } from '@travelpulse/utils';
+import {
+	calculateTravelDays,
+	capitalizeFirstLetter,
+	dateJs,
+} from '@travelpulse/utils';
 import { constructPackageDetails } from '../utils/data';
 
 /**
@@ -324,106 +327,157 @@ export const getGlobalPackages = async (_req: Request, res: Response) => {
 	}
 };
 
+async function findInstanceIdBySlug(
+	slug: string,
+	targetDestination: ProductSearch['targetDestination']
+): Promise<number | undefined> {
+	switch (targetDestination) {
+		case 'local':
+			const countryObj = await Country.findOne({
+				where: { slug },
+			});
+			return countryObj?.id;
+		case 'regional':
+			const continentObj = await Continent.findOne({
+				where: dbConnect.literal(
+					`alias_list::jsonb ? '${slug.toLowerCase()}'`
+				),
+			});
+			return continentObj?.id;
+		case 'global':
+			return 0;
+		default:
+			throw new BadRequestException('Invalid target destination', {});
+	}
+}
+
+function determineQueryObj(
+	targetDestination: ProductSearch['targetDestination'],
+	instanceId: number
+) {
+	let queryObj: {
+		continentId?: number;
+		countryId?: number;
+		type: ProductSearch['targetDestination'];
+	} = {
+		type: targetDestination,
+	};
+
+	switch (targetDestination) {
+		case 'local':
+			queryObj = {
+				...queryObj,
+				countryId: instanceId,
+			};
+			break;
+		case 'regional':
+			queryObj = {
+				...queryObj,
+				continentId: instanceId,
+			};
+			break;
+		case 'global':
+			queryObj = {
+				...queryObj,
+				type: 'global',
+			};
+			break;
+	}
+
+	return queryObj;
+}
+
 /**
- * Returns all local packages for a specific country, using the country slug.
+ * Returns all local packages for a specific query, using the provided slug.
  * @returns
  */
 export const searchProducts = async (req: Request, res: Response) => {
-	try {
-		const {
-			country: countrySlug,
-			from: start,
-			to: end,
-		} = req.query as ProductSearch;
+	const {
+		query,
+		targetDestination,
+		from: start,
+		to: end,
+	} = req.query as ProductSearch;
 
-		// Find country by slug
-		const countryObj = await Country.findOne({
-			where: { slug: countrySlug.toLowerCase() },
-		});
+	const queryString = query.toLowerCase();
+	const instanceId = await findInstanceIdBySlug(
+		queryString,
+		targetDestination as ProductSearch['targetDestination']
+	);
 
-		if (!countryObj) {
-			return res.status(404).json(errorResponse('Country not found'));
-		}
-
-		// Calculate the number of travel days (inclusive)
-		const startDate = dateJs(start);
-		const endDate = dateJs(end);
-		const travelDuration = calculateTravelDays(startDate, endDate);
-
-		// Query operators and their packages
-		const operators = await Operator.findAll({
-			where: {
-				type: 'local',
-				countryId: countryObj.id,
-			},
-			attributes: [
-				'id',
-				'title',
-				'type',
-				'esimType',
-				'planType',
-				'activationPolicy',
-				'rechargeability',
-				'isKycVerify',
-				'info',
-				'otherInfo',
-			],
-			include: [
-				{
-					association: 'packages',
-					attributes: [
-						'id',
-						'title',
-						'price',
-						'amount',
-						'day',
-						'data',
-						'isUnlimited',
-					],
-					where: {
-						[Op.or]: [
-							{ day: { [Op.gte]: travelDuration } },
-							{ isUnlimited: true },
-						],
-					},
-				},
-				{
-					association: 'coverage',
-					attributes: ['data'],
-				},
-			],
-			order: [
-				['packages', 'price', 'ASC'],
-				['packages', 'amount', 'DESC'],
-				['packages', 'day', 'ASC'],
-			],
-		});
-
-		const countries = [
-			{
-				id: countryObj.id,
-				name: countryObj.name,
-				slug: countryObj.slug,
-				flag: countryObj.flag,
-			},
-		];
-
-		// Flatten packages and attach operator info, including additional features
-		const packages: PackageInterface[] = operators
-			.flatMap((operator) => {
-				return constructPackageDetails(operator, countries);
-			})
-			.filter((pkg) => Boolean(pkg));
-
-		const results: PackageResults = {
-			packages,
-			destinationType: 'local',
-			travelDuration,
-		};
-
-		return res.json(successResponse(results));
-	} catch (error) {
-		console.error('Error in searchProducts', error);
-		return res.status(500).json(errorResponse(SOMETHING_WENT_WRONG));
+	if (typeof instanceId === 'undefined') {
+		return res
+			.status(404)
+			.json(
+				errorResponse(
+					`${capitalizeFirstLetter(targetDestination)} instance not found`
+				)
+			);
 	}
+
+	// Calculate the number of travel days (inclusive)
+	const startDate = dateJs(start);
+	const endDate = dateJs(end);
+	const travelDuration = calculateTravelDays(startDate, endDate);
+
+	// Query operators and their packages
+	const operators = await Operator.findAll({
+		where: determineQueryObj(targetDestination, instanceId),
+		attributes: [
+			'id',
+			'title',
+			'type',
+			'esimType',
+			'planType',
+			'activationPolicy',
+			'rechargeability',
+			'isKycVerify',
+			'info',
+			'otherInfo',
+		],
+		include: [
+			{
+				association: 'packages',
+				attributes: [
+					'id',
+					'title',
+					'price',
+					'amount',
+					'day',
+					'data',
+					'isUnlimited',
+				],
+				where: {
+					[Op.or]: [
+						{ day: { [Op.gte]: travelDuration } },
+						{ isUnlimited: true },
+					],
+				},
+			},
+			{
+				association: 'coverage',
+				attributes: ['data'],
+			},
+		],
+		order: [
+			['packages', 'price', 'ASC'],
+			['packages', 'amount', 'DESC'],
+			['packages', 'day', 'ASC'],
+		],
+	});
+
+	// Flatten packages and attach operator info, including additional features
+	const [packages] = await Promise.all(
+		operators.flatMap(async (operator) => {
+			return await constructPackageDetails(operator);
+		})
+	);
+
+	const results: PackageResults = {
+		packages: packages.filter((pkg) => Boolean(pkg)),
+		destinationType: targetDestination,
+		travelDuration,
+	};
+
+	return res.json(successResponse(results));
 };

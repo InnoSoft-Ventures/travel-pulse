@@ -6,6 +6,8 @@ import {
 import Continent from '../db/models/Continent';
 import Operator from '../db/models/Operator';
 import { getPlanServices } from '@travelpulse/utils';
+import Country from '../db/models/Country';
+import { Op } from 'sequelize';
 
 /**
  * Builds a map from continent alias (string) to continent ID (number).
@@ -112,28 +114,42 @@ function extractNetworks(data: OperatorCoverage[]) {
 	});
 }
 
-export function constructPackageDetails(
-	operator: Operator,
-	countries: CountryPackageInterface[]
-): PackageInterface[] {
+export async function constructPackageDetails(
+	operator: Operator
+): Promise<PackageInterface[]> {
 	if (!operator.packages) {
 		return [];
 	}
 
-	// Always ensure info is an array and otherInfo is a string or null
-	const info = Array.isArray(operator.info)
-		? operator.info
-		: typeof operator.info === 'string'
-			? [operator.info]
+	const data = operator.packages.map(async (pkg: any) => {
+		// Always ensure info is an array and otherInfo is a string or null
+		const info = Array.isArray(operator.info)
+			? operator.info
+			: typeof operator.info === 'string'
+				? [operator.info]
+				: [];
+		const extraInfo =
+			typeof operator.otherInfo === 'string' ? operator.otherInfo : null;
+
+		const speed = extractSpeed(info);
+		const hotspotSharing = extractHotspot(info, extraInfo);
+		const networks = extractNetworks(operator.coverage?.data || []);
+
+		// Find supported countries from the coverage data
+		const supportedCountries = operator.coverage?.data
+			? operator.coverage.data.map((coverage) => coverage.code)
 			: [];
-	const extraInfo =
-		typeof operator.otherInfo === 'string' ? operator.otherInfo : null;
 
-	const speed = extractSpeed(info);
-	const hotspotSharing = extractHotspot(info, extraInfo);
-	const networks = extractNetworks(operator.coverage?.data || []);
+		const countries: CountryPackageInterface[] = await Country.findAll({
+			where: {
+				iso2: {
+					[Op.in]: supportedCountries,
+				},
+			},
+			attributes: ['id', 'name', 'iso2', 'slug', 'flag'],
+			order: [['name', 'ASC']],
+		});
 
-	const data = operator.packages.map((pkg: any) => {
 		const details: PackageInterface = {
 			packageId: pkg.id,
 			title: pkg.title,
@@ -175,5 +191,5 @@ export function constructPackageDetails(
 		return details;
 	});
 
-	return data;
+	return await Promise.all(data);
 }

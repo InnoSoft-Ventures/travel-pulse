@@ -5,24 +5,28 @@ import { DatePicker, PlanCard } from '@travelpulse/ui';
 import styles from './country.module.scss';
 import { ApiService, updateDates, useAppDispatch } from '@travelpulse/ui/state';
 import { DATE_FORMAT, dateJs, DateRange } from '@travelpulse/utils';
-import type {
+import {
 	PackageInterface,
 	PackageResults,
 	SuccessResponse,
+	UIPlanType,
+	UIPlanTypeMap,
 } from '@travelpulse/interfaces';
 
 interface PlanListProps {
-	countrySlug: string;
+	slug: string;
+	targetDestination: UIPlanType;
 	startDate: dateJs.Dayjs;
 	endDate: dateJs.Dayjs;
 	handlePlanDetails: (plan: PackageInterface) => void;
 }
 
 export default function PlanList({
-	countrySlug,
+	slug,
 	handlePlanDetails,
 	startDate,
 	endDate,
+	targetDestination,
 }: PlanListProps) {
 	const dispatch = useAppDispatch();
 
@@ -35,10 +39,16 @@ export default function PlanList({
 		isMountedRef.current = true;
 		setLoading(true);
 		setError(null);
+		console.log(
+			'Fetching plans for:',
+			slug,
+			UIPlanTypeMap[targetDestination]
+		);
 
 		ApiService.get('/products/search', {
 			params: {
-				country: countrySlug,
+				query: slug,
+				targetDestination: UIPlanTypeMap[targetDestination],
 				from: startDate.format(DATE_FORMAT),
 				to: endDate.format(DATE_FORMAT),
 			},
@@ -59,7 +69,12 @@ export default function PlanList({
 		return () => {
 			isMountedRef.current = false;
 		};
-	}, [countrySlug, startDate.toISOString(), endDate.toISOString()]);
+	}, [
+		slug,
+		startDate.toISOString(),
+		targetDestination,
+		endDate.toISOString(),
+	]);
 
 	const handleDateChange = (range: DateRange) => {
 		dispatch(

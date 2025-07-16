@@ -31,6 +31,7 @@ async function fetchData(info: {
 
 			if (!res.ok) return null;
 			const { data }: SuccessResponse<Continent> = await res.json();
+			console.log('Data fetched:', data);
 
 			return data || null;
 		}
@@ -97,5 +98,10 @@ export default async function DestinationEsimPage({
 
 	if (!destination) notFound();
 
-	return <DestinationEsimContent destination={destination} />;
+	return (
+		<DestinationEsimContent
+			targetDestination={results.target}
+			destination={destination}
+		/>
+	);
 }
