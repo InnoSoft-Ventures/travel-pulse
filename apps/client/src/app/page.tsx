@@ -5,20 +5,17 @@ import {
 	Button,
 	Title,
 	DestinationCards,
-	Curve,
 	SearchAndCalendar,
 	SectionCard,
 	Testimonial,
+	HowItWorks,
 } from '@travelpulse/ui';
 
 // Icons
 import Characters from '@/assets/characters.svg';
 import YellowStar from '@/assets/yellow-star.svg';
-import NetworkIcon from '@/assets/network.svg';
 import GlobeIcon from '@/assets/globe.svg';
 import FeatherIcon from '@/assets/feather.svg';
-import MapIcon from '@/assets/map.svg';
-import QRcodeIcon from '@/assets/qr-code.svg';
 import SettingsIcon from '@/assets/settings-gear.svg';
 
 import styles from './home.module.scss';
@@ -238,42 +235,8 @@ export default function HomePage() {
 						</div>
 					</div>
 
-					<div className={styles.chooseHowContainer}>
-						<Curve variant="secondary" />
-						<Title position={'center'} className={styles.title}>
-							How TravelPulse eSIM works
-						</Title>
-						<div className={styles.secFeatureListContainer}>
-							<div>
-								<SectionCard
-									icon={<MapIcon />}
-									title="Choose Your Package"
-									description="Select the perfect eSIM for your destination and data needs."
-								/>
-								<SectionCard
-									icon={<QRcodeIcon />}
-									title="Scan QR Code"
-									description="Using your eSIM-compatible device to scan the QR code we send you via email and WhatsApp to quickly install your eSIM."
-								/>
-								<SectionCard
-									icon={<NetworkIcon />}
-									title="Activate and Connect"
-									description="When you arrive at your destination, switch to your eSIM
-						as the primary data connection and enable roaming to
-						join the local network seamlessly."
-								/>
-							</div>
+					<HowItWorks />
 
-							<div className={styles.textCenter}>
-								<Button
-									variant="secondary"
-									className={styles.AllDestinations}
-								>
-									View all destinations
-								</Button>
-							</div>
-						</div>
-					</div>
 					<div className={styles.testimonialContainer}>
 						<Title
 							position="center"

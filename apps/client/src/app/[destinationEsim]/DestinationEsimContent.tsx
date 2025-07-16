@@ -10,6 +10,7 @@ import {
 	CompatibilityChecker,
 	DestinationHeader,
 	Title,
+	HowItWorks,
 } from '@travelpulse/ui';
 import {
 	Continent,
@@ -135,6 +136,11 @@ const DestinationEsimContent = ({ destination, targetDestination }: Props) => {
 					</div>
 				</section>
 			</div>
+
+			<HowItWorks
+				className={styles.howItWorks}
+				destinationName={destination.name}
+			/>
 
 			{selectedPlan && (
 				<PlanDetailModal
