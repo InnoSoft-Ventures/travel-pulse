@@ -2,20 +2,40 @@
 	.main {
 		margin: 0 auto;
 		padding: 0 15px;
-		max-width: 14850px;
+		max-width: 1485px;
 		padding-top: 30px;
 	}
 
-	.choosePaymentMethodTxt {
-		font-size: 15px;
-		color: var(--light-purple);
+	.secureCheckoutTitle {
+		margin-bottom: 30px;
 	}
 
-	.paymentMethodsContainer {
-		max-width: 530px;
+	.checkoutContent {
 		display: flex;
-		flex-direction: column;
-		row-gap: 20px;
-		margin-top: 25px;
+		width: 100%;
+		flex-direction: row;
+		gap: 2rem;
+	}
+
+	.checkoutLeft {
+		flex: 1.2;
+	}
+
+	.checkoutPaymentDetails {
+		max-width: 580px;
+	}
+
+	.orderDetailsTitle {
+		margin-bottom: 15px;
+	}
+
+	.checkoutRight {
+		flex: 1;
+		position: relative;
+	}
+
+	.checkoutOrderSummary {
+		position: sticky;
+		top: 2rem;
 	}
 }

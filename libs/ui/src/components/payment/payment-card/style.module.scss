@@ -1,7 +1,7 @@
 .paymentCardContainer {
 	padding: 19px 18px;
-	box-shadow: 0px 3px 13px 0px rgb(0 0 0 / 23%);
-	border-radius: 5px;
+	box-shadow: 0px 3px 13px 0px rgb(0 0 0 / 18%);
+	border-radius: 8px;
 	background-color: #fff;
 	transition: background-color 0.5s ease-in-out;
 	cursor: pointer;
@@ -34,5 +34,44 @@
 		font-size: 13px;
 		color: var(--light-purple);
 		font-weight: 500;
+	}
+
+	.divider {
+		border: none;
+		border-top: 1px solid #ddd;
+		margin: 16px 0;
+	}
+
+	.form {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		margin-bottom: 6px;
+	}
+
+	.row {
+		display: flex;
+		gap: 20px;
+		flex-wrap: wrap;
+	}
+
+	.formGroup {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+
+		label {
+			font-size: 14px;
+			margin-bottom: 6px;
+			color: #333;
+		}
+
+		.input {
+			max-width: 100%;
+		}
+
+		&.halfWidth {
+			max-width: 110px;
+		}
 	}
 }

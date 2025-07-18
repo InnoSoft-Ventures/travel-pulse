@@ -1,2 +1,2 @@
-export * from './payment-card';
-export * from './paypal';
+export * from './payment-methods';
+export * from './order-summary';

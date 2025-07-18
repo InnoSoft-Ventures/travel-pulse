@@ -1,0 +1,69 @@
+'use client';
+import React, { useState } from 'react';
+import styles from './styles.module.scss';
+import { PaymentCard } from '../payment-card';
+import { Paypal } from '../paypal';
+import { Button, Checkbox, Title } from '../../common';
+import Link from 'next/link';
+
+export const PaymentMethods = () => {
+	const [selectedMethod, setSelectedMethod] = useState<
+		'card' | 'paypal' | null
+	>(null);
+
+	return (
+		<>
+			<div>
+				<Title size="size16">Payment Option</Title>
+				<div className={styles.choosePaymentMethodTxt}>
+					You can choose or change the payment method to complete your
+					order.
+				</div>
+
+				<div className={styles.paymentMethodsContainer}>
+					<div
+						className={styles.paymentMethod}
+						onClick={() => setSelectedMethod('card')}
+					>
+						<PaymentCard selected={selectedMethod === 'card'} />
+					</div>
+
+					<div
+						className={styles.paymentMethod}
+						onClick={() => setSelectedMethod('paypal')}
+					>
+						<Paypal selected={selectedMethod === 'paypal'} />
+					</div>
+				</div>
+			</div>
+
+			<div className={styles.securityInfo}>
+				<ul>
+					<li className={styles.compatibilityCheck}>
+						<span className={styles.checkboxWrapper}>
+							<Checkbox />
+						</span>{' '}
+						Before completing this order, please confirm your device
+						is eSIM compatible and network-unlocked.{' '}
+						<Link href="/learn-more">Learn More</Link>
+					</li>
+					<li className={styles.termsNotice}>
+						By clicking <span>Pay</span>, you agree to our{' '}
+						<Link href="/terms">Terms of Service</Link> and{' '}
+						<Link href="/privacy">Privacy Policy</Link>.
+					</li>
+				</ul>
+			</div>
+
+			<div className={styles.payButtonContainer}>
+				<Button size="lg" fullWidth>
+					Pay £12.54
+				</Button>
+			</div>
+
+			<div className={styles.sslNotice}>
+				All transactions are secure and encrypted via SSL encryption
+			</div>
+		</>
+	);
+};
