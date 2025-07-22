@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './how-it-works.module.scss';
 import { Curve } from '../curve';
 import { Button, Title } from '../common';
-import { SectionCard } from '../SectionCard';
+import { SectionCard } from '../section-card';
 import MapIcon from '../../assets/map.svg';
 import QRcodeIcon from '../../assets/qr-code.svg';
 import NetworkIcon from '../../assets/network.svg';

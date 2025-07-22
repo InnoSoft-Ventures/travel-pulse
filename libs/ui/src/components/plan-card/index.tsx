@@ -1,16 +1,24 @@
+'use client';
 import React from 'react';
 import { Button } from '../common';
 import styles from './plan-card.module.scss';
 import Network5GIcon from '../../assets/network-5g.svg';
 import { PackageInterface } from '@travelpulse/interfaces';
+import { useRouter } from 'next/navigation';
+import { addToCart, useAppDispatch } from '@travelpulse/state';
+import { DATE_FORMAT, dateJs } from '@travelpulse/utils';
 
 interface PlanCardProps {
 	packageDetails: PackageInterface;
 	showPlanDetails: () => void;
+	startDate: dateJs.Dayjs;
 }
 
 export function PlanCard(props: PlanCardProps) {
-	const { packageDetails, showPlanDetails } = props;
+	const { packageDetails, showPlanDetails, startDate } = props;
+
+	const router = useRouter();
+	const dispatch = useAppDispatch();
 
 	let title = '';
 
@@ -31,6 +39,21 @@ export function PlanCard(props: PlanCardProps) {
 			packageDetails.countries.length > 1
 				? `${packageDetails.countries.length} countries`
 				: 'No coverage';
+	}
+
+	function onBuyNow() {
+		console.log('Buy Now clicked for:', packageDetails.title);
+
+		// Add the package to the cart
+		dispatch(
+			addToCart({
+				packageItem: packageDetails,
+				startDate: startDate.format(DATE_FORMAT),
+			})
+		);
+
+		// Redirect to the checkout page
+		router.push('/checkout');
 	}
 
 	return (
@@ -79,7 +102,9 @@ export function PlanCard(props: PlanCardProps) {
 					>
 						Plan details
 					</button>
-					<Button className={styles.buyNowBtn}>Buy Now</Button>
+					<Button className={styles.buyNowBtn} onClick={onBuyNow}>
+						Buy Now
+					</Button>
 				</div>
 			</div>
 		</div>

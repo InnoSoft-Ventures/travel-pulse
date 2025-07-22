@@ -112,6 +112,7 @@ export default function PlanList({
 								key={`package-${plan.packageId}`}
 								packageDetails={plan}
 								showPlanDetails={() => handlePlanDetails(plan)}
+								startDate={startDate}
 							/>
 						))}
 					</div>

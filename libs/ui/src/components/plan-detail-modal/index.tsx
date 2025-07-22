@@ -5,8 +5,9 @@ import { Button, Counter, DatePicker, Modal } from '../common';
 import styles from './plan-detail-modal.module.scss';
 import { Countries } from '../countries';
 import { PackageInterface } from '@travelpulse/interfaces';
-import { updateDates, useAppDispatch } from '@travelpulse/state';
-import { dateJs, DateRange } from '@travelpulse/utils';
+import { addToCart, updateDates, useAppDispatch } from '@travelpulse/state';
+import { DATE_FORMAT, dateJs, DateRange } from '@travelpulse/utils';
+import { useRouter } from 'next/navigation';
 
 interface PlanDetailModalProps {
 	open: boolean;
@@ -25,6 +26,7 @@ function PlanDetailModal({
 }: PlanDetailModalProps) {
 	const [quantity, setQuantity] = useState<number>(1);
 	const dispatch = useAppDispatch();
+	const router = useRouter();
 
 	const title = useMemo(() => {
 		if (data.continent?.name) return data.continent.name;
@@ -64,6 +66,21 @@ function PlanDetailModal({
 		const price = Number(data.price || 0);
 		return `$${(price * quantity).toFixed(2)} USD`;
 	}, [data.price, quantity]);
+
+	function onBuyNow() {
+		console.log('Modal -> Buy Now clicked for:', data.title);
+
+		// Add the package to the cart
+		dispatch(
+			addToCart({
+				packageItem: data,
+				startDate: startDate.format(DATE_FORMAT),
+			})
+		);
+
+		// Redirect to the checkout page
+		router.push('/checkout');
+	}
 
 	return (
 		<Modal
@@ -197,7 +214,9 @@ function PlanDetailModal({
 							<span>Total:</span>
 							<strong>{total}</strong>
 						</div>
-						<Button className={styles.buyButton}>Buy Now</Button>
+						<Button className={styles.buyButton} onClick={onBuyNow}>
+							Buy Now
+						</Button>
 					</div>
 				</div>
 			</div>

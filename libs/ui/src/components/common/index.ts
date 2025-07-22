@@ -9,3 +9,5 @@ export * from './modal';
 export * from './counter';
 export * from './icon';
 export * from './checkbox';
+export * from './dropdown';
+export * from './avatar';

@@ -1,18 +1,35 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
 import { PaymentCard } from '../payment-card';
 import { Paypal } from '../paypal';
 import { Button, Checkbox, Title } from '../../common';
 import Link from 'next/link';
 
-export const PaymentMethods = () => {
+interface PaymentMethodsProps {
+	currency: string;
+	total: number;
+}
+
+export const PaymentMethods = ({ currency, total }: PaymentMethodsProps) => {
 	const [selectedMethod, setSelectedMethod] = useState<
 		'card' | 'paypal' | null
 	>(null);
+	const [isCardValid, setIsCardValid] = useState(false);
+	const [isEsimCompatible, setIsEsimCompatible] = useState(false);
+	const [isPayButtonEnabled, setIsPayButtonEnabled] = useState(false);
+
+	useEffect(() => {
+		const isPaypalSelected = selectedMethod === 'paypal';
+		const isCardSelectedAndValid = selectedMethod === 'card' && isCardValid;
+
+		setIsPayButtonEnabled(
+			isEsimCompatible && (isPaypalSelected || isCardSelectedAndValid)
+		);
+	}, [selectedMethod, isCardValid, isEsimCompatible]);
 
 	return (
-		<>
+		<form>
 			<div>
 				<Title size="size16">Payment Option</Title>
 				<div className={styles.choosePaymentMethodTxt}>
@@ -25,7 +42,10 @@ export const PaymentMethods = () => {
 						className={styles.paymentMethod}
 						onClick={() => setSelectedMethod('card')}
 					>
-						<PaymentCard selected={selectedMethod === 'card'} />
+						<PaymentCard
+							selected={selectedMethod === 'card'}
+							onValidityChange={setIsCardValid}
+						/>
 					</div>
 
 					<div
@@ -41,7 +61,13 @@ export const PaymentMethods = () => {
 				<ul>
 					<li className={styles.compatibilityCheck}>
 						<span className={styles.checkboxWrapper}>
-							<Checkbox />
+							<Checkbox
+								id="esim-compatibility"
+								checked={isEsimCompatible}
+								onChange={(e) =>
+									setIsEsimCompatible(e.target.checked)
+								}
+							/>
 						</span>{' '}
 						Before completing this order, please confirm your device
 						is eSIM compatible and network-unlocked.{' '}
@@ -56,14 +82,21 @@ export const PaymentMethods = () => {
 			</div>
 
 			<div className={styles.payButtonContainer}>
-				<Button size="lg" fullWidth>
-					Pay £12.54
+				<Button
+					size="lg"
+					fullWidth
+					id="payment-button"
+					type="submit"
+					disabled={!isPayButtonEnabled}
+				>
+					Pay {currency}
+					{total}
 				</Button>
 			</div>
 
 			<div className={styles.sslNotice}>
 				All transactions are secure and encrypted via SSL encryption
 			</div>
-		</>
+		</form>
 	);
 };

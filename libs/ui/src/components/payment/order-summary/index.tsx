@@ -2,44 +2,42 @@
 
 import React from 'react';
 import styles from './order-summary.module.scss';
-
-interface PlanItem {
-	flag: string;
-	name: string;
-	data: string;
-	validity: string;
-	startDate: string;
-	originalPrice?: string;
-	finalPrice: string;
-}
+import { CartItem } from '@travelpulse/interfaces';
+import { dateJs } from '@travelpulse/utils';
+import Image from 'next/image';
 
 interface OrderSummaryProps {
-	plans: PlanItem[];
-	subtotal: string;
-	discount: string;
-	bundleDiscount: string;
-	total: string;
-	currency?: string;
+	cartItems: CartItem[];
+	total: number;
+	currency: string;
 }
 
-export function OrderSummary({
-	plans,
-	subtotal,
-	discount,
-	bundleDiscount,
-	total,
-	currency = 'GBP',
-}: OrderSummaryProps) {
+export function OrderSummary(props: OrderSummaryProps) {
+	const { cartItems, total, currency } = props;
+
+	const discount = '£1.05';
+	const bundleDiscount = '£1.25';
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.planList}>
-				{plans.map((plan, i) => (
+				{cartItems.map((plan, i) => (
 					<div
 						className={styles.planCard}
 						key={`order-summary-plan-${i}`}
 					>
 						<div className={styles.planHeader}>
-							<span className={styles.flag}>{plan.flag}</span>
+							{plan.flag && (
+								<div className={styles.flag}>
+									<Image
+										src={plan.flag}
+										alt={`${plan.name} flag`}
+										width={36}
+										height={20}
+										className={styles.flagImage}
+									/>
+								</div>
+							)}
 							<div>
 								{plan.name}{' '}
 								<span className={styles.eSim}>eSIM</span>
@@ -57,7 +55,9 @@ export function OrderSummary({
 							</li>
 							<li>
 								<span>Starting Date:</span>{' '}
-								<strong>{plan.startDate}</strong>
+								<strong>
+									{dateJs(plan.startDate).format('DD MMM')}
+								</strong>
 							</li>
 							<li>
 								Item Total:{' '}
@@ -68,7 +68,7 @@ export function OrderSummary({
 										</div>
 									)}{' '}
 									<span className={styles.price}>
-										{plan.finalPrice}
+										{`${currency}${plan.finalPrice}`}
 									</span>
 								</div>
 							</li>
@@ -80,7 +80,7 @@ export function OrderSummary({
 			<div className={styles.summary}>
 				<div className={styles.row}>
 					<span>Subtotal</span>
-					<span>{subtotal}</span>
+					<span>{`${currency}${total}`}</span>
 				</div>
 				<div className={styles.row}>
 					<span className={styles.discount}>Discount</span>
@@ -97,7 +97,8 @@ export function OrderSummary({
 				<div className={styles.totalRow}>
 					<span>Total</span>
 					<span>
-						{total} {currency}
+						{currency}
+						{total}
 					</span>
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CreditCardIcon from '../../../assets/credit-card.svg';
 
 import styles from './style.module.scss';
@@ -7,9 +7,44 @@ import { Input } from '../../common';
 
 interface PaymentCardProps {
 	selected?: boolean;
+	onValidityChange: (isValid: boolean) => void;
 }
 
-export const PaymentCard = ({ selected = false }: PaymentCardProps) => {
+export const PaymentCard = ({
+	selected = false,
+	onValidityChange,
+}: PaymentCardProps) => {
+	const [cardNumber, setCardNumber] = useState('');
+	const [name, setName] = useState('');
+	const [expiryDate, setExpiryDate] = useState('');
+	const [cvv, setCvv] = useState('');
+
+	useEffect(() => {
+		if (selected) {
+			const isCardNumberValid =
+				cardNumber.replace(/\s/g, '').length >= 12;
+			const isNameValid = name.trim().length > 0;
+			const isExpiryDateValid = /^(0[1-9]|1[0-2])\s*\/\s*\d{2}$/.test(
+				expiryDate
+			);
+			const isCvvValid = /^\d{3,4}$/.test(cvv);
+
+			console.log({
+				isCardNumberValid,
+				isNameValid,
+				isExpiryDateValid,
+				isCvvValid,
+			});
+
+			onValidityChange(
+				isCardNumberValid &&
+					isNameValid &&
+					isExpiryDateValid &&
+					isCvvValid
+			);
+		}
+	}, [cardNumber, name, expiryDate, cvv, selected, onValidityChange]);
+
 	return (
 		<div className={styles.paymentCardContainer} data-selected={selected}>
 			<div className={styles.inner}>
@@ -29,7 +64,7 @@ export const PaymentCard = ({ selected = false }: PaymentCardProps) => {
 				<>
 					<hr className={styles.divider} />
 
-					<form className={styles.form}>
+					<div className={styles.form}>
 						<div className={styles.formGroup}>
 							<label htmlFor="cardNumber">Card Number</label>
 							<Input
@@ -38,6 +73,8 @@ export const PaymentCard = ({ selected = false }: PaymentCardProps) => {
 								id="cardNumber"
 								placeholder="1234 1234 1234 1234"
 								containerClassName={styles.input}
+								value={cardNumber}
+								onChange={(e) => setCardNumber(e.target.value)}
 							/>
 						</div>
 						<div className={styles.row}>
@@ -48,6 +85,8 @@ export const PaymentCard = ({ selected = false }: PaymentCardProps) => {
 									type="text"
 									id="name"
 									placeholder="Card name"
+									value={name}
+									onChange={(e) => setName(e.target.value)}
 								/>
 							</div>
 							<div
@@ -62,6 +101,10 @@ export const PaymentCard = ({ selected = false }: PaymentCardProps) => {
 									type="text"
 									id="expiryDate"
 									placeholder="MM / YY"
+									value={expiryDate}
+									onChange={(e) =>
+										setExpiryDate(e.target.value)
+									}
 								/>
 							</div>
 							<div
@@ -76,10 +119,12 @@ export const PaymentCard = ({ selected = false }: PaymentCardProps) => {
 									type="text"
 									id="cvv"
 									placeholder="CVV"
+									value={cvv}
+									onChange={(e) => setCvv(e.target.value)}
 								/>
 							</div>
 						</div>
-					</form>
+					</div>
 				</>
 			)}
 		</div>

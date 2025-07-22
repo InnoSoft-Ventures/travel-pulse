@@ -8,6 +8,7 @@ import auth from './features/auth.slice';
 import masterData from './features/masterdata.slice';
 import products from './features/products.slice';
 import metaData from './features/metadata.slice';
+import cart from './features/cart.slice';
 
 const persistedProductsReducer = persistReducer(
 	{
@@ -24,4 +25,5 @@ export const rootReducer = combineReducers({
 	masterData,
 	products: persistedProductsReducer,
 	metaData,
+	cart,
 });

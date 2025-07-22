@@ -54,9 +54,9 @@ export interface OperatorCoverage {
 
 // Package details
 export interface PackageInterface {
-	packageId: number;
+	packageId: string;
 	title: string;
-	price: string;
+	price: number;
 	/** Amount of data in digits, i.e 2048 ~ 2GB */
 	amount: number;
 	/** Amount of data in units, e.g 2GB */

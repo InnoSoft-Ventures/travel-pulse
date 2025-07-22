@@ -34,6 +34,8 @@ function DestinationCards(props: DestinationCardsProps) {
 	const [selectedPackage, setSelectedPackage] =
 		useState<PackageInterface | null>(null);
 	const { dates } = useAppSelector((state) => state.metaData);
+	const startDate = dateJs(dates.start);
+	const endDate = dateJs(dates.end);
 
 	return (
 		<div
@@ -91,6 +93,7 @@ function DestinationCards(props: DestinationCardsProps) {
 						<PlanCard
 							key={`search-result-pkg-${pkg.packageId}-${index}`}
 							packageDetails={pkg}
+							startDate={startDate}
 							showPlanDetails={() => setSelectedPackage(pkg)}
 						/>
 					);
@@ -100,8 +103,8 @@ function DestinationCards(props: DestinationCardsProps) {
 				<PlanDetailModal
 					open={!!selectedPackage}
 					data={selectedPackage}
-					startDate={dateJs(dates.start)}
-					endDate={dateJs(dates.end)}
+					startDate={startDate}
+					endDate={endDate}
 					onClose={() => setSelectedPackage(null)}
 				/>
 			)}

@@ -19,7 +19,7 @@ export * from './plan-detail-modal';
 export * from './google-login';
 export * from './search-and-calendar';
 export * from './curve';
-export * from './SectionCard';
+export * from './section-card';
 export * from './testimonial';
 export * from './how-it-works';
 export * from './payment';

@@ -30,9 +30,10 @@ const PurgeStoreButton: React.FC<PurgeStoreButtonProps> = ({ onPurge }) => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			const key = e.key;
 			if (
-				key === 'Shift' ||
-				key.toUpperCase() === 'P' ||
-				key.toUpperCase() === 'G'
+				key &&
+				(key === 'Shift' ||
+					key.toUpperCase() === 'P' ||
+					key.toUpperCase() === 'G')
 			) {
 				setKeyState((prev) => ({
 					...prev,
@@ -43,9 +44,10 @@ const PurgeStoreButton: React.FC<PurgeStoreButtonProps> = ({ onPurge }) => {
 		const handleKeyUp = (e: KeyboardEvent) => {
 			const key = e.key;
 			if (
-				key === 'Shift' ||
-				key.toUpperCase() === 'P' ||
-				key.toUpperCase() === 'G'
+				key &&
+				(key === 'Shift' ||
+					key.toUpperCase() === 'P' ||
+					key.toUpperCase() === 'G')
 			) {
 				setKeyState((prev) => ({
 					...prev,

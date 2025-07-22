@@ -61,3 +61,15 @@ export interface ItemState<T> {
 	status: StateStatus;
 	error: ErrorInstance;
 }
+
+export interface CartItem {
+	name: string;
+	packageId: string;
+	flag: string;
+	data: string;
+	validity: string;
+	startDate: string;
+	originalPrice?: number;
+	finalPrice: number;
+	quantity: number;
+}
