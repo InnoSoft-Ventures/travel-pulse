@@ -1,0 +1,9 @@
+.wifiIcon {
+	@apply text-indigo-600 mr-2 mt-[-1px];
+
+	&[data-active='false'] {
+		path {
+			stroke: #6b7280;
+		}
+	}
+}

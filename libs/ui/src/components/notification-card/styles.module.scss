@@ -1,0 +1,34 @@
+.notificationsCard {
+	@apply bg-white rounded-xl shadow-md p-5 space-y-4;
+
+	> h2 {
+		font-weight: 500;
+		font-size: 19px;
+		color: var(--dark-purple);
+	}
+
+	.notificationItem {
+		cursor: pointer;
+	}
+
+	.notificationMessage {
+		font-size: 14px;
+		font-weight: 500;
+		color: var(--dark-purple);
+		line-height: 1.5;
+		margin-bottom: 0.25rem;
+
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.notificationTimestamp {
+		font-size: 0.79rem;
+		line-height: 1.25rem;
+		color: var(--light-purple);
+	}
+}

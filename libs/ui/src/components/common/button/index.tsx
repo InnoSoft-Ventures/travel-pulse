@@ -10,7 +10,7 @@ import {
 const buttonVariants = cva(styles.btn, {
 	variants: {
 		variant: {
-			default: styles.default,
+			primary: styles.default,
 			outline: styles.outline,
 			secondary: styles.secondary,
 			link: styles.link,
@@ -22,7 +22,7 @@ const buttonVariants = cva(styles.btn, {
 		},
 	},
 	defaultVariants: {
-		variant: 'default',
+		variant: 'primary',
 		size: 'default',
 	},
 });

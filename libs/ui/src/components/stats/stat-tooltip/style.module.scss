@@ -1,0 +1,15 @@
+.statTooltip {
+	.statTooltipTitle {
+		color: rgb(107 114 128);
+		font-weight: 500;
+		font-size: 14px;
+	}
+
+	.statTooltipText {
+		font-size: 14px;
+		line-height: 16px;
+		color: var(--dark-purple);
+		font-weight: 600;
+		margin-top: 0.25rem;
+	}
+}

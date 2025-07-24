@@ -1,0 +1,13 @@
+.usageStatsContainer {
+	display: flex;
+	gap: 1.5rem;
+	flex-wrap: wrap;
+
+	&.horizontal {
+		flex-direction: row;
+	}
+
+	&.vertical {
+		flex-direction: column;
+	}
+}

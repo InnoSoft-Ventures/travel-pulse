@@ -25,3 +25,7 @@ export * from './section-card';
 export * from './testimonial';
 export * from './how-it-works';
 export * from './payment';
+export * from './notification-card';
+export * from './stats';
+export * from './sim-card';
+export * from './my-esims';
