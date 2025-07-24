@@ -6,10 +6,12 @@ export * from './layout/top-nav';
 export * from './layout/destination-cards';
 export * from './layout/footer';
 export * from './layout/minimal-nav';
+export * from './layout/app-top-nav';
+export * from './layout/app-sidebar';
+export * from './layout/conditional-footer';
 
 export * from './destination-header';
 export * from './feature-card';
-export * from './logo';
 export * from './hexagon';
 export * from './destination-card';
 export * from './region';

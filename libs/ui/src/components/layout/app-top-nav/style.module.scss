@@ -1,0 +1,17 @@
+.appTopBar {
+	@apply bg-white shadow-sm px-6 py-3 flex items-center justify-between;
+}
+
+.userProfileTrigger {
+	outline: none;
+
+	&[data-state='open'] {
+		> div {
+			background-color: #e5e7eb;
+		}
+	}
+}
+
+.dropdownMenuContent {
+	min-width: 170px;
+}

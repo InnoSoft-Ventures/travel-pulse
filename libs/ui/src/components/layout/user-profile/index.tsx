@@ -14,7 +14,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
 }) => {
 	return (
 		<div className={styles.userProfile}>
-			<Avatar src={avatarUrl} alt={`${name}'s avatar`} size={40} />
+			<Avatar src={avatarUrl} alt={`${name}'s avatar`} size={30} />
 			<span className={styles.userName}>{name}</span>
 			<ArrowIcon className={styles.dropdownIcon} />
 		</div>

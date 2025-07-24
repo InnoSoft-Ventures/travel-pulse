@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import styles from './footer.module.scss';
-import { Logo } from '../../logo';
+import { Logo } from '../../common/logo';
 import { useTheme } from '../../../theme-context';
 import { cn } from '../../../utils';
 

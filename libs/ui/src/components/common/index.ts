@@ -11,3 +11,5 @@ export * from './icon';
 export * from './checkbox';
 export * from './dropdown';
 export * from './avatar';
+export * from './nav-link';
+export * from './logo';

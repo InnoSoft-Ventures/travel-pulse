@@ -3,9 +3,10 @@
 	align-items: center;
 	gap: 12px;
 	padding: 8px;
-	border-radius: 24px;
-	background-color: #f3f4f6;
+	padding-right: 10px;
+	border-radius: 8px;
 	cursor: pointer;
+	background-color: rgb(233 235 239);
 	transition: background-color 0.2s ease-in-out;
 
 	&:hover {
@@ -13,13 +14,17 @@
 	}
 
 	.userName {
-		font-weight: 500;
-		color: #1f2937;
+		font-weight: 400;
+		color: var(--dark-purple);
+		font-size: 14px;
 	}
 
 	.dropdownIcon {
-		width: 16px;
-		height: 16px;
-		color: #6b7280;
+		rotate: 90deg;
+		color: var(--dark-purple);
+
+		path {
+			stroke-width: 1.5px;
+		}
 	}
 }

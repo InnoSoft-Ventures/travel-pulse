@@ -22,7 +22,10 @@
 		["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
 		["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
 	],
-	"css.customData": [".vscode/tailwind.json"],
+	"tailwindCSS.experimental.configFile": "./apps/client/tailwind.config.ts",
+	"tailwindCSS.includeLanguages": {
+		"scss": "css"
+	},
 	"github.copilot.editor.enableAutoCompletions": true,
 	"typescript.preferences.importModuleSpecifier": "relative",
 	"javascript.preferences.importModuleSpecifier": "relative"

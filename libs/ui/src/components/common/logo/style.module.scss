@@ -16,7 +16,8 @@
 		color: var(--dark-purple);
 	}
 
-	.logoName {
+	.logoName,
+	.logoDivider {
 		font-size: 18px;
 		font-weight: 600;
 		margin-right: 4px;
@@ -25,6 +26,10 @@
 		&.dark {
 			padding-left: 38px !important;
 		}
+	}
+
+	.logoDivider {
+		padding-left: 0;
 	}
 
 	.logoSlogan {

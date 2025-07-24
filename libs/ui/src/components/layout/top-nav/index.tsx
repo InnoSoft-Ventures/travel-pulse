@@ -5,7 +5,7 @@ import styles from './top-nav.module.scss';
 import { Button } from '../../common/button';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Logo } from '../../logo';
+import { Logo } from '../../common/logo';
 import { sessionValid, useAppSelector } from '@travelpulse/state';
 
 const TopNav = () => {

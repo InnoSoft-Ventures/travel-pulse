@@ -1,41 +1,45 @@
+'use client';
 import React from 'react';
-import { Logo } from '../../common/logo';
-import styles from './styles.module.scss';
+import { Bell } from 'lucide-react';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from '../../common/dropdown';
-import { UserProfile } from '../user-profile';
+} from '../../common';
 import Link from 'next/link';
-import { BellIcon } from 'lucide-react';
+import { UserProfile } from '../user-profile';
+import styles from './style.module.scss';
 
-export const MinimalNav = () => {
-	// Mock user data - replace with actual user data from context or props
+export function AppTopBar() {
 	const user = {
 		name: 'Martin Rollins',
 		avatarUrl: 'https://randomuser.me/api/portraits/men/19.jpg',
 	};
 
 	return (
-		<nav className={styles.minimalNav}>
-			<div className={styles.inner}>
-				<div>
-					<Logo color="dark" variant="secondary" />
-				</div>
-				<div className={styles.right}>
-					<div className={styles.currency}>USD ($)</div>
-					<div className={styles.notificationIcon}>
-						<BellIcon />
-					</div>
+		<header className={styles.appTopBar}>
+			<h1 className="text-lg font-semibold">Welcome back, Martin</h1>
+
+			<div className="flex items-center gap-6 relative">
+				<button className="text-gray-600 hover:text-indigo-600">
+					<Bell size={20} />
+				</button>
+
+				<div className="relative">
 					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<div style={{ cursor: 'pointer' }}>
+						<DropdownMenuTrigger
+							asChild
+							className={styles.userProfileTrigger}
+						>
+							<button type="button">
 								<UserProfile {...user} />
-							</div>
+							</button>
 						</DropdownMenuTrigger>
-						<DropdownMenuContent align="end">
+						<DropdownMenuContent
+							className={styles.dropdownMenuContent}
+							align="end"
+						>
 							<DropdownMenuItem>
 								<Link href="/dashboard">Dashboard</Link>
 							</DropdownMenuItem>
@@ -52,6 +56,6 @@ export const MinimalNav = () => {
 					</DropdownMenu>
 				</div>
 			</div>
-		</nav>
+		</header>
 	);
-};
+}
