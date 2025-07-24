@@ -13,3 +13,4 @@ export * from './dropdown';
 export * from './avatar';
 export * from './nav-link';
 export * from './logo';
+export * from './tabs';

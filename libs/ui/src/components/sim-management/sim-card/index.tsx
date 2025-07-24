@@ -1,25 +1,11 @@
 'use client';
 import React from 'react';
-import { Button } from '../common';
+import { Button } from '../../common';
 import styles from './style.module.scss';
 
-import WifiIcon from '../../assets/wifi.svg';
-import PhoneIcon from '../../assets/phone.svg';
-
-interface SimData {
-	providerName: string;
-	planName: string;
-	phoneNumber: string;
-	dataLeft: string;
-	expiresOn: string;
-	isActive: boolean;
-}
-
-export interface SimCardProps {
-	data: SimData;
-	onRecharge?: () => void;
-	onViewDetails?: () => void;
-}
+import WifiIcon from '../../../assets/wifi.svg';
+import PhoneIcon from '../../../assets/phone.svg';
+import { SimCardProps } from '../sim-interface';
 
 export const SimCard: React.FC<SimCardProps> = ({
 	data,

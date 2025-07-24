@@ -1,12 +1,8 @@
 'use client';
 import React from 'react';
-import { SimCard, SimCardProps } from '../sim-card';
-import { Title } from '../common';
-
-export interface SimInfo
-	extends Omit<SimCardProps['data'], 'onRecharge' | 'onViewDetails'> {
-	id: string;
-}
+import { SimCard } from '../sim-card';
+import { Title } from '../../common';
+import { SimInfo } from '../sim-interface';
 
 interface MyESimsProps {
 	sims: SimInfo[];
@@ -22,8 +18,9 @@ export const MyESims: React.FC<MyESimsProps> = ({ sims }) => {
 	};
 
 	return (
-		<div className="space-y-4">
+		<div className="space-y-4 pt-9">
 			<Title size="size19">My eSIMs</Title>
+
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
 				{sims.map((sim) => (
 					<SimCard
