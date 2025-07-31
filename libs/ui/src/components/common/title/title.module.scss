@@ -12,6 +12,10 @@
 		color: var(--light-grey);
 	}
 
+	&.tertiaryColor {
+		color: var(--light-purple);
+	}
+
 	&.dualPrimaryColor > span {
 		color: var(--purple);
 	}
@@ -20,8 +24,8 @@
 		color: var(--dark-purple);
 	}
 
-	&.size20 {
-		font-size: 20px;
+	&.size14 {
+		font-size: 14px;
 		font-weight: 400;
 	}
 
@@ -33,6 +37,11 @@
 	&.size19 {
 		font-size: 19px;
 		font-weight: 500;
+	}
+
+	&.size20 {
+		font-size: 20px;
+		font-weight: 400;
 	}
 
 	&.size35 {

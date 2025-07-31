@@ -1,0 +1,38 @@
+.countryData {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+
+	.flagContainer {
+		width: 36px;
+		height: 20px;
+
+		.flag {
+			width: 36px;
+			height: 20px;
+			object-fit: cover;
+		}
+	}
+
+	.countryName {
+		flex: 1;
+
+		> div {
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+		}
+	}
+}
+
+.countryPicker {
+	flex-direction: column;
+	display: flex;
+	gap: 0.5rem;
+
+	.label {
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+		font-weight: 600;
+	}
+}

@@ -3,6 +3,7 @@ import React from 'react';
 import ReactSelect, {
 	components,
 	ControlProps,
+	CSSObjectWithLabel,
 	OptionProps,
 	Props as ReactSelectProps,
 } from 'react-select';
@@ -19,7 +20,7 @@ export interface SelectItem<T = any> {
 	data?: T;
 }
 
-export type ControlVariant = 'primary' | 'secondary';
+export type ControlVariant = 'primary' | 'secondary' | 'tertiary';
 
 interface ExtendedProps {
 	startContent?: React.ReactNode;
@@ -60,15 +61,17 @@ export interface SelectProps
 		ExtendedProps {
 	options?: SelectItem[];
 	controlVariant?: ControlVariant;
+	radius?: 'sm' | 'md';
 	hideDropdownIndicator?: boolean;
 	hideIndicatorSeparator?: boolean;
 	loadOptions?: (inputValue: string) => Promise<SelectItem[]>;
 }
 
-const Select = (props: SelectProps) => {
+export const Select = (props: SelectProps) => {
 	const {
 		options = [],
 		loadOptions,
+		radius,
 		hideDropdownIndicator = false,
 		hideIndicatorSeparator = false,
 		controlVariant = 'primary',
@@ -115,20 +118,50 @@ const Select = (props: SelectProps) => {
 	const SelectComponent = loadOptions ? AsyncSelect : ReactSelect;
 
 	let customStyles: typeof selectStyles = selectStyles;
+	let styleObj: CSSObjectWithLabel | undefined;
 
 	if (controlVariant === 'secondary') {
+		styleObj = {
+			boxShadow: '0 2px 4px rgba(0, 0, 0, 0.25)',
+			backgroundColor: '#fffefe',
+			border: '1px solid #fff',
+			'&:hover': {
+				border: '1px solid #fff',
+				backgroundColor: '#fffefe',
+			},
+		};
+	}
+
+	if (controlVariant === 'tertiary') {
+		styleObj = {
+			boxShadow: '0 2px 4px rgba(0, 0, 0, 0.15)',
+			backgroundColor: '#fffefe',
+			border: '1px solid var(--dark-purple)',
+			'&:focus': {
+				borderColor:
+					'rgb(76.3762376238, 76.3762376238, 126.6237623762)',
+			},
+			'&:hover': {
+				border: '1px solid rgb(76.3762376238, 76.3762376238, 126.6237623762)',
+				backgroundColor: '#fffefe',
+			},
+		};
+	}
+
+	if (radius === 'sm') {
+		styleObj = {
+			...styleObj,
+			borderRadius: '8px',
+		};
+	}
+
+	if (styleObj) {
 		customStyles = {
 			...selectStyles,
 			control: (base) => ({
 				...base,
 				...controlCSSObject,
-				boxShadow: '0 2px 4px rgba(0, 0, 0, 0.25)',
-				backgroundColor: '#fffefe',
-				border: '1px solid #fff',
-				'&:hover': {
-					border: '1px solid #fff',
-					backgroundColor: '#fffefe',
-				},
+				...styleObj,
 			}),
 		};
 	}
@@ -151,5 +184,3 @@ const Select = (props: SelectProps) => {
 		/>
 	);
 };
-
-export default Select;

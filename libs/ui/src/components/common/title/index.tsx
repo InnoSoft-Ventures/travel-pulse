@@ -8,12 +8,14 @@ const titleVariants = cva(styles.mainTitle, {
 		color: {
 			primary: styles.defaultColor,
 			secondary: styles.secondaryColor,
+			tertiary: styles.tertiaryColor,
 		},
 		dualColor: {
 			primary: styles.dualPrimaryColor,
 			secondary: styles.dualSecondaryColor,
 		},
 		size: {
+			size14: styles.size14,
 			size16: styles.size16,
 			size19: styles.size19,
 			size20: styles.size20,
@@ -38,6 +40,7 @@ interface TitleProps
 	extends Omit<React.HTMLAttributes<HTMLDivElement>, 'color' | 'content'>,
 		VariantProps<typeof titleVariants> {
 	children: React.ReactNode;
+	isSubTitle?: boolean;
 	fontWeight?: React.CSSProperties['fontWeight'];
 }
 
@@ -55,7 +58,7 @@ interface TitleProps
  *   - Default: `undefined`
  *
  * - `size` (optional): Specifies the size of the title.
- *   - Options: `'size16' | 'size19' | 'size20' | 'size35' | 'size40' | 'size45'`
+ *   - Options: `'size14', 'size16' | 'size19' | 'size20' | 'size35' | 'size40' | 'size45'`
  *   - Default: `'size40'`
  *
  * - `position` (optional): Specifies the alignment of the title.
@@ -76,6 +79,7 @@ const Title = (props: TitleProps) => {
 		position,
 		dualColor,
 		fontWeight,
+		isSubTitle,
 		...rest
 	} = props;
 
@@ -83,6 +87,7 @@ const Title = (props: TitleProps) => {
 		<div
 			className={cn(
 				titleVariants({ color, size, dualColor, position }),
+				isSubTitle && styles.subTitle,
 				className
 			)}
 			style={{ fontWeight }}

@@ -13,6 +13,7 @@ const calendarVariants = cva(styles.inputContainer, {
 	variants: {
 		variant: {
 			default: styles.default,
+			primary: styles.primary,
 			secondary: styles.secondary,
 		},
 		size: {

@@ -12,16 +12,22 @@ const inputVariants = cva(styles.inputContainer, {
 	variants: {
 		variant: {
 			default: styles.default,
+			primary: styles.primary,
 			secondary: styles.secondary,
 		},
 		size: {
 			default: styles.defaultSize,
 			large: styles.largeSize,
 		},
+		radius: {
+			sm: styles.radiusSm,
+			md: styles.radiusMd,
+		},
 	},
 	defaultVariants: {
 		variant: 'default',
 		size: 'default',
+		radius: 'md',
 	},
 });
 
@@ -33,6 +39,7 @@ export interface InputProps
 		VariantProps<typeof inputVariants> {
 	inputClassName?: string;
 	containerClassName?: string;
+	label?: string;
 	type?: 'search' | 'text' | 'password' | 'email';
 	icon?: React.ReactNode;
 	lastIcon?: React.ReactNode;
@@ -49,7 +56,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 		containerClassName,
 		variant,
 		size,
+		radius,
 		error,
+		label,
+		disabled,
 		...rest
 	} = props;
 
@@ -59,29 +69,43 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
 	return (
 		<div className={cn(styles.container, containerClassName)}>
-			<label
-				htmlFor={id}
-				className={cn(
-					inputVariants({ variant, size }),
-					inputClassName,
-					type === 'password' ? styles.addPadding : ''
+			<div className={styles.inputWrapper}>
+				{label && (
+					<label className={styles.label} htmlFor={id}>
+						{label}
+					</label>
 				)}
-			>
-				{icon && <div>{icon}</div>}
-				<input type={inputType} id={id} ref={ref} {...rest} />
 
-				{type !== 'password' && lastIcon && <div>{lastIcon}</div>}
+				<div
+					className={cn(
+						inputVariants({ variant, size, radius }),
+						inputClassName,
+						type === 'password' ? styles.addPadding : ''
+					)}
+					aria-disabled={disabled}
+				>
+					{icon && <div>{icon}</div>}
+					<input
+						type={inputType}
+						id={id}
+						disabled={disabled}
+						ref={ref}
+						{...rest}
+					/>
 
-				{type === 'password' && (
-					<button
-						type="button"
-						className={styles.passwordIcon}
-						onClick={() => setShowPassword((prev) => !prev)}
-					>
-						{!showPassword ? <EyeOpened /> : <EyeClosed />}
-					</button>
-				)}
-			</label>
+					{type !== 'password' && lastIcon && <div>{lastIcon}</div>}
+
+					{type === 'password' && (
+						<button
+							type="button"
+							className={styles.passwordIcon}
+							onClick={() => setShowPassword((prev) => !prev)}
+						>
+							{!showPassword ? <EyeOpened /> : <EyeClosed />}
+						</button>
+					)}
+				</div>
+			</div>
 			{error && <div className={styles.error}>{error}</div>}
 		</div>
 	);

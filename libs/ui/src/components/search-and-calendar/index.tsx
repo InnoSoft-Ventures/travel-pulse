@@ -1,21 +1,16 @@
 'use client';
 import React, { useState } from 'react';
 import styles from './search-and-calendar.module.scss';
-import { Button, InputProps } from '../common';
+import { Button, CountryPicker, InputProps } from '../common';
 import LocationIcon from '../../assets/location.svg';
 import { Calendar } from '../common/calendar';
 import SearchIcon from '../../assets/white-search.svg';
 import { cn } from '../../utils';
-import {
-	setSearchData,
-	useAppDispatch,
-	useAppSelector,
-} from '@travelpulse/state';
+import { setSearchData, useAppDispatch } from '@travelpulse/state';
 import { Country, SelectedSearchData } from '@travelpulse/interfaces';
 import { DATE_FORMAT, dateJs, toast } from '@travelpulse/utils';
-import { getCountries, productSearch } from '@travelpulse/state/thunks';
-import { useFilter } from '@react-aria/i18n';
-import Select, { ControlVariant, SelectItem } from '../common/select';
+import { productSearch } from '@travelpulse/state/thunks';
+import { ControlVariant } from '../common/select';
 
 interface SearchAndCalendarProps {
 	className?: string;
@@ -26,7 +21,6 @@ interface SearchAndCalendarProps {
 const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 	const { className, inputVariant, controlVariant } = props;
 
-	const { status } = useAppSelector((state) => state.masterData.countries);
 	// const { searchData } = useAppSelector((state) => state.products);
 
 	const [selectedData, setSelectedData] = useState<SelectedSearchData>({
@@ -34,34 +28,9 @@ const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 		dates: null,
 	});
 
-	const { contains } = useFilter({ sensitivity: 'base' });
-
 	const dispatch = useAppDispatch();
 
-	const filterCountries = async (inputValue: string) => {
-		try {
-			const countryList = await dispatch(
-				getCountries(inputValue.trim())
-			).unwrap();
-
-			return countryList.map((country) => ({
-				value: country.id,
-				label: country.name,
-				data: country,
-			}));
-		} catch (error) {
-			console.error('Error fetching countries:', error);
-			return [];
-		}
-	};
-
-	const handleCountryChange = (selectedOption: SelectItem<Country>) => {
-		const selectedCountry = selectedOption.data;
-
-		if (!selectedCountry) {
-			return;
-		}
-
+	const handleCountryChange = (selectedCountry: Country) => {
 		setSelectedData((prev) => ({
 			...prev,
 			country: selectedCountry,
@@ -124,50 +93,20 @@ const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 	return (
 		<form onSubmit={handleFormSubmit}>
 			<div className={cn(styles.searchContainer, className)}>
-				<Select
+				<CountryPicker
 					startContent={
 						<div>
 							<LocationIcon />
 						</div>
 					}
-					required
-					cacheOptions
-					loadOptions={filterCountries}
-					defaultOptions
-					isSearchable
+					onData={handleCountryChange}
 					name="country-search"
 					placeholder="Where do you need internet?"
 					aria-label="Select an destination"
-					isLoading={status === 'loading'}
-					onChange={(selected) => {
-						handleCountryChange(selected as SelectItem<Country>);
-					}}
-					filterOption={(option, inputValue) => {
-						const countryOption = option as SelectItem<Country>;
-
-						return contains(countryOption.label, inputValue);
-					}}
-					hideDropdownIndicator
-					noOptionsMessage={() => 'No countries found'}
-					hideIndicatorSeparator
-					renderOption={(option: SelectItem<Country>) => {
-						return (
-							<div className={styles.countryData}>
-								<div className={styles.flagContainer}>
-									<img
-										src={option.data?.flag}
-										className={styles.flag}
-										alt={option.label}
-									/>
-								</div>
-								<div className={styles.countryName}>
-									<div>{option.label}</div>
-								</div>
-							</div>
-						);
-					}}
 					controlVariant={controlVariant}
+					required
 				/>
+
 				<Calendar
 					id="date-picker"
 					variant={inputVariant}

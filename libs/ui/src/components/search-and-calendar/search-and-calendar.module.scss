@@ -10,33 +10,6 @@
 	}
 }
 
-.countryData {
-	display: flex;
-	gap: 10px;
-	align-items: center;
-
-	.flagContainer {
-		width: 36px;
-		height: 20px;
-
-		.flag {
-			width: 36px;
-			height: 20px;
-			object-fit: cover;
-		}
-	}
-
-	.countryName {
-		flex: 1;
-
-		> div {
-			white-space: nowrap;
-			text-overflow: ellipsis;
-			overflow: hidden;
-		}
-	}
-}
-
 .inputWrapper[data-hover='true'] {
 	background-color: rgb(244, 244, 245);
 }
