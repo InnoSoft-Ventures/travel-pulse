@@ -20,7 +20,10 @@ export function AppSidebar() {
 				<NavLink href="/app/notifications">
 					<Bell size={18} /> Notifications
 				</NavLink>
-				<NavLink href="/app/settings/account">
+				<NavLink
+					href="/app/settings/account"
+					partialMatchValue="settings"
+				>
 					<Settings size={18} /> Settings
 				</NavLink>
 				<NavLink href="/app/support">

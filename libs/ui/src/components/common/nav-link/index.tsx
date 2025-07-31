@@ -7,16 +7,22 @@ interface NavLinkProps extends LinkProps {
 	children: React.ReactNode;
 	isActive?: boolean;
 	className?: string;
+	partialMatchValue?: string;
 }
 
 export const NavLink = ({
 	children,
 	isActive,
 	className,
+	partialMatchValue,
 	...rest
 }: NavLinkProps) => {
 	const pathName = usePathname();
-	const active = isActive || pathName === rest.href;
+	let active = isActive || pathName === rest.href;
+
+	if (partialMatchValue && pathName.includes(partialMatchValue)) {
+		active = true;
+	}
 
 	return (
 		<Link {...rest} className={className} data-active={active}>

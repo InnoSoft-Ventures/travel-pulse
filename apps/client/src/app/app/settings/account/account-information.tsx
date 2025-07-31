@@ -83,7 +83,7 @@ export const AccountInformation = () => {
 				<Button variant="outline" className="rounded-full px-6">
 					Cancel
 				</Button>
-				<Button className="rounded-full px-6 bg-gradient-to-b from-[#7C6BF7] to-[#5A44DB] text-white">
+				<Button disabled type="submit">
 					Save changes
 				</Button>
 			</div>

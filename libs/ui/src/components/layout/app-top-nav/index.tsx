@@ -65,7 +65,9 @@ export function AppTopBar() {
 								<Link href="/app">Dashboard</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem>
-								<Link href="/app/account">Profile</Link>
+								<Link href="/app/settings/account">
+									Profile
+								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuItem>
 								<Link href="/app/orders">Orders</Link>
