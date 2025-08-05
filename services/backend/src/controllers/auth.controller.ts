@@ -11,7 +11,18 @@ export const registerUser = async (req: Request, res: Response) => {
 };
 
 export const loginUser = async (req: Request, res: Response) => {
-	res.json(successResponse(await loginService(req.body)));
+	const data = await loginService(req.body);
+
+	const { token, user } = data;
+
+	res.cookie('token', token.accessToken, {
+		httpOnly: true,
+		secure: false, // ✅ for local dev only
+		sameSite: 'lax',
+		maxAge: 3600000, // 1 hour
+	});
+
+	res.json(successResponse({ user }));
 };
 
 // export const refreshToken = (req: any, res: any) => {

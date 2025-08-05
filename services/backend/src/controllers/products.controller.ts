@@ -466,6 +466,12 @@ export const searchProducts = async (req: Request, res: Response) => {
 		],
 	});
 
+	const results: PackageResults = {
+		packages: [],
+		destinationType: targetDestination,
+		travelDuration,
+	};
+
 	// Flatten packages and attach operator info, including additional features
 	const [packages] = await Promise.all(
 		operators.flatMap(async (operator) => {
@@ -473,11 +479,9 @@ export const searchProducts = async (req: Request, res: Response) => {
 		})
 	);
 
-	const results: PackageResults = {
-		packages: packages.filter((pkg) => Boolean(pkg)),
-		destinationType: targetDestination,
-		travelDuration,
-	};
+	if (packages) {
+		results.packages = packages.filter((pkg) => Boolean(pkg));
+	}
 
 	return res.json(successResponse(results));
 };

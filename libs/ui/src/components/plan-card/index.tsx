@@ -17,6 +17,8 @@ interface PlanCardProps {
 export function PlanCard(props: PlanCardProps) {
 	const { packageDetails, showPlanDetails, startDate } = props;
 
+	console.log('Start', startDate);
+
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 

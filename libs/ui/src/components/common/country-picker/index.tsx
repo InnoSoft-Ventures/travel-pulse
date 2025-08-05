@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '@travelpulse/state';
 import { getCountries } from '@travelpulse/state/thunks';
 
 import styles from './styles.module.scss';
+import { cn } from '../../../utils';
 
 interface CountryPickerProps {
 	startContent?: React.ReactNode;
@@ -21,10 +22,12 @@ interface CountryPickerProps {
 	controlVariant?: ControlVariant;
 	hideDropdownIndicator?: boolean;
 	onData: (country: Country) => void;
+	className?: string;
 }
 
 export const CountryPicker = (props: CountryPickerProps) => {
-	const { onData, label, id, hideDropdownIndicator, ...rest } = props;
+	const { onData, label, id, hideDropdownIndicator, className, ...rest } =
+		props;
 
 	const { contains } = useFilter({ sensitivity: 'base' });
 	const dispatch = useAppDispatch();
@@ -58,7 +61,7 @@ export const CountryPicker = (props: CountryPickerProps) => {
 	};
 
 	return (
-		<div className={styles.countryPicker}>
+		<div className={cn(styles.countryPicker, className)}>
 			{label && (
 				<label className={styles.label} htmlFor={id}>
 					{label}

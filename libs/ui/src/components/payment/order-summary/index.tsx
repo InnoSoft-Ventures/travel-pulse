@@ -5,6 +5,8 @@ import styles from './order-summary.module.scss';
 import { CartItem } from '@travelpulse/interfaces';
 import { dateJs } from '@travelpulse/utils';
 import Image from 'next/image';
+import { CopyIcon, TrashIcon } from 'lucide-react';
+import { removeFromCart, useAppDispatch } from '@travelpulse/state';
 
 interface OrderSummaryProps {
 	cartItems: CartItem[];
@@ -15,8 +17,18 @@ interface OrderSummaryProps {
 export function OrderSummary(props: OrderSummaryProps) {
 	const { cartItems, total, currency } = props;
 
+	const dispatch = useAppDispatch();
+
 	const discount = '£1.05';
 	const bundleDiscount = '£1.25';
+
+	const handleDelete = (index: number) => {
+		dispatch(removeFromCart(index));
+	};
+
+	// const handleCopy = (plan: PlanItem) => {
+	// 	setCartItems((prev) => [...prev, { ...plan }]);
+	// };
 
 	return (
 		<div className={styles.container}>
@@ -26,6 +38,27 @@ export function OrderSummary(props: OrderSummaryProps) {
 						className={styles.planCard}
 						key={`order-summary-plan-${i}`}
 					>
+						{/* Top-right action buttons */}
+						<div className={styles.actionButtons}>
+							<button
+								className={styles.copyBtn}
+								// onClick={() => handleCopy(plan)}
+								title="Duplicate"
+							>
+								<CopyIcon size={16} />
+							</button>
+
+							<span className={styles.divider} />
+
+							<button
+								className={styles.deleteBtn}
+								onClick={() => handleDelete(i)}
+								title="Remove"
+							>
+								<TrashIcon size={16} />
+							</button>
+						</div>
+
 						<div className={styles.planHeader}>
 							{plan.flag && (
 								<div className={styles.flag}>

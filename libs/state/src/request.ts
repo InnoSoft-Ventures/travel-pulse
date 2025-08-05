@@ -10,6 +10,7 @@ const axiosInstance = axios.create({
 	headers: {
 		'Content-Type': 'application/json',
 	},
+	withCredentials: true,
 	validateStatus: function (status) {
 		// Resolve only if the status code is less than 500
 		return status < 500;
@@ -18,12 +19,6 @@ const axiosInstance = axios.create({
 
 // Interceptor to attach the authorization token
 axiosInstance.interceptors.request.use((config) => {
-	const userSession = getUserFromLocalStorage();
-
-	if (userSession) {
-		config.headers.Authorization = `Bearer ${userSession.token}`;
-	}
-
 	return config;
 });
 
@@ -51,7 +46,7 @@ export const isLoggedIn = () => {
 
 	if (!userSession) return false;
 
-	return !!userSession.token;
+	return !!userSession;
 };
 
 /**

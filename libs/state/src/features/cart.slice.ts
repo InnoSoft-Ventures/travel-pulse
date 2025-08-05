@@ -35,7 +35,7 @@ const cartSlice = createSlice({
 
 			const cartItem: CartItem = {
 				packageId: packageItem.packageId,
-				name: `${name} eSIM`,
+				name: name,
 				flag:
 					packageItem.countries.length === 1
 						? packageItem.countries[0].flag
@@ -56,21 +56,16 @@ const cartSlice = createSlice({
 				state.items.list.push(cartItem);
 			}
 		},
-		removeFromCart: (
-			state,
-			action: PayloadAction<Pick<CartItem, 'packageId'>>
-		) => {
+		removeFromCart: (state, action: PayloadAction<number>) => {
 			state.items.list = state.items.list.filter(
-				(item) => item.packageId !== action.payload.packageId
+				(_, index) => index !== action.payload
 			);
 		},
 		updateQuantity: (
 			state,
-			action: PayloadAction<Pick<CartItem, 'packageId' | 'quantity'>>
+			action: PayloadAction<{ index: number; quantity: number }>
 		) => {
-			const item = state.items.list.find(
-				(item) => item.packageId === action.payload.packageId
-			);
+			const item = state.items.list[action.payload.index];
 			if (item) {
 				item.quantity = action.payload.quantity;
 			}

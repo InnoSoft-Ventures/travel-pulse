@@ -7,7 +7,12 @@ import { Calendar } from '../common/calendar';
 import SearchIcon from '../../assets/white-search.svg';
 import { cn } from '../../utils';
 import { setSearchData, useAppDispatch } from '@travelpulse/state';
-import { Country, SelectedSearchData } from '@travelpulse/interfaces';
+import {
+	Country,
+	SelectedSearchData,
+	UIPlanType,
+	UIPlanTypeMap,
+} from '@travelpulse/interfaces';
 import { DATE_FORMAT, dateJs, toast } from '@travelpulse/utils';
 import { productSearch } from '@travelpulse/state/thunks';
 import { ControlVariant } from '../common/select';
@@ -80,7 +85,8 @@ const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 
 			dispatch(
 				productSearch({
-					country: country.slug,
+					query: country.slug,
+					targetDestination: UIPlanTypeMap[UIPlanType.Local],
 					from: dateJs(startDate).format(DATE_FORMAT),
 					to: dateJs(endDate).format(DATE_FORMAT),
 				})
@@ -105,6 +111,8 @@ const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 					aria-label="Select an destination"
 					controlVariant={controlVariant}
 					required
+					hideDropdownIndicator
+					className={styles.countryPicker}
 				/>
 
 				<Calendar

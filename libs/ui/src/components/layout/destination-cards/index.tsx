@@ -37,6 +37,8 @@ function DestinationCards(props: DestinationCardsProps) {
 	const startDate = dateJs(dates.start);
 	const endDate = dateJs(dates.end);
 
+	console.log('selectedDates', dates);
+
 	return (
 		<div
 			className={cn(

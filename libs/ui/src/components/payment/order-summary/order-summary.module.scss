@@ -16,6 +16,7 @@
 	border-radius: 8px;
 	padding: 16px;
 	margin-bottom: 1rem;
+	position: relative;
 }
 
 .planHeader {
@@ -27,6 +28,42 @@
 
 	.eSim {
 		font-weight: 400;
+	}
+}
+
+.actionButtons {
+	position: absolute;
+	top: 19px;
+	right: 15px;
+	display: flex;
+	gap: 8px;
+}
+
+.divider {
+	width: 1px;
+	height: 16px;
+	background-color: #d1d5db;
+	border-radius: 1px;
+}
+
+.copyBtn,
+.deleteBtn {
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: #6b7280;
+	transition: color 0.2s ease-in-out;
+}
+
+.copyBtn {
+	&:hover {
+		color: var(--text-purple);
+	}
+}
+
+.deleteBtn {
+	&:hover {
+		color: #dc2626;
 	}
 }
 

@@ -14,7 +14,7 @@ const TopNav = () => {
 	const isLoggedIn = useAppSelector(sessionValid);
 
 	const onAuthNavigate = () => {
-		router.push(isLoggedIn ? '/dashboard' : '/auth/signin');
+		router.push(isLoggedIn ? '/app' : '/auth/signin');
 	};
 
 	return (

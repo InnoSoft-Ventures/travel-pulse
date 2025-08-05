@@ -17,7 +17,8 @@ import {
 } from '@travelpulse/interfaces/schemas';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
 import { useRouter } from 'next/navigation';
-import { toast } from '@travelpulse/utils';
+import { formatApiErrorDescription, toast } from '@travelpulse/utils';
+import { ErrorHandler } from '@travelpulse/interfaces';
 
 export default function SignupClient() {
 	const {
@@ -41,12 +42,11 @@ export default function SignupClient() {
 			// For now, redirect to the login page
 			router.push('/auth/signin');
 		} catch (error) {
+			console.error('Registration failed:', error);
 			toast.error({
 				title: 'Registration failed',
-				// @ts-ignore
-				description: error || 'Please try again later.',
+				description: formatApiErrorDescription(error as ErrorHandler),
 			});
-			console.error('Registration failed:', error);
 		}
 	};
 

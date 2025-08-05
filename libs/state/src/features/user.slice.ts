@@ -3,7 +3,6 @@ import { UserDataDAO } from '@travelpulse/interfaces';
 
 interface UserState {
 	account: UserDataDAO['user'];
-	token: UserDataDAO['token'];
 }
 
 const initialState: UserState = {
@@ -14,9 +13,6 @@ const initialState: UserState = {
 		email: '',
 		registrationDate: '',
 	},
-	token: {
-		accessToken: '',
-	},
 };
 
 const userSlice = createSlice({
@@ -25,21 +21,16 @@ const userSlice = createSlice({
 	reducers: {
 		setUser(state, action: PayloadAction<UserDataDAO>) {
 			state.account = action.payload.user;
-			state.token = action.payload.token;
-		},
-		updateToken(state, action: PayloadAction<string>) {
-			state.token.accessToken = action.payload;
 		},
 	},
 	selectors: {
 		getAccount: (state: UserState) => state.account,
-		getToken: (state: UserState) => state.token.accessToken,
-		sessionValid: (state: UserState) => Boolean(state.token.accessToken),
+		sessionValid: (state: UserState) => Boolean(state.account.accountId),
 	},
 });
 
-export const { setUser, updateToken } = userSlice.actions;
+export const { setUser } = userSlice.actions;
 
-export const { getAccount, getToken, sessionValid } = userSlice.selectors;
+export const { getAccount, sessionValid } = userSlice.selectors;
 
 export default userSlice.reducer;

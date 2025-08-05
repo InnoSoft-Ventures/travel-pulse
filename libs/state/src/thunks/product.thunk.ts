@@ -79,7 +79,15 @@ export const getMultipleRegions = createAsyncThunk(
 
 export const productSearch = createAsyncThunk(
 	'products/productSearch',
-	async (params: { country: string; from: string; to: string }, thunkAPI) => {
+	async (
+		params: {
+			query: string;
+			from: string;
+			to: string;
+			targetDestination: string;
+		},
+		thunkAPI
+	) => {
 		try {
 			const response = await ApiService.get<ResponseData<PackageResults>>(
 				`/products/search`,
