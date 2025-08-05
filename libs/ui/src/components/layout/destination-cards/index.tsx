@@ -33,11 +33,9 @@ function DestinationCards(props: DestinationCardsProps) {
 
 	const [selectedPackage, setSelectedPackage] =
 		useState<PackageInterface | null>(null);
-	const { dates } = useAppSelector((state) => state.metaData);
-	const startDate = dateJs(dates.start);
-	const endDate = dateJs(dates.end);
-
-	console.log('selectedDates', dates);
+	const { searchData } = useAppSelector((state) => state.products);
+	const startDate = dateJs(searchData.dates ? searchData.dates[0] : '');
+	const endDate = dateJs(searchData.dates ? searchData.dates[1] : '');
 
 	return (
 		<div

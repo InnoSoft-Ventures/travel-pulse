@@ -6,7 +6,11 @@ import LocationIcon from '../../assets/location.svg';
 import { Calendar } from '../common/calendar';
 import SearchIcon from '../../assets/white-search.svg';
 import { cn } from '../../utils';
-import { setSearchData, useAppDispatch } from '@travelpulse/state';
+import {
+	setSearchData,
+	useAppDispatch,
+	useAppSelector,
+} from '@travelpulse/state';
 import {
 	Country,
 	SelectedSearchData,
@@ -26,11 +30,17 @@ interface SearchAndCalendarProps {
 const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 	const { className, inputVariant, controlVariant } = props;
 
-	// const { searchData } = useAppSelector((state) => state.products);
+	const { searchData } = useAppSelector((state) => state.products);
 
+	const dates = searchData.dates
+		? [
+				dateJs(searchData.dates[0]).toDate(),
+				dateJs(searchData.dates[1]).toDate(),
+		  ]
+		: null;
 	const [selectedData, setSelectedData] = useState<SelectedSearchData>({
 		country: null,
-		dates: null,
+		dates: dates,
 	});
 
 	const dispatch = useAppDispatch();
@@ -126,6 +136,7 @@ const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 							dates,
 						}));
 					}}
+					value={selectedData.dates || undefined}
 					placeholder="Arrival & Departure"
 					containerClassName={styles.datePickerInput}
 				/>

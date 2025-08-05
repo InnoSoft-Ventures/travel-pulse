@@ -15,6 +15,8 @@ import {
 import {
 	createInitialItemState,
 	createInitialListState,
+	DATE_FORMAT,
+	dateJs,
 	formatApiErrorDescription,
 	toast,
 } from '@travelpulse/utils';
@@ -26,10 +28,15 @@ interface ProductState {
 	productSearch: ItemState<PackageResults>;
 }
 
+const date = dateJs();
+
 const initialState: ProductState = {
 	searchData: {
 		country: null,
-		dates: null,
+		dates: [
+			date.format(DATE_FORMAT),
+			date.add(7, 'days').format(DATE_FORMAT),
+		],
 	},
 	productSearch: createInitialItemState<PackageResults>({
 		packages: null,

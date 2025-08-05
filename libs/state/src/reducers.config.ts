@@ -19,11 +19,20 @@ const persistedProductsReducer = persistReducer(
 	products
 );
 
+const persistedMetaDataReducer = persistReducer(
+	{
+		key: 'metaData',
+		storage,
+		blacklist: ['dates'],
+	},
+	metaData
+);
+
 export const rootReducer = combineReducers({
 	user,
 	auth,
 	masterData,
 	products: persistedProductsReducer,
-	metaData,
+	metaData: persistedMetaDataReducer,
 	cart,
 });

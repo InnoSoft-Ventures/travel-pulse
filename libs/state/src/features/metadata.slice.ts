@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { DATE_FORMAT, dateJs } from '@travelpulse/utils';
 
 interface MetadataState {
 	dates: {
@@ -7,10 +8,12 @@ interface MetadataState {
 	};
 }
 
+const date = dateJs();
+
 const initialState: MetadataState = {
 	dates: {
-		start: '',
-		end: '',
+		start: date.format(DATE_FORMAT),
+		end: date.add(7, 'days').format(DATE_FORMAT),
 	},
 };
 
