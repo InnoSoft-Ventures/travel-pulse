@@ -7,6 +7,7 @@ import webhooksRoute from './webhooks.route';
 import ordersRoute from './orders.route';
 import productsRoute from './products.route';
 import authRoute from './auth.route';
+import cartRoute from './cart.route';
 
 const router = Router();
 
@@ -21,5 +22,6 @@ router.use('/orders', ordersRoute);
 
 // Auth routes
 router.use('/auth', authRoute);
+router.use('/cart', cartRoute);
 
 export default router;

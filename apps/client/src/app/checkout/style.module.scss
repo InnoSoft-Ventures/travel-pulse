@@ -27,6 +27,12 @@
 
 	.orderDetailsTitle {
 		margin-bottom: 15px;
+
+		.itemCount {
+			font-size: 13px;
+			color: var(--text-purple);
+			font-weight: 600;
+		}
 	}
 
 	.checkoutRight {

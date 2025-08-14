@@ -12,21 +12,12 @@ import { useAppSelector } from '@travelpulse/ui/state';
 import { redirect } from 'next/navigation';
 
 export default function CheckoutClient() {
-	const { items: cartItems } = useAppSelector((state) => state.cart);
+	const cartState = useAppSelector((state) => state.cart);
 
 	// If there are no items in cart redirect to product page
-	if (cartItems.list.length === 0) {
+	if (cartState.items.list.length === 0) {
 		redirect('/destinations/local');
 	}
-
-	const calculateTotal = useMemo(() => {
-		const subtotal = cartItems.list.reduce((prev, current) => {
-			return prev + current.finalPrice * current.quantity;
-		}, 0);
-		return subtotal;
-	}, [cartItems.list]);
-
-	const currency = '£';
 
 	return (
 		<div className={style.checkoutContainer}>
@@ -46,8 +37,8 @@ export default function CheckoutClient() {
 								</div> */}
 
 								<PaymentMethods
-									currency={currency}
-									total={calculateTotal}
+									currency={cartState.details.currency}
+									total={cartState.details.total}
 								/>
 							</div>
 						</div>
@@ -57,13 +48,17 @@ export default function CheckoutClient() {
 									size="size16"
 									className={style.orderDetailsTitle}
 								>
-									Order details
+									Order details{' '}
+									{cartState.items.list.length > 1 && (
+										<span
+											className={style.itemCount}
+											title={`${cartState.items.list.length} packages in cart`}
+										>
+											({cartState.items.list.length})
+										</span>
+									)}
 								</Title>
-								<OrderSummary
-									currency={currency}
-									total={calculateTotal}
-									cartItems={cartItems.list}
-								/>
+								<OrderSummary cartState={cartState} />
 							</div>
 						</div>
 					</div>

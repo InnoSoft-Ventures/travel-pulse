@@ -69,7 +69,24 @@ export interface CartItem {
 	data: string;
 	validity: string;
 	startDate: string;
+	/** Price before the discount is applied */
 	originalPrice?: number;
-	finalPrice: number;
+	finalPrice: string;
 	quantity: number;
+}
+
+export interface CartDetails {
+	items: CartItem[];
+	details: {
+		/** Formatted subtotal price with currency symbol */
+		subtotal: string;
+		discount: number;
+		bundleDiscount: number;
+		taxesAndFees: string;
+		/** Total price without currency symbol */
+		total: number;
+		/** Formatted total price with currency symbol */
+		totalPrice: string;
+		currency: string;
+	};
 }

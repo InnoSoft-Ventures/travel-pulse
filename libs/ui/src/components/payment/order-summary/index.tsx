@@ -1,26 +1,35 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './order-summary.module.scss';
-import { CartItem } from '@travelpulse/interfaces';
 import { dateJs } from '@travelpulse/utils';
 import Image from 'next/image';
 import { CopyIcon, TrashIcon } from 'lucide-react';
-import { removeFromCart, useAppDispatch } from '@travelpulse/state';
+import { CartState, removeFromCart, useAppDispatch } from '@travelpulse/state';
+import { processCart } from '@travelpulse/state/thunks';
 
 interface OrderSummaryProps {
-	cartItems: CartItem[];
-	total: number;
-	currency: string;
+	cartState: CartState;
 }
 
-export function OrderSummary(props: OrderSummaryProps) {
-	const { cartItems, total, currency } = props;
+export function OrderSummary({ cartState }: OrderSummaryProps) {
+	const { items, details } = cartState;
+	const {
+		totalPrice,
+		currency,
+		taxesAndFees,
+		bundleDiscount,
+		discount,
+		subtotal,
+	} = details;
 
 	const dispatch = useAppDispatch();
 
-	const discount = '£1.05';
-	const bundleDiscount = '£1.25';
+	const cartItems = items.list;
+
+	useEffect(() => {
+		dispatch(processCart());
+	}, [dispatch]);
 
 	const handleDelete = (index: number) => {
 		dispatch(removeFromCart(index));
@@ -33,106 +42,125 @@ export function OrderSummary(props: OrderSummaryProps) {
 	return (
 		<div className={styles.container}>
 			<div className={styles.planList}>
-				{cartItems.map((plan, i) => (
-					<div
-						className={styles.planCard}
-						key={`order-summary-plan-${i}`}
-					>
-						{/* Top-right action buttons */}
-						<div className={styles.actionButtons}>
-							<button
-								className={styles.copyBtn}
-								// onClick={() => handleCopy(plan)}
-								title="Duplicate"
-							>
-								<CopyIcon size={16} />
-							</button>
+				{items.status === 'succeeded' &&
+					cartItems.map((plan, i) => (
+						<div
+							className={styles.planCard}
+							key={`order-summary-plan-${i}`}
+						>
+							{/* Top-right action buttons */}
+							<div className={styles.actionButtons}>
+								<button
+									className={styles.copyBtn}
+									// onClick={() => handleCopy(plan)}
+									title="Duplicate"
+								>
+									<CopyIcon size={16} />
+								</button>
 
-							<span className={styles.divider} />
+								<span className={styles.divider} />
 
-							<button
-								className={styles.deleteBtn}
-								onClick={() => handleDelete(i)}
-								title="Remove"
-							>
-								<TrashIcon size={16} />
-							</button>
-						</div>
-
-						<div className={styles.planHeader}>
-							{plan.flag && (
-								<div className={styles.flag}>
-									<Image
-										src={plan.flag}
-										alt={`${plan.name} flag`}
-										width={36}
-										height={20}
-										className={styles.flagImage}
-									/>
-								</div>
-							)}
-							<div>
-								{plan.name}{' '}
-								<span className={styles.eSim}>eSIM</span>
+								<button
+									className={styles.deleteBtn}
+									onClick={() => handleDelete(i)}
+									title="Remove"
+								>
+									<TrashIcon size={16} />
+								</button>
 							</div>
-						</div>
 
-						<ul className={styles.planDetails}>
-							<li>
-								<span>Data Allowance:</span>{' '}
-								<strong>{plan.data}</strong>
-							</li>
-							<li>
-								<span>Validity:</span>{' '}
-								<strong>{plan.validity}</strong>
-							</li>
-							<li>
-								<span>Starting Date:</span>{' '}
-								<strong>
-									{dateJs(plan.startDate).format('DD MMM')}
-								</strong>
-							</li>
-							<li>
-								Item Total:{' '}
-								<div className={styles.priceContainer}>
-									{plan.originalPrice && (
-										<div className={styles.oldPrice}>
-											{plan.originalPrice}
-										</div>
-									)}{' '}
-									<span className={styles.price}>
-										{`${currency}${plan.finalPrice}`}
-									</span>
+							<div className={styles.planHeader}>
+								{plan.flag && (
+									<div className={styles.flag}>
+										<Image
+											src={plan.flag}
+											alt={`${plan.name} flag`}
+											width={36}
+											height={20}
+											className={styles.flagImage}
+										/>
+									</div>
+								)}
+								<div className={styles.planName}>
+									{plan.name}{' '}
+									<span className={styles.eSim}>eSIM</span>
+									{plan.quantity > 1 && (
+										<span className={styles.quantity}>
+											<span>x</span> {plan.quantity}
+										</span>
+									)}
 								</div>
-							</li>
-						</ul>
-					</div>
-				))}
+							</div>
+
+							<ul className={styles.planDetails}>
+								<li>
+									<span>Data Allowance:</span>{' '}
+									<strong>{plan.data}</strong>
+								</li>
+								<li>
+									<span>Validity:</span>{' '}
+									<strong>{plan.validity}</strong>
+								</li>
+								<li>
+									<span>Starting Date:</span>{' '}
+									<strong>
+										{dateJs(plan.startDate).format(
+											'DD MMM'
+										)}
+									</strong>
+								</li>
+								<li>
+									Item Total:{' '}
+									<div className={styles.priceContainer}>
+										{plan.originalPrice && (
+											<div className={styles.oldPrice}>
+												{plan.originalPrice}
+											</div>
+										)}{' '}
+										<span className={styles.price}>
+											{plan.finalPrice}
+										</span>
+									</div>
+								</li>
+							</ul>
+						</div>
+					))}
+
+				{items.status === 'loading' && <div>Loading...</div>}
+
+				{items.status === 'failed' && (
+					<div>Error loading cart items</div>
+				)}
 			</div>
 
 			<div className={styles.summary}>
 				<div className={styles.row}>
 					<span>Subtotal</span>
-					<span>{`${currency}${total}`}</span>
+					<span>{subtotal}</span>
 				</div>
-				<div className={styles.row}>
-					<span className={styles.discount}>Discount</span>
-					<span className={styles.discount}>({discount})</span>
-				</div>
-				<div className={styles.row}>
-					<span className={styles.discount}>Bundle Discount</span>
-					<span className={styles.discount}>({bundleDiscount})</span>
-				</div>
+				{discount > 0 && (
+					<div className={styles.row}>
+						<span className={styles.discount}>Discount</span>
+						<span className={styles.discount}>({discount})</span>
+					</div>
+				)}
+
+				{bundleDiscount > 0 && (
+					<div className={styles.row}>
+						<span className={styles.discount}>Bundle Discount</span>
+						<span className={styles.discount}>
+							({bundleDiscount})
+						</span>
+					</div>
+				)}
+
 				<div className={styles.row}>
 					<span>Taxes & Fees</span>
-					<span>Included</span>
+					<span>{taxesAndFees}</span>
 				</div>
 				<div className={styles.totalRow}>
 					<span>Total</span>
-					<span>
-						{currency}
-						{total}
-					</span>
+					<span>{totalPrice}</span>
 				</div>
 			</div>
 
