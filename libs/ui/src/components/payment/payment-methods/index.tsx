@@ -8,10 +8,15 @@ import Link from 'next/link';
 
 interface PaymentMethodsProps {
 	currency: string;
+	hasItems: boolean;
 	total: number;
 }
 
-export const PaymentMethods = ({ currency, total }: PaymentMethodsProps) => {
+export const PaymentMethods = ({
+	currency,
+	hasItems,
+	total,
+}: PaymentMethodsProps) => {
 	const [selectedMethod, setSelectedMethod] = useState<
 		'card' | 'paypal' | null
 	>(null);
@@ -87,7 +92,7 @@ export const PaymentMethods = ({ currency, total }: PaymentMethodsProps) => {
 					fullWidth
 					id="payment-button"
 					type="submit"
-					disabled={!isPayButtonEnabled}
+					disabled={!isPayButtonEnabled || !hasItems}
 				>
 					Pay {currency}
 					{total}

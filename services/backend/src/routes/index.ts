@@ -8,6 +8,7 @@ import ordersRoute from './orders.route';
 import productsRoute from './products.route';
 import authRoute from './auth.route';
 import cartRoute from './cart.route';
+import { routeMiddleware } from '@travelpulse/middlewares';
 
 const router = Router();
 
@@ -18,10 +19,16 @@ router.use('/webhooks', webhooksRoute);
 
 router.use('/products', productsRoute);
 
-router.use('/orders', ordersRoute);
-
 // Auth routes
 router.use('/auth', authRoute);
+
+// Cart management routes
 router.use('/cart', cartRoute);
+
+// Protected routes
+router.use(routeMiddleware(__dirname + '/../'));
+
+// Order management routes
+router.use('/orders', ordersRoute);
 
 export default router;

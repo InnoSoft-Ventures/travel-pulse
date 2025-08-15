@@ -1,15 +1,12 @@
 import express from 'express';
 import { errorHandler, validateData } from '@travelpulse/middlewares';
-import { makeOrder } from '../controllers/orders.controller';
-import { OrderPayloadSchema } from '../schema/order.schema';
-import { createPaymentAttempt } from '../controllers/payment.controller';
 import { PaymentAttemptSchema } from '../schema/payment.schema';
+import { createPaymentAttempt } from '../controllers/payment.controller';
 
 const router = express.Router();
 
-router.post('/', validateData(OrderPayloadSchema), errorHandler(makeOrder));
 router.post(
-	'/:orderId/payments',
+	'/',
 	validateData(PaymentAttemptSchema),
 	errorHandler(createPaymentAttempt)
 );

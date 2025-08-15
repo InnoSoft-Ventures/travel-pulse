@@ -5,9 +5,11 @@ import { OrderStatus } from '@travelpulse/interfaces';
 
 export interface OrderAttributes {
 	id: number;
+	orderNumber: string;
 	userId: number;
 	totalAmount: number;
-	status: string;
+	status: OrderStatus;
+	currency: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -19,9 +21,11 @@ export type OrderCreationAttributes = Optional<
 
 class Order extends Model<OrderAttributes, OrderCreationAttributes> {
 	public id!: number;
+	public orderNumber!: string;
 	public userId!: number;
 	public totalAmount!: number;
-	public status!: string;
+	public status!: OrderStatus;
+	public currency!: string;
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
 }
@@ -33,6 +37,12 @@ Order.init(
 			autoIncrement: true,
 			primaryKey: true,
 			type: DataTypes.INTEGER,
+		},
+		orderNumber: {
+			allowNull: false,
+			type: DataTypes.STRING,
+			unique: true,
+			field: 'order_number',
 		},
 		userId: {
 			allowNull: false,
@@ -57,6 +67,11 @@ Order.init(
 				OrderStatus.CANCELLED
 			),
 			defaultValue: OrderStatus.PENDING,
+		},
+		currency: {
+			allowNull: false,
+			type: DataTypes.STRING(3),
+			defaultValue: 'USD',
 		},
 		createdAt: {
 			allowNull: false,

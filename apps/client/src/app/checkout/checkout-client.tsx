@@ -38,6 +38,7 @@ export default function CheckoutClient() {
 
 								<PaymentMethods
 									currency={cartState.details.currency}
+									hasItems={cartState.items.list.length > 0}
 									total={cartState.details.total}
 								/>
 							</div>

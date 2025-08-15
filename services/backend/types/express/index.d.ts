@@ -6,3 +6,7 @@ declare module 'express' {
 		user?: SessionToken; // Adjust the type according to your payload
 	}
 }
+
+export interface SessionRequest extends Request {
+	user: SessionToken; // Ensure user is always present
+}

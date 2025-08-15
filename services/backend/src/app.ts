@@ -34,9 +34,6 @@ app.use(logger('combined'));
 // Initialize RabbitMQ connection
 // rabbitMqInit();
 
-// Authentication and Authorization middleware
-// app.use(routeMiddleware);
-
 // Config routers
 app.use(routes);
 

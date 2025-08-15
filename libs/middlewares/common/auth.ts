@@ -131,17 +131,17 @@ export function verifyToken<T>(servicePath: string, token: string) {
 	} catch (error) {
 		console.error('verifyToken:', error);
 
-                let errorObj = error;
+		let errorObj = error;
 
-                if (
-                        error instanceof jwt.TokenExpiredError ||
-                        error instanceof jwt.JsonWebTokenError
-                ) {
-                        errorObj = {
-                                error: 'Invalid/Expired token',
-                                code: ERROR_CODE.INVALID_TOKEN,
-                        };
-                }
+		if (
+			error instanceof jwt.TokenExpiredError ||
+			error instanceof jwt.JsonWebTokenError
+		) {
+			errorObj = {
+				error: 'Invalid/Expired token',
+				code: ERROR_CODE.INVALID_TOKEN,
+			};
+		}
 
 		throw new UnauthorizedException({
 			error: errorObj,
@@ -156,28 +156,12 @@ export const extractToken = (
 	res: Response,
 	next: NextFunction
 ) => {
-	const authHeader = req.headers.authorization;
-
-	if (!authHeader) {
-		console.error('extractToken: Authorization header not found!');
-
-		return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json(
-			errorResponse('Unauthorized access', {
-				error: 'Authorization header not found',
-			})
-		);
-	}
-
-	const token = authHeader.split(' ')[1];
+	const { token } = req.cookies;
 
 	if (!token) {
-		console.error(
-			'extractToken: Token not found in the Authorization header!'
-		);
-
 		return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json(
 			errorResponse('Unauthorized access', {
-				error: 'Token not found',
+				error: 'Missing access token',
 			})
 		);
 	}

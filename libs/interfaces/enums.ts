@@ -8,10 +8,16 @@ export const ERROR_CODE = {
 };
 
 export enum OrderStatus {
-	PENDING = 'pending',
-	PROCESSING = 'processing',
-	COMPLETED = 'completed',
-	CANCELLED = 'cancelled',
+	PENDING = 'PENDING',
+	PROCESSING = 'PROCESSING',
+	COMPLETED = 'COMPLETED',
+	CANCELLED = 'CANCELLED',
+}
+
+export enum PaymentStatus {
+	INITIATED = 'initiated',
+	REQUIRES_ACTION = 'requires_action',
+	PAID = 'paid',
 }
 
 export enum ProviderOrderStatus {

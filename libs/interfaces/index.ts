@@ -7,3 +7,5 @@ export * from './ui-enums';
 export * from './ui-products';
 export * from './common';
 export * from './provider';
+export * from './order';
+export * from './payment';

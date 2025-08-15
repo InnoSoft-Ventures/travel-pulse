@@ -27,6 +27,18 @@ export interface PackageAttributes {
 	operator?: Operator;
 }
 
+export type PackageLite = Pick<
+	Package,
+	| 'id'
+	| 'price'
+	| 'type'
+	| 'amount'
+	| 'voice'
+	| 'text'
+	| 'externalPackageId'
+	| 'provider'
+> & { quantity: number };
+
 export type PackageCreationAttributes = Optional<
 	PackageAttributes,
 	'id' | 'createdAt' | 'updatedAt'

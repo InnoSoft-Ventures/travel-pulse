@@ -3,23 +3,35 @@ import dbConnect from '../db';
 import Order from '../db/models/Order';
 import OrderItem, { OrderItemCreationAttributes } from '../db/models/OrderItem';
 import {
+	OrderResponse,
 	OrderStatus,
 	ProviderFactoryData,
 	SOMETHING_WENT_WRONG,
 } from '@travelpulse/interfaces';
-import Package from '../db/models/Package';
+import Package, { PackageLite } from '../db/models/Package';
 import { OrderPayload } from '../schema/order.schema';
-import { Request } from 'express';
 import { ProviderFactory } from '@travelpulse/providers';
 import ProviderOrder from '../db/models/ProviderOrder';
-import { Transaction } from 'sequelize';
+import { Op, Transaction } from 'sequelize';
 import { providerTokenHandler } from './provider-token.service';
+import { SessionRequest } from '../../types/express';
+import { toDecimalPoints } from '@travelpulse/utils';
+import { generateOrderNumber } from '../utils/generate-order-number';
 
-const fetchPackages = async (packageIds: number[]) => {
+const fetchPackages = async (
+	packageQuantityMap: Map<number, number>
+): Promise<Map<number, PackageLite>> => {
 	console.log('Fetching packages');
+
+	const packageIds = Array.from(packageQuantityMap.keys());
+
+	if (!packageIds?.length) return new Map();
+
 	const packages = await Package.findAll({
 		where: {
-			id: packageIds,
+			id: {
+				[Op.in]: packageIds,
+			},
 		},
 		attributes: [
 			'id',
@@ -33,34 +45,45 @@ const fetchPackages = async (packageIds: number[]) => {
 		],
 	});
 
-	return packages.reduce<Record<number, Package>>((acc, pkg) => {
-		acc[pkg.id] = pkg;
-		return acc;
-	}, {});
+	const results = new Map<number, PackageLite>();
+
+	for (const pkg of packages) {
+		const plainPkg = pkg.get({ plain: true }) as Omit<
+			PackageLite,
+			'quantity'
+		>;
+
+		const quantity = packageQuantityMap.get(Number(pkg.id));
+
+		if (quantity) {
+			results.set(Number(pkg.id), { ...plainPkg, quantity });
+		}
+	}
+
+	return results;
 };
 
 const prepareOrderDetails = (
 	data: OrderPayload['packages'],
-	reducePackage: Record<number, Package>,
+	reducePackage: Map<number, PackageLite>,
 	orderId: number
 ) => {
 	let totalAmount = 0;
-	const packageList: OrderItemCreationAttributes[] = [];
+	const orderDetails: OrderItemCreationAttributes[] = [];
 	const providerOrderDataPreparation: ProviderFactoryData[] = [];
 
 	for (const item of data) {
-		const packageData = reducePackage[item.packageId];
+		const packageData = reducePackage.get(Number(item.packageId));
 
 		if (!packageData) {
 			throw new InternalException('Package not found', null);
 		}
 
-		const itemTotal = packageData.price * item.quantity;
-		totalAmount += itemTotal;
+		totalAmount += packageData.price * item.quantity;
 
-		packageList.push({
+		orderDetails.push({
 			orderId,
-			packageId: item.packageId,
+			packageId: Number(item.packageId),
 			quantity: item.quantity,
 			price: packageData.price,
 			startDate: item.startDate,
@@ -78,10 +101,20 @@ const prepareOrderDetails = (
 		});
 	}
 
-	return { totalAmount, packageList, providerOrderDataPreparation };
+	return {
+		totalAmount: toDecimalPoints<number>(totalAmount),
+		orderDetails,
+		providerOrderDataPreparation,
+	};
 };
 
-const processProviderOrders = async (
+/**
+ * Process provider orders
+ * @param providerOrderDataPreparation
+ * @param orderId
+ * @param transact
+ */
+export const processProviderOrders = async (
 	providerOrderDataPreparation: ProviderFactoryData[],
 	orderId: number,
 	transact: Transaction
@@ -106,47 +139,71 @@ const processProviderOrders = async (
 	console.log('Provider orders processed');
 };
 
-export const createOrderService = async (req: Request) => {
+export const createOrderService = async (
+	req: SessionRequest
+): Promise<OrderResponse> => {
 	const data = req.body as OrderPayload;
-	const userId = 1; // Hardcoded for now
+	const userId = req.user.accountId;
+
 	const transact = await dbConnect.transaction();
+
+	if (data.packages.length === 0) {
+		throw new InternalException('No packages provided', null);
+	}
+
+	console.log('Creating order for user:', userId);
 
 	try {
 		// Step 1: Create the order entry;.
 		const order = await Order.create(
 			{
 				userId,
+				orderNumber: generateOrderNumber(),
 				status: OrderStatus.PENDING,
+				currency: data.currency,
 				totalAmount: 0,
 			},
 			{ transaction: transact }
 		);
 
+		// We need to account for the fact that the packages could be duplicated on data.packages,
+		// so we use a Set to filter out duplicate package IDs but we need to count the quantity of each package
+		const packageQuantityMap = new Map<number, number>();
+
+		for (const item of data.packages) {
+			packageQuantityMap.set(
+				Number(item.packageId),
+				(packageQuantityMap.get(Number(item.packageId)) || 0) +
+					item.quantity
+			);
+		}
+
 		// Step 2: Fetch package details
-		const reducePackage = await fetchPackages(
-			data.packages.map((item) => item.packageId)
-		);
+		const reducePackage = await fetchPackages(packageQuantityMap);
 
 		// Step 3: Prepare order details
-		const { totalAmount, packageList, providerOrderDataPreparation } =
-			prepareOrderDetails(data.packages, reducePackage, order.id);
+		const { totalAmount, orderDetails } = prepareOrderDetails(
+			data.packages,
+			reducePackage,
+			order.id
+		);
 
 		console.log('Order details prepared');
 		// Step 4: Create order items
-		await OrderItem.bulkCreate(packageList, {
+		await OrderItem.bulkCreate(orderDetails, {
 			transaction: transact,
 		});
 
 		console.log('Order items created');
 
-		// Step 5: Process provider orders
-		await processProviderOrders(
-			providerOrderDataPreparation,
-			order.id,
-			transact
-		);
+		// // Step 5: Process provider orders
+		// await processProviderOrders(
+		// 	providerOrderDataPreparation,
+		// 	order.id,
+		// 	transact
+		// );
 
-		// Step 6: Update order total amount
+		// Step 5: Update order total amount
 		await order.update({ totalAmount }, { transaction: transact });
 
 		console.log('Order total amount updated');
@@ -154,7 +211,13 @@ export const createOrderService = async (req: Request) => {
 		// Commit the transaction
 		await transact.commit();
 
-		return order;
+		return {
+			orderId: order.id,
+			orderNumber: order.orderNumber,
+			status: order.status,
+			total: order.totalAmount,
+			currency: order.currency,
+		};
 	} catch (error) {
 		console.error('Failed to create order:', error);
 		await transact.rollback();
