@@ -79,3 +79,29 @@ export const forgotPassword = createAsyncThunk(
 		}
 	}
 );
+
+export const logoutUser = createAsyncThunk(
+	'auth/logout',
+	async (_, thunkAPI) => {
+		try {
+			// Best-effort server logout (clears httpOnly cookie)
+			await ApiService.post('/auth/logout');
+		} catch {}
+
+		// Trigger client-side reset of account domain (handled in store.ts)
+		thunkAPI.dispatch({ type: 'auth/logout' });
+
+		// Redirect logic: if current path is under /app, send to login; otherwise reload
+		if (typeof window !== 'undefined') {
+			const { location } = window;
+			const pathname = location?.pathname || '/';
+
+			if (pathname.startsWith('/app')) {
+				location.replace(`/auth/signin`);
+			} else {
+				location.reload();
+			}
+		}
+		return true;
+	}
+);

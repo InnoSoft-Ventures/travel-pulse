@@ -9,7 +9,8 @@
 .planList {
 	margin-bottom: 1rem;
 	color: var(--dark-purple);
-	height: 415px;
+	min-height: 260px;
+	max-height: 415px;
 	overflow: auto;
 }
 

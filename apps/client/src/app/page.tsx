@@ -28,7 +28,7 @@ import {
 
 export default function HomePage() {
 	const { popularDestinations, multipleRegions, productSearch } =
-		useAppSelector((state) => state.products);
+		useAppSelector((state) => state.app.products);
 
 	const dispatch = useAppDispatch();
 

@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button, GoogleAuth, Input, Logo } from '@travelpulse/ui';
+import { Button, GoogleAuth, Input, Logo, useRedirect } from '@travelpulse/ui';
 
 import MailIcon from '@/assets/mail-icon.svg';
 import LockIcon from '@/assets/lock-icon.svg';
@@ -12,7 +12,6 @@ import { useForm } from '@travelpulse/ui/forms';
 import { LoginFormValues, LoginSchema } from '@travelpulse/interfaces/schemas';
 import { loginUser } from '@travelpulse/ui/thunks';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
-import { useRouter } from 'next/navigation';
 import { toast } from '@travelpulse/utils';
 
 export default function LoginClient() {
@@ -24,17 +23,16 @@ export default function LoginClient() {
 		mode: 'all',
 	});
 
-	const { status } = useAppSelector((state) => state.auth);
+	const { status } = useAppSelector((state) => state.app.auth);
 
 	const dispatch = useAppDispatch();
-
-	const router = useRouter();
+	const redirectUtil = useRedirect();
 
 	const onSubmit = async (data: LoginFormValues) => {
 		try {
 			await dispatch(loginUser(data)).unwrap();
 
-			router.push('/');
+			redirectUtil('/');
 		} catch (error) {
 			toast.error({
 				title: 'Login failed',

@@ -1,5 +1,4 @@
 import axios, { AxiosError } from 'axios';
-import { getUserFromLocalStorage } from './storage';
 
 // Define your API base URL
 const baseURL = 'http://localhost:4000/';
@@ -39,23 +38,5 @@ axiosInstance.interceptors.response.use(
 );
 
 const ApiService = axiosInstance;
-
-// Check if the user is logged in
-export const isLoggedIn = () => {
-	const userSession = getUserFromLocalStorage();
-
-	if (!userSession) return false;
-
-	return !!userSession;
-};
-
-/**
- * Clear user session data
- */
-export const logOut = () => {
-	localStorage.clear();
-
-	window.location.reload();
-};
 
 export { ApiService };

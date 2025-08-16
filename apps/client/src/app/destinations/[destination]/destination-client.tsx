@@ -50,9 +50,11 @@ const DestinationsPage = ({ params }: DestinationPageProps) => {
 			break;
 	}
 
-	const { popularDestinations } = useAppSelector((state) => state.products);
+	const { popularDestinations } = useAppSelector(
+		(state) => state.app.products
+	);
 	const { popularCountries, regions } = useAppSelector(
-		(state) => state.masterData
+		(state) => state.app.masterData
 	);
 	const router = useRouter();
 

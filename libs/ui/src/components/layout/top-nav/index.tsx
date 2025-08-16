@@ -11,7 +11,7 @@ import { sessionValid, useAppSelector } from '@travelpulse/state';
 const TopNav = () => {
 	const router = useRouter();
 
-	const isLoggedIn = useAppSelector(sessionValid);
+	const isLoggedIn = useAppSelector((state) => sessionValid(state.account));
 
 	const onAuthNavigate = () => {
 		router.push(isLoggedIn ? '/app' : '/auth/signin');

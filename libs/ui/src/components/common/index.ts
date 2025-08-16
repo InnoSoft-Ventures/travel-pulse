@@ -17,3 +17,4 @@ export * from './logo';
 export * from './tabs';
 export * from './settings-tabs';
 export * from './country-picker';
+export * from './account-dropdown';

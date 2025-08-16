@@ -1,16 +1,10 @@
 'use client';
 import React from 'react';
 import { Bell } from 'lucide-react';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '../../common';
-import Link from 'next/link';
-import { UserProfile } from '../user-profile';
 import styles from './style.module.scss';
 import { usePathname } from 'next/navigation';
+import { AccountDropdown } from '../../common';
+import { useAppSelector } from '@travelpulse/state';
 
 const getTitleFromPath = (pathname: string): string => {
 	if (pathname.includes('/app/orders/')) {
@@ -32,11 +26,7 @@ const getTitleFromPath = (pathname: string): string => {
 export function AppTopBar() {
 	const pathname = usePathname();
 	const title = getTitleFromPath(pathname);
-
-	const user = {
-		name: 'Martin Rollins',
-		avatarUrl: 'https://randomuser.me/api/portraits/men/19.jpg',
-	};
+	const account = useAppSelector((state) => state.account.user.session);
 
 	return (
 		<header className={styles.appTopBar}>
@@ -47,37 +37,7 @@ export function AppTopBar() {
 					<Bell size={20} />
 				</button>
 
-				<div className="relative">
-					<DropdownMenu>
-						<DropdownMenuTrigger
-							asChild
-							className={styles.userProfileTrigger}
-						>
-							<button type="button">
-								<UserProfile {...user} />
-							</button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent
-							className={styles.dropdownMenuContent}
-							align="end"
-						>
-							<DropdownMenuItem>
-								<Link href="/app">Dashboard</Link>
-							</DropdownMenuItem>
-							<DropdownMenuItem>
-								<Link href="/app/settings/account">
-									Profile
-								</Link>
-							</DropdownMenuItem>
-							<DropdownMenuItem>
-								<Link href="/app/orders">Orders</Link>
-							</DropdownMenuItem>
-							<DropdownMenuItem>
-								<Link href="/logout">Logout</Link>
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-				</div>
+				<AccountDropdown account={account} />
 			</div>
 		</header>
 	);

@@ -31,7 +31,9 @@ export const CountryPicker = (props: CountryPickerProps) => {
 
 	const { contains } = useFilter({ sensitivity: 'base' });
 	const dispatch = useAppDispatch();
-	const { status } = useAppSelector((state) => state.masterData.countries);
+	const { status } = useAppSelector(
+		(state) => state.app.masterData.countries
+	);
 
 	const filterCountries = async (inputValue: string) => {
 		try {

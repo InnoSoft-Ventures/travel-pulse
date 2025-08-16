@@ -12,7 +12,7 @@ export const processCart = createAsyncThunk<
 >('cart/process', async (_, thunkAPI) => {
 	const state = thunkAPI.getState();
 
-	const items: Cart['items'] = state.cart.items.list.map((item) => ({
+	const items: Cart['items'] = state.app.cart.items.list.map((item) => ({
 		packageId: item.packageId,
 		name: item.name,
 		flag: item.flag,

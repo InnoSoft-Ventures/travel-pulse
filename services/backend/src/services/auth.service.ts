@@ -3,6 +3,7 @@ import { comparePassword, hashPassword } from '../utils/hash';
 import { BadRequestException, signToken } from '@travelpulse/middlewares';
 import User from '../db/models/User';
 import { SignInType, SignUpType } from '../schema/auth.schema';
+import { DEFAULT_USER_PICTURE } from '@travelpulse/utils';
 
 export const registerService = async (
 	profileData: SignUpType
@@ -41,6 +42,7 @@ export const registerService = async (
 			firstName: user.firstName,
 			lastName: user.lastName,
 			registrationDate: user.createdAt.toISOString(),
+			picture: DEFAULT_USER_PICTURE,
 		},
 		token: {
 			accessToken,
@@ -76,6 +78,7 @@ export const loginService = async (data: SignInType): Promise<UserDataDAO> => {
 			firstName: user.firstName,
 			lastName: user.lastName,
 			registrationDate: user.createdAt.toISOString(),
+			picture: DEFAULT_USER_PICTURE,
 		},
 		token: {
 			accessToken,

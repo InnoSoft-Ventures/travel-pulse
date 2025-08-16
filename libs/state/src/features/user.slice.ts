@@ -2,16 +2,17 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UserDataDAO } from '@travelpulse/interfaces';
 
 interface UserState {
-	account: UserDataDAO['user'];
+	session: UserDataDAO['user'];
 }
 
 const initialState: UserState = {
-	account: {
+	session: {
 		accountId: 0,
 		firstName: '',
 		lastName: '',
 		email: '',
 		registrationDate: '',
+		picture: 'https://randomuser.me/api/portraits/lego/1.jpg',
 	},
 };
 
@@ -20,12 +21,12 @@ const userSlice = createSlice({
 	initialState,
 	reducers: {
 		setUser(state, action: PayloadAction<UserDataDAO>) {
-			state.account = action.payload.user;
+			state.session = action.payload.user;
 		},
 	},
 	selectors: {
-		getAccount: (state: UserState) => state.account,
-		sessionValid: (state: UserState) => Boolean(state.account.accountId),
+		getAccount: (state: UserState) => state.session,
+		sessionValid: (state: UserState) => Boolean(state.session.accountId),
 	},
 });
 

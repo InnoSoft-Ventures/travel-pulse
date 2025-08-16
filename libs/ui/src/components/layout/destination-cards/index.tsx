@@ -33,7 +33,7 @@ function DestinationCards(props: DestinationCardsProps) {
 
 	const [selectedPackage, setSelectedPackage] =
 		useState<PackageInterface | null>(null);
-	const { searchData } = useAppSelector((state) => state.products);
+	const { searchData } = useAppSelector((state) => state.app.products);
 	const startDate = dateJs(searchData.dates ? searchData.dates[0] : '');
 	const endDate = dateJs(searchData.dates ? searchData.dates[1] : '');
 

@@ -30,7 +30,7 @@ interface SearchAndCalendarProps {
 const SearchAndCalendar = (props: SearchAndCalendarProps) => {
 	const { className, inputVariant, controlVariant } = props;
 
-	const { searchData } = useAppSelector((state) => state.products);
+	const { searchData } = useAppSelector((state) => state.app.products);
 
 	const dates = searchData.dates
 		? [

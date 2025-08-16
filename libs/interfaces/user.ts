@@ -25,6 +25,7 @@ export interface UserDataDAO {
 		lastName: string;
 		email: string;
 		registrationDate: string;
+		picture: string;
 	};
 	token: {
 		accessToken: string;

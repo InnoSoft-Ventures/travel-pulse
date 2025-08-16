@@ -1,21 +1,22 @@
+'use client';
 import React from 'react';
 import { Logo } from '../../common/logo';
 import styles from './styles.module.scss';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '../../common/dropdown';
-import { UserProfile } from '../user-profile';
-import Link from 'next/link';
 import { BellIcon } from 'lucide-react';
+import { sessionValid, useAppSelector } from '@travelpulse/state';
+import { AccountDropdown, Button } from '../../common';
+import { usePathname, useRouter } from 'next/navigation';
 
 export const MinimalNav = () => {
-	// Mock user data - replace with actual user data from context or props
-	const user = {
-		name: 'Martin Rollins',
-		avatarUrl: 'https://randomuser.me/api/portraits/men/19.jpg',
+	const account = useAppSelector((state) => state.account.user.session);
+	const isLoggedIn = useAppSelector((state) => sessionValid(state.account));
+	const router = useRouter();
+
+	// Get the current pathname
+	const pathname = usePathname();
+
+	const onAuthNavigate = () => {
+		router.push(`/auth/signin?redirect=${pathname}`);
 	};
 
 	return (
@@ -29,27 +30,16 @@ export const MinimalNav = () => {
 					<div className={styles.notificationIcon}>
 						<BellIcon />
 					</div>
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<div style={{ cursor: 'pointer' }}>
-								<UserProfile {...user} />
-							</div>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align="end">
-							<DropdownMenuItem>
-								<Link href="/dashboard">Dashboard</Link>
-							</DropdownMenuItem>
-							<DropdownMenuItem>
-								<Link href="/dashboard/account">Profile</Link>
-							</DropdownMenuItem>
-							<DropdownMenuItem>
-								<Link href="/dashboard/orders">Orders</Link>
-							</DropdownMenuItem>
-							<DropdownMenuItem>
-								<Link href="/logout">Logout</Link>
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
+
+					{isLoggedIn ? (
+						<>
+							<AccountDropdown account={account} />
+						</>
+					) : (
+						<Button size="sm" onClick={onAuthNavigate}>
+							Sign In / Sign Up
+						</Button>
+					)}
 				</div>
 			</div>
 		</nav>

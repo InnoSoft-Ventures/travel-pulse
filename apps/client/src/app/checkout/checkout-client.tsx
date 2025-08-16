@@ -12,7 +12,7 @@ import { useAppSelector } from '@travelpulse/ui/state';
 import { redirect } from 'next/navigation';
 
 export default function CheckoutClient() {
-	const cartState = useAppSelector((state) => state.cart);
+	const cartState = useAppSelector((state) => state.app.cart);
 
 	// If there are no items in cart redirect to product page
 	if (cartState.items.list.length === 0) {

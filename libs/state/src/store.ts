@@ -1,19 +1,26 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { persistStore } from 'redux-persist';
 import { rootReducer } from './reducers.config';
 
 export const makeStore = () => {
-	const persistedReducer = persistReducer(
-		{
-			key: 'root',
-			storage,
-		},
-		rootReducer
-	);
+	// const persistedReducer = persistReducer(
+	// 	{
+	// 		key: 'root',
+	// 		storage,
+	// 	},
+	// 	rootReducer
+	// );
+
+	const rootWithReset = (state: any, action: any) => {
+		if (action.type === 'auth/logout') {
+			// Keep app branch; reset account
+			state = { ...state, account: undefined };
+		}
+		return rootReducer(state, action);
+	};
 
 	const store = configureStore({
-		reducer: persistedReducer,
+		reducer: rootWithReset,
 		// @ts-ignore
 		devTools: process.env.NODE_ENV !== 'production',
 		middleware: (getDefaultMiddleware) =>

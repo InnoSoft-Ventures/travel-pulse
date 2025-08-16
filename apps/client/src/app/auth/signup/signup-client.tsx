@@ -28,7 +28,7 @@ export default function SignupClient() {
 	} = useForm(RegisterSchema);
 
 	const dispatch = useAppDispatch();
-	const { status } = useAppSelector((state) => state.auth);
+	const { status } = useAppSelector((state) => state.app.auth);
 
 	const router = useRouter();
 

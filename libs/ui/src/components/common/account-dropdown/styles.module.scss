@@ -1,0 +1,14 @@
+.userProfileTrigger {
+	min-width: 140px;
+	outline: none;
+
+	&[data-state='open'] {
+		> div {
+			background-color: #e5e7eb;
+		}
+	}
+}
+
+.dropdownMenuContent {
+	min-width: 170px;
+}

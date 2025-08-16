@@ -25,6 +25,18 @@ export const loginUser = async (req: Request, res: Response) => {
 	res.json(successResponse({ user }));
 };
 
+export const logoutUser = async (_req: Request, res: Response) => {
+	// Clear the auth cookie
+	res.cookie('token', '', {
+		httpOnly: true,
+		secure: false, // set true behind HTTPS in prod
+		sameSite: 'lax',
+		maxAge: 0,
+	});
+
+	return res.status(HTTP_STATUS_CODES.OK).json(successResponse({}));
+};
+
 // export const refreshToken = (req: any, res: any) => {
 // 	const refreshToken = req.body.refreshToken;
 

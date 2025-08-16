@@ -28,11 +28,41 @@ const persistedMetaDataReducer = persistReducer(
 	metaData
 );
 
-export const rootReducer = combineReducers({
+// Account related reducers
+const accountReducer = combineReducers({
 	user,
+});
+
+// App related reducers
+const appReducer = combineReducers({
 	auth,
+	cart,
 	masterData,
 	products: persistedProductsReducer,
 	metaData: persistedMetaDataReducer,
-	cart,
+});
+
+// Persist account reducers separately
+const accountPersistConfig = {
+	key: 'account',
+	storage,
+};
+const persistedAccountReducer = persistReducer(
+	accountPersistConfig,
+	accountReducer
+);
+
+// Persist app reducers separately
+const appPersistConfig = {
+	key: 'app',
+	storage,
+	blacklist: ['auth'],
+	whitelist: ['cart'],
+};
+const persistedAppReducer = persistReducer(appPersistConfig, appReducer);
+
+// Root reducer with two domains
+export const rootReducer = combineReducers({
+	account: persistedAccountReducer,
+	app: persistedAppReducer,
 });

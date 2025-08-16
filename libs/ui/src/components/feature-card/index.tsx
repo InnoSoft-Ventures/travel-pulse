@@ -7,7 +7,7 @@ const FeatureCard = () => {
 		<div className={styles.featureCardContainer}>
 			<div className={styles.featureCard}>
 				<div className={styles.iconContainer}>
-					<Hexagon />
+					<Hexagon icon={<></>} />
 				</div>
 				<div className={styles.textContainer}>
 					<div className={styles.title}>Enjoy dual SIMs</div>

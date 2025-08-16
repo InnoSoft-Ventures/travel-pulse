@@ -29,7 +29,9 @@ interface Props {
 }
 
 const DestinationEsimContent = ({ destination, targetDestination }: Props) => {
-	const { dates: selectedDates } = useAppSelector((state) => state.metaData);
+	const { dates: selectedDates } = useAppSelector(
+		(state) => state.app.metaData
+	);
 
 	const today = useMemo(() => dateJs(), []);
 	const startDate = selectedDates?.start
