@@ -83,6 +83,7 @@ PaymentAttempt.init(
 			allowNull: false,
 			type: DataTypes.ENUM(
 				PaymentStatus.INITIATED,
+				PaymentStatus.FAILED,
 				PaymentStatus.REQUIRES_ACTION,
 				PaymentStatus.PAID
 			),

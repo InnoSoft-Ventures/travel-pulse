@@ -1,4 +1,5 @@
 import {
+	OrderStatus,
 	PaymentProvider,
 	PaymentStatus,
 	SOMETHING_WENT_WRONG,
@@ -10,6 +11,7 @@ import { isValidPaymentMethod } from '../../utils/data';
 import { PaymentAttemptRequest } from '../../schema/payment.schema';
 import dbConnect from '../../db';
 import Order from '../../db/models/Order';
+import { updateOrderStatus } from '../orders/order-util';
 
 /**
  * Create payment attempt for an order.
@@ -33,13 +35,19 @@ export const createPaymentAttemptService = async (req: SessionRequest) => {
 		}
 
 		// Find order total amount
-		const order = await Order.findByPk(orderId);
+		const order = await Order.findOne({
+			where: {
+				id: orderId,
+				userId,
+			},
+			transaction: transact,
+		});
 
 		if (!order) {
 			throw new InternalException(`Order not found: ${orderId}`, null);
 		}
 
-		const attempt = await PaymentAttempt.create(
+		const paymentAttempt = await PaymentAttempt.create(
 			{
 				orderId,
 				userId,
@@ -54,15 +62,23 @@ export const createPaymentAttemptService = async (req: SessionRequest) => {
 			}
 		);
 
+		// Update order status
+		await updateOrderStatus(
+			order,
+			OrderStatus.PROCESSING_PAYMENT,
+			transact
+		);
+
 		await transact.commit();
 
 		return {
-			attemptId: attempt.id,
-			status: attempt.status,
-			amount: attempt.amount,
-			currency: attempt.currency,
-			provider: attempt.provider,
-			method: attempt.method,
+			paymentId: paymentAttempt.id,
+			orderId: orderId,
+			status: paymentAttempt.status,
+			amount: paymentAttempt.amount,
+			currency: paymentAttempt.currency,
+			provider: paymentAttempt.provider,
+			method: paymentAttempt.method,
 		};
 	} catch (error) {
 		console.error('Failed to create payment attempt:', error);

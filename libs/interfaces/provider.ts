@@ -11,12 +11,8 @@ export interface ProviderFactoryData {
 	text: number;
 }
 
-export interface ProviderOrderResponse {
+export interface ProviderOrderResponse extends ProviderFactoryData {
 	externalRequestId: string;
-	provider: ProviderIdentity;
-	dataAmount: number;
-	voice: number;
-	text: number;
 }
 
 export interface ProviderStrategy {

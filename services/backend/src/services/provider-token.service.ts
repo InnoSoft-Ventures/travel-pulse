@@ -8,34 +8,42 @@ import {
 	ProviderAuthenticate,
 } from '@travelpulse/providers';
 import { findProvider } from './provider.service';
+import { Transaction } from 'sequelize';
 
 /**
  * Fetch provider access token, check if still valid using expiry date,
  *  - If expired will use the clientId and clientSecret to obtain new access token then return it
  *  - Otherwise, will return current access token
  */
-export async function providerTokenHandler(
-	provider: ProviderIdentity
-): Promise<string> {
-	const details = await findProvider(provider);
+export function providerTokenHandler(transact: Transaction) {
+	return async (provider: ProviderIdentity) => {
+		const details = await findProvider(provider, transact);
 
-	const isValid = isTokenValid(details.createdAt, details.expiresIn);
+		const isValid = isTokenValid(details.createdAt, details.expiresIn);
 
-	if (isValid) return details.accessToken;
+		if (isValid) return details.accessToken;
 
-	const apiUrl = `${getProviderURL(provider)}/token`;
+		const apiUrl = `${getProviderURL(provider)}/token`;
 
-	return await authenticateProviderService(provider, apiUrl, details);
+		return await authenticateProviderService(
+			provider,
+			apiUrl,
+			transact,
+			details
+		);
+	};
 }
 
 export async function authenticateProviderService(
 	provider: ProviderIdentity,
 	apiUrl: string,
+	transact: Transaction,
 	providerDetails?: Provider
 ): Promise<string> {
 	const auth = ProviderAuthenticate.getInstance();
 
-	const providerInfo = providerDetails ?? (await findProvider(provider));
+	const providerInfo =
+		providerDetails ?? (await findProvider(provider, transact));
 
 	const response = await auth.authenticate<ProviderAccessToken>(
 		provider,
@@ -56,14 +64,19 @@ export async function authenticateProviderService(
 
 	const { access_token, expires_in, token_type } = response.data;
 
-	await Provider.upsert({
-		name: provider,
-		identityName: provider.toLowerCase() as ProviderIdentity,
-		accessToken: access_token,
-		expiresIn: expires_in,
-		tokenType: token_type,
-		issuedAt: new Date(),
-	});
+	await Provider.upsert(
+		{
+			name: provider,
+			identityName: provider.toLowerCase() as ProviderIdentity,
+			accessToken: access_token,
+			expiresIn: expires_in,
+			tokenType: token_type,
+			issuedAt: new Date(),
+		},
+		{
+			transaction: transact,
+		}
+	);
 
 	return access_token;
 }

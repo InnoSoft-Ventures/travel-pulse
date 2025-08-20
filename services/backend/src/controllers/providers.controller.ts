@@ -22,14 +22,20 @@ import Provider from '../db/models/Provider';
 import { findProvider } from '../services/provider.service';
 import { providerTokenHandler } from '../services/provider-token.service';
 import { buildAliasToContinentIdMap } from '../utils/data';
+import dbConnect from '../db';
 
 export const airaloAuthenticate = async (_req: Request, res: Response) => {
+	const transact = await dbConnect.transaction();
+
 	try {
 		const airalo = ProviderAuthenticate.getInstance();
 
 		const apiURL = `${AIRALO_API_URL}/token`;
 
-		const providerDetails = await findProvider(ProviderIdentity.AIRALO);
+		const providerDetails = await findProvider(
+			ProviderIdentity.AIRALO,
+			transact
+		);
 
 		const data = await airalo.authenticate<ProviderAccessToken>(
 			ProviderIdentity.AIRALO,
@@ -51,15 +57,22 @@ export const airaloAuthenticate = async (_req: Request, res: Response) => {
 		const { data: airaloSessionData } = data;
 
 		// Save the authentication token to the database
-		const [, updated] = await Provider.upsert({
-			name: ProviderIdentity.AIRALO,
-			identityName:
-				ProviderIdentity.AIRALO.toLowerCase() as ProviderIdentity,
-			accessToken: airaloSessionData.access_token,
-			expiresIn: airaloSessionData.expires_in,
-			tokenType: airaloSessionData.token_type,
-			issuedAt: new Date(),
-		});
+		const [, updated] = await Provider.upsert(
+			{
+				name: ProviderIdentity.AIRALO,
+				identityName:
+					ProviderIdentity.AIRALO.toLowerCase() as ProviderIdentity,
+				accessToken: airaloSessionData.access_token,
+				expiresIn: airaloSessionData.expires_in,
+				tokenType: airaloSessionData.token_type,
+				issuedAt: new Date(),
+			},
+			{
+				transaction: transact,
+			}
+		);
+
+		await transact.commit();
 
 		res.status(201).json(
 			successResponse({
@@ -68,6 +81,8 @@ export const airaloAuthenticate = async (_req: Request, res: Response) => {
 		);
 	} catch (error) {
 		console.error('Failed to authenticate with Airalo API:', error);
+
+		await transact.rollback();
 
 		res.status(500).json(
 			errorResponse('Failed to authenticate with Airalo API')
@@ -245,28 +260,44 @@ async function getData() {
 }
 
 export const getAiraloPackages = async (req: Request, res: Response) => {
-	const { type } = req.query;
+	const transact = await dbConnect.transaction();
 
-	if (!['local', 'global'].includes(type as string)) {
+	try {
+		const { type } = req.query;
+
+		if (!['local', 'global'].includes(type as string)) {
+			return res
+				.status(400)
+				.json(
+					errorResponse(
+						'Invalid package type, supported types are "local" and "global"'
+					)
+				);
+		}
+
+		// Get Airalo accessToken from DB
+		const token = await providerTokenHandler(transact)(
+			ProviderIdentity.AIRALO
+		);
+
+		const airalo = Airalo.getInstance(token);
+
+		const dataInfo = await getData();
+
+		await getAiraloPackageList(
+			type as 'local' | 'global',
+			airalo,
+			dataInfo,
+			1
+		);
+
 		return res
-			.status(400)
-			.json(
-				errorResponse(
-					'Invalid package type, supported types are "local" and "global"'
-				)
-			);
+			.status(200)
+			.json({ missingCountries: Array.from(missingCountries) });
+	} catch (error) {
+		console.error('Error fetching Airalo packages:', error);
+		return res
+			.status(500)
+			.json(errorResponse('Failed to fetch Airalo packages'));
 	}
-
-	// Get Airalo accessToken from DB
-	const token = await providerTokenHandler(ProviderIdentity.AIRALO);
-
-	const airalo = Airalo.getInstance(token);
-
-	const dataInfo = await getData();
-
-	await getAiraloPackageList(type as 'local' | 'global', airalo, dataInfo, 1);
-
-	return res
-		.status(200)
-		.json({ missingCountries: Array.from(missingCountries) });
 };

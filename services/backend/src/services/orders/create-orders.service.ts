@@ -1,25 +1,25 @@
 import { InternalException } from '@travelpulse/middlewares';
-import dbConnect from '../db';
-import Order from '../db/models/Order';
-import OrderItem, { OrderItemCreationAttributes } from '../db/models/OrderItem';
+import dbConnect from '../../db';
+import Order from '../../db/models/Order';
+import OrderItem, {
+	OrderItemCreationAttributes,
+} from '../../db/models/OrderItem';
 import {
 	OrderResponse,
 	OrderStatus,
 	ProviderFactoryData,
 	SOMETHING_WENT_WRONG,
 } from '@travelpulse/interfaces';
-import Package, { PackageLite } from '../db/models/Package';
-import { OrderPayload } from '../schema/order.schema';
-import { ProviderFactory } from '@travelpulse/providers';
-import ProviderOrder from '../db/models/ProviderOrder';
+import Package, { PackageLite } from '../../db/models/Package';
+import { OrderPayload } from '../../schema/order.schema';
 import { Op, Transaction } from 'sequelize';
-import { providerTokenHandler } from './provider-token.service';
-import { SessionRequest } from '../../types/express';
+import { SessionRequest } from '../../../types/express';
 import { toDecimalPoints } from '@travelpulse/utils';
-import { generateOrderNumber } from '../utils/generate-order-number';
+import { generateOrderNumber } from '../../utils/generate-order-number';
 
 const fetchPackages = async (
-	packageQuantityMap: Map<number, number>
+	packageQuantityMap: Map<number, number>,
+	transact: Transaction
 ): Promise<Map<number, PackageLite>> => {
 	console.log('Fetching packages');
 
@@ -43,6 +43,7 @@ const fetchPackages = async (
 			'externalPackageId',
 			'provider',
 		],
+		transaction: transact,
 	});
 
 	const results = new Map<number, PackageLite>();
@@ -108,37 +109,6 @@ const prepareOrderDetails = (
 	};
 };
 
-/**
- * Process provider orders
- * @param providerOrderDataPreparation
- * @param orderId
- * @param transact
- */
-export const processProviderOrders = async (
-	providerOrderDataPreparation: ProviderFactoryData[],
-	orderId: number,
-	transact: Transaction
-) => {
-	console.log('Processing provider orders');
-
-	const provider = new ProviderFactory(
-		providerOrderDataPreparation,
-		providerTokenHandler
-	);
-	const providerOrders = await provider.processOrder();
-
-	const providerOrderList = providerOrders.map((item) => ({
-		...item,
-		orderId,
-	}));
-
-	await ProviderOrder.bulkCreate(providerOrderList, {
-		transaction: transact,
-	});
-
-	console.log('Provider orders processed');
-};
-
 export const createOrderService = async (
 	req: SessionRequest
 ): Promise<OrderResponse> => {
@@ -179,7 +149,7 @@ export const createOrderService = async (
 		}
 
 		// Step 2: Fetch package details
-		const reducePackage = await fetchPackages(packageQuantityMap);
+		const reducePackage = await fetchPackages(packageQuantityMap, transact);
 
 		// Step 3: Prepare order details
 		const { totalAmount, orderDetails } = prepareOrderDetails(
@@ -188,7 +158,6 @@ export const createOrderService = async (
 			order.id
 		);
 
-		console.log('Order details prepared');
 		// Step 4: Create order items
 		await OrderItem.bulkCreate(orderDetails, {
 			transaction: transact,
@@ -203,12 +172,11 @@ export const createOrderService = async (
 		// 	transact
 		// );
 
-		// Step 5: Update order total amount
+		// Step 4: Update order total amount
 		await order.update({ totalAmount }, { transaction: transact });
 
 		console.log('Order total amount updated');
 
-		// Commit the transaction
 		await transact.commit();
 
 		return {

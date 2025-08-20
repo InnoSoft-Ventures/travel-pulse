@@ -31,6 +31,8 @@ class OrderItem extends Model<
 	public startDate!: string;
 	public iccid!: string;
 	public price!: number;
+	public createdAt!: Date;
+	public updatedAt!: Date;
 }
 
 OrderItem.init(
@@ -102,6 +104,12 @@ OrderItem.belongsTo(Order, {
 	foreignKey: 'orderId',
 	as: 'order',
 });
+
+Order.hasMany(OrderItem, {
+	foreignKey: 'orderId',
+	as: 'orderItems',
+});
+
 OrderItem.belongsTo(Package, {
 	foreignKey: 'packageId',
 	as: 'package',

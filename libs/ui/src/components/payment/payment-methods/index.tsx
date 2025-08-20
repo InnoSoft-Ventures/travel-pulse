@@ -34,7 +34,7 @@ export const PaymentMethods = ({
 	}, [selectedMethod, isCardValid, isEsimCompatible]);
 
 	return (
-		<form>
+		<>
 			<div>
 				<Title size="size16">Payment Option</Title>
 				<div className={styles.choosePaymentMethodTxt}>
@@ -102,6 +102,6 @@ export const PaymentMethods = ({
 			<div className={styles.sslNotice}>
 				All transactions are secure and encrypted via SSL encryption
 			</div>
-		</form>
+		</>
 	);
 };

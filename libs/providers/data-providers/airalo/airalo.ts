@@ -199,11 +199,8 @@ export class Airalo extends AiraloBase implements ProviderStrategy {
 		}
 
 		return {
+			...data,
 			externalRequestId: response.data.request_id,
-			provider: data.provider,
-			dataAmount: data.dataAmount,
-			voice: data.voice,
-			text: data.text,
 		};
 	}
 }

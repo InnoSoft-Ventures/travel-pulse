@@ -2,6 +2,7 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
 import User from './User';
 import { OrderStatus } from '@travelpulse/interfaces';
+import OrderItem from './OrderItem';
 
 export interface OrderAttributes {
 	id: number;
@@ -26,6 +27,8 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> {
 	public totalAmount!: number;
 	public status!: OrderStatus;
 	public currency!: string;
+
+	public orderItems!: OrderItem[];
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
 }
@@ -62,7 +65,9 @@ Order.init(
 			allowNull: false,
 			type: DataTypes.ENUM(
 				OrderStatus.PENDING,
-				OrderStatus.PROCESSING,
+				OrderStatus.PROCESSING_PAYMENT,
+				OrderStatus.PAID,
+				OrderStatus.PAYMENT_FAILED,
 				OrderStatus.COMPLETED,
 				OrderStatus.CANCELLED
 			),

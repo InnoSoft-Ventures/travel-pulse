@@ -9,22 +9,25 @@ export const ERROR_CODE = {
 
 export enum OrderStatus {
 	PENDING = 'PENDING',
-	PROCESSING = 'PROCESSING',
+	PROCESSING_PAYMENT = 'PROCESSING_PAYMENT',
+	PAID = 'PAID',
 	COMPLETED = 'COMPLETED',
+	PAYMENT_FAILED = 'PAYMENT_FAILED',
 	CANCELLED = 'CANCELLED',
 }
 
 export enum PaymentStatus {
 	INITIATED = 'initiated',
+	FAILED = 'failed',
 	REQUIRES_ACTION = 'requires_action',
 	PAID = 'paid',
 }
 
 export enum ProviderOrderStatus {
-	PENDING = 'pending',
-	PROCESSING = 'processing',
-	COMPLETED = 'completed',
-	CANCELLED = 'cancelled',
+	PENDING = 'PENDING',
+	PROCESSING = 'PROCESSING',
+	COMPLETED = 'COMPLETED',
+	CANCELLED = 'CANCELLED',
 }
 
 export enum ProviderIdentity {
