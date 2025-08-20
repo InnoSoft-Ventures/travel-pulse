@@ -1,16 +1,17 @@
 'use client';
 
 import React from 'react';
-import { User, Lock, Moon, CreditCard, TabletSmartphone } from 'lucide-react';
+import { User, Lock, CreditCard, Package } from 'lucide-react';
 import clsx from 'clsx';
 import { usePathname, useRouter } from 'next/navigation';
 
 const tabs = [
 	{ key: 'account', label: 'Account', icon: User },
 	{ key: 'security', label: 'Security', icon: Lock },
-	{ key: 'appearance', label: 'Appearance', icon: Moon },
+	// { key: 'appearance', label: 'Appearance', icon: Moon },
+	{ key: 'orders', label: 'Orders', icon: Package },
 	{ key: 'billing', label: 'Billing', icon: CreditCard },
-	{ key: 'device', label: 'Device', icon: TabletSmartphone },
+	// { key: 'device', label: 'Device', icon: TabletSmartphone },
 ];
 
 export function SettingsTabs() {
@@ -24,8 +25,10 @@ export function SettingsTabs() {
 	};
 
 	return (
-		<div className="h-auto rounded-md p-1 max-w-[1000px] bg-[#f0f0f2] items-center justify-center text-muted-foreground">
-			<div className="grid grid-cols-5 items-center justify-center gap-[9.5px] px-[0.5px] py-[0.5px]">
+		<div className="h-auto rounded-md p-1 max-w-[860px] bg-[#f0f0f2] items-center justify-center text-muted-foreground">
+			<div
+				className={`grid grid-cols-${tabs.length} items-center justify-center gap-[9.5px] px-[0.5px] py-[0.5px]`}
+			>
 				{tabs.map(({ key, label, icon: Icon }) => {
 					const isActive = current === key;
 

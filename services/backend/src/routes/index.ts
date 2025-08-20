@@ -8,6 +8,7 @@ import ordersRoute from './orders.route';
 import productsRoute from './products.route';
 import authRoute from './auth.route';
 import cartRoute from './cart.route';
+import accountRoute from './account.route';
 import { routeMiddleware } from '@travelpulse/middlewares';
 
 const router = Router();
@@ -30,5 +31,8 @@ router.use(routeMiddleware(__dirname + '/../'));
 
 // Order management routes
 router.use('/orders', ordersRoute);
+
+// Account management routes
+router.use('/account', accountRoute);
 
 export default router;

@@ -19,7 +19,7 @@ export const loginUser = async (req: Request, res: Response) => {
 		httpOnly: true,
 		secure: false, // ✅ for local dev only
 		sameSite: 'lax',
-		maxAge: 3600000, // 1 hour
+		maxAge: 86400000, // 1 day
 	});
 
 	res.json(successResponse({ user }));

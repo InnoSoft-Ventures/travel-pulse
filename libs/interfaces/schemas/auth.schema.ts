@@ -30,12 +30,22 @@ export const AuthSchema = z.object({
 });
 
 export const RegisterSchema = AuthSchema.extend({
-	firstName: z.string().min(1, 'First name is required').min(2, {
-		message: 'First name must be at least 2 characters',
-	}),
-	lastName: z.string().min(1, 'Last name is required').min(2, {
-		message: 'Last name must be at least 2 characters',
-	}),
+	firstName: z
+		.string()
+		.trim()
+		.min(1, 'First name is required')
+		.min(2, {
+			message: 'First name must be at least 2 characters',
+		})
+		.max(50, { message: 'First name must be at most 50 characters' }),
+	lastName: z
+		.string()
+		.trim()
+		.min(1, 'Last name is required')
+		.min(2, {
+			message: 'Last name must be at least 2 characters',
+		})
+		.max(50, { message: 'Last name must be at most 50 characters' }),
 });
 
 export const LoginSchema = AuthSchema;

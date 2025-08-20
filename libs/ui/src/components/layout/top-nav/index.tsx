@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Logo } from '../../common/logo';
 import { sessionValid, useAppSelector } from '@travelpulse/state';
+import { CartIcon } from '../../common';
 
 const TopNav = () => {
 	const router = useRouter();
@@ -28,6 +29,7 @@ const TopNav = () => {
 							<Link href="/about">About Us</Link>
 							<Link href="/help">Help & FAQs</Link>
 							<Link href="/">USD ($)</Link>
+							<CartIcon />
 						</div>
 						<div>
 							<Button size="sm" onClick={onAuthNavigate}>

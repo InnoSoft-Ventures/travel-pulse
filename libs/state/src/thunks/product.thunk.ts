@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ApiService } from '../request';
+import { ApiService } from '../request/request';
 import {
 	CountryProduct,
 	PackageResults,

@@ -1,5 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
+import Country from './Country';
 
 export interface UserAttributes {
 	id: number;
@@ -8,6 +9,7 @@ export interface UserAttributes {
 	email: string;
 	password: string;
 	phone: string;
+	countryId?: number | null;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -24,6 +26,9 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
 	public email!: string;
 	public phone!: string;
 	public password!: string;
+	public countryId?: number | null;
+
+	public country?: Country | null;
 
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
@@ -60,6 +65,11 @@ User.init(
 			allowNull: false,
 			type: DataTypes.TEXT,
 		},
+		countryId: {
+			allowNull: true,
+			field: 'country_id',
+			type: DataTypes.INTEGER,
+		},
 		createdAt: {
 			allowNull: false,
 			type: DataTypes.DATE,
@@ -80,5 +90,11 @@ User.init(
 		timestamps: false,
 	}
 );
+
+User.belongsTo(Country, {
+	foreignKey: 'countryId',
+	targetKey: 'id',
+	as: 'country',
+});
 
 export default User;

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RegisterFormValues } from '@travelpulse/interfaces/schemas';
-import { ApiService } from '../request';
+import { ApiService } from '../request/request';
 import { setUser } from '../features/user.slice';
 import { ResponseData, UserDataDAO } from '@travelpulse/interfaces';
 import { errorHandler } from '@travelpulse/utils';
@@ -97,7 +97,7 @@ export const logoutUser = createAsyncThunk(
 			const pathname = location?.pathname || '/';
 
 			if (pathname.startsWith('/app')) {
-				location.replace(`/auth/signin`);
+				location.replace(`/auth/signin?redirect=${pathname}`);
 			} else {
 				location.reload();
 			}

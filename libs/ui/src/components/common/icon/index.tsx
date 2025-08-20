@@ -12,3 +12,4 @@ const Icon = ({ name, ...props }: IconProps) => {
 };
 
 export { Icon };
+export { CartIcon } from './shopping-cart-icon';

@@ -4,6 +4,7 @@ import { BadRequestException, signToken } from '@travelpulse/middlewares';
 import User from '../db/models/User';
 import { SignInType, SignUpType } from '../schema/auth.schema';
 import { DEFAULT_USER_PICTURE } from '@travelpulse/utils';
+import Country from '../db/models/Country';
 
 export const registerService = async (
 	profileData: SignUpType
@@ -41,8 +42,10 @@ export const registerService = async (
 			email: user.email,
 			firstName: user.firstName,
 			lastName: user.lastName,
+			phoneNumber: user.phone,
 			registrationDate: user.createdAt.toISOString(),
 			picture: DEFAULT_USER_PICTURE,
+			country: null, // Country is not set during registration
 		},
 		token: {
 			accessToken,
@@ -55,6 +58,14 @@ export const loginService = async (data: SignInType): Promise<UserDataDAO> => {
 
 	const user = await User.findOne({
 		where: { email },
+		include: [
+			{
+				model: Country,
+				as: 'country',
+				attributes: ['id', 'name', 'iso2', 'flag'],
+				required: false,
+			},
+		],
 	});
 
 	if (!user) {
@@ -77,8 +88,10 @@ export const loginService = async (data: SignInType): Promise<UserDataDAO> => {
 			email: user.email,
 			firstName: user.firstName,
 			lastName: user.lastName,
+			phoneNumber: user.phone,
 			registrationDate: user.createdAt.toISOString(),
 			picture: DEFAULT_USER_PICTURE,
+			country: user.country || null,
 		},
 		token: {
 			accessToken,

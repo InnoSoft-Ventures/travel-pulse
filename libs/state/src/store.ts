@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore } from 'redux-persist';
 import { rootReducer } from './reducers.config';
+import { storeRef } from './storeRef';
 
 export const makeStore = () => {
 	// const persistedReducer = persistReducer(
@@ -30,6 +31,9 @@ export const makeStore = () => {
 				},
 			}),
 	});
+
+	// expose store to non-React modules (e.g., axios interceptors)
+	storeRef.set(store);
 
 	const persistor = persistStore(store);
 

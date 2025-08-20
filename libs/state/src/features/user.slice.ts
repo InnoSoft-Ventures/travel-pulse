@@ -11,8 +11,10 @@ const initialState: UserState = {
 		firstName: '',
 		lastName: '',
 		email: '',
+		phoneNumber: '',
 		registrationDate: '',
 		picture: 'https://randomuser.me/api/portraits/lego/1.jpg',
+		country: null,
 	},
 };
 

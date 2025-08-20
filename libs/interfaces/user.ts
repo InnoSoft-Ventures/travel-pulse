@@ -1,3 +1,5 @@
+import { Country } from './common';
+
 export interface SessionToken {
 	accountId: number;
 	iat?: number;
@@ -24,8 +26,10 @@ export interface UserDataDAO {
 		firstName: string;
 		lastName: string;
 		email: string;
+		phoneNumber: string;
 		registrationDate: string;
 		picture: string;
+		country: Pick<Country, 'id' | 'name' | 'iso2' | 'flag'> | null;
 	};
 	token: {
 		accessToken: string;

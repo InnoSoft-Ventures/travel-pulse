@@ -67,7 +67,7 @@ export interface SelectProps
 	loadOptions?: (inputValue: string) => Promise<SelectItem[]>;
 }
 
-export const Select = (props: SelectProps) => {
+export function Select(props: SelectProps) {
 	const {
 		options = [],
 		loadOptions,
@@ -183,4 +183,4 @@ export const Select = (props: SelectProps) => {
 			// getOptionValue={(e) => String(e.value)}
 		/>
 	);
-};
+}

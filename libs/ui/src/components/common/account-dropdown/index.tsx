@@ -46,17 +46,30 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({
 					className={styles.dropdownMenuContent}
 					align="end"
 				>
-					<DropdownMenuItem>
-						<Link href="/app">Dashboard</Link>
+					<DropdownMenuItem className="p-0">
+						<Link href="/app" className="px-2 py-1.5 flex-1">
+							Dashboard
+						</Link>
 					</DropdownMenuItem>
-					<DropdownMenuItem>
-						<Link href="/app/settings/account">Profile</Link>
+					<DropdownMenuItem className="p-0">
+						<Link
+							href="/app/settings/account"
+							className="px-2 py-1.5 flex-1"
+						>
+							Profile
+						</Link>
 					</DropdownMenuItem>
-					<DropdownMenuItem>
-						<Link href="/app/orders">Orders</Link>
+					<DropdownMenuItem className="p-0">
+						<Link href="/app/orders" className="px-2 py-1.5 flex-1">
+							Orders
+						</Link>
 					</DropdownMenuItem>
-					<DropdownMenuItem>
-						<a href="/logout" onClick={onLogoutFn}>
+					<DropdownMenuItem className="p-0">
+						<a
+							href="/logout"
+							className="px-2 py-1.5 flex-1"
+							onClick={onLogoutFn}
+						>
 							Logout
 						</a>
 					</DropdownMenuItem>
