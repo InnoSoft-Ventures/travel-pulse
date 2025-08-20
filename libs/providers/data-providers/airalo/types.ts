@@ -182,11 +182,6 @@ export type AiraloAsyncOrderResponse = {
 				voice: null;
 			};
 		};
-		'1': {
-			data: {
-				net_price: number;
-			};
-		};
 		id: number;
 		code: string;
 		currency: string;
@@ -199,6 +194,7 @@ export type AiraloAsyncOrderResponse = {
 		package: string;
 		data: string;
 		price: number;
+		net_price: number;
 		created_at: string;
 		manual_installation: string;
 		qrcode_installation: string;

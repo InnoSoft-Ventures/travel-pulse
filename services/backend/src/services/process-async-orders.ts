@@ -111,8 +111,9 @@ const processAiraloOrder = async (
 		installationGuides: data.data.installation_guides,
 		text: data.data['0'].data.text,
 		voice: data.data['0'].data.voice,
-		netPrice: data.data['1'].data.net_price,
+		netPrice: data.data.net_price,
 	};
+	console.log('data.data.sims', data.data.sims[0]);
 
 	// Save the SIMs
 	const simData: SimCreationAttributes[] = data.data.sims.map((sim) => ({
