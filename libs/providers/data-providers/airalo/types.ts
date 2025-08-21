@@ -127,6 +127,7 @@ export interface ProviderAccessToken {
 export type AiraloNotificationType =
 	| 'async_orders'
 	| 'webhook_low_data'
+	| 'email_low_data'
 	| 'webhook_credit_limit';
 
 export interface AiraloOrderNotification {
@@ -135,11 +136,9 @@ export interface AiraloOrderNotification {
 }
 
 export interface AiraloLowDataNotification {
-	type: 'webhook_low_data';
-	webhook_url: string;
-	/** use this value to receive notification via email */
-	email_low_data: string;
-	email: string;
+	type: 'webhook_low_data' | 'email_low_data';
+	webhook_url?: string;
+	email?: string;
 	language: 'en';
 }
 

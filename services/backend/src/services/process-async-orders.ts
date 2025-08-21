@@ -113,7 +113,6 @@ const processAiraloOrder = async (
 		voice: data.data['0'].data.voice,
 		netPrice: data.data.net_price,
 	};
-	console.log('data.data.sims', data.data.sims[0]);
 
 	// Save the SIMs
 	const simData: SimCreationAttributes[] = data.data.sims.map((sim) => ({
@@ -132,9 +131,8 @@ const processAiraloOrder = async (
 		apn: sim.apn,
 		msisdn: sim.msisdn,
 		directAppleInstallationUrl: sim.direct_apple_installation_url,
-		remaining: 0,
-		total: 0,
-		expiredAt: new Date(),
+		remaining: providerOrder.dataAmount,
+		total: providerOrder.dataAmount,
 		isUnlimited: false,
 		status: SimStatus.NOT_ACTIVE,
 		remainingVoice: 0,

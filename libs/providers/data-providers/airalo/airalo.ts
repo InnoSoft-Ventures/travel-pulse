@@ -169,6 +169,48 @@ export class Airalo extends AiraloBase implements ProviderStrategy {
 	}
 
 	/**
+	 * Retrieves the Airalo simulator details.
+	 *
+	 * @param data - The Airalo simulator data.
+	 * @returns The response data from the Airalo API.
+	 * @throws Error if unable to retrieve simulator details from Airalo API.
+	 */
+	public async simulator(data: AiraloNotification) {
+		try {
+			const response = await this.request.post(
+				`${AIRALO_API_URL}/simulator/webhook`,
+				data
+			);
+
+			return response.data;
+		} catch (error) {
+			console.error('Failed to retrieve simulator details:', error);
+			throw new Error(
+				'Unable to retrieve simulator details from Airalo API'
+			);
+		}
+	}
+
+	/**
+	 * Retrieves the eSIM usage details for a specific SIM card.
+	 *
+	 * @param iccid - The ICCID of the SIM card.
+	 * @returns The eSIM usage details.
+	 */
+	public async getESIMUsage(iccid: string) {
+		try {
+			const response = await this.request.get(
+				`${AIRALO_API_URL}/sims/${iccid}/usage`
+			);
+
+			return response.data;
+		} catch (error) {
+			console.error('Failed to retrieve eSIM usage:', error);
+			throw new Error('Unable to retrieve eSIM usage from Airalo API');
+		}
+	}
+
+	/**
 	 * Creates an order for a package from Airalo.
 	 *
 	 * @param data - The data required to create the order.

@@ -1,3 +1,5 @@
+import { dateJs } from '@travelpulse/utils';
+
 /**
  * Checks if a token is valid based on its issued time and expiration duration.
  *
@@ -13,4 +15,18 @@ export function isTokenValid(
 ): boolean {
 	const expiryTime = new Date(issuedAt).getTime() + expiresIn * 1000;
 	return currentTime < expiryTime;
+}
+
+/**
+ * Calculates the expiry date by adding a specified number of days to the given start date.
+ *
+ * @param startDate - The starting date as a string (i.e `2025-08-20 22:54:03`).
+ * @param validityDuration - The number of days to add to the start date to determine the expiry date.
+ * @returns The calculated expiry date as a JavaScript Date object.
+ */
+export function calculateExpiryDate(
+	startDate: string,
+	validityDuration: number
+): Date {
+	return dateJs(startDate).add(validityDuration, 'days').toDate();
 }

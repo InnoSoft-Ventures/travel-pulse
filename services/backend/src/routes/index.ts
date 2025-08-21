@@ -6,6 +6,7 @@ import providersRoute from './providers.route';
 import webhooksRoute from './webhooks.route';
 import ordersRoute from './orders.route';
 import productsRoute from './products.route';
+import esimsRoute from './esims.route';
 import authRoute from './auth.route';
 import cartRoute from './cart.route';
 import accountRoute from './account.route';
@@ -35,5 +36,8 @@ router.use('/orders', ordersRoute);
 
 // Account management routes
 router.use('/account', accountRoute);
+
+// eSIM management routes
+router.use('/esims', esimsRoute);
 
 export default router;

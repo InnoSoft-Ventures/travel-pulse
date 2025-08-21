@@ -24,6 +24,22 @@ export const notificationDetails = async (req: Request, res: Response) => {
 	);
 };
 
+export const webhookAiraloSimulator = async (req: Request, res: Response) => {
+	const data = await optingAiraloService('simulator', req.body);
+
+	res.json(successResponse(data, 'Simulator triggered successfully'));
+};
+
+export const webhookAiraloLowData = async (req: Request, res: Response) => {
+	// const data = await optingAiraloService('low-data', req.body);
+	console.log('Low data notification received');
+	console.log(req.body);
+
+	res.json(
+		successResponse('data', 'Low data notification triggered successfully')
+	);
+};
+
 export const asyncOrders = (provider: ProviderIdentity) => {
 	return async (req: Request, res: Response) => {
 		await processAsyncOrders(provider, req.body);

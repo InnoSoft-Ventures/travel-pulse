@@ -42,7 +42,7 @@ export interface SimAttributes {
 
 export type SimCreationAttributes = Optional<
 	SimAttributes,
-	'id' | 'createdAt' | 'updatedAt'
+	'id' | 'expiredAt' | 'createdAt' | 'updatedAt'
 >;
 
 class Sim extends Model<SimAttributes, SimCreationAttributes> {
@@ -164,7 +164,7 @@ Sim.init(
 			type: DataTypes.INTEGER,
 		},
 		expiredAt: {
-			allowNull: false,
+			allowNull: true,
 			type: DataTypes.DATE,
 			field: 'expired_at',
 		},
