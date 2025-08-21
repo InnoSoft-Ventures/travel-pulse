@@ -13,13 +13,11 @@ export const listEsims = async (req: SessionRequest, res: Response) => {
 };
 
 export const getEsimDetails = async (req: SessionRequest, res: Response) => {
-	const simId = Number(req.params.simId);
-	const data = await getEsimDetailsService(req, simId);
+	const data = await getEsimDetailsService(req);
 	res.json(successResponse(data, 'eSIM details retrieved successfully'));
 };
 
 export const getEsimQr = async (req: SessionRequest, res: Response) => {
-	const simId = Number(req.params.simId);
-	const data = await getEsimQrService(req, simId);
+	const data = await getEsimQrService(req);
 	res.json(successResponse(data, 'eSIM QR retrieved successfully'));
 };

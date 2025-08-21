@@ -88,10 +88,8 @@ export const listEsimsService = async (
 			providerOrder: po
 				? {
 						id: po.id,
-						provider: po.provider,
 						packageId: po.packageId,
 						type: po.type,
-						dataAmount: po.dataAmount,
 						voice: po.voice,
 						text: po.text,
 						price: po.price,
@@ -112,11 +110,9 @@ export const listEsimsService = async (
 	};
 };
 
-export const getEsimDetailsService = async (
-	req: SessionRequest,
-	simId: number
-) => {
+export const getEsimDetailsService = async (req: SessionRequest) => {
 	const userId = req.user.accountId;
+	const simId = Number(req.params.simId);
 
 	const sim = await Sim.findOne({
 		where: { id: simId },
@@ -165,10 +161,8 @@ export const getEsimDetailsService = async (
 		providerOrder: po
 			? {
 					id: po.id,
-					provider: po.provider,
 					packageId: po.packageId,
 					type: po.type,
-					dataAmount: po.dataAmount,
 					voice: po.voice,
 					text: po.text,
 					price: po.price,
@@ -179,8 +173,9 @@ export const getEsimDetailsService = async (
 	};
 };
 
-export const getEsimQrService = async (req: SessionRequest, simId: number) => {
+export const getEsimQrService = async (req: SessionRequest) => {
 	const userId = req.user.accountId;
+	const simId = Number(req.params.simId);
 
 	const sim = await Sim.findOne({
 		where: { id: simId },
