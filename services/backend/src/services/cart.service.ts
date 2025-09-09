@@ -35,24 +35,23 @@ export const processCartService = async (cart: Cart): Promise<CartDetails> => {
 
 	cart.items.forEach((item) => {
 		const productDetails = productDetailsMap.get(item.packageId);
-		if (!productDetails) {
-			throw new Error(`Product with ID ${item.packageId} not found`);
+
+		if (productDetails) {
+			const details: CartItem = {
+				...item,
+				finalPrice: toDecimalPoints<string>(
+					productDetails.price * item.quantity,
+					currency
+				),
+				// Will be used for displaying the original price
+				// originalPrice: productDetails.price,
+				data: productDetails.data,
+				validity: `${productDetails.day} Days`,
+			};
+
+			subtotal += productDetails.price * details.quantity;
+			items.push(details);
 		}
-
-		const details: CartItem = {
-			...item,
-			finalPrice: toDecimalPoints<string>(
-				productDetails.price * item.quantity,
-				currency
-			),
-			// Will be used for displaying the original price
-			// originalPrice: productDetails.price,
-			data: productDetails.data,
-			validity: `${productDetails.day} Days`,
-		};
-
-		subtotal += productDetails.price * details.quantity;
-		items.push(details);
 	});
 
 	const subTotalTwoDecimal = toDecimalPoints<number>(subtotal);

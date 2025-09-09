@@ -5,8 +5,12 @@ import {
 } from '../controllers/providers.controller';
 import { errorHandler } from '@travelpulse/middlewares';
 import { getAiraloESIMUsage } from '../controllers/sim-usage.controller';
+import { providerOnboarding } from '../controllers/provider-onboarding.controller';
 
 const router = express.Router();
+
+// Provider Onboarding
+router.post('/onboard', errorHandler(providerOnboarding));
 
 router.post('/airalo/token', errorHandler(airaloAuthenticate));
 router.get('/airalo/packages', errorHandler(getAiraloPackages));

@@ -15,19 +15,20 @@ The project is structured using **pnpm** for efficient package management, with 
 -   Node.js (v14.x or higher)
 -   pnpm (v7.x or higher)
 -   Nx CLI (v15.x or higher)
+-   Docker
 
 ### **Installation**
 
-1. **Clone the Repository**
-   Begin by cloning the repository to your local machine:
+1.  **Clone the Repository**
+    Begin by cloning the repository to your local machine:
 
     ```bash
     git clone https://github.com/InnoSoft-Ventures/travel-pulse.git
     cd travel-pulse
     ```
 
-2. **Install Dependencies**
-   Use **pnpm** to install all necessary dependencies for the project:
+2.  **Install Dependencies**
+    Use **pnpm** to install all necessary dependencies for the project:
 
     ```bash
     pnpm install
@@ -45,20 +46,26 @@ The project is structured using **pnpm** for efficient package management, with 
     nvm use
     ```
 
+    Run the following command to start Database server, run migrations and start backend services:
+
+    ```bash
+    pnpm setup:server
+    ```
+
 ### **Running the Application**
+
+-   **Run the Backend server**
+    To start the development server, run:
+
+    ```bash
+    pnpm run server:dev
+    ```
 
 -   **Run the web app**
     To start the development server for your application, run the following command:
 
     ```bash
     pnpm run web:dev
-    ```
-
--   **Run the API server**
-    To start the development server, run:
-
-    ```bash
-    pnpm run server:dev
     ```
 
 3. **Run Tests**
