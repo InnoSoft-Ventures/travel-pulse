@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Modal } from 'react-responsive-modal';
+import { Modal, ModalProps } from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
 import { cva, VariantProps } from 'class-variance-authority';
 import { cn } from '../../../utils';
@@ -23,13 +23,14 @@ const modalVariants = cva(styles.modal, {
 	},
 });
 
-interface BaseModalProps extends VariantProps<typeof modalVariants> {
+interface BaseModalProps
+	extends VariantProps<typeof modalVariants>,
+		ModalProps {
 	open: boolean;
 	title?: string;
-	description?: string;
+	description?: React.ReactNode;
 	children?: React.ReactNode;
 	onOk?: () => void;
-	onCancel: () => void;
 	showFooter?: boolean;
 	okText?: string;
 	cancelText?: string;
@@ -45,7 +46,6 @@ function BaseModal({
 	description,
 	children,
 	onOk,
-	onCancel,
 	okText = 'OK',
 	cancelText = 'Cancel',
 	showCloseIcon = true,
@@ -54,11 +54,13 @@ function BaseModal({
 	focusTrapped = true,
 	size,
 	className,
+	onClose,
+	...props
 }: BaseModalProps) {
 	return (
 		<Modal
 			open={open}
-			onClose={onCancel}
+			onClose={onClose}
 			center={center}
 			showCloseIcon={showCloseIcon}
 			closeIcon={<CloseIcon />}
@@ -67,6 +69,7 @@ function BaseModal({
 				modal: cn(modalVariants({ size }), className),
 				overlay: styles.overlay,
 			}}
+			{...props}
 		>
 			<div className={styles.header}>
 				{title && <h2>{title}</h2>}
@@ -77,7 +80,7 @@ function BaseModal({
 
 			{showFooter && (
 				<div className={styles.footer}>
-					<Button type="button" variant="outline" onClick={onCancel}>
+					<Button type="button" variant="outline" onClick={onClose}>
 						{cancelText}
 					</Button>
 					{onOk && (

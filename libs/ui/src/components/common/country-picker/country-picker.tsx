@@ -62,8 +62,8 @@ export const CountryPicker = (props: CountryPickerProps) => {
 		[]
 	);
 
-	const selectedOption = useMemo<CountryOption | null>(() => {
-		return value ? toOption(value) : null;
+	const selectedOption = useMemo<CountryOption | undefined>(() => {
+		return value ? toOption(value) : undefined;
 	}, [value, toOption]);
 
 	const loadOptions = useCallback(

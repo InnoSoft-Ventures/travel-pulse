@@ -11,7 +11,7 @@ import {
 	SOMETHING_WENT_WRONG,
 } from '@travelpulse/interfaces';
 import Package, { PackageLite } from '../../db/models/Package';
-import { OrderPayload } from '../../schema/order.schema';
+import { CreateOrderPayload } from '@travelpulse/interfaces/schemas';
 import { Op, Transaction } from 'sequelize';
 import { SessionRequest } from '../../../types/express';
 import { toDecimalPoints } from '@travelpulse/utils';
@@ -65,7 +65,7 @@ const fetchPackages = async (
 };
 
 const prepareOrderDetails = (
-	data: OrderPayload['packages'],
+	data: CreateOrderPayload['packages'],
 	reducePackage: Map<number, PackageLite>,
 	orderId: number
 ) => {
@@ -112,7 +112,7 @@ const prepareOrderDetails = (
 export const createOrderService = async (
 	req: SessionRequest
 ): Promise<OrderResponse> => {
-	const data = req.body as OrderPayload;
+	const data = req.body as CreateOrderPayload;
 	const userId = req.user.accountId;
 
 	const transact = await dbConnect.transaction();

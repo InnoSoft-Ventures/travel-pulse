@@ -1,7 +1,7 @@
 import express from 'express';
 import { errorHandler, validateData } from '@travelpulse/middlewares';
 import { getOrders, makeOrder } from '../controllers/orders.controller';
-import { OrderPayloadSchema } from '../schema/order.schema';
+import { OrderPayloadSchema } from '@travelpulse/interfaces/schemas';
 import {
 	confirmPayment,
 	createPaymentAttempt,
@@ -9,7 +9,7 @@ import {
 import {
 	PaymentAttemptSchema,
 	PaymentConfirmationRequestSchema,
-} from '../schema/payment.schema';
+} from '@travelpulse/interfaces/schemas';
 
 const router = express.Router();
 

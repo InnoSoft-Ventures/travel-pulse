@@ -12,6 +12,7 @@
 		"imsis",
 		"masterdata",
 		"msisdn",
+		"payfast",
 		"persistor",
 		"qrcode",
 		"rechargeability",

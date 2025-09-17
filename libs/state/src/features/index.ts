@@ -4,3 +4,4 @@ export * from './masterdata.slice';
 export * from './products.slice';
 export * from './metadata.slice';
 export * from './cart.slice';
+export * from './orders.slice';

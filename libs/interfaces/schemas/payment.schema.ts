@@ -1,17 +1,22 @@
 import { z } from 'zod';
-import { PAYMENT_METHODS, PaymentProvider } from '@travelpulse/interfaces';
 import { isValidPaymentMethod } from '../utils/data';
+import { PAYMENT_METHODS, PaymentMethod, PaymentProvider } from '../constants';
 
 const providerEnum = z.enum(
 	Object.keys(PAYMENT_METHODS) as [PaymentProvider, ...PaymentProvider[]]
 );
+// Collect all unique methods across providers and type them
+const methodValues = Array.from(
+	new Set(Object.values(PAYMENT_METHODS).flat())
+) as [PaymentMethod, ...PaymentMethod[]];
+const methodEnum = z.enum(methodValues);
 
 // method depends on provider at runtime; we validate with a refinement
 export const PaymentAttemptSchema = z
 	.object({
 		currency: z.string(),
 		provider: providerEnum,
-		method: z.string(),
+		method: methodEnum,
 	})
 	.refine(
 		(val) => {

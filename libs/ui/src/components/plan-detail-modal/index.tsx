@@ -86,7 +86,7 @@ function PlanDetailModal({
 		<Modal
 			open={open}
 			size="large"
-			onCancel={onClose}
+			onClose={onClose}
 			focusTrapped={false}
 			showFooter={false}
 			className={styles.planModalContainer}

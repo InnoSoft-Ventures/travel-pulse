@@ -5,6 +5,10 @@ import { PaymentCard } from '../payment-card';
 import { Paypal } from '../paypal';
 import { Button, Checkbox, Title } from '../../common';
 import Link from 'next/link';
+import { useAppDispatch, useAppSelector } from '@travelpulse/state';
+import { createOrder, createPaymentAttempt } from '@travelpulse/state/thunks';
+import PaymentModal from '../payment-modal';
+import { PaymentMethod } from '@travelpulse/interfaces';
 
 interface PaymentMethodsProps {
 	currency: string;
@@ -12,17 +16,32 @@ interface PaymentMethodsProps {
 	total: number;
 }
 
+// Enable pay button only if:
+// - User has confirmed device is eSIM compatible
+// - And either PayPal is selected, or Card is selected and valid
 export const PaymentMethods = ({
 	currency,
 	hasItems,
 	total,
 }: PaymentMethodsProps) => {
-	const [selectedMethod, setSelectedMethod] = useState<
-		'card' | 'paypal' | null
-	>(null);
+	const [selectedMethod, setSelectedMethod] = useState<PaymentMethod | null>(
+		null
+	);
 	const [isCardValid, setIsCardValid] = useState(false);
 	const [isEsimCompatible, setIsEsimCompatible] = useState(false);
 	const [isPayButtonEnabled, setIsPayButtonEnabled] = useState(false);
+
+	const { status, error } = useAppSelector(
+		(state) => state.account.orders.create
+	);
+
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		if (error) {
+			console.log(`Order creation failed:, `, error);
+		}
+	}, [error]);
 
 	useEffect(() => {
 		const isPaypalSelected = selectedMethod === 'paypal';
@@ -32,6 +51,35 @@ export const PaymentMethods = ({
 			isEsimCompatible && (isPaypalSelected || isCardSelectedAndValid)
 		);
 	}, [selectedMethod, isCardValid, isEsimCompatible]);
+
+	const [showProcessingModal, setShowProcessingModal] = useState(false);
+
+	const submitOrder = async (e: React.FormEvent) => {
+		e.preventDefault();
+
+		try {
+			const order = await dispatch(createOrder()).unwrap();
+			// Open processing modal
+			setShowProcessingModal(true);
+
+			// Determine provider + method based on selection
+			const provider = selectedMethod === 'paypal' ? 'paypal' : 'payfast';
+
+			const paymentAttempt = await dispatch(
+				createPaymentAttempt({
+					orderId: order.orderId,
+					provider: provider,
+					method: selectedMethod as PaymentMethod,
+					currency: 'USD',
+				})
+			).unwrap();
+
+			// Leave modal open; you can redirect based on provider next
+			console.log('Payment Attempt:', paymentAttempt);
+		} catch (error) {
+			console.error('Failed to create order:', error);
+		}
+	};
 
 	return (
 		<>
@@ -91,8 +139,10 @@ export const PaymentMethods = ({
 					size="lg"
 					fullWidth
 					id="payment-button"
-					type="submit"
+					type="button"
+					isLoading={status === 'loading'}
 					disabled={!isPayButtonEnabled || !hasItems}
+					onClick={submitOrder}
 				>
 					Pay {currency}
 					{total}
@@ -102,6 +152,11 @@ export const PaymentMethods = ({
 			<div className={styles.sslNotice}>
 				All transactions are secure and encrypted via SSL encryption
 			</div>
+
+			<PaymentModal
+				open={showProcessingModal}
+				onClose={() => setShowProcessingModal(false)}
+			/>
 		</>
 	);
 };

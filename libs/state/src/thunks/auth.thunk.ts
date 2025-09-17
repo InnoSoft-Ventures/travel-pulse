@@ -82,7 +82,10 @@ export const forgotPassword = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
 	'auth/logout',
-	async (_, thunkAPI) => {
+	async (
+		{ redirectToLoginPage }: { redirectToLoginPage?: boolean },
+		thunkAPI
+	) => {
 		try {
 			// Best-effort server logout (clears httpOnly cookie)
 			await ApiService.post('/auth/logout');
@@ -91,13 +94,27 @@ export const logoutUser = createAsyncThunk(
 		// Trigger client-side reset of account domain (handled in store.ts)
 		thunkAPI.dispatch({ type: 'auth/logout' });
 
+		// Clear persisted account to avoid rehydration after reload
+		if (typeof window !== 'undefined') {
+			try {
+				window.localStorage.removeItem('persist:account');
+			} catch {}
+		}
+
 		// Redirect logic: if current path is under /app, send to login; otherwise reload
 		if (typeof window !== 'undefined') {
 			const { location } = window;
 			const pathname = location?.pathname || '/';
 
-			if (pathname.startsWith('/app')) {
-				location.replace(`/auth/signin?redirect=${pathname}`);
+			if (
+				pathname.startsWith('/app') ||
+				pathname.startsWith('/checkout')
+			) {
+				const redirectPath = !redirectToLoginPage
+					? `?redirect=${pathname}`
+					: '';
+
+				location.replace(`/auth/signin${redirectPath}`);
 			} else {
 				location.reload();
 			}

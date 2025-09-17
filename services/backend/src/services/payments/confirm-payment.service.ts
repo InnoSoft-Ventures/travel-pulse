@@ -11,7 +11,7 @@ import {
 	PaymentStatus,
 	ProviderFactoryData,
 } from '@travelpulse/interfaces';
-import { PaymentConfirmationRequest } from '../../schema/payment.schema';
+import { PaymentConfirmationRequest } from '@travelpulse/interfaces/schemas/payment.schema';
 import { processProviderOrders } from '../orders/provider-order.service';
 
 /**

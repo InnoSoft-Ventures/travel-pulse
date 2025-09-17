@@ -2,16 +2,16 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import dbConnect from '..';
 import Order from './Order';
 import User from './User';
-import { PaymentStatus } from '@travelpulse/interfaces';
+import { PaymentStatus, ProviderMethodPair } from '@travelpulse/interfaces';
 
 export interface PaymentAttemptAttributes {
 	id: number;
 	orderId: number;
 	userId: number;
 	/** e.g., 'stripe', 'adyen', 'manual' */
-	provider: string;
+	provider: ProviderMethodPair['provider'];
 	/** e.g., 'card', 'apple_pay', 'google_pay' */
-	method: string;
+	method: ProviderMethodPair['method'];
 	status: PaymentStatus;
 	referenceId: string | null;
 	amount: number;
@@ -39,8 +39,8 @@ class PaymentAttempt
 	public id!: number;
 	public orderId!: number;
 	public userId!: number;
-	public provider!: string;
-	public method!: string;
+	public provider!: ProviderMethodPair['provider'];
+	public method!: ProviderMethodPair['method'];
 	public status!: PaymentStatus;
 	public referenceId!: string | null;
 	public amount!: number;

@@ -25,7 +25,7 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({
 
 	function onLogoutFn(e: React.MouseEvent<HTMLAnchorElement>) {
 		e.preventDefault();
-		dispatch(logoutUser());
+		dispatch(logoutUser({ redirectToLoginPage: true }));
 	}
 
 	return (

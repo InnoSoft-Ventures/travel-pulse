@@ -13,9 +13,18 @@ export const makeStore = () => {
 	// );
 
 	const rootWithReset = (state: any, action: any) => {
-		if (action.type === 'auth/logout') {
-			// Keep app branch; reset account
-			state = { ...state, account: undefined };
+		if (
+			typeof action?.type === 'string' &&
+			action.type.startsWith('auth/logout')
+		) {
+			// Build a fresh root state from reducer initializers
+			const freshState = rootReducer(undefined, {
+				type: '@@INIT',
+			} as any);
+			// Keep app branch; fully reset other domains to their initial state
+			const appState = state?.app as (typeof freshState)['app'];
+
+			return { ...freshState, app: appState };
 		}
 		return rootReducer(state, action);
 	};

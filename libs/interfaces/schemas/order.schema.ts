@@ -11,4 +11,4 @@ export const OrderPayloadSchema = z.object({
 	currency: z.string().min(3).max(3),
 });
 
-export type OrderPayload = z.infer<typeof OrderPayloadSchema>;
+export type CreateOrderPayload = z.infer<typeof OrderPayloadSchema>;

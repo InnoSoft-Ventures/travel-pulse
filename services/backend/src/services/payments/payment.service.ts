@@ -1,5 +1,7 @@
 import {
+	isValidPaymentMethod,
 	OrderStatus,
+	PaymentAttemptResponse,
 	PaymentProvider,
 	PaymentStatus,
 	SOMETHING_WENT_WRONG,
@@ -7,8 +9,7 @@ import {
 import PaymentAttempt from '../../db/models/PaymentAttempt';
 import { SessionRequest } from '../../../types/express';
 import { InternalException } from '@travelpulse/middlewares';
-import { isValidPaymentMethod } from '../../utils/data';
-import { PaymentAttemptRequest } from '../../schema/payment.schema';
+import { PaymentAttemptRequest } from '@travelpulse/interfaces/schemas';
 import dbConnect from '../../db';
 import Order from '../../db/models/Order';
 import { updateOrderStatus } from '../orders/order-util';
@@ -17,7 +18,9 @@ import { updateOrderStatus } from '../orders/order-util';
  * Create payment attempt for an order.
  * @returns
  */
-export const createPaymentAttemptService = async (req: SessionRequest) => {
+export const createPaymentAttemptService = async (
+	req: SessionRequest
+): Promise<PaymentAttemptResponse> => {
 	const transact = await dbConnect.transaction();
 
 	try {

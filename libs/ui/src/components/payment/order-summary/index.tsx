@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { CopyIcon, TrashIcon } from 'lucide-react';
 import { CartState, removeFromCart, useAppDispatch } from '@travelpulse/state';
 import { processCart } from '@travelpulse/state/thunks';
+import { Icon } from '../../common';
 
 interface OrderSummaryProps {
 	cartState: CartState;
@@ -126,7 +127,12 @@ export function OrderSummary({ cartState }: OrderSummaryProps) {
 						</div>
 					))}
 
-				{items.status === 'loading' && <div>Loading...</div>}
+				{items.status === 'loading' && (
+					<div>
+						<Icon name="LoaderCircle" />
+						<div>Loading cart items...</div>
+					</div>
+				)}
 
 				{items.status === 'failed' && (
 					<div>Error loading cart items</div>

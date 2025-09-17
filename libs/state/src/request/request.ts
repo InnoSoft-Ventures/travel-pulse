@@ -36,7 +36,7 @@ axiosInstance.interceptors.response.use(
 				const store = storeRef.get();
 				if (store) {
 					// fire and forget
-					store.dispatch<any>(logoutUser());
+					store.dispatch<any>(logoutUser({}));
 				}
 			} catch {}
 

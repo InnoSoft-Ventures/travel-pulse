@@ -23,7 +23,7 @@ function CompatibilityChecker() {
 			<Modal
 				open={showModal}
 				size="large"
-				onCancel={() => {
+				onClose={() => {
 					setShowModal(false);
 				}}
 				onOk={() => {
