@@ -16,6 +16,7 @@ export const getOrdersService = async (
 				as: 'orderItems',
 			},
 		],
+		order: [['createdAt', 'DESC']],
 	});
 
 	return orders.map((order) => {
@@ -32,6 +33,7 @@ export const getOrdersService = async (
 				price: detail.price,
 				startDate: detail.startDate,
 			})),
+			createdAt: order.createdAt,
 		};
 
 		return details;

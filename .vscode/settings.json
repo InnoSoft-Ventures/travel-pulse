@@ -17,8 +17,10 @@
 		"persistor",
 		"qrcode",
 		"rechargeability",
+		"redirecturl",
 		"topup",
 		"travelpulse",
+		"trxref",
 		"xlarge"
 	],
 	"tailwindCSS.experimental.classRegex": [

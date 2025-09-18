@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
 	ItemState,
 	ListState,
@@ -15,18 +15,30 @@ import {
 	createOrder,
 	fetchOrders,
 	createPaymentAttempt,
+	confirmPayment,
 } from '../thunks/order.thunk';
 
 export interface OrdersState {
 	create: ItemState<OrderResponse | null>;
 	list: ListState<OrderDetailResponse>;
 	paymentAttempt: ItemState<PaymentAttemptResponse | null>;
+	confirmation: ItemState<{
+		orderId: number;
+		paymentId: number;
+		orderStatus: string;
+		paymentStatus: string;
+		providerOrdersCreated: boolean;
+		message?: string;
+	} | null>;
+	confirmationStep: 'initial' | 'processing' | 'completed';
 }
 
 const initialState: OrdersState = {
 	create: createInitialItemState<OrderResponse | null>(null),
 	list: createInitialListState<OrderDetailResponse>(),
 	paymentAttempt: createInitialItemState(null),
+	confirmation: createInitialItemState(null),
+	confirmationStep: 'initial',
 };
 
 const ordersSlice = createSlice({
@@ -35,6 +47,12 @@ const ordersSlice = createSlice({
 	reducers: {
 		resetCreate(state) {
 			state.create = createInitialItemState<OrderResponse | null>(null);
+		},
+		updateConfirmationStep(
+			state,
+			action: PayloadAction<OrdersState['confirmationStep']>
+		) {
+			state.confirmationStep = action.payload;
 		},
 	},
 	extraReducers: (builder) => {
@@ -79,9 +97,23 @@ const ordersSlice = createSlice({
 			state.paymentAttempt.status = 'failed';
 			state.paymentAttempt.error = action.payload as ErrorHandler;
 		});
+
+		// Confirm payment
+		builder.addCase(confirmPayment.pending, (state) => {
+			state.confirmation.status = 'loading';
+			state.confirmation.error = undefined;
+		});
+		builder.addCase(confirmPayment.fulfilled, (state, action) => {
+			state.confirmation.data = action.payload;
+			state.confirmation.status = 'succeeded';
+		});
+		builder.addCase(confirmPayment.rejected, (state, action) => {
+			state.confirmation.status = 'failed';
+			state.confirmation.error = action.payload as ErrorHandler;
+		});
 	},
 });
 
-export const { resetCreate } = ordersSlice.actions;
+export const { resetCreate, updateConfirmationStep } = ordersSlice.actions;
 
 export default ordersSlice.reducer;

@@ -73,7 +73,9 @@ function BaseModal({
 		>
 			<div className={styles.header}>
 				{title && <h2>{title}</h2>}
-				{description && <p>{description}</p>}
+				{description && (
+					<div className={styles.description}>{description}</div>
+				)}
 			</div>
 
 			<div className={styles.body}>{children}</div>

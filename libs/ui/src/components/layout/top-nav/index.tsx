@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Logo } from '../../common/logo';
 import { sessionValid, useAppSelector } from '@travelpulse/state';
-import { CartIcon } from '../../common';
+import { CartIcon } from '../../common/icon';
 
 const TopNav = () => {
 	const router = useRouter();

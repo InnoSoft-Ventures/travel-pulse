@@ -6,14 +6,16 @@
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.header h2 {
-	font-size: 1.5rem;
-	margin-bottom: 0.25rem;
-}
+.header {
+	h2 {
+		font-size: 1.5rem;
+		margin-bottom: 0.25rem;
+	}
 
-.header p {
-	font-size: 0.95rem;
-	color: #666;
+	.description {
+		font-size: 0.95rem;
+		color: #666;
+	}
 }
 
 .body {

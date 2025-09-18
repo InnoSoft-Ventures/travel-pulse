@@ -1,9 +1,13 @@
 import express from 'express';
-import { errorHandler, validateData } from '@travelpulse/middlewares';
+import {
+	errorHandler,
+	errorResponse,
+	validateData,
+} from '@travelpulse/middlewares';
 import { getOrders, makeOrder } from '../controllers/orders.controller';
 import { OrderPayloadSchema } from '@travelpulse/interfaces/schemas';
 import {
-	confirmPayment,
+	// confirmPayment,
 	createPaymentAttempt,
 } from '../controllers/payment.controller';
 import {
@@ -21,10 +25,18 @@ router.post(
 	validateData(PaymentAttemptSchema),
 	errorHandler(createPaymentAttempt)
 );
+// router.post(
+// 	'/:orderId/payments/:paymentId/confirm',
+// 	validateData(PaymentConfirmationRequestSchema),
+// 	errorHandler(confirmPayment)
+// );
+
 router.post(
 	'/:orderId/payments/:paymentId/confirm',
 	validateData(PaymentConfirmationRequestSchema),
-	errorHandler(confirmPayment)
+	errorHandler((_req: any, res: any) => {
+		res.status(200).json(errorResponse('Fail'));
+	})
 );
 
 export default router;

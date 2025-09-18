@@ -21,4 +21,5 @@ export interface OrderDetailResponse {
 		price: number;
 		startDate: string;
 	}[];
+	createdAt: Date;
 }

@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '@travelpulse/state';
 import { createOrder, createPaymentAttempt } from '@travelpulse/state/thunks';
 import PaymentModal from '../payment-modal';
 import { PaymentMethod } from '@travelpulse/interfaces';
+import { launchPaymentProvider } from './payment-provider-launcher';
 
 interface PaymentMethodsProps {
 	currency: string;
@@ -45,7 +46,7 @@ export const PaymentMethods = ({
 
 	useEffect(() => {
 		const isPaypalSelected = selectedMethod === 'paypal';
-		const isCardSelectedAndValid = selectedMethod === 'card' && isCardValid;
+		const isCardSelectedAndValid = selectedMethod === 'card';
 
 		setIsPayButtonEnabled(
 			isEsimCompatible && (isPaypalSelected || isCardSelectedAndValid)
@@ -59,25 +60,26 @@ export const PaymentMethods = ({
 
 		try {
 			const order = await dispatch(createOrder()).unwrap();
+
 			// Open processing modal
 			setShowProcessingModal(true);
 
 			// Determine provider + method based on selection
-			const provider = selectedMethod === 'paypal' ? 'paypal' : 'payfast';
+			const provider =
+				selectedMethod === 'paypal' ? 'paypal' : 'paystack';
 
 			const paymentAttempt = await dispatch(
 				createPaymentAttempt({
 					orderId: order.orderId,
 					provider: provider,
 					method: selectedMethod as PaymentMethod,
-					currency: 'USD',
+					currency: 'ZAR', // adjust per selected currency mapping
 				})
 			).unwrap();
 
-			// Leave modal open; you can redirect based on provider next
-			console.log('Payment Attempt:', paymentAttempt);
+			launchPaymentProvider(paymentAttempt, dispatch);
 		} catch (error) {
-			console.error('Failed to create order:', error);
+			console.error('Failed to create order or payment attempt:', error);
 		}
 	};
 
