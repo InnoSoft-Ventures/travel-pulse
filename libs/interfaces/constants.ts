@@ -1,5 +1,5 @@
 export const PAYMENT_METHODS = {
-	payfast: ['card', 'apple_pay', 'google_pay'],
+	paystack: ['card', 'apple_pay', 'google_pay'],
 	paypal: ['card', 'paypal'],
 } as const;
 

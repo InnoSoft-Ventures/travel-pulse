@@ -34,6 +34,7 @@ export const registerService = async (
 	// Generate tokens
 	const accessToken = signToken<SignToken>(__dirname + '/../', {
 		accountId: user.id,
+		email: '',
 	});
 
 	return {
@@ -80,6 +81,7 @@ export const loginService = async (data: SignInType): Promise<UserDataDAO> => {
 
 	const accessToken = signToken<SignToken>(__dirname + '/../', {
 		accountId: user.id,
+		email: '',
 	});
 
 	return {

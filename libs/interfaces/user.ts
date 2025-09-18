@@ -2,6 +2,7 @@ import { Country } from './common';
 
 export interface SessionToken {
 	accountId: number;
+	email: string;
 	iat?: number;
 	exp?: number;
 }

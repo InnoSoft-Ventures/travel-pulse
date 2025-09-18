@@ -11,6 +11,7 @@ import authRoute from './auth.route';
 import cartRoute from './cart.route';
 import accountRoute from './account.route';
 import { routeMiddleware } from '@travelpulse/middlewares';
+import User from '../db/models/User';
 
 const router = Router();
 
@@ -29,7 +30,7 @@ router.use('/auth', authRoute);
 router.use('/cart', cartRoute);
 
 // Protected routes
-router.use(routeMiddleware(__dirname + '/../'));
+router.use(routeMiddleware(__dirname + '/../', User));
 
 // Order management routes
 router.use('/orders', ordersRoute);

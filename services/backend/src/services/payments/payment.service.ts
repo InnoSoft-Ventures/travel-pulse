@@ -13,6 +13,7 @@ import { PaymentAttemptRequest } from '@travelpulse/interfaces/schemas';
 import dbConnect from '../../db';
 import Order from '../../db/models/Order';
 import { updateOrderStatus } from '../orders/order-util';
+import { getOrThrowPaymentProviderAdapter } from '@travelpulse/services/payment-providers/registry';
 
 /**
  * Create payment attempt for an order.
@@ -28,7 +29,7 @@ export const createPaymentAttemptService = async (
 			req.body as PaymentAttemptRequest;
 
 		const orderId = Number(req.params.orderId);
-		const userId = req.user.accountId;
+		const { accountId: userId, email } = req.user;
 
 		if (!isValidPaymentMethod<PaymentProvider>(provider, method)) {
 			throw new InternalException(
@@ -72,6 +73,40 @@ export const createPaymentAttemptService = async (
 			transact
 		);
 
+		let session: PaymentAttemptResponse['session'];
+		try {
+			const adapter = getOrThrowPaymentProviderAdapter(provider);
+			if (adapter.initOneTimePayment) {
+				const sessionData = await adapter.initOneTimePayment({
+					order: {
+						orderId: order.id,
+						totalAmount: order.totalAmount,
+					},
+					currency,
+					userId,
+					method,
+					paymentAttemptId: paymentAttempt.id,
+					email,
+				});
+				if (sessionData) session = sessionData;
+			}
+		} catch (e) {
+			console.error('Provider session init failed:', e);
+		}
+
+		// Save provider payment reference
+		if (session) {
+			if (session.providerReference)
+				paymentAttempt.referenceId = session.providerReference;
+
+			if (session.redirectUrl)
+				paymentAttempt.redirectUrl = session.redirectUrl;
+
+			if (session.metadata) paymentAttempt.metadata = session.metadata;
+
+			await paymentAttempt.save({ transaction: transact });
+		}
+
 		await transact.commit();
 
 		return {
@@ -82,6 +117,7 @@ export const createPaymentAttemptService = async (
 			currency: paymentAttempt.currency,
 			provider: paymentAttempt.provider,
 			method: paymentAttempt.method,
+			session,
 		};
 	} catch (error) {
 		console.error('Failed to create payment attempt:', error);

@@ -9,4 +9,10 @@ export type PaymentAttemptResponse = {
 	status: PaymentStatus;
 	amount: number;
 	currency: string;
+	// Generic provider session/popup bootstrap data (e.g., Paystack reference)
+	session?: {
+		providerReference?: string; // e.g., Paystack reference
+		redirectUrl?: string; // if a provider needs redirection
+		metadata?: Record<string, any>;
+	};
 };

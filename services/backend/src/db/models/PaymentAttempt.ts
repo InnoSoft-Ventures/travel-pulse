@@ -14,6 +14,10 @@ export interface PaymentAttemptAttributes {
 	method: ProviderMethodPair['method'];
 	status: PaymentStatus;
 	referenceId: string | null;
+	/** Provider redirect / authorization URL (if applicable) */
+	redirectUrl: string | null;
+	/** Arbitrary provider session metadata (JSON) */
+	metadata: Record<string, any> | null;
 	amount: number;
 	currency: string; // ISO 4217
 	errorCode: string | null;
@@ -26,6 +30,8 @@ export type PaymentAttemptCreationAttributes = Optional<
 	PaymentAttemptAttributes,
 	| 'id'
 	| 'referenceId'
+	| 'redirectUrl'
+	| 'metadata'
 	| 'errorCode'
 	| 'errorMessage'
 	| 'createdAt'
@@ -43,6 +49,8 @@ class PaymentAttempt
 	public method!: ProviderMethodPair['method'];
 	public status!: PaymentStatus;
 	public referenceId!: string | null;
+	public redirectUrl!: string | null;
+	public metadata!: Record<string, any> | null;
 	public amount!: number;
 	public currency!: string;
 	public errorCode!: string | null;
@@ -93,6 +101,16 @@ PaymentAttempt.init(
 			allowNull: true,
 			type: DataTypes.STRING,
 			field: 'reference_id',
+		},
+		redirectUrl: {
+			allowNull: true,
+			type: DataTypes.TEXT,
+			field: 'redirect_url',
+		},
+		metadata: {
+			allowNull: true,
+			type: DataTypes.JSON,
+			field: 'metadata',
 		},
 		amount: {
 			allowNull: false,

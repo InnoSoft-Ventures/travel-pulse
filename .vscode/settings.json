@@ -13,6 +13,7 @@
 		"masterdata",
 		"msisdn",
 		"payfast",
+		"paystack",
 		"persistor",
 		"qrcode",
 		"rechargeability",

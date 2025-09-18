@@ -197,6 +197,9 @@ importers:
       '@travelpulse/api-service':
         specifier: workspace:^
         version: link:../api-service
+      '@travelpulse/interfaces':
+        specifier: workspace:^
+        version: link:../interfaces
       rabbitmq-client:
         specifier: ^4.6.0
         version: 4.6.0

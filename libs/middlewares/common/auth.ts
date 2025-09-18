@@ -150,8 +150,22 @@ export function verifyToken<T>(servicePath: string, token: string) {
 	}
 }
 
-export const extractToken = (
+async function getUserEmail(
+	accountId: number,
+	User: any
+): Promise<string | undefined> {
+	try {
+		const user = await User.findByPk(accountId, { attributes: ['email'] });
+		return user?.email || undefined;
+	} catch (e) {
+		console.error('Failed to lookup user email:', e);
+		return undefined;
+	}
+}
+
+export const extractToken = async (
 	servicePath: string,
+	user: any,
 	req: Request,
 	res: Response,
 	next: NextFunction
@@ -182,6 +196,13 @@ export const extractToken = (
 			algorithms: ['RS256'],
 		});
 
+		// Attach user information to the request
+		const email = await getUserEmail(req.user.accountId, user);
+
+		if (email) {
+			req.user.email = email;
+		}
+
 		return next();
 	} catch (error) {
 		console.error('extractToken: Token verification failed!', error);
@@ -197,12 +218,11 @@ export const extractToken = (
 /**
  * @param servicePath can be just `__dirname` or `__dirname + '/../../'`
  */
-export const routeMiddleware = (servicePath: string) => {
+export const routeMiddleware = (servicePath: string, user: any) => {
 	return (req: Request, res: Response, next: NextFunction) => {
 		if (req.url.includes('/internal')) {
 			return authMiddleware(req, res, next);
 		}
-
-		return extractToken(servicePath, req, res, next);
+		extractToken(servicePath, user, req, res, next);
 	};
 };

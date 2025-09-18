@@ -1,10 +1,6 @@
 {
 	"extends": "@config/tsconfig/base.json",
-	"include": [
-		".",
-		"../../libs/interfaces/schemas/order.schema.ts",
-		"../../libs/interfaces/schemas/payment.schema.ts"
-	],
+	"include": ["."],
 	"exclude": ["dist", "node_modules"],
 	"files": ["./types/express/index.d.ts"]
 }
