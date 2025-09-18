@@ -16,3 +16,6 @@ export * from './constants';
 
 // Utils
 export * from './utils';
+
+// payment providers
+export * from './payments';

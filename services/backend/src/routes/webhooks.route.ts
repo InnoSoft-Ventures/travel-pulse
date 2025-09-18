@@ -5,6 +5,7 @@ import {
 	notificationDetails,
 	optIn,
 	optOut,
+	paystackWebhook,
 	webhookAiraloLowData,
 	webhookAiraloSimulator,
 } from '../controllers/webhook.controller';
@@ -31,5 +32,8 @@ router.post(
 );
 
 router.post('/airalo/low-data', errorHandler(webhookAiraloLowData));
+
+// Paystack
+router.post('/paystack', errorHandler(paystackWebhook));
 
 export default router;

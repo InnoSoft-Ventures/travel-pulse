@@ -30,7 +30,12 @@ export interface OrdersState {
 		providerOrdersCreated: boolean;
 		message?: string;
 	} | null>;
-	confirmationStep: 'initial' | 'processing' | 'completed';
+	confirmationStep:
+		| 'initial'
+		| 'processing'
+		| 'completed'
+		| 'failed'
+		| 'closed';
 }
 
 const initialState: OrdersState = {

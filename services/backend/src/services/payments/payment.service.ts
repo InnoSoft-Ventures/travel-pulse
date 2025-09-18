@@ -74,24 +74,23 @@ export const createPaymentAttemptService = async (
 		);
 
 		let session: PaymentAttemptResponse['session'];
-		try {
-			const adapter = getOrThrowPaymentProviderAdapter(provider);
-			if (adapter.initOneTimePayment) {
-				const sessionData = await adapter.initOneTimePayment({
-					order: {
-						orderId: order.id,
-						totalAmount: order.totalAmount,
-					},
-					currency,
-					userId,
-					method,
-					paymentAttemptId: paymentAttempt.id,
-					email,
-				});
-				if (sessionData) session = sessionData;
-			}
-		} catch (e) {
-			console.error('Provider session init failed:', e);
+
+		const adapter = getOrThrowPaymentProviderAdapter(provider);
+
+		if (adapter.initOneTimePayment) {
+			const sessionData = await adapter.initOneTimePayment({
+				order: {
+					orderId: order.id,
+					totalAmount: order.totalAmount,
+				},
+				currency,
+				userId,
+				method,
+				paymentAttemptId: paymentAttempt.id,
+				email,
+			});
+
+			if (sessionData) session = sessionData;
 		}
 
 		// Save provider payment reference

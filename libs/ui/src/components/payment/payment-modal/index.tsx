@@ -9,19 +9,27 @@ interface PaymentModalProps {
 }
 
 const PaymentModal = ({ open, onClose }: PaymentModalProps) => {
-	const paymentAttempt = useAppSelector(
-		(state) => state.account.orders.paymentAttempt
-	);
-	const { confirmation, confirmationStep } = useAppSelector(
+	const { confirmation, confirmationStep, paymentAttempt } = useAppSelector(
 		(state) => state.account.orders
 	);
 
 	// Auto close when confirmed
 	useEffect(() => {
-		if (confirmation.status === 'succeeded') {
-			setTimeout(() => onClose(), 1200);
+		if (
+			confirmation.status === 'succeeded' ||
+			confirmationStep === 'failed' ||
+			confirmationStep === 'closed' ||
+			paymentAttempt.status === 'failed'
+		) {
+			const timeoutDuration =
+				confirmationStep === 'failed' ||
+				paymentAttempt.status === 'failed'
+					? 2500
+					: 1200;
+
+			setTimeout(() => onClose(), timeoutDuration);
 		}
-	}, [confirmation.status, onClose]);
+	}, [confirmation.status, paymentAttempt, confirmationStep, onClose]);
 
 	const Preparing = () => (
 		<div className="flex flex-col items-center justify-center p-6">
@@ -55,6 +63,12 @@ const PaymentModal = ({ open, onClose }: PaymentModalProps) => {
 			{confirmationStep === 'processing' && (
 				<p className="text-lg font-medium">
 					Confirming payment, please wait...
+				</p>
+			)}
+
+			{confirmationStep === 'failed' && (
+				<p className="text-lg font-medium text-red-600">
+					Payment confirmation timed out.
 				</p>
 			)}
 			{confirmationStep !== 'processing' &&

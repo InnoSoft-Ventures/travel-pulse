@@ -45,17 +45,24 @@ const launchPaystack = async (
 					},
 					onTimeout: () => {
 						console.warn('Payment confirmation timed out');
+						stopPaymentConfirmationPolling(
+							data.orderId,
+							data.paymentId
+						);
+						dispatch(updateConfirmationStep('failed'));
 					},
 				});
 			},
 			onCancel: () => {
 				console.log('User canceled. Paystack popup closed');
 				stopPaymentConfirmationPolling(data.orderId, data.paymentId);
+				dispatch(updateConfirmationStep('failed'));
 			},
 			onError: (error: unknown) => {
 				console.error('Paystack error:', error);
 				// TODO: surface error to modal state
 				stopPaymentConfirmationPolling(data.orderId, data.paymentId);
+				dispatch(updateConfirmationStep('failed'));
 			},
 		});
 	} catch (err) {

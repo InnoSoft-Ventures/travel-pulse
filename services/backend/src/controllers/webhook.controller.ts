@@ -3,6 +3,7 @@ import { successResponse } from '@travelpulse/middlewares';
 import { Request, Response } from 'express';
 import { processAsyncOrders } from '../services/process-async-orders';
 import { optingAiraloService } from '../services/webhooks/airalo/airalo-notifications';
+import { handlePaystackWebhook } from '../services/webhooks/payments/paystack.webhook';
 
 export const optIn = async (req: Request, res: Response) => {
 	const data = await optingAiraloService('opt-in', req.body);
@@ -46,4 +47,10 @@ export const asyncOrders = (provider: ProviderIdentity) => {
 
 		res.json(successResponse(null, 'Order received'));
 	};
+};
+
+export const paystackWebhook = async (req: Request, res: Response) => {
+	const data = await handlePaystackWebhook(req);
+
+	res.json(successResponse(data, 'Paystack webhook processed successfully'));
 };
