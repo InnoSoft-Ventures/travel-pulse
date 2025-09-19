@@ -48,6 +48,7 @@ const appReducer = combineReducers({
 const accountPersistConfig = {
 	key: 'account',
 	storage,
+	blacklist: ['orders'],
 };
 const persistedAccountReducer = persistReducer(
 	accountPersistConfig,

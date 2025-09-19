@@ -1,39 +1,42 @@
 import { InternalException, NotFoundException } from '@travelpulse/middlewares';
-import { SessionRequest } from '../../../types/express';
 import PaymentAttempt from '../../db/models/PaymentAttempt';
 import Order from '../../db/models/Order';
 import OrderItem from '../../db/models/OrderItem';
 import Package from '../../db/models/Package';
 import ProviderOrder from '../../db/models/ProviderOrder';
-import dbConnect from '../../db';
 import {
 	OrderStatus,
 	PaymentStatus,
 	ProviderFactoryData,
 } from '@travelpulse/interfaces';
-import { PaymentConfirmationRequest } from '@travelpulse/interfaces/schemas/payment.schema';
 import { processProviderOrders } from '../orders/provider-order.service';
+import { Transaction } from 'sequelize';
+
+interface ConfirmPaymentServiceRequest {
+	orderId: number;
+	userId: number;
+	paymentAttemptId: number;
+	referenceId: string;
+}
 
 /**
  * Confirm a successful payment and create provider orders atomically.
  * Implements idempotency: if already confirmed, does not duplicate provider orders.
  */
-export const confirmPaymentService = async (req: SessionRequest) => {
-	const { orderId: orderIdParam, paymentId: paymentIdParam } = req.params;
-	const orderId = Number(orderIdParam);
-	const paymentId = Number(paymentIdParam);
-	const { referenceId } = req.body as PaymentConfirmationRequest;
-
-	const transact = await dbConnect.transaction();
+export const confirmPaymentService = async (
+	data: ConfirmPaymentServiceRequest,
+	transact: Transaction
+) => {
+	const { orderId, userId, paymentAttemptId, referenceId } = data;
 
 	// Load Order and PaymentAttempt within the same transaction
 	const [order, paymentAttempt] = await Promise.all([
 		Order.findOne({
-			where: { id: orderId, userId: req.user.accountId },
+			where: { id: orderId, userId },
 			transaction: transact,
 		}),
 		PaymentAttempt.findOne({
-			where: { id: paymentId, orderId },
+			where: { id: paymentAttemptId, orderId, userId },
 			transaction: transact,
 		}),
 	]);
@@ -44,7 +47,7 @@ export const confirmPaymentService = async (req: SessionRequest) => {
 
 	if (!paymentAttempt) {
 		throw new NotFoundException(
-			`Payment attempt not found: ${paymentId}`,
+			`Payment attempt not found: ${paymentAttemptId}`,
 			null
 		);
 	}

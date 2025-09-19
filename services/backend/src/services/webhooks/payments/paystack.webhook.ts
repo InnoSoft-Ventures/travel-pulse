@@ -1,6 +1,7 @@
 import { Request } from 'express';
 import crypto from 'crypto';
 import { PaystackWebhookPayload } from '@travelpulse/interfaces';
+import { handleChargeSuccess } from './charge-handler';
 
 const verifyPaystackSignature = (req: Request) => {
 	const secret = process.env.PAYSTACK_TEST_SECRET_KEY || '';
@@ -19,13 +20,9 @@ export const handlePaystackWebhook = async (req: Request) => {
 
 	const { event, data } = req.body as PaystackWebhookPayload;
 
-	console.log(data);
 	switch (event) {
 		case 'charge.success':
-			// Handle successful charge
-
-			// TODO: Verify amount matches expected amount,  save card details (authorization)
-			console.log('Charge successful:', data);
+			handleChargeSuccess(data);
 			break;
 
 		default:

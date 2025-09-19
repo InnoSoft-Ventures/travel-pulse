@@ -19,3 +19,4 @@ export * from './utils';
 
 // payment providers
 export * from './payments';
+export * from './payment-card';
