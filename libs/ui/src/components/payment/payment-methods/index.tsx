@@ -83,6 +83,18 @@ export const PaymentMethods = ({
 		}
 	};
 
+	function handleClose(redirect?: boolean) {
+		if (redirect) {
+			try {
+				sessionStorage.setItem('tp:clearCartOnOrders', '1');
+			} catch {}
+			window.location.replace('/app/settings/orders');
+			return;
+		}
+
+		setShowProcessingModal(false);
+	}
+
 	return (
 		<>
 			<div>
@@ -155,10 +167,7 @@ export const PaymentMethods = ({
 				All transactions are secure and encrypted via SSL encryption
 			</div>
 
-			<PaymentModal
-				open={showProcessingModal}
-				onClose={() => setShowProcessingModal(false)}
-			/>
+			<PaymentModal open={showProcessingModal} onClose={handleClose} />
 		</>
 	);
 };

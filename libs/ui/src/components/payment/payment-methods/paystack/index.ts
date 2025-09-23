@@ -1,8 +1,4 @@
 import { PaymentAttemptResponse } from '@travelpulse/interfaces';
-import {
-	startPaymentConfirmationPolling,
-	stopPaymentConfirmationPolling,
-} from '../confirmation-watcher';
 import { AppDispatch, updateConfirmationStep } from '@travelpulse/state';
 
 interface PaystackSuccessResponse {
@@ -15,11 +11,7 @@ interface PaystackSuccessResponse {
 	redirecturl: string;
 }
 
-const launchPaystack = async (
-	accessCode: string,
-	dispatch: AppDispatch,
-	data: Pick<PaymentAttemptResponse, 'paymentId' | 'orderId'>
-) => {
+const launchPaystack = async (accessCode: string, dispatch: AppDispatch) => {
 	try {
 		if (typeof window === 'undefined') return; // SSR guard
 		// Dynamically import to avoid touching window during SSR
@@ -30,38 +22,18 @@ const launchPaystack = async (
 		popup.resumeTransaction(accessCode, {
 			onLoad(tranx: unknown) {
 				console.log('Paystack loaded:', tranx);
+				dispatch(updateConfirmationStep('processing'));
 			},
 			onSuccess: (response: PaystackSuccessResponse) => {
 				console.log('Paystack success:', response);
-
-				dispatch(updateConfirmationStep('processing'));
-
-				startPaymentConfirmationPolling({
-					orderId: data.orderId,
-					paymentId: data.paymentId,
-					referenceId: response.reference,
-					onSuccess: () => {
-						console.log('Payment confirmed via polling');
-					},
-					onTimeout: () => {
-						console.warn('Payment confirmation timed out');
-						stopPaymentConfirmationPolling(
-							data.orderId,
-							data.paymentId
-						);
-						dispatch(updateConfirmationStep('failed'));
-					},
-				});
 			},
 			onCancel: () => {
 				console.log('User canceled. Paystack popup closed');
-				stopPaymentConfirmationPolling(data.orderId, data.paymentId);
 				dispatch(updateConfirmationStep('failed'));
 			},
 			onError: (error: unknown) => {
 				console.error('Paystack error:', error);
 				// TODO: surface error to modal state
-				stopPaymentConfirmationPolling(data.orderId, data.paymentId);
 				dispatch(updateConfirmationStep('failed'));
 			},
 		});
@@ -80,10 +52,7 @@ export const handlePaystack = (
 		const { metadata, redirectUrl } = session;
 
 		if (metadata) {
-			void launchPaystack(metadata.accessCode, dispatch, {
-				paymentId: paymentAttempt.paymentId,
-				orderId: paymentAttempt.orderId,
-			});
+			void launchPaystack(metadata.accessCode, dispatch);
 		} else if (redirectUrl) {
 			window.location.href = redirectUrl;
 		}

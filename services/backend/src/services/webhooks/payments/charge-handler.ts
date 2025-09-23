@@ -6,6 +6,7 @@ import { PaymentCardCreationAttributes } from '../../../db/models/PaymentCard';
 import { saveCardDetails } from '../../payment-cards/payment-card.service';
 import dbConnect from '../../../db';
 import { Transaction } from 'sequelize';
+import { sendPaymentConfirmed } from '../../sse/payment-sse.service';
 
 function verifyChargeAmount(
 	status: string,
@@ -92,10 +93,19 @@ export const handleChargeSuccess = async (
 		throw new BadRequestException('Invalid charge amount or status', null);
 	}
 
-	// 2. Save card details (authorization)
+	// 4. Emit SSE to notify FE listeners
+	sendPaymentConfirmed(paymentDetails.userId, {
+		orderId: paymentDetails.orderId,
+		paymentId: paymentDetails.id,
+		referenceId: data.reference,
+	});
+
+	// 3. Send confirmation email
+
+	// 4. Save card details (authorization)
 	await handleCardSave(paymentDetails.userId, data, transact);
 
-	// 3. Distribute product by calling confirmPaymentService method
+	// 5. Distribute product by calling confirmPaymentService method
 	await confirmPaymentService(
 		{
 			orderId: paymentDetails.orderId,

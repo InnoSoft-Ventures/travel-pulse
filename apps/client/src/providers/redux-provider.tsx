@@ -3,9 +3,9 @@
 import { ToastProvider } from '@travelpulse/utils';
 import { UIProvider } from '@travelpulse/ui';
 import {
-	ReduxProvider,
 	AppStore,
 	makeStore,
+	ReduxProvider,
 	PersistGate,
 } from '@travelpulse/ui/state';
 import { useRef } from 'react';

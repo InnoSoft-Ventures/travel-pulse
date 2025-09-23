@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.scss';
 import { ConditionalFooter, ThemeProvider } from '@travelpulse/ui';
+import CartClearOnOrders from './cart-clear-on-orders';
 import ReduxProvider from '../providers/redux-provider';
 
 export const metadata: Metadata = {
@@ -23,6 +24,7 @@ export default function RootLayout({
 			<body className="antialiased">
 				<ReduxProvider>
 					<ThemeProvider>
+						<CartClearOnOrders />
 						{children}
 
 						<ConditionalFooter />

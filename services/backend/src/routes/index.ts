@@ -7,6 +7,7 @@ import webhooksRoute from './webhooks.route';
 import ordersRoute from './orders.route';
 import productsRoute from './products.route';
 import esimsRoute from './esims.route';
+import sseRoute from './sse.route';
 import authRoute from './auth.route';
 import cartRoute from './cart.route';
 import accountRoute from './account.route';
@@ -40,5 +41,8 @@ router.use('/account', accountRoute);
 
 // eSIM management routes
 router.use('/esims', esimsRoute);
+
+// Server-Sent Events
+router.use('/sse', sseRoute);
 
 export default router;

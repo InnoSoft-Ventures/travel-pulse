@@ -89,6 +89,32 @@ export const fetchOrders = createAsyncThunk<
 	}
 });
 
+export const fetchOrderById = createAsyncThunk<
+	OrderDetailResponse,
+	number,
+	{ state: RootState }
+>('orders/fetchOne', async (orderId, thunkAPI) => {
+	try {
+		const response = await ApiService.get<
+			ResponseData<OrderDetailResponse>
+		>(`/orders/${orderId}`);
+
+		const results = response.data;
+
+		if (!results.success) {
+			return thunkAPI.rejectWithValue(
+				errorHandler(results, 'Failed to fetch order')
+			);
+		}
+
+		return results.data;
+	} catch (error) {
+		return thunkAPI.rejectWithValue(
+			errorHandler(error, 'Unexpected error while fetching order')
+		);
+	}
+});
+
 export const createPaymentAttempt = createAsyncThunk<
 	PaymentAttemptResponse,
 	{
@@ -121,49 +147,6 @@ export const createPaymentAttempt = createAsyncThunk<
 	} catch (error) {
 		return thunkAPI.rejectWithValue(
 			errorHandler(error, 'Unexpected error creating payment attempt')
-		);
-	}
-});
-
-export const confirmPayment = createAsyncThunk<
-	{
-		orderId: number;
-		paymentId: number;
-		orderStatus: string;
-		paymentStatus: string;
-		providerOrdersCreated: boolean;
-		message?: string;
-	},
-	{ orderId: number; paymentId: number; referenceId?: string }
->('orders/confirmPayment', async (payload, thunkAPI) => {
-	try {
-		const { orderId, paymentId, referenceId } = payload;
-
-		const response = await ApiService.post<
-			ResponseData<{
-				orderId: number;
-				paymentId: number;
-				orderStatus: string;
-				paymentStatus: string;
-				providerOrdersCreated: boolean;
-				message?: string;
-			}>
-		>(`/orders/${orderId}/payments/${paymentId}/confirm`, {
-			referenceId,
-		});
-
-		const results = response.data;
-
-		if (!results.success) {
-			return thunkAPI.rejectWithValue(
-				errorHandler(results, 'Failed to confirm payment')
-			);
-		}
-
-		return results.data;
-	} catch (error) {
-		return thunkAPI.rejectWithValue(
-			errorHandler(error, 'Unexpected error confirming payment')
 		);
 	}
 });

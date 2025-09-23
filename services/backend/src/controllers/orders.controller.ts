@@ -2,7 +2,10 @@ import { HTTP_STATUS_CODES, successResponse } from '@travelpulse/middlewares';
 import { Response } from 'express';
 import { createOrderService } from '../services/orders/create-orders.service';
 import { SessionRequest } from '../../types/express';
-import { getOrdersService } from '../services/orders/order-details.service';
+import {
+	getOrdersService,
+	getOrderByIdService,
+} from '../services/orders/order-details.service';
 
 export const makeOrder = async (req: SessionRequest, res: Response) => {
 	const orderResponse = await createOrderService(req);
@@ -17,5 +20,13 @@ export const getOrders = async (req: SessionRequest, res: Response) => {
 
 	res.status(HTTP_STATUS_CODES.OK).json(
 		successResponse(orders, 'Orders retrieved successfully')
+	);
+};
+
+export const getOrderById = async (req: SessionRequest, res: Response) => {
+	const order = await getOrderByIdService(req);
+
+	res.status(HTTP_STATUS_CODES.OK).json(
+		successResponse(order, 'Order retrieved successfully')
 	);
 };

@@ -14,8 +14,8 @@ import {
 import {
 	createOrder,
 	fetchOrders,
+	fetchOrderById,
 	createPaymentAttempt,
-	confirmPayment,
 } from '../thunks/order.thunk';
 
 export interface OrdersState {
@@ -89,6 +89,16 @@ const ordersSlice = createSlice({
 			state.list.error = action.payload as ErrorHandler;
 		});
 
+		// Fetch single order
+		builder.addCase(fetchOrderById.fulfilled, (state, action) => {
+			const idx = state.list.list.findIndex(
+				(o) => o.orderId === action.payload.orderId
+			);
+			if (idx >= 0) state.list.list[idx] = action.payload;
+			else state.list.list.unshift(action.payload);
+			if (state.list.status === 'idle') state.list.status = 'succeeded';
+		});
+
 		// Create payment attempt
 		builder.addCase(createPaymentAttempt.pending, (state) => {
 			state.paymentAttempt.status = 'loading';
@@ -101,20 +111,6 @@ const ordersSlice = createSlice({
 		builder.addCase(createPaymentAttempt.rejected, (state, action) => {
 			state.paymentAttempt.status = 'failed';
 			state.paymentAttempt.error = action.payload as ErrorHandler;
-		});
-
-		// Confirm payment
-		builder.addCase(confirmPayment.pending, (state) => {
-			state.confirmation.status = 'loading';
-			state.confirmation.error = undefined;
-		});
-		builder.addCase(confirmPayment.fulfilled, (state, action) => {
-			state.confirmation.data = action.payload;
-			state.confirmation.status = 'succeeded';
-		});
-		builder.addCase(confirmPayment.rejected, (state, action) => {
-			state.confirmation.status = 'failed';
-			state.confirmation.error = action.payload as ErrorHandler;
 		});
 	},
 });

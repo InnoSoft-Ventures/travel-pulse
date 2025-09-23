@@ -12,7 +12,7 @@ export const launchPaymentProvider = (
 		case 'paystack':
 			return handlePaystack(paymentAttempt, dispatch);
 
-		// Future cases for other providers can be added here.
+		// TODO: Future cases for other providers can be added here.
 		default:
 			console.warn(`No launcher implemented for provider: ${provider}`);
 			break;

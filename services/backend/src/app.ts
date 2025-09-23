@@ -16,8 +16,37 @@ dotenv.config();
 
 const app = express();
 
-app.use(helmet());
-app.use(compression());
+app.use(
+	helmet({
+		contentSecurityPolicy: {
+			useDefaults: true,
+			directives: {
+				// Allow frontend (3000) to open EventSource to backend (4000)
+				// @ts-ignore
+				'connect-src': ["'self'", 'http://localhost:4000'],
+			},
+		},
+	})
+);
+// Disable compression for Server-Sent Events to avoid buffering
+app.use(
+	compression({
+		filter: (req, res) => {
+			const accept = req.headers['accept'] || '';
+			if (
+				typeof accept === 'string' &&
+				accept.includes('text/event-stream')
+			) {
+				return false;
+			}
+			// Also skip for SSE route path
+			if (req.url?.startsWith('/sse/')) return false;
+			// Fallback to default filter
+			// @ts-ignore
+			return compression.filter(req, res);
+		},
+	})
+);
 app.use(express.json());
 app.use(
 	cors({
