@@ -11,6 +11,9 @@
     ".": {
       "import": "./index.ts"
     },
+    "./providers": {
+      "import": "./providers.ts"
+    },
     "./thunks": {
       "import": "./src/thunks/index.ts"
     }

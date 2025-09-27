@@ -4,10 +4,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
 import { fetchOrderById } from '@travelpulse/ui/thunks';
-import { Modal, Title, Button } from '@travelpulse/ui';
-import styles from '../../styles.module.scss';
+import { Button, Title } from '@travelpulse/ui';
+import styles from '../styles.module.scss';
 
-export default function OrderModalPage() {
+export default function OrderDetailsPage() {
 	const params = useParams();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
@@ -39,14 +39,36 @@ export default function OrderModalPage() {
 		};
 	}, [order, orderId, dispatch]);
 
-	const onClose = () => router.back();
+	const goBack = () => router.push('/app/settings/orders');
 
 	const isLoading = !order && (isFetching || !tried);
 	const notFound = !order && tried && !isFetching;
 
 	return (
-		<Modal open={true} onClose={onClose} size="medium" center>
-			{order ? (
+		<div className={styles.container}>
+			{!order ? (
+				isLoading ? (
+					<div className={styles.detailsHeader}>
+						<Title size="size16">Loading order…</Title>
+					</div>
+				) : notFound ? (
+					<div className={styles.detailsModal}>
+						<div className={styles.detailsHeader}>
+							<Title size="size16">Order not found</Title>
+						</div>
+						<div className={styles.modalActions}>
+							<Button
+								variant="outline"
+								onClick={() =>
+									router.push('/app/settings/orders')
+								}
+							>
+								Back to Orders
+							</Button>
+						</div>
+					</div>
+				) : null
+			) : (
 				<div className={styles.detailsModal}>
 					<div className={styles.detailsHeader}>
 						<Title size="size16">
@@ -74,33 +96,13 @@ export default function OrderModalPage() {
 							</div>
 						))}
 					</div>
-					<div className={styles.modalActions}>
-						<Button fullWidth onClick={onClose}>
-							Close
-						</Button>
-					</div>
 				</div>
-			) : isLoading ? (
-				<div className={styles.detailsModal}>
-					<div className={styles.detailsHeader}>
-						<Title size="size16">Loading order…</Title>
-					</div>
-				</div>
-			) : notFound ? (
-				<div className={styles.detailsModal}>
-					<div className={styles.detailsHeader}>
-						<Title size="size16">Order not found</Title>
-					</div>
-					<div className={styles.modalActions}>
-						<Button
-							fullWidth
-							onClick={() => router.push('/app/settings/orders')}
-						>
-							Back to Orders
-						</Button>
-					</div>
-				</div>
-			) : null}
-		</Modal>
+			)}
+			<div className={styles.modalActions}>
+				<Button variant="outline" onClick={goBack}>
+					Back to Orders
+				</Button>
+			</div>
+		</div>
 	);
 }

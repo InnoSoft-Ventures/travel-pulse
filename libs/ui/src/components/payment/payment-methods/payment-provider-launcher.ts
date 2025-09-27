@@ -1,10 +1,10 @@
 import { PaymentAttemptResponse } from '@travelpulse/interfaces';
 import { handlePaystack } from './paystack';
-import { AppDispatch } from '@travelpulse/state';
+// Removed AppDispatch import to avoid runtime state import
 
 export const launchPaymentProvider = (
 	paymentAttempt: PaymentAttemptResponse,
-	dispatch: AppDispatch
+	dispatch: any
 ) => {
 	const { provider } = paymentAttempt;
 

@@ -1,17 +1,16 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
 import { fetchOrders, createPaymentAttempt } from '@travelpulse/ui/thunks';
-import { Title, Button, Modal, DatePicker } from '@travelpulse/ui';
+import { Title, Button, DatePicker } from '@travelpulse/ui';
 import styles from './styles.module.scss';
 import { DateRange, dateJs } from '@travelpulse/utils';
 // import { launchPaymentProvider } from '@travelpulse/ui';
 
 export default function OrdersClient() {
 	const dispatch = useAppDispatch();
-	const router = useRouter();
 	const { list } = useAppSelector((s) => s.account.orders);
 
 	const [statusFilter, setStatusFilter] = useState<
@@ -22,9 +21,9 @@ export default function OrdersClient() {
 		startDate: dateJs(),
 		endDate: dateJs(),
 	});
+	const [dateFilterOn, setDateFilterOn] = useState(false);
 
 	const [expanded, setExpanded] = useState<Record<number, boolean>>({});
-	const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
 
 	useEffect(() => {
 		if (list.status === 'idle' || list.status === 'failed') {
@@ -59,8 +58,8 @@ export default function OrdersClient() {
 					String(o.orderId).toLowerCase().includes(q)
 			);
 		}
-		// Date range filter (inclusive)
-		if (dates.startDate && dates.endDate) {
+		// Date range filter (inclusive) — only after user toggles it
+		if (dateFilterOn && dates.startDate && dates.endDate) {
 			const start = dates.startDate.startOf('day').toDate().getTime();
 			const end = dates.endDate.endOf('day').toDate().getTime();
 			rows = rows.filter((o) => {
@@ -69,25 +68,11 @@ export default function OrdersClient() {
 			});
 		}
 		return rows;
-	}, [list.list, statusFilter, query, dates]);
+	}, [list.list, statusFilter, query, dates, dateFilterOn]);
 
 	const toggleExpand = useCallback((id: number) => {
 		setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
 	}, []);
-
-	const openDetails = useCallback(
-		(id: number) => {
-			// navigate to parallel modal route so the page stays rendered
-			router.push(`/app/settings/orders/${id}`);
-		},
-		[router]
-	);
-	const closeDetails = useCallback(() => setSelectedOrderId(null), []);
-
-	const selectedOrder = useMemo(
-		() => filtered.find((o) => o.orderId === selectedOrderId) || null,
-		[filtered, selectedOrderId]
-	);
 
 	const isUnpaid = (status?: string) => {
 		const s = String(status).toUpperCase();
@@ -127,8 +112,20 @@ export default function OrdersClient() {
 						<DatePicker
 							hideSearchBtn
 							dates={dates}
-							setDates={setDates}
+							setDates={(d) => {
+								setDates(d);
+								setDateFilterOn(true);
+							}}
 						/>
+						{dateFilterOn && (
+							<Button
+								variant="outline"
+								size="sm"
+								onClick={() => setDateFilterOn(false)}
+							>
+								Clear date
+							</Button>
+						)}
 					</div>
 					<select
 						value={statusFilter}
@@ -184,12 +181,11 @@ export default function OrdersClient() {
 									{o.totalAmount} {o.currency}
 									<div className={styles.rowActions}>
 										<Button
+											as={Link as any}
+											href={`${o.orderId}`}
 											size="sm"
 											variant="outline"
-											onClick={(e) => {
-												e.stopPropagation();
-												openDetails(o.orderId);
-											}}
+											onClick={(e) => e.stopPropagation()}
 										>
 											View details
 										</Button>
@@ -234,63 +230,7 @@ export default function OrdersClient() {
 				</div>
 			)}
 
-			<Modal
-				open={!!selectedOrder}
-				onClose={closeDetails}
-				size="medium"
-				center
-			>
-				{selectedOrder && (
-					<div className={styles.detailsModal}>
-						<div className={styles.detailsHeader}>
-							<Title size="size16">
-								Order #
-								{selectedOrder.orderNumber ||
-									selectedOrder.orderId}
-							</Title>
-							<div>
-								<StatusBadge
-									status={String(selectedOrder.status)}
-								/>
-							</div>
-						</div>
-						<div className={styles.detailsMeta}>
-							<div>
-								Date:{' '}
-								{new Date(
-									selectedOrder.createdAt as unknown as string
-								).toLocaleString()}
-							</div>
-							<div>
-								Total: {selectedOrder.totalAmount}{' '}
-								{selectedOrder.currency}
-							</div>
-						</div>
-						<div className={styles.itemsList}>
-							{selectedOrder.details?.map((d) => (
-								<div key={d.id} className={styles.itemRow}>
-									<div>Package #{d.packageId}</div>
-									<div>Qty: {d.quantity}</div>
-									<div>Price: {d.price}</div>
-									<div>Start: {d.startDate}</div>
-								</div>
-							))}
-						</div>
-						{isUnpaid(String(selectedOrder.status)) && (
-							<div className={styles.modalActions}>
-								<Button
-									fullWidth
-									onClick={() =>
-										handlePayNow(selectedOrder.orderId)
-									}
-								>
-									Pay now
-								</Button>
-							</div>
-						)}
-					</div>
-				)}
-			</Modal>
+			{/* Details modal is handled by the intercepting route (@modal). */}
 		</div>
 	);
 }
