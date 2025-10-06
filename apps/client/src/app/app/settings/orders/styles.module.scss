@@ -56,17 +56,50 @@
 .tableHeader,
 .tableRow {
 	display: grid;
-	grid-template-columns: 140px 220px 180px 1fr;
 	gap: 12px;
 	align-items: center;
-	padding: 10px 12px;
-	border: 1px solid #e5e7eb;
-	border-radius: 10px;
+	padding: 12px 15px;
+	border: 1px solid #ebebeb;
+	border-radius: 6px;
 }
+
 .tableHeader {
-	background: #f9fafb;
-	font-weight: 600;
+	grid-template-columns: 175px 145px 128px 128px 148px;
+	background: #fff;
+
+	> div {
+		font-size: 14px;
+		font-weight: 500;
+	}
 }
+
+.tableRow {
+	grid-template-columns: 1fr 1fr;
+	column-gap: 0;
+	min-height: 65px;
+	transition: all 0.2s ease-in-out;
+
+	&:hover {
+		background: #fff;
+	}
+}
+
+.rowDetails {
+	display: grid;
+	grid-template-columns: 175px 145px 128px 128px 148px;
+	gap: 12px;
+
+	> div {
+		font-size: 14px;
+	}
+
+	> .orderNumber {
+		font-size: 12px;
+		text-decoration: underline;
+		font-weight: 400;
+	}
+}
+
 .rowContainer {
 	display: flex;
 	flex-direction: column;
@@ -80,6 +113,13 @@
 .rowActions {
 	display: flex;
 	gap: 8px;
+
+	> button,
+	a {
+		font-size: 13px !important;
+		max-width: 119px;
+		width: 100%;
+	}
 }
 .expanded {
 	padding: 10px 12px;

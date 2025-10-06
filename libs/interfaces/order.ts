@@ -22,4 +22,5 @@ export interface OrderDetailResponse {
 		startDate: string;
 	}[];
 	createdAt: Date;
+	formattedCreatedAt: string;
 }

@@ -17,12 +17,17 @@ export default function StoreProvider({
 	children: React.ReactNode;
 }) {
 	const ref = useRef<AppStore | undefined>(undefined);
+	// Create store/persistor pair once
 	const store = makeStore();
 
 	const toastPlacement = 'top-center';
 
 	if (!ref.current) {
 		ref.current = store.store;
+	}
+
+	if (!ref.current) {
+		throw new Error('StoreProvider: Redux store not initialized');
 	}
 
 	return (
@@ -33,7 +38,6 @@ export default function StoreProvider({
 						placement={toastPlacement}
 						toastOffset={toastPlacement.includes('top') ? 20 : 0}
 					/>
-
 					<PurgeStoreButton onPurge={store.persistor.purge} />
 					{children}
 				</UIProvider>

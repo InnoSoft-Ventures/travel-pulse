@@ -2,6 +2,7 @@ import { OrderDetailResponse } from '@travelpulse/interfaces';
 import { SessionRequest } from '../../../types/express';
 import Order from '../../db/models/Order';
 import OrderItem from '../../db/models/OrderItem';
+import { dateJs } from '@travelpulse/utils';
 
 export const getOrdersService = async (
 	req: SessionRequest
@@ -34,6 +35,7 @@ export const getOrdersService = async (
 				startDate: detail.startDate,
 			})),
 			createdAt: order.createdAt,
+			formattedCreatedAt: dateJs(order.createdAt).format('D MMM, YYYY'),
 		};
 
 		return details;
@@ -75,5 +77,6 @@ export const getOrderByIdService = async (
 			startDate: detail.startDate,
 		})),
 		createdAt: order.createdAt,
+		formattedCreatedAt: dateJs(order.createdAt).format('D MMM, YYYY'),
 	};
 };

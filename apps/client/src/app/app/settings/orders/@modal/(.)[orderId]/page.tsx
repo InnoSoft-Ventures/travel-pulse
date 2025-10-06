@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
-import { fetchOrderById } from '@travelpulse/ui/thunks';
+import { fetchOrderById, createPaymentAttempt } from '@travelpulse/ui/thunks';
 import { Modal, Title, Button } from '@travelpulse/ui';
 import styles from '../../styles.module.scss';
 
@@ -15,6 +16,7 @@ export default function OrderModalPage() {
 	const { list } = useAppSelector((s) => s.account.orders);
 	const [isFetching, setIsFetching] = useState(false);
 	const [tried, setTried] = useState(false);
+	const [isPaying, setIsPaying] = useState(false);
 
 	const order = useMemo(
 		() => list.list.find((o) => o.orderId === orderId) || null,
@@ -43,6 +45,33 @@ export default function OrderModalPage() {
 
 	const isLoading = !order && (isFetching || !tried);
 	const notFound = !order && tried && !isFetching;
+
+	const isUnpaid = (status?: string) => {
+		const s = String(status).toUpperCase();
+		return s === 'PENDING' || s === 'PROCESSING_PAYMENT';
+	};
+
+	const handlePayNow = async () => {
+		if (!order) return;
+		try {
+			setIsPaying(true);
+			const attempt = await (dispatch as any)(
+				createPaymentAttempt({
+					orderId: order.orderId,
+					provider: 'paystack',
+					method: 'card',
+					currency: order.currency,
+				})
+			).unwrap();
+			// If you want to launch a provider immediately, import and call:
+			// import { launchPaymentProvider } from '@travelpulse/ui/payment-launcher';
+			// launchPaymentProvider(attempt, dispatch as any);
+		} catch (e) {
+			console.error('Failed to start payment:', e);
+		} finally {
+			setIsPaying(false);
+		}
+	};
 
 	return (
 		<Modal open={true} onClose={onClose} size="medium" center>
@@ -75,7 +104,25 @@ export default function OrderModalPage() {
 						))}
 					</div>
 					<div className={styles.modalActions}>
-						<Button fullWidth onClick={onClose}>
+						{isUnpaid(String(order.status)) && (
+							<Button
+								fullWidth
+								isLoading={isPaying}
+								onClick={handlePayNow}
+							>
+								Pay now
+							</Button>
+						)}
+						<Button
+							as={Link as any}
+							href={`/app/settings/orders/${order.orderId}`}
+							target="_blank"
+							rel="noopener noreferrer"
+							variant="outline"
+						>
+							Open full page
+						</Button>
+						<Button variant="outline" onClick={onClose}>
 							Close
 						</Button>
 					</div>

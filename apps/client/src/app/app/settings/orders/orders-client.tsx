@@ -2,12 +2,18 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import {
+	Drawer,
+	DrawerContent,
+	DrawerHeader,
+	DrawerBody,
+	DrawerFooter,
+} from '@heroui/drawer';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
 import { fetchOrders, createPaymentAttempt } from '@travelpulse/ui/thunks';
 import { Title, Button, DatePicker } from '@travelpulse/ui';
 import styles from './styles.module.scss';
 import { DateRange, dateJs } from '@travelpulse/utils';
-// import { launchPaymentProvider } from '@travelpulse/ui';
 
 export default function OrdersClient() {
 	const dispatch = useAppDispatch();
@@ -22,18 +28,23 @@ export default function OrdersClient() {
 		endDate: dateJs(),
 	});
 	const [dateFilterOn, setDateFilterOn] = useState(false);
-
-	const [expanded, setExpanded] = useState<Record<number, boolean>>({});
+	const [activeOrderId, setActiveOrderId] = useState<number | null>(null);
+	const activeOrder = useMemo(
+		() =>
+			activeOrderId != null
+				? list.list.find((o) => o.orderId === activeOrderId) || null
+				: null,
+		[list.list, activeOrderId]
+	);
 
 	useEffect(() => {
 		if (list.status === 'idle' || list.status === 'failed') {
 			dispatch(fetchOrders());
 		}
-	}, [dispatch]);
+	}, [dispatch, list.status]);
 
 	const filtered = useMemo(() => {
 		let rows = list.list;
-		// Status filter
 		if (statusFilter !== 'all') {
 			rows = rows.filter((o) => {
 				const status = String(o.status).toUpperCase();
@@ -49,7 +60,6 @@ export default function OrdersClient() {
 				return true;
 			});
 		}
-		// Search by order number/id
 		const q = query.trim().toLowerCase();
 		if (q) {
 			rows = rows.filter(
@@ -58,7 +68,6 @@ export default function OrdersClient() {
 					String(o.orderId).toLowerCase().includes(q)
 			);
 		}
-		// Date range filter (inclusive) — only after user toggles it
 		if (dateFilterOn && dates.startDate && dates.endDate) {
 			const start = dates.startDate.startOf('day').toDate().getTime();
 			const end = dates.endDate.endOf('day').toDate().getTime();
@@ -70,20 +79,17 @@ export default function OrdersClient() {
 		return rows;
 	}, [list.list, statusFilter, query, dates, dateFilterOn]);
 
-	const toggleExpand = useCallback((id: number) => {
-		setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
-	}, []);
-
+	const openDrawer = useCallback((id: number) => setActiveOrderId(id), []);
+	const closeDrawer = useCallback(() => setActiveOrderId(null), []);
 	const isUnpaid = (status?: string) => {
 		const s = String(status).toUpperCase();
 		return s === 'PENDING' || s === 'PROCESSING_PAYMENT';
 	};
-
 	const handlePayNow = async (orderId: number) => {
 		try {
 			const order = filtered.find((o) => o.orderId === orderId);
 			if (!order) return;
-			const attempt = await (dispatch as any)(
+			await (dispatch as any)(
 				createPaymentAttempt({
 					orderId,
 					provider: 'paystack',
@@ -143,13 +149,11 @@ export default function OrdersClient() {
 			{list.status === 'loading' && (
 				<div className={styles.loading}>Loading orders…</div>
 			)}
-
 			{list.status === 'failed' && (
 				<div className={styles.error}>
 					Could not load orders. Please try again.
 				</div>
 			)}
-
 			{list.status === 'succeeded' && filtered.length === 0 && (
 				<div className={styles.empty}>No orders to display.</div>
 			)}
@@ -159,78 +163,163 @@ export default function OrdersClient() {
 					<div className={styles.tableHeader}>
 						<div>Order #</div>
 						<div>Date</div>
+						<div>Payment</div>
 						<div>Status</div>
-						<div>Total</div>
+						<div>Price</div>
 					</div>
-					{filtered.map((o) => (
-						<div key={o.orderId} className={styles.rowContainer}>
-							<div
-								className={styles.tableRow}
-								onClick={() => toggleExpand(o.orderId)}
-							>
-								<div>#{o.orderNumber || o.orderId}</div>
-								<div>
-									{new Date(
-										o.createdAt as unknown as string
-									).toLocaleString()}
-								</div>
-								<div>
-									<StatusBadge status={String(o.status)} />
-								</div>
-								<div className={styles.totalCell}>
-									{o.totalAmount} {o.currency}
-									<div className={styles.rowActions}>
+					{filtered.map((o) => {
+						const paymentStatus = String(o.status).toUpperCase();
+						const processingStatus = paymentStatus; // placeholder for separate processing status if added later
+						return (
+							<div key={o.orderId} className={styles.tableRow}>
+								<Link
+									key={o.orderId}
+									className={styles.rowDetails}
+									href={`orders/${o.orderId}`}
+									// onClick={() => openDrawer(o.orderId)}
+								>
+									<div className={styles.orderNumber}>
+										#{o.orderNumber || o.orderId}
+									</div>
+									<div>{o.formattedCreatedAt}</div>
+									<div>
+										<StatusBadge status={paymentStatus} />
+									</div>
+									<div>
+										<StatusBadge
+											status={processingStatus}
+										/>
+									</div>
+									<div>
+										{o.totalAmount} {o.currency}
+									</div>
+								</Link>
+								<div className={styles.rowActions}>
+									{isUnpaid(String(o.status)) ? (
 										<Button
-											as={Link as any}
-											href={`${o.orderId}`}
 											size="sm"
+											onClick={(e) => {
+												e.stopPropagation();
+												handlePayNow(o.orderId);
+											}}
+										>
+											Pay now
+										</Button>
+									) : (
+										<Button
 											variant="outline"
-											onClick={(e) => e.stopPropagation()}
+											size="sm"
+											as={Link as any}
+											href={`orders/${o.orderId}`}
 										>
 											View details
 										</Button>
-										{isUnpaid(String(o.status)) && (
-											<Button
-												size="sm"
-												onClick={(e) => {
-													e.stopPropagation();
-													handlePayNow(o.orderId);
-												}}
-											>
-												Pay now
-											</Button>
-										)}
-									</div>
+									)}
 								</div>
 							</div>
-							{expanded[o.orderId] && (
-								<div className={styles.expanded}>
-									<div className={styles.itemsHeader}>
-										Items
-									</div>
-									<div className={styles.itemsList}>
-										{o.details?.map((d) => (
-											<div
-												key={d.id}
-												className={styles.itemRow}
-											>
-												<div>
-													Package #{d.packageId}
-												</div>
-												<div>Qty: {d.quantity}</div>
-												<div>Price: {d.price}</div>
-												<div>Start: {d.startDate}</div>
-											</div>
-										))}
-									</div>
-								</div>
-							)}
-						</div>
-					))}
+						);
+					})}
 				</div>
 			)}
 
-			{/* Details modal is handled by the intercepting route (@modal). */}
+			<Drawer
+				isOpen={activeOrderId != null}
+				onOpenChange={(open) => !open && closeDrawer()}
+				size="md"
+			>
+				<DrawerContent>
+					{(close) => (
+						<>
+							<DrawerHeader>
+								{activeOrder ? (
+									<span>
+										Order #
+										{activeOrder.orderNumber ||
+											activeOrder.orderId}
+									</span>
+								) : (
+									'Order details'
+								)}
+							</DrawerHeader>
+							<DrawerBody>
+								{activeOrder ? (
+									<div className={styles.drawerContent}>
+										<div className={styles.detailsMeta}>
+											<div>
+												Date:{' '}
+												{new Date(
+													activeOrder.createdAt as unknown as string
+												).toLocaleString()}
+											</div>
+											<div>
+												Total: {activeOrder.totalAmount}{' '}
+												{activeOrder.currency}
+											</div>
+										</div>
+										<div className={styles.itemsList}>
+											{activeOrder.details?.map((d) => (
+												<div
+													key={d.id}
+													className={styles.itemRow}
+												>
+													<div>
+														Package #{d.packageId}
+													</div>
+													<div>Qty: {d.quantity}</div>
+													<div>Price: {d.price}</div>
+													<div>
+														Start: {d.startDate}
+													</div>
+												</div>
+											))}
+										</div>
+									</div>
+								) : (
+									<div>Loading…</div>
+								)}
+							</DrawerBody>
+							<DrawerFooter>
+								{activeOrder &&
+									isUnpaid(String(activeOrder.status)) && (
+										<Button
+											onClick={() =>
+												activeOrder &&
+												handlePayNow(
+													activeOrder.orderId
+												)
+											}
+											fullWidth
+										>
+											Pay now
+										</Button>
+									)}
+								{activeOrder && (
+									<Button
+										variant="outline"
+										as={Link as any}
+										href={`/app/settings/orders/${activeOrder.orderId}`}
+										target="_blank"
+										rel="noopener noreferrer"
+										fullWidth
+									>
+										Open full page ↗
+									</Button>
+								)}
+								<Button
+									variant="outline"
+									onClick={() => {
+										close();
+										closeDrawer();
+									}}
+									fullWidth
+								>
+									Close
+								</Button>
+							</DrawerFooter>
+						</>
+					)}
+				</DrawerContent>
+			</Drawer>
 		</div>
 	);
 }
