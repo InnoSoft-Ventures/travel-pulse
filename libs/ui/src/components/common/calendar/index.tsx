@@ -20,10 +20,15 @@ const calendarVariants = cva(styles.inputContainer, {
 			default: styles.defaultSize,
 			large: styles.largeSize,
 		},
+		radius: {
+			'6px': styles.radius6px,
+			'15px': styles.radius15px,
+		},
 	},
 	defaultVariants: {
 		variant: 'default',
 		size: 'default',
+		radius: '15px',
 	},
 });
 
@@ -50,6 +55,7 @@ interface CalendarProps extends VariantProps<typeof calendarVariants> {
 	conjunction?: string;
 	inputClassName?: string;
 	containerClassName?: string;
+	hideStartIcon?: React.ReactNode;
 	lastIcon?: React.ReactNode;
 	error?: string;
 	onChange?: (dates: Date[]) => void;
@@ -66,6 +72,7 @@ interface CalendarProps extends VariantProps<typeof calendarVariants> {
 function Calendar(props: CalendarProps) {
 	const {
 		id,
+		hideStartIcon = false,
 		lastIcon,
 		inputClassName,
 		required,
@@ -85,6 +92,7 @@ function Calendar(props: CalendarProps) {
 		conjunction = 'to',
 		placeholder = 'Select date',
 		disabled = false,
+		radius,
 	} = props;
 
 	const pickerInstance = useRef<Flatpickr>(null);
@@ -94,24 +102,27 @@ function Calendar(props: CalendarProps) {
 			<label
 				htmlFor={id}
 				className={cn(
-					calendarVariants({ variant, size }),
+					calendarVariants({ variant, size, radius }),
 					inputClassName
 				)}
 				aria-disabled={disabled}
 			>
-				<button
-					type="button"
-					onClick={() => {
-						if (pickerInstance.current) {
-							pickerInstance.current.flatpickr.open();
-						}
-					}}
-					className={styles.calendarIcon}
-					disabled={disabled}
-					aria-label="Open calendar"
-				>
-					<CalendarIcon />
-				</button>
+				{!hideStartIcon && (
+					<button
+						type="button"
+						onClick={() => {
+							if (pickerInstance.current) {
+								pickerInstance.current.flatpickr.open();
+							}
+						}}
+						className={styles.calendarIcon}
+						disabled={disabled}
+						aria-label="Open calendar"
+					>
+						<CalendarIcon />
+					</button>
+				)}
+
 				<Flatpickr
 					className={styles.input}
 					options={{

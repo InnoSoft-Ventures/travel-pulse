@@ -1,27 +1,15 @@
+.ordersPageContainer {
+	max-width: 1065px;
+}
+
 .container {
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
+	margin-top: 2rem;
 }
-.headerRow {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+
+.title {
+	margin-bottom: 18px;
 }
-.filters {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-}
-.search {
-	padding: 6px 8px;
-	border-radius: 6px;
-	border: 1px solid #e5e7eb;
-	min-width: 200px;
-}
-.dateFilter {
-	min-width: 320px;
-}
+
 .filters {
 	display: flex;
 	align-items: center;
@@ -34,9 +22,6 @@
 	background: #fff;
 }
 .search {
-	padding: 6px 8px;
-	border-radius: 6px;
-	border: 1px solid #e5e7eb;
 	min-width: 200px;
 }
 .dateFilter {
@@ -246,4 +231,97 @@
 }
 .modalActions {
 	margin-top: 8px;
+}
+
+/* Lightweight drawer shell (loading fallback) */
+.drawerOverlayLite {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.35);
+	z-index: 60;
+	display: flex;
+	justify-content: flex-end;
+}
+.drawerLite {
+	width: 420px;
+	max-width: 100%;
+	background: #fff;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.25);
+	animation: slideIn 0.28s ease;
+}
+.drawerLiteHeader {
+	padding: 14px 18px;
+	font-weight: 600;
+	font-size: 14px;
+	border-bottom: 1px solid #eee;
+}
+.drawerLiteBody {
+	padding: 16px 18px;
+	overflow-y: auto;
+}
+@keyframes slideIn {
+	from {
+		transform: translateX(40px);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+/* Skeleton Loader */
+.skeletonWrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	width: 100%;
+}
+.skeletonRow {
+	display: flex;
+	gap: 12px;
+}
+.skeletonBlock {
+	position: relative;
+	overflow: hidden;
+	background: #f3f4f6;
+	border-radius: 6px;
+	height: 14px;
+	flex: 1;
+}
+.skeletonBlock.sm {
+	flex: 0 0 80px;
+}
+.skeletonBlock.md {
+	flex: 0 0 140px;
+}
+.skeletonBlock.lg {
+	flex: 0 0 220px;
+}
+.skeletonBlock.tall {
+	height: 90px;
+}
+.skeletonBlock:before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		90deg,
+		rgba(243, 244, 246, 0) 0%,
+		rgba(229, 231, 235, 0.9) 50%,
+		rgba(243, 244, 246, 0) 100%
+	);
+	animation: shimmer 1.3s infinite;
+	transform: translateX(-100%);
+}
+@keyframes shimmer {
+	0% {
+		transform: translateX(-100%);
+	}
+	100% {
+		transform: translateX(100%);
+	}
 }

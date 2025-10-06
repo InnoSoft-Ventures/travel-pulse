@@ -6,18 +6,33 @@
 	}
 
 	.datePickerInput {
-		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22);
 		background: #f8f8ff;
-		border: 2px solid transparent;
-		background-image: var(--pink-purple-gradient);
-		background-origin: border-box;
-		background-clip: padding-box, border-box;
 		border-radius: 15px;
 
 		> input {
 			font-size: 13px;
 			font-weight: 400;
 			color: var(--dark-purple);
+		}
+
+		&.purpleGradient {
+			border: 2px solid transparent;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22);
+			background-image: var(--pink-purple-gradient);
+			background-origin: border-box;
+			background-clip: padding-box, border-box;
+		}
+
+		&.gray {
+			border: 1px solid #d1d5db;
+		}
+
+		&.radius6px {
+			border-radius: 6px;
+		}
+
+		&.radius15px {
+			border-radius: 15px;
 		}
 	}
 

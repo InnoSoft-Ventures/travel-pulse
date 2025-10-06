@@ -5,7 +5,14 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
 import { fetchOrderById, createPaymentAttempt } from '@travelpulse/ui/thunks';
-import { Modal, Title, Button } from '@travelpulse/ui';
+import { Title, Button } from '@travelpulse/ui';
+import {
+	Drawer,
+	DrawerContent,
+	DrawerHeader,
+	DrawerBody,
+	DrawerFooter,
+} from '@heroui/drawer';
 import styles from '../../styles.module.scss';
 
 export default function OrderModalPage() {
@@ -74,80 +81,133 @@ export default function OrderModalPage() {
 	};
 
 	return (
-		<Modal open={true} onClose={onClose} size="medium" center>
-			{order ? (
-				<div className={styles.detailsModal}>
-					<div className={styles.detailsHeader}>
-						<Title size="size16">
-							Order #{order.orderNumber || order.orderId}
-						</Title>
-					</div>
-					<div className={styles.detailsMeta}>
-						<div>
-							Date:{' '}
-							{new Date(
-								order.createdAt as unknown as string
-							).toLocaleString()}
-						</div>
-						<div>
-							Total: {order.totalAmount} {order.currency}
-						</div>
-					</div>
-					<div className={styles.itemsList}>
-						{order.details?.map((d) => (
-							<div key={d.id} className={styles.itemRow}>
-								<div>Package #{d.packageId}</div>
-								<div>Qty: {d.quantity}</div>
-								<div>Price: {d.price}</div>
-								<div>Start: {d.startDate}</div>
-							</div>
-						))}
-					</div>
-					<div className={styles.modalActions}>
-						{isUnpaid(String(order.status)) && (
+		<Drawer
+			isOpen={true}
+			onOpenChange={(open) => !open && onClose()}
+			size="lg"
+			placement="right"
+		>
+			<DrawerContent>
+				{(close) => (
+					<>
+						<DrawerHeader>
+							{order ? (
+								<span>
+									Order #{order.orderNumber || order.orderId}
+								</span>
+							) : isLoading ? (
+								<Title size="size16">
+									Loading order details
+								</Title>
+							) : notFound ? (
+								<Title size="size16">Order not found</Title>
+							) : null}
+						</DrawerHeader>
+						<DrawerBody>
+							{order && (
+								<div className={styles.drawerContent}>
+									<div className={styles.detailsMeta}>
+										<div>
+											Date:{' '}
+											{new Date(
+												order.createdAt as unknown as string
+											).toLocaleString()}
+										</div>
+										<div>
+											Total: {order.totalAmount}{' '}
+											{order.currency}
+										</div>
+									</div>
+									<div className={styles.itemsList}>
+										{order.details?.map((d) => (
+											<div
+												key={d.id}
+												className={styles.itemRow}
+											>
+												<div>
+													Package #{d.packageId}
+												</div>
+												<div>Qty: {d.quantity}</div>
+												<div>Price: {d.price}</div>
+												<div>Start: {d.startDate}</div>
+											</div>
+										))}
+									</div>
+								</div>
+							)}
+							{isLoading && (
+								<div
+									className={styles.skeletonWrapper}
+									aria-label="Loading order details"
+								>
+									<div className={styles.skeletonRow}>
+										<div
+											className={`${styles.skeletonBlock} ${styles.md}`}
+										></div>
+										<div
+											className={`${styles.skeletonBlock} ${styles.sm}`}
+										></div>
+									</div>
+									<div
+										className={
+											styles.skeletonBlock +
+											' ' +
+											styles.lg
+										}
+									></div>
+									<div
+										className={
+											styles.skeletonBlock +
+											' ' +
+											styles.tall
+										}
+									></div>
+								</div>
+							)}
+							{notFound && (
+								<div className={styles.detailsModal}>
+									<div className={styles.detailsHeader}>
+										<Title size="size16">
+											Order not found
+										</Title>
+									</div>
+								</div>
+							)}
+						</DrawerBody>
+						<DrawerFooter>
+							{order && isUnpaid(String(order.status)) && (
+								<Button
+									fullWidth
+									isLoading={isPaying}
+									onClick={handlePayNow}
+								>
+									Pay now
+								</Button>
+							)}
+							{order && (
+								<Button
+									as={Link as any}
+									href={`/app/settings/orders/${order.orderId}`}
+									target="_blank"
+									rel="noopener noreferrer"
+									variant="outline"
+								>
+									Open full page
+								</Button>
+							)}
 							<Button
-								fullWidth
-								isLoading={isPaying}
-								onClick={handlePayNow}
+								variant="outline"
+								onClick={() => {
+									close();
+									onClose();
+								}}
 							>
-								Pay now
+								Close
 							</Button>
-						)}
-						<Button
-							as={Link as any}
-							href={`/app/settings/orders/${order.orderId}`}
-							target="_blank"
-							rel="noopener noreferrer"
-							variant="outline"
-						>
-							Open full page
-						</Button>
-						<Button variant="outline" onClick={onClose}>
-							Close
-						</Button>
-					</div>
-				</div>
-			) : isLoading ? (
-				<div className={styles.detailsModal}>
-					<div className={styles.detailsHeader}>
-						<Title size="size16">Loading order…</Title>
-					</div>
-				</div>
-			) : notFound ? (
-				<div className={styles.detailsModal}>
-					<div className={styles.detailsHeader}>
-						<Title size="size16">Order not found</Title>
-					</div>
-					<div className={styles.modalActions}>
-						<Button
-							fullWidth
-							onClick={() => router.push('/app/settings/orders')}
-						>
-							Back to Orders
-						</Button>
-					</div>
-				</div>
-			) : null}
-		</Modal>
+						</DrawerFooter>
+					</>
+				)}
+			</DrawerContent>
+		</Drawer>
 	);
 }

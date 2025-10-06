@@ -5,8 +5,26 @@ import styles from './date-picker.module.scss';
 import { cn } from '../../../utils';
 import { Calendar } from '../calendar';
 import { calculateTravelDays, dateJs, DateRange } from '@travelpulse/utils';
+import { cva, VariantProps } from 'class-variance-authority';
 
-interface DatePickerProps {
+const datePickerVariants = cva(styles.datePickerInput, {
+	variants: {
+		variant: {
+			primary: styles.purpleGradient,
+			secondary: styles.gray,
+		},
+		radius: {
+			'6px': styles.radius6px,
+			'15px': styles.radius15px,
+		},
+	},
+	defaultVariants: {
+		variant: 'primary',
+		radius: '15px',
+	},
+});
+
+interface DatePickerProps extends VariantProps<typeof datePickerVariants> {
 	inputClassName?: string;
 	btnClassName?: string;
 	dates: DateRange;
@@ -18,6 +36,7 @@ interface DatePickerProps {
 	/** @default true */
 	showTravelingNote?: boolean;
 	disabled?: boolean;
+	hideStartIcon?: boolean;
 }
 
 function DatePicker(props: DatePickerProps) {
@@ -28,6 +47,9 @@ function DatePicker(props: DatePickerProps) {
 		hideSearchBtn = false,
 		showTravelingNote = true,
 		disabled = false,
+		variant,
+		radius,
+		hideStartIcon = false,
 	} = props;
 
 	const { startDate, endDate } = dates;
@@ -52,7 +74,11 @@ function DatePicker(props: DatePickerProps) {
 					value={[startDate?.toDate(), endDate?.toDate()]}
 					onClose={handleDates}
 					placeholder="Select dates"
-					containerClassName={styles.datePickerInput}
+					containerClassName={cn(
+						datePickerVariants({ variant, radius })
+					)}
+					hideStartIcon={hideStartIcon}
+					radius={radius}
 				/>
 
 				{!hideSearchBtn && (
