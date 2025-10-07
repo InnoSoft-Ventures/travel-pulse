@@ -21,14 +21,14 @@ const calendarVariants = cva(styles.inputContainer, {
 			large: styles.largeSize,
 		},
 		radius: {
-			'6px': styles.radius6px,
-			'15px': styles.radius15px,
+			sm: styles.radiusSm,
+			md: styles.radiusMd,
 		},
 	},
 	defaultVariants: {
 		variant: 'default',
 		size: 'default',
-		radius: '15px',
+		radius: 'md',
 	},
 });
 

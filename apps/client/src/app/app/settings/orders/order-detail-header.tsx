@@ -1,15 +1,11 @@
 import React from 'react';
 import styles from './styles.module.scss';
-import { Button, DatePicker, Input } from '@travelpulse/ui';
+import { Button, DatePicker, Input, Select, SelectItem } from '@travelpulse/ui';
 import { dateJs } from '@travelpulse/utils';
 
 interface OrderDetailHeaderProps {
-	setStatusFilter: React.Dispatch<
-		React.SetStateAction<
-			'all' | 'unpaid' | 'processing' | 'paid' | 'failed'
-		>
-	>;
-	statusFilter: 'all' | 'unpaid' | 'processing' | 'paid' | 'failed';
+	setStatusFilter: React.Dispatch<React.SetStateAction<SelectItem>>;
+	statusFilter: SelectItem;
 	query: string;
 	setQuery: React.Dispatch<React.SetStateAction<string>>;
 	dates: {
@@ -45,40 +41,64 @@ function OrderDetailHeader(props: OrderDetailHeaderProps) {
 				placeholder="Search by order #"
 				value={query}
 				radius="sm"
+				size="large"
 				onChange={(e) => setQuery(e.target.value)}
 			/>
-			<div className={styles.dateFilter}>
-				<DatePicker
-					hideSearchBtn
-					showTravelingNote={false}
-					dates={dates}
-					setDates={(d) => {
-						setDates(d);
-						setDateFilterOn(true);
+			<div className="flex justify-end w-full gap-[20px]">
+				<div className={styles.dateFilter}>
+					<DatePicker
+						hideSearchBtn
+						showTravelingNote={false}
+						dates={dates}
+						setDates={(d) => {
+							setDates(d);
+							setDateFilterOn(true);
+						}}
+						variant="secondary"
+						radius="sm"
+					/>
+					{dateFilterOn && (
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={() => setDateFilterOn(false)}
+						>
+							Clear date
+						</Button>
+					)}
+				</div>
+				<Select
+					className={styles.statusSelector}
+					controlVariant="secondary"
+					options={[
+						{
+							label: 'All',
+							value: 'all',
+						},
+						{
+							label: 'Unpaid',
+							value: 'unpaid',
+						},
+						{
+							label: 'Processing',
+							value: 'processing',
+						},
+						{
+							label: 'Paid',
+							value: 'paid',
+						},
+						{
+							label: 'Failed',
+							value: 'failed',
+						},
+					]}
+					radius="sm"
+					value={statusFilter}
+					onChange={(option) => {
+						setStatusFilter(option as SelectItem);
 					}}
-					variant="secondary"
-					radius="6px"
 				/>
-				{dateFilterOn && (
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={() => setDateFilterOn(false)}
-					>
-						Clear date
-					</Button>
-				)}
 			</div>
-			<select
-				value={statusFilter}
-				onChange={(e) => setStatusFilter(e.target.value as any)}
-			>
-				<option value="all">All</option>
-				<option value="unpaid">Unpaid</option>
-				<option value="processing">Processing</option>
-				<option value="paid">Paid</option>
-				<option value="failed">Failed</option>
-			</select>
 		</div>
 	);
 }

@@ -6,6 +6,10 @@
 	margin-top: 2rem;
 }
 
+.headerRow {
+	margin-bottom: 2rem;
+}
+
 .title {
 	margin-bottom: 18px;
 }
@@ -15,29 +19,41 @@
 	align-items: center;
 	gap: 10px;
 }
+
 .filters select {
 	padding: 6px 8px;
 	border-radius: 6px;
 	border: 1px solid #e5e7eb;
 	background: #fff;
 }
+
 .search {
 	min-width: 200px;
 }
+
 .dateFilter {
-	min-width: 320px;
+	max-width: 245px;
+	min-width: auto;
+	width: 100%;
 }
+
+.statusSelector {
+	max-width: 175px !important;
+}
+
 .loading,
 .error,
 .empty {
 	padding: 12px 0;
 	color: #6b7280;
 }
+
 .table {
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 8px;
 }
+
 .tableHeader,
 .tableRow {
 	display: grid;

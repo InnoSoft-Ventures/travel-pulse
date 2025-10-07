@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
 import { fetchOrders, createPaymentAttempt } from '@travelpulse/ui/thunks';
-import { Title, Button } from '@travelpulse/ui';
+import { Title, Button, SelectItem } from '@travelpulse/ui';
 import styles from './styles.module.scss';
 import { DateRange, dateJs } from '@travelpulse/utils';
 import OrderDetailHeader from './order-detail-header';
@@ -14,9 +14,10 @@ export default function OrdersClient() {
 	const dispatch = useAppDispatch();
 	const { list } = useAppSelector((s) => s.account.orders);
 
-	const [statusFilter, setStatusFilter] = useState<
-		'all' | 'unpaid' | 'processing' | 'paid' | 'failed'
-	>('all');
+	const [statusFilter, setStatusFilter] = useState<SelectItem>({
+		label: 'All',
+		value: 'all',
+	});
 	const [query, setQuery] = useState('');
 	const [dates, setDates] = useState<DateRange>({
 		startDate: dateJs(),
@@ -32,15 +33,17 @@ export default function OrdersClient() {
 
 	const filtered = useMemo(() => {
 		let rows = list.list;
-		if (statusFilter !== 'all') {
+		const statusOption = statusFilter.value;
+
+		if (statusOption !== 'all') {
 			rows = rows.filter((o) => {
 				const status = String(o.status).toUpperCase();
-				if (statusFilter === 'unpaid') return status === 'PENDING';
-				if (statusFilter === 'processing')
+				if (statusOption === 'unpaid') return status === 'PENDING';
+				if (statusOption === 'processing')
 					return status === 'PROCESSING_PAYMENT';
-				if (statusFilter === 'paid')
+				if (statusOption === 'paid')
 					return status === 'PAID' || status === 'COMPLETED';
-				if (statusFilter === 'failed')
+				if (statusOption === 'failed')
 					return (
 						status === 'PAYMENT_FAILED' || status === 'CANCELLED'
 					);

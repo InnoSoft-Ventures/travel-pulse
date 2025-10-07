@@ -14,13 +14,13 @@ const datePickerVariants = cva(styles.datePickerInput, {
 			secondary: styles.gray,
 		},
 		radius: {
-			'6px': styles.radius6px,
-			'15px': styles.radius15px,
+			sm: styles.radiusSm,
+			md: styles.radiusMd,
 		},
 	},
 	defaultVariants: {
 		variant: 'primary',
-		radius: '15px',
+		radius: 'md',
 	},
 });
 

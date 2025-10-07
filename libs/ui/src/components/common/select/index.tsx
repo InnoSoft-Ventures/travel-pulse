@@ -122,6 +122,8 @@ export function Select(props: SelectProps) {
 
 	if (controlVariant === 'secondary') {
 		styleObj = {
+			backgroundOrigin: 'initial',
+			backgroundClip: 'initial',
 			boxShadow: '0 2px 4px rgba(0, 0, 0, 0.25)',
 			backgroundColor: '#fffefe',
 			border: '1px solid #fff',
@@ -134,6 +136,8 @@ export function Select(props: SelectProps) {
 
 	if (controlVariant === 'tertiary') {
 		styleObj = {
+			backgroundOrigin: 'initial',
+			backgroundClip: 'initial',
 			boxShadow: '0 2px 4px rgba(0, 0, 0, 0.15)',
 			backgroundColor: '#fffefe',
 			border: '1px solid var(--dark-purple)',

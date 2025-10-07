@@ -6,16 +6,7 @@
 	}
 
 	.datePickerInput {
-		background: #f8f8ff;
-		border-radius: 15px;
-
-		> input {
-			font-size: 13px;
-			font-weight: 400;
-			color: var(--dark-purple);
-		}
-
-		&.purpleGradient {
+		&.purpleGradient > div {
 			border: 2px solid transparent;
 			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22);
 			background-image: var(--pink-purple-gradient);
@@ -23,15 +14,15 @@
 			background-clip: padding-box, border-box;
 		}
 
-		&.gray {
+		&.gray > div {
 			border: 1px solid #d1d5db;
 		}
 
-		&.radius6px {
-			border-radius: 6px;
+		&.radiusSm > div {
+			border-radius: 8px;
 		}
 
-		&.radius15px {
+		&.radiusMd > div {
 			border-radius: 15px;
 		}
 	}
