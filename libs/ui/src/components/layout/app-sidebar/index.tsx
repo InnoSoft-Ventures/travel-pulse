@@ -1,5 +1,12 @@
 import React from 'react';
-import { Home, Smartphone, Bell, Settings, HelpCircle } from 'lucide-react';
+import {
+	Home,
+	Smartphone,
+	Bell,
+	Settings,
+	HelpCircle,
+	Package,
+} from 'lucide-react';
 import styles from './style.module.scss';
 import { NavLink } from '../../common';
 import { Logo } from '../../common/logo';
@@ -20,9 +27,13 @@ export function AppSidebar() {
 				<NavLink href="/app/notifications">
 					<Bell size={18} /> Notifications
 				</NavLink>
+				<NavLink href="/app/settings/orders" partialMatchValue="orders">
+					<Package size={18} /> Orders
+				</NavLink>
 				<NavLink
 					href="/app/settings/account"
 					partialMatchValue="settings"
+					pathIgnorePartialList={['orders']}
 				>
 					<Settings size={18} /> Settings
 				</NavLink>

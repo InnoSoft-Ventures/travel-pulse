@@ -8,6 +8,7 @@ interface NavLinkProps extends LinkProps {
 	isActive?: boolean;
 	className?: string;
 	partialMatchValue?: string;
+	pathIgnorePartialList?: string[];
 }
 
 export const NavLink = ({
@@ -15,6 +16,7 @@ export const NavLink = ({
 	isActive,
 	className,
 	partialMatchValue,
+	pathIgnorePartialList,
 	...rest
 }: NavLinkProps) => {
 	const pathName = usePathname();
@@ -22,6 +24,15 @@ export const NavLink = ({
 
 	if (partialMatchValue && pathName.includes(partialMatchValue)) {
 		active = true;
+	}
+
+	if (pathIgnorePartialList) {
+		for (const ignorePath of pathIgnorePartialList) {
+			if (pathName.includes(ignorePath)) {
+				active = false;
+				break;
+			}
+		}
 	}
 
 	return (
