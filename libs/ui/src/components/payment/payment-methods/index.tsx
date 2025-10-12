@@ -83,12 +83,12 @@ export const PaymentMethods = ({
 		}
 	};
 
-	function handleClose(redirect?: boolean) {
+	function handleClose(redirect?: boolean, orderId?: number) {
 		if (redirect) {
 			try {
 				sessionStorage.setItem('tp:clearCartOnOrders', '1');
 			} catch {}
-			window.location.replace('/app/settings/orders');
+			window.location.replace(`/app/settings/orders/${orderId}`);
 			return;
 		}
 

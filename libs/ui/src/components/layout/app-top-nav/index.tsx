@@ -5,6 +5,7 @@ import styles from './style.module.scss';
 import { usePathname } from 'next/navigation';
 import { AccountDropdown } from '../../common';
 import { useAppSelector } from '@travelpulse/state';
+import { CartIcon } from '../../common/icon';
 
 const getTitleFromPath = (pathname: string): string => {
 	if (pathname.includes('/app/orders/')) {
@@ -36,6 +37,8 @@ export function AppTopBar() {
 				<button className="text-gray-600 hover:text-indigo-600">
 					<Bell size={20} />
 				</button>
+
+				<CartIcon className={styles.cartIcon} />
 
 				<AccountDropdown account={account} />
 			</div>

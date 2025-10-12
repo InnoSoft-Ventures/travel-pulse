@@ -1,4 +1,8 @@
 .appTopBar {
 	@apply bg-white shadow-sm px-6 py-3 flex items-center justify-between;
 	z-index: 10;
+
+	.cartIcon {
+		@apply text-gray-600 hover:text-indigo-600;
+	}
 }

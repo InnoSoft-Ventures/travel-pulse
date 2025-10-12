@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../common';
 import { SimCard } from '../sim-card';
 import { SimInfo } from '../sim-interface';
@@ -9,16 +9,49 @@ interface ESimTabsProps {
 }
 
 export const ESimTabs = ({ sims }: ESimTabsProps) => {
+	const active = useMemo(() => sims.filter((s) => s.isActive), [sims]);
+	const inactive = useMemo(() => sims.filter((s) => !s.isActive), [sims]);
+
 	const onRecharge = (simId: string) => {
 		console.log(`Recharge SIM with ID: ${simId}`);
 	};
 
-	const onViewDetails = (simId: string) => {
-		console.log(`View details for SIM with ID: ${simId}`);
+	const onViewDetails = (sim: SimInfo) => {
+		// you can deep-link to plan detail using pkg if you want
+		console.log(`View details for SIM with ID: ${sim.id}`, sim);
 	};
 
+	// const onInstallShare = (simId: string) => {
+	//   console.log(`Install/share flow for SIM ${simId}`);
+	// };
+
+	// const onToggleRenew = (simId: string, next: boolean) => {
+	//   console.log(`Auto-renew for ${simId}: ${next}`);
+	//   // TODO hook to backend
+	// };
+
+	const renderGrid = (arr: SimInfo[]) =>
+		arr.length ? (
+			<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+				{arr.map((sim) => (
+					<SimCard
+						key={sim.id}
+						data={sim}
+						onRecharge={() => onRecharge(sim.id)}
+						onViewDetails={() => onViewDetails(sim)}
+						// onInstallShare={() => onInstallShare(sim.id)}
+						// onToggleRenew={(next) => onToggleRenew(sim.id, next)}
+					/>
+				))}
+			</div>
+		) : (
+			<div className="rounded-lg border border-gray-200 bg-white p-6 text-center text-gray-600">
+				No eSIMs in this tab.
+			</div>
+		);
+
 	return (
-		<div>
+		<div className="space-y-6">
 			<Tabs defaultValue="active" className="space-y-6">
 				<TabsList className="grid max-w-2xl grid-cols-3 h-auto">
 					<TabsTrigger
@@ -40,25 +73,17 @@ export const ESimTabs = ({ sims }: ESimTabsProps) => {
 						All eSIMs
 					</TabsTrigger>
 				</TabsList>
+
 				<TabsContent value="active" className="space-y-6">
-					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
-						{sims.map((sim) => (
-							<SimCard
-								key={sim.id}
-								data={sim}
-								onRecharge={() => onRecharge(sim.id)}
-								onViewDetails={() => onViewDetails(sim.id)}
-							/>
-						))}
-					</div>
+					{renderGrid(active)}
 				</TabsContent>
+
 				<TabsContent value="inactive" className="space-y-6">
-					{/* Inactive eSIMs content goes here */}
-					<p>Inactive eSIMs will be displayed here.</p>
+					{renderGrid(inactive)}
 				</TabsContent>
+
 				<TabsContent value="all" className="space-y-6">
-					{/* All eSIMs content goes here */}
-					<p>All eSIMs will be displayed here.</p>
+					{renderGrid(sims)}
 				</TabsContent>
 			</Tabs>
 		</div>

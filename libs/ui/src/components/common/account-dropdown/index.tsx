@@ -60,7 +60,10 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({
 						</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem className="p-0">
-						<Link href="/app/orders" className="px-2 py-1.5 flex-1">
+						<Link
+							href="/app/settings/orders"
+							className="px-2 py-1.5 flex-1"
+						>
 							Orders
 						</Link>
 					</DropdownMenuItem>

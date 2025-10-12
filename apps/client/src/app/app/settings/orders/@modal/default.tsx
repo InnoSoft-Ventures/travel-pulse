@@ -1,3 +1,3 @@
-export default function ModalSlotDefault() {
+export default function OrderDrawerSlotDefault() {
 	return null;
 }

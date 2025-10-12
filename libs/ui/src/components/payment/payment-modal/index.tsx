@@ -8,7 +8,7 @@ import { CheckCircle } from 'lucide-react';
 
 interface PaymentModalProps {
 	open: boolean;
-	onClose: (redirect?: boolean) => void;
+	onClose: (redirect?: boolean, orderId?: number) => void;
 }
 
 const PaymentModal = ({ open, onClose }: PaymentModalProps) => {
@@ -32,7 +32,10 @@ const PaymentModal = ({ open, onClose }: PaymentModalProps) => {
 					return s != null ? Math.max(s - 1, 0) : s;
 				});
 			}, 1000);
-			timeoutId = setTimeout(() => onClose(true), ms);
+			timeoutId = setTimeout(
+				() => onClose(true, paymentAttempt.data?.orderId),
+				ms
+			);
 		};
 
 		if (confirmationStep === 'completed') {

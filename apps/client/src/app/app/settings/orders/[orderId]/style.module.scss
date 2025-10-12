@@ -1,0 +1,387 @@
+.page {
+	display: grid;
+	gap: 20px;
+	max-width: 1145px;
+}
+
+/* Header */
+.header {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 16px;
+	margin-top: 2rem;
+	margin-bottom: 20px;
+}
+.headerLeft {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+.h1 {
+	font-size: 22px;
+	font-weight: 800;
+}
+.headerActions {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+/* ===== Combined Summary Card ===== */
+.summaryCombined {
+	background: #fff;
+	border: 1px solid #edf0f2;
+	border-radius: 8px;
+	box-shadow: 0 1px 0 rgba(16, 24, 40, 0.02);
+	padding: 0;
+	max-width: 610px;
+	overflow: hidden;
+}
+.summaryLeft,
+.summaryRight {
+	padding: 16px;
+}
+.orderNoRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+}
+.orderNo {
+	font-size: 12px;
+	padding: 5px 10px;
+	font-weight: 500;
+	letter-spacing: 0.2px;
+	background-color: #eaeaea;
+	border-radius: 9px;
+}
+
+.badge {
+	padding: 4px 10px;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 500;
+}
+.success {
+	background: #ecfdf5;
+	color: #065f46;
+}
+.warning {
+	background: #fffbeb;
+	color: #92400e;
+}
+.danger {
+	background: #fef2f2;
+	color: #991b1b;
+}
+.info {
+	background: #eff6ff;
+	color: #1e40af;
+}
+.neutral {
+	background: #eef2f7;
+	color: #3b4252;
+}
+
+.hDivider {
+	height: 1px;
+	background: #e6e9ee;
+	margin: 12px 0;
+}
+.hDividerThin {
+	height: 1px;
+	background: #eef2f5;
+	grid-column: 1 / -1;
+	margin: 6px 0;
+}
+.vDivider {
+	width: 1px;
+	background: #edf0f2;
+}
+
+.kvlContainer {
+	display: grid;
+	row-gap: 15px;
+}
+
+.kvlLeft {
+	display: flex;
+	justify-content: space-between;
+	font-size: 14px;
+	color: #4b5563;
+	align-items: center;
+}
+.k {
+	color: #5f6b7a;
+}
+.v {
+	font-weight: 500;
+	color: var(--dark-purple);
+}
+.kStrong {
+	font-weight: 800;
+	color: var(--dark-purple);
+}
+
+.kvlRight {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 10px 12px;
+	align-items: center;
+	min-width: 280px;
+}
+.vRight {
+	text-align: right;
+	color: var(--dark-purple);
+}
+.vStrongRight {
+	text-align: right;
+	font-weight: 500;
+	color: var(--dark-purple);
+}
+
+/* ===== Items table ===== */
+.tableCard {
+	background: #fff;
+	border: 1px solid #edf0f2;
+	border-radius: 8px;
+	padding: 0;
+	box-shadow: 0 1px 0 rgba(16, 24, 40, 0.02);
+}
+.tableHeader,
+.row {
+	display: grid;
+	grid-template-columns: minmax(300px, 1fr) 110px 70px 150px 150px 120px 140px; /* align header & rows */
+	gap: 12px;
+	align-items: center;
+	padding: 12px 16px;
+}
+.tableHeader {
+	font-size: 13px;
+	font-weight: 700;
+	color: #3a4250;
+}
+.hrLight {
+	height: 1px;
+	background: #f1f3f6;
+}
+
+.tdPlan {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+.planLink {
+	color: #111827;
+	font-weight: 700;
+	text-decoration: none;
+}
+.planLink:hover {
+	text-decoration: underline;
+}
+.planSub {
+	color: #6b7280;
+	font-size: 12.5px;
+	line-height: 1.2;
+}
+
+.tdType,
+.tdQty,
+.tdRetail,
+.tdPrice,
+.tdStatus {
+	display: flex;
+	align-items: center;
+}
+.tdRetail,
+.tdPrice {
+	justify-content: flex-end;
+}
+.thRetail,
+.thPrice {
+	text-align: right;
+}
+.thActions {
+	text-align: right;
+}
+.tdActions {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.empty {
+	padding: 16px;
+	color: #6b7280;
+}
+
+/* Skeleton */
+.skeleton {
+	height: 260px;
+	border-radius: 12px;
+	background: linear-gradient(90deg, #f4f4f5, #efeff0, #f4f4f5);
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+	.summaryCombined {
+		grid-template-columns: 1fr;
+	}
+	.vDivider {
+		display: none;
+	}
+	.summaryRight {
+		border-top: 1px solid #edf0f2;
+	}
+	.tableHeader,
+	.row {
+		grid-template-columns: minmax(220px, 1fr) 90px 60px 130px 130px 110px 130px;
+	}
+}
+@media (max-width: 720px) {
+	.tableHeader {
+		display: none;
+	}
+	.row {
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
+		padding: 12px 14px;
+		border-top: 1px solid #f1f3f6;
+	}
+	.tdPlan {
+		grid-column: 1 / -1;
+	}
+	.tdRetail,
+	.tdPrice {
+		justify-content: flex-start;
+	}
+	.tdActions {
+		grid-column: 2 / 3;
+		justify-content: flex-end;
+	}
+}
+
+/* ===== Timeline Section (aligned grid) ===== */
+.timelineCard {
+	background: #fcfcfd;
+	border: 1px solid #eceff3;
+	border-radius: 8px;
+	padding: 24px 28px;
+	margin-top: 16px;
+	box-shadow: 0 1px 2px rgba(16, 24, 40, 0.03);
+}
+
+.timelineHeader {
+	margin-bottom: 16px;
+}
+
+/* Use a grid: col-1 for bullets/line, col-2 for content */
+.timeline {
+	--tl-col: 18px; /* width of the bullet column */
+	--tl-bullet: 12px; /* bullet diameter */
+	--tl-line: 2px; /* vertical line width */
+
+	display: grid;
+	grid-template-columns: var(--tl-col) 1fr;
+	row-gap: 15px;
+	position: relative;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* Draw the vertical line in column 1 */
+.timeline::before {
+	content: '';
+	position: absolute;
+	top: 12px;
+	bottom: 0;
+	left: calc((var(--tl-col) - var(--tl-line)) / 2);
+	width: var(--tl-line);
+	background-color: #e5e7eb;
+	z-index: 0;
+}
+
+/* Each item becomes two grid cells: bullet in col-1, body in col-2 */
+.timelineItem {
+	display: contents; /* lets children place directly in the grid */
+
+	.timelineBullet {
+		grid-column: 1;
+		justify-self: center;
+		width: var(--tl-bullet);
+		height: var(--tl-bullet);
+		background: #7c3aed;
+		border-radius: 50%;
+		margin-top: 4px; /* align with first line of text */
+		box-shadow: 0 0 0 2px #fcfcfd; /* halo to cut through the line */
+		z-index: 1;
+	}
+
+	.timelineBody {
+		grid-column: 2;
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		padding-left: 7px;
+	}
+
+	.timelineTitle {
+		font-weight: 600;
+		color: var(--dark-purple);
+		font-size: 15px;
+		line-height: 21px;
+	}
+
+	.timelineSub {
+		font-size: 14px;
+		color: #6b7280;
+	}
+
+	&:last-child {
+		.timelineBody {
+			padding-bottom: 15px;
+		}
+	}
+
+	.timelineAt {
+		font-size: 13px;
+		color: #8c95a3;
+	}
+}
+
+/* “Next step” aligns with text column */
+.nextStep {
+	padding: 10px 12px;
+	border-left: 3px solid #7c3aed;
+	background: #f5f3ff;
+	border-radius: 8px;
+	max-width: 550px;
+	font-size: 14px;
+	color: #4b5563;
+}
+.nextStep strong {
+	color: #111827;
+}
+
+/* Optional: subtle entrance animation */
+.timelineBody {
+	opacity: 0;
+	transform: translateY(6px);
+	animation: tlIn 0.35s ease forwards;
+}
+.timelineItem:nth-child(1) .timelineBody {
+	animation-delay: 0.05s;
+}
+.timelineItem:nth-child(2) .timelineBody {
+	animation-delay: 0.1s;
+}
+.timelineItem:nth-child(3) .timelineBody {
+	animation-delay: 0.15s;
+}
+@keyframes tlIn {
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
