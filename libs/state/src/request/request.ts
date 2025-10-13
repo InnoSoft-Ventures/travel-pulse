@@ -1,7 +1,16 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { BASE_API_URL } from './config';
 import { logoutUser } from '../thunks/auth.thunk';
+import { setUser } from '../features/user.slice';
+import { ResponseData, UserDataDAO } from '@travelpulse/interfaces';
 import { storeRef } from '@travelpulse/state';
+
+interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {
+	_retry?: boolean;
+	skipAuthRefresh?: boolean;
+}
+
+type RefreshSubscriber = (success: boolean) => void;
 
 const axiosInstance = axios.create({
 	baseURL: BASE_API_URL,
@@ -11,41 +20,147 @@ const axiosInstance = axios.create({
 		'Content-Type': 'application/json',
 	},
 	withCredentials: true,
-	validateStatus: function (status) {
+	validateStatus(status) {
 		return status !== 401 && status >= 200 && status < 500;
 	},
 });
 
-// Interceptor to attach the authorization token
-axiosInstance.interceptors.request.use((config) => {
-	return config;
-});
+axiosInstance.interceptors.request.use((config) => config);
+
+let refreshInProgress = false;
+let refreshSubscribers: RefreshSubscriber[] = [];
+
+const subscribeTokenRefresh = (callback: RefreshSubscriber) => {
+	refreshSubscribers.push(callback);
+};
+
+const notifyRefreshSubscribers = (success: boolean) => {
+	refreshSubscribers.forEach((callback) => {
+		try {
+			callback(success);
+		} catch (err) {
+			console.error('Refresh subscriber error:', err);
+		}
+	});
+
+	refreshSubscribers = [];
+};
+
+const performRefresh = async () => {
+	const store = storeRef.get();
+
+	const refreshConfig: AxiosRequestConfigWithRetry = {
+		withCredentials: true,
+		skipAuthRefresh: true,
+	};
+
+	const response = await axiosInstance.post<ResponseData<UserDataDAO>>(
+		'/auth/refresh',
+		{},
+		refreshConfig
+	);
+
+	const payload = response.data as ResponseData<UserDataDAO>;
+
+	if (payload.success === true && store) {
+		store.dispatch(setUser(payload.data));
+	}
+
+	return response;
+};
 
 axiosInstance.interceptors.response.use(
 	(response) => ({
 		...response,
 		data: { ...response.data, statusCode: response.status },
 	}),
-	(error: AxiosError) => {
+	async (error: AxiosError) => {
 		console.error('API Error:', error);
 
-		if (error.response && error.response.status === 401) {
-			console.log('Unauthorized access - refreshing token...');
-			// Dispatch logout which clears session and redirects appropriately
-			try {
-				const store = storeRef.get();
-				if (store) {
-					// fire and forget
-					store.dispatch<any>(logoutUser({}));
-				}
-			} catch {}
+		const { response } = error;
+		const originalRequest = error.config as AxiosRequestConfigWithRetry;
 
-			const { data, status } = error.response as any;
-			return Promise.reject({ ...(data || {}), statusCode: status });
+		if (
+			response?.status === 401 &&
+			!originalRequest?.skipAuthRefresh &&
+			!originalRequest?.url?.includes('/auth/signin') &&
+			!originalRequest?.url?.includes('/auth/signup') &&
+			!originalRequest?.url?.includes('/auth/logout') &&
+			!originalRequest?.url?.includes('/auth/refresh')
+		) {
+			if (originalRequest._retry) {
+				return Promise.reject(error);
+			}
+
+			originalRequest._retry = true;
+
+			if (refreshInProgress) {
+				return new Promise((resolve, reject) => {
+					subscribeTokenRefresh(async (success) => {
+						if (!success) {
+							return reject(error);
+						}
+
+						try {
+							const retryResponse = await axiosInstance(
+								originalRequest
+							);
+							resolve(retryResponse);
+						} catch (retryErr) {
+							reject(retryErr);
+						}
+					});
+				});
+			}
+
+			refreshInProgress = true;
+
+			return new Promise(async (resolve, reject) => {
+				subscribeTokenRefresh(async (success) => {
+					if (!success) {
+						return reject(error);
+					}
+
+					try {
+						const retryResponse = await axiosInstance(
+							originalRequest
+						);
+						resolve(retryResponse);
+					} catch (retryErr) {
+						reject(retryErr);
+					}
+				});
+
+				try {
+					await performRefresh();
+					notifyRefreshSubscribers(true);
+				} catch (refreshErr) {
+					console.error('Failed to refresh session:', refreshErr);
+					notifyRefreshSubscribers(false);
+
+					try {
+						const store = storeRef.get();
+						if (store) {
+							await store.dispatch<any>(
+								logoutUser({ redirectToLoginPage: true })
+							);
+						}
+					} catch (logoutErr) {
+						console.error(
+							'Failed to logout after refresh error:',
+							logoutErr
+						);
+					}
+
+					reject(refreshErr);
+				} finally {
+					refreshInProgress = false;
+				}
+			});
 		}
 
-		if (error.response) {
-			const { data, status } = error.response as any;
+		if (response) {
+			const { data, status } = response as any;
 			return Promise.reject({ ...(data || {}), statusCode: status });
 		}
 

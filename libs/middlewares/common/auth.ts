@@ -170,7 +170,7 @@ export const extractToken = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	const { token } = req.cookies;
+	const token = req.cookies?.token;
 
 	if (!token) {
 		return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json(
