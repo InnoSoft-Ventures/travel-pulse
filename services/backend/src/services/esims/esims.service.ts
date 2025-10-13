@@ -3,6 +3,10 @@ import { SessionRequest } from '../../../types/express';
 import { Op } from 'sequelize';
 import Sim from '../../db/models/Sims';
 import ProviderOrder from '../../db/models/ProviderOrder';
+import Package from '../../db/models/Package';
+import Operator from '../../db/models/Operator';
+import Continent from '../../db/models/Continent';
+import Country from '../../db/models/Country';
 import Order from '../../db/models/Order';
 import {
 	SIMDetails,
@@ -152,6 +156,66 @@ export const getEsimDetailsService = async (
 	}
 
 	const po = sim.get('providerOrder') as ProviderOrder;
+
+	// Resolve country by looking up the package via externalPackageId/provider
+	let country: {
+		id: number;
+		name: string;
+		iso2: string;
+		flag: string;
+	} | null = null;
+	let continent: { id: number; name: string } | null = null;
+	try {
+		if (po?.packageId && po?.provider) {
+			const pkg = await Package.findOne({
+				where: {
+					externalPackageId: po.packageId,
+					provider: po.provider as any,
+				},
+				attributes: ['id', 'operatorId'],
+				include: [
+					{
+						model: Operator,
+						as: 'operator',
+						attributes: ['id', 'countryId', 'continentId'],
+						include: [
+							{
+								model: Country,
+								as: 'country',
+								attributes: ['id', 'name', 'iso2', 'flag'],
+								required: false,
+							},
+							{
+								model: Continent,
+								as: 'continent',
+								attributes: ['id', 'name'],
+								required: false,
+							},
+						],
+					},
+				],
+			});
+
+			const op = pkg?.get('operator') as Operator | undefined;
+			const c = op?.get('country') as Country | undefined;
+			const cont = op?.get('continent') as Continent | undefined;
+			if (c) {
+				country = {
+					id: (c as any).id,
+					name: (c as any).name,
+					iso2: (c as any).iso2,
+					flag: (c as any).flag,
+				};
+			}
+			if (cont) {
+				continent = { id: (cont as any).id, name: (cont as any).name };
+			}
+		}
+	} catch (error) {
+		console.error('Error fetching country for eSIM details:', error);
+		country = null;
+		continent = null;
+	}
 	const order = po?.get('order') as Order | undefined;
 	const expiredAt = sim.expiredAt
 		? dateJs(sim.expiredAt).format(PRETTY_DATE_FORMAT)
@@ -187,6 +251,8 @@ export const getEsimDetailsService = async (
 				}
 			: null,
 		order: order ? { id: order.id, orderNumber: order.orderNumber } : null,
+		country,
+		continent,
 	};
 };
 

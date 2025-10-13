@@ -1,4 +1,5 @@
 import { SimStatus } from './enums';
+import { Country, Continent } from './common';
 
 export interface SIMInfo {
 	id: number;
@@ -38,6 +39,14 @@ export interface SIMDetails extends SIMInfo {
 		currency: string | null;
 	} | null;
 	order: { id: number; orderNumber: string } | null;
+	/**
+	 * Country where this eSIM/package primarily applies. Derived from the package's operator.
+	 */
+	country: Pick<Country, 'id' | 'name' | 'iso2' | 'flag'> | null;
+	/**
+	 * Continent derived from the operator's country.
+	 */
+	continent: Pick<Continent, 'id' | 'name'> | null;
 }
 
 export interface SIMInfoResponse {

@@ -34,5 +34,7 @@ export interface UserDataDAO {
 	};
 	token: {
 		accessToken: string;
+		refreshToken?: string;
+		refreshTokenExpiresAt?: string;
 	};
 }

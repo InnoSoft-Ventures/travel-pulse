@@ -7,27 +7,37 @@ import { AccountDropdown } from '../../common';
 import { useAppSelector } from '@travelpulse/state';
 import { CartIcon } from '../../common/icon';
 
-const getTitleFromPath = (pathname: string): string => {
+const getTitleFromPath = (pathname: string, userFullName: string): string => {
 	if (pathname.includes('/app/orders/')) {
 		return 'Order Details';
 	}
 
 	const titles: { [key: string]: string } = {
-		'/app': 'Welcome back, Martin',
-		'/app/account': 'Account Settings',
-		'/app/account/security': 'Security Settings',
-		'/app/account/notifications': 'Notification Settings',
+		'/app/settings/account': 'Account Settings',
+		'/app/settings/security': 'Security Settings',
+		'/app/settings/notifications': 'Notification Settings',
+		'/app/settings/orders': 'Order History',
 		'/app/esims': 'eSIM Management',
-		'/app/orders': 'Purchase History',
+		'/app': `Welcome back, ${userFullName}`,
 	};
+
+	// Implement partial matching for paths like /app/esims/[esimId]
+	for (const path in titles) {
+		if (pathname.startsWith(path)) {
+			return titles[path];
+		}
+	}
 
 	return titles[pathname] || 'Dashboard';
 };
 
 export function AppTopBar() {
 	const pathname = usePathname();
-	const title = getTitleFromPath(pathname);
 	const account = useAppSelector((state) => state.account.user.session);
+	const title = getTitleFromPath(
+		pathname,
+		`${account.firstName} ${account.lastName}`
+	);
 
 	return (
 		<header className={styles.appTopBar}>

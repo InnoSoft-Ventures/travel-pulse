@@ -106,6 +106,28 @@ export default function EsimDetailsPage() {
 				{/* Hero / header section */}
 				<div className={styles.hero}>
 					<div className={styles.heroLeft}>
+						{(sim.country || sim.continent) && (
+							<div className={styles.countryRow}>
+								{sim.country?.flag ? (
+									<img
+										src={sim.country.flag}
+										alt={`${sim.country.name} flag`}
+										className={styles.countryFlag}
+									/>
+								) : sim.continent ? (
+									<span
+										className={styles.flagPlaceholder}
+										aria-label={`${sim.continent.name} placeholder flag`}
+										role="img"
+									>
+										🌐
+									</span>
+								) : null}
+								<span className={styles.countryName}>
+									{sim.country?.name ?? sim.continent?.name}
+								</span>
+							</div>
+						)}
 						<h1 className={styles.planName}>{planName}</h1>
 						<p className={styles.operator}>{providerName}</p>
 					</div>

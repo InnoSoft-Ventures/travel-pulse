@@ -27,6 +27,41 @@
 	gap: 4px;
 }
 
+.countryRow {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 2px;
+}
+
+.countryFlag {
+	width: 18px;
+	height: 12px;
+	object-fit: cover;
+	border: 1px solid #e5e7eb;
+	border-radius: 2px;
+}
+
+.countryName {
+	font-size: 12px;
+	color: #6b7280;
+}
+
+.flagPlaceholder {
+	/* mimic flag chip size */
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 18px;
+	height: 12px;
+	font-size: 10px;
+	line-height: 1;
+	border: 1px solid #e5e7eb;
+	border-radius: 2px;
+	background: #f3f4f6;
+	color: #6b7280;
+}
+
 .planName {
 	font-size: 22px;
 	font-weight: 700;
@@ -294,7 +329,9 @@
 /* Sticky action bar */
 .stickyBar {
 	position: sticky;
-	bottom: 0;
+	margin-left: -1.5rem;
+	margin-right: -1.5rem;
+	bottom: -2.25rem;
 	background: rgba(255, 255, 255, 0.8);
 	backdrop-filter: blur(6px);
 	border-top: 1px solid #e5e7eb;
