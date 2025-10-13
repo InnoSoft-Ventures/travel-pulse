@@ -4,31 +4,15 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ActivityLog, ESimTabs } from '@travelpulse/ui';
 import { ApiService } from '@travelpulse/ui/state';
 import {
-	EsimListItem,
-	EsimListResponse,
+	SIMInfo,
+	SIMInfoResponse,
 	SuccessResponse,
 } from '@travelpulse/interfaces';
-
-export type SimInfo = {
-	id: string;
-	planName: string;
-	providerName: string;
-	phoneNumber: string;
-	dataLeft: string; // e.g. "1.5 GB" or "—"
-	expiresOn: string; // display date or "—"
-	isActive: boolean;
-	// optional UX extras
-	validityDays?: number | null;
-	supportsVoice?: boolean;
-	supportsSms?: boolean;
-	autoRenew?: boolean;
-	packageId?: number;
-};
 
 const ESimsPage = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	const [sims, setSims] = useState<EsimListItem[]>([]);
+	const [sims, setSims] = useState<SIMInfo[]>([]);
 
 	useEffect(() => {
 		setLoading(true);
@@ -38,7 +22,7 @@ const ESimsPage = () => {
 			params: { status: 'all', page: 1, size: 20 },
 		})
 			.then((res) => {
-				const parsed = res.data as SuccessResponse<EsimListResponse>;
+				const parsed = res.data as SuccessResponse<SIMInfoResponse>;
 				setSims(parsed.data.items || []);
 			})
 			.catch((err) => {
@@ -47,22 +31,6 @@ const ESimsPage = () => {
 			})
 			.finally(() => setLoading(false));
 	}, []);
-
-	const mapped: SimInfo[] = useMemo(
-		() =>
-			sims.map((s) => ({
-				id: String(s.id),
-				planName: s.providerOrder?.packageId || 'eSIM Plan',
-				providerName: 'Provider',
-				phoneNumber: s.msisdn || '',
-				dataLeft: s.remaining ? `${s.remaining} GB` : '—',
-				expiresOn: s.expiredAt
-					? new Date(s.expiredAt).toLocaleDateString()
-					: '—',
-				isActive: s.status === 'ACTIVE',
-			})),
-		[sims]
-	);
 
 	return (
 		<div className="space-y-6">
@@ -80,7 +48,7 @@ const ESimsPage = () => {
 					{error}
 				</div>
 			) : (
-				<ESimTabs sims={mapped} />
+				<ESimTabs sims={sims} />
 			)}
 
 			<ActivityLog />

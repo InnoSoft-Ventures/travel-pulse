@@ -4,7 +4,13 @@ import { Op } from 'sequelize';
 import Sim from '../../db/models/Sims';
 import ProviderOrder from '../../db/models/ProviderOrder';
 import Order from '../../db/models/Order';
-import { SimStatus } from '@travelpulse/interfaces';
+import {
+	SIMDetails,
+	SIMInfo,
+	SIMInfoResponse,
+	SimStatus,
+} from '@travelpulse/interfaces';
+import { dateJs, PRETTY_DATE_FORMAT } from '@travelpulse/utils';
 
 type ListQuery = {
 	status?: 'active' | 'inactive' | 'all';
@@ -15,7 +21,7 @@ type ListQuery = {
 export const listEsimsService = async (
 	req: SessionRequest,
 	query: ListQuery
-) => {
+): Promise<SIMInfoResponse> => {
 	const userId = req.user.accountId;
 	const pageNum = Math.max(parseInt(String(query.page ?? '1'), 10) || 1, 1);
 	const sizeNum = Math.min(
@@ -72,16 +78,21 @@ export const listEsimsService = async (
 		offset,
 	});
 
-	const items = rows.map((sim) => {
+	const items: SIMInfo[] = rows.map((sim) => {
 		const po = sim.get('providerOrder') as ProviderOrder;
 		const order = po?.get('order') as Order | undefined;
+		const expiredAt = sim.expiredAt
+			? dateJs(sim.expiredAt).format(PRETTY_DATE_FORMAT)
+			: '-';
+
 		return {
 			id: sim.id,
 			status: sim.status,
+			name: po.packageId || 'eSIM Plan',
 			msisdn: sim.msisdn,
 			remaining: sim.remaining,
 			total: sim.total,
-			expiredAt: sim.expiredAt,
+			expiredAt,
 			apnType: sim.apnType,
 			apnValue: sim.apnValue,
 			directAppleInstallationUrl: sim.directAppleInstallationUrl,
@@ -110,7 +121,9 @@ export const listEsimsService = async (
 	};
 };
 
-export const getEsimDetailsService = async (req: SessionRequest) => {
+export const getEsimDetailsService = async (
+	req: SessionRequest
+): Promise<SIMDetails> => {
 	const userId = req.user.accountId;
 	const simId = Number(req.params.simId);
 
@@ -140,18 +153,22 @@ export const getEsimDetailsService = async (req: SessionRequest) => {
 
 	const po = sim.get('providerOrder') as ProviderOrder;
 	const order = po?.get('order') as Order | undefined;
+	const expiredAt = sim.expiredAt
+		? dateJs(sim.expiredAt).format(PRETTY_DATE_FORMAT)
+		: '-';
 
 	return {
 		id: sim.id,
+		name: po.packageId || 'eSIM Plan',
 		status: sim.status,
 		msisdn: sim.msisdn,
 		iccid: sim.iccid,
 		lpa: sim.lpa,
-		qrcode: sim.qrcode,
+		activationCode: sim.qrcode,
 		qrcodeUrl: sim.qrcodeUrl,
 		remaining: sim.remaining,
 		total: sim.total,
-		expiredAt: sim.expiredAt,
+		expiredAt,
 		apnType: sim.apnType,
 		apnValue: sim.apnValue,
 		isRoaming: sim.isRoaming,

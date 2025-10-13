@@ -1,0 +1,463 @@
+.page {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+	padding: 24px;
+	max-width: 800px;
+	margin: 0 auto;
+	color: #1f2937; // base text color
+}
+
+/* Hero / header area */
+.hero {
+	display: flex;
+	justify-content: space-between;
+	align-items: start;
+	gap: 16px;
+	background: #ffffff;
+	border: 1px solid #e5e7eb;
+	border-radius: 12px;
+	padding: 20px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.heroLeft {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.planName {
+	font-size: 22px;
+	font-weight: 700;
+	color: #111827;
+	margin: 0;
+}
+
+.operator {
+	font-size: 14px;
+	color: #6b7280;
+	margin: 0;
+}
+
+.statusChip {
+	font-size: 12px;
+	font-weight: 600;
+	padding: 4px 12px;
+	border-radius: 999px;
+	display: inline-flex;
+	align-items: center;
+	line-height: 1;
+
+	&.active {
+		background-color: #dcfce7;
+		color: #065f46;
+		border: 1px solid #86efac;
+	}
+
+	&.inactive {
+		background-color: #f3f4f6;
+		color: #6b7280;
+		border: 1px solid #d1d5db;
+	}
+}
+
+/* Section titles */
+.sectionTitle {
+	font-size: 16px;
+	font-weight: 600;
+	color: #374151;
+	margin-bottom: 12px;
+}
+
+.breadcrumbs {
+	font-size: 13px;
+	color: #6b7280;
+	margin-top: 4px;
+	margin-bottom: 8px;
+
+	ol {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	li::after {
+		content: '/';
+		margin-left: 8px;
+		color: #9ca3af;
+	}
+	li:last-child::after {
+		content: '';
+		margin: 0;
+	}
+	a {
+		color: #2563eb;
+		text-decoration: none;
+	}
+}
+
+/* Key-value rows (Identifiers, plan rows) */
+.kvRow {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 0;
+	border-bottom: 1px solid #f3f4f6;
+
+	&:last-child {
+		border-bottom: none;
+	}
+
+	span {
+		font-size: 14px;
+		color: #4b5563;
+
+		&.value {
+			font-weight: 500;
+			color: #111827;
+		}
+	}
+}
+
+/* Plan / package row of two cards */
+.packRow {
+	display: flex;
+	gap: 16px;
+	flex-wrap: wrap;
+	margin-bottom: 16px;
+}
+
+.packItem {
+	flex: 1;
+	background-color: #fafafa;
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+	padding: 12px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+
+	.packLabel {
+		font-size: 12px;
+		color: #6b7280;
+	}
+	.packValue {
+		font-size: 20px;
+		font-weight: 700;
+		color: #111827;
+		margin-top: 4px;
+	}
+}
+
+/* Usage / chart section */
+.usageSection {
+	background: #ffffff;
+	border: 1px solid #e5e7eb;
+	border-radius: 12px;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.progressWrap {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.progressBar {
+	width: 100%;
+	height: 10px;
+	background: #f3f4f6;
+	border-radius: 999px;
+	overflow: hidden;
+}
+
+.progressFill {
+	height: 100%;
+	background: linear-gradient(90deg, #6366f1, #8b5cf6);
+	width: 0%;
+	transition: width 300ms ease;
+}
+
+.progressMeta {
+	font-size: 12px;
+	color: #6b7280;
+}
+
+/* Alert banner (low data, expiration warning) */
+.alertBanner {
+	border-radius: 10px;
+	padding: 14px 16px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 14px;
+	font-weight: 500;
+
+	&.warning {
+		background-color: #fffbeb;
+		color: #92400e;
+		border: 1px solid #fde047;
+	}
+	&.error {
+		background-color: #fef2f2;
+		color: #991b1b;
+		border: 1px solid #fca5a5;
+	}
+	&.info {
+		background-color: #eff6ff;
+		color: #1e40af;
+		border: 1px solid #93c5fd;
+	}
+}
+
+/* Actions section */
+.actionsSection {
+	background: #ffffff;
+	border: 1px solid #e5e7eb;
+	border-radius: 12px;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.actionRow {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+
+	button {
+		flex: 1;
+	}
+}
+
+/* Auto-renew / renew section */
+.renewSection {
+	background: #ffffff;
+	border: 1px solid #e5e7eb;
+	border-radius: 12px;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.renewControl {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+
+	span {
+		font-size: 14px;
+		font-weight: 600;
+		color: #374151;
+	}
+}
+
+.nextRenewal {
+	font-size: 13px;
+	color: #6b7280;
+}
+
+/* Misc section (support, logs) */
+.miscSection {
+	background: #ffffff;
+	border: 1px solid #e5e7eb;
+	border-radius: 12px;
+	padding: 20px;
+}
+
+.miscList {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	li {
+		margin-bottom: 12px;
+		button {
+			font-size: 14px;
+			color: #2563eb;
+			text-decoration: none;
+			background: none;
+			border: none;
+			padding: 0;
+			cursor: pointer;
+		}
+	}
+}
+
+/* Sticky action bar */
+.stickyBar {
+	position: sticky;
+	bottom: 0;
+	background: rgba(255, 255, 255, 0.8);
+	backdrop-filter: blur(6px);
+	border-top: 1px solid #e5e7eb;
+	padding: 10px 0;
+	margin-top: 12px;
+}
+
+.stickyInner {
+	max-width: 800px;
+	margin: 0 auto;
+	display: flex;
+	gap: 12px;
+	justify-content: flex-end;
+}
+
+/* New additions for details UI */
+.mono {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+		'Liberation Mono', 'Courier New', monospace;
+}
+
+.badge {
+	display: inline-block;
+	padding: 2px 8px;
+	font-size: 12px;
+	border-radius: 999px;
+	background: #eef2ff;
+	color: #4338ca;
+	border: 1px solid #c7d2fe;
+}
+
+.installGrid {
+	display: grid;
+	grid-template-columns: 160px 1fr;
+	gap: 16px;
+	align-items: start;
+}
+
+.qrBox {
+	border: 1px solid #e5e7eb;
+	border-radius: 12px;
+	padding: 8px;
+	background: #fff;
+	text-align: center;
+}
+
+.qrImage {
+	width: 144px;
+	height: 144px;
+	object-fit: contain;
+}
+
+.qrBoxPlaceholder {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 160px;
+	height: 160px;
+	border: 1px dashed #e5e7eb;
+	border-radius: 12px;
+	color: #9ca3af;
+}
+
+.metaLine {
+	margin-top: 8px;
+	font-size: 12px;
+	color: #6b7280;
+}
+
+.codeList {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.codeLabel {
+	font-size: 12px;
+	color: #6b7280;
+	margin-bottom: 4px;
+}
+
+.codeBox {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	border: 1px solid #e5e7eb;
+	background: #fafafa;
+	border-radius: 10px;
+	padding: 10px 12px;
+}
+
+.inlineActions {
+	display: flex;
+	gap: 8px;
+}
+
+.apnGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 12px;
+	margin-top: 12px;
+}
+
+.apnCard {
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+	background: #fafafa;
+	padding: 10px 12px;
+}
+
+.apnTitle {
+	font-size: 13px;
+	font-weight: 600;
+	color: #374151;
+	margin-bottom: 6px;
+}
+
+/* ICCID Card */
+.iccidCard {
+	background: #faf7f2; /* soft tint to lift from background */
+	border: 1px solid #efe7dc;
+	border-radius: 12px;
+	padding: 16px;
+}
+
+.iccidBox {
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-radius: 12px;
+	padding: 12px 14px;
+}
+
+.iccidHeaderRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.iccidLabel {
+	font-size: 12px;
+	color: #6b7280;
+	font-weight: 600;
+}
+
+.iccidValue {
+	margin-top: 6px;
+	font-size: 14px;
+	color: #111827;
+}
+
+.iconButton {
+	background: transparent;
+	border: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	border-radius: 8px;
+	color: #111827;
+	cursor: pointer;
+}
+.iconButton:hover {
+	background: #f3f4f6;
+}

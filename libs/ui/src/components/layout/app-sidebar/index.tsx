@@ -21,7 +21,7 @@ export function AppSidebar() {
 				<NavLink href="/app">
 					<Home size={18} /> Overview
 				</NavLink>
-				<NavLink href="/app/esims">
+				<NavLink href="/app/esims" partialMatchValue="esims">
 					<Smartphone size={18} /> eSIM Management
 				</NavLink>
 				<NavLink href="/app/notifications">

@@ -2,23 +2,35 @@
 import React, { useMemo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../common';
 import { SimCard } from '../sim-card';
-import { SimInfo } from '../sim-interface';
+
+import styles from './styles.module.scss';
+import { SIMInfo } from '@travelpulse/interfaces';
+import { useRouter } from 'next/navigation';
 
 interface ESimTabsProps {
-	sims: SimInfo[];
+	sims: SIMInfo[];
 }
 
 export const ESimTabs = ({ sims }: ESimTabsProps) => {
-	const active = useMemo(() => sims.filter((s) => s.isActive), [sims]);
-	const inactive = useMemo(() => sims.filter((s) => !s.isActive), [sims]);
+	const router = useRouter();
 
-	const onRecharge = (simId: string) => {
+	const active = useMemo(
+		() => sims.filter((s) => s.status === 'ACTIVE'),
+		[sims]
+	);
+	const inactive = useMemo(
+		() => sims.filter((s) => s.status === 'NOT_ACTIVE'),
+		[sims]
+	);
+
+	const onRecharge = (simId: number) => {
 		console.log(`Recharge SIM with ID: ${simId}`);
 	};
 
-	const onViewDetails = (sim: SimInfo) => {
+	const onViewDetails = (sim: SIMInfo) => {
 		// you can deep-link to plan detail using pkg if you want
 		console.log(`View details for SIM with ID: ${sim.id}`, sim);
+		router.push(`/app/esims/${sim.id}`);
 	};
 
 	// const onInstallShare = (simId: string) => {
@@ -30,9 +42,9 @@ export const ESimTabs = ({ sims }: ESimTabsProps) => {
 	//   // TODO hook to backend
 	// };
 
-	const renderGrid = (arr: SimInfo[]) =>
+	const renderGrid = (arr: SIMInfo[]) =>
 		arr.length ? (
-			<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+			<div className={styles.simCardGrid}>
 				{arr.map((sim) => (
 					<SimCard
 						key={sim.id}

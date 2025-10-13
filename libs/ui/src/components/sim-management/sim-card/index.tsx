@@ -5,11 +5,10 @@ import { Button } from '../../common';
 import styles from './style.module.scss';
 
 import WifiIcon from '../../../assets/wifi.svg';
-import PhoneIcon from '../../../assets/phone.svg';
-import { SimInfo } from '../sim-interface';
+import { SIMInfo } from '@travelpulse/interfaces';
 
 export type SimCardProps = {
-	data: SimInfo;
+	data: SIMInfo;
 	onRecharge: () => void;
 	onViewDetails: () => void;
 	onInstallShare?: () => void;
@@ -24,25 +23,23 @@ export const SimCard: React.FC<SimCardProps> = ({
 	onToggleRenew,
 }) => {
 	const {
-		providerName,
-		planName,
-		phoneNumber,
-		dataLeft,
-		expiresOn,
-		isActive,
+		name: planName,
+		remaining,
+		expiredAt: expiresOn,
+		status,
 		// validityDays,
 		// supportsVoice,
 		// supportsSms,
 		// autoRenew,
 	} = data;
 
+	const isActive = status === 'ACTIVE';
 	const autoRenew = false;
+	const pendingInstallation = !isActive;
 
 	const statusCls = isActive
 		? 'bg-emerald-100 text-emerald-700 border border-emerald-300'
 		: 'bg-gray-200 text-gray-600 border border-gray-300';
-
-	const cardStateCls = isActive ? '' : 'opacity-[0.55]';
 
 	const renewLabel = useMemo(() => (autoRenew ? 'On' : 'Off'), [autoRenew]);
 
@@ -50,17 +47,16 @@ export const SimCard: React.FC<SimCardProps> = ({
 		<article
 			className={[
 				'bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-shadow',
-				cardStateCls,
 			].join(' ')}
 			aria-live="polite"
 		>
 			{/* Header */}
 			<div className="flex items-start justify-between gap-3">
 				<div className="min-w-0">
-					<h3 className="text-[18px] leading-6 font-extrabold text-slate-900 truncate">
+					<h3 className="text-[18px] leading-6 font-semibold text-slate-900 truncate">
 						{planName}
 					</h3>
-					<p className="text-gray-500 text-sm">{providerName}</p>
+					<p className="text-gray-500 text-sm">South Africa</p>
 				</div>
 
 				<span
@@ -73,32 +69,23 @@ export const SimCard: React.FC<SimCardProps> = ({
 						data-active={isActive}
 						className={styles.wifiIcon}
 					/>
-					<span className="text-xs font-semibold">
+					<span className="text-xs font-medium">
 						{isActive ? 'Active' : 'Inactive'}
 					</span>
 				</span>
-			</div>
-
-			{/* Phone */}
-			<div className="flex items-center mt-4 text-gray-900">
-				<PhoneIcon
-					stroke="currentColor"
-					className="text-indigo-600 mr-2"
-				/>
-				<span className="font-medium">{phoneNumber || '—'}</span>
 			</div>
 
 			{/* KPI tiles */}
 			<div className="mt-4 grid grid-cols-2 gap-3">
 				<div className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-2">
 					<div className="text-xs text-gray-500">Data left</div>
-					<div className="font-extrabold text-[22px] leading-7">
-						{dataLeft}
+					<div className="font-semibold text-[16px] leading-7">
+						{remaining}
 					</div>
 				</div>
 				<div className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-2">
 					<div className="text-xs text-gray-500">Expires on</div>
-					<div className="font-extrabold text-[18px] leading-7">
+					<div className="font-semibold text-[16px] leading-7">
 						{expiresOn}
 					</div>
 				</div>
@@ -162,14 +149,12 @@ export const SimCard: React.FC<SimCardProps> = ({
 			)}
 
 			{/* Actions */}
-			<div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
-				<Button
-					onClick={onRecharge}
-					disabled={!isActive}
-					className="sm:col-span-1 bg-gradient-to-b from-indigo-500 to-indigo-700 text-white shadow-[0_8px_18px_rgba(79,70,229,0.25)] hover:brightness-105"
-				>
-					Recharge
-				</Button>
+			<div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+				{isActive && (
+					<Button onClick={onRecharge} className="sm:col-span-1">
+						Top up
+					</Button>
+				)}
 
 				<Button
 					onClick={onViewDetails}
@@ -179,12 +164,8 @@ export const SimCard: React.FC<SimCardProps> = ({
 					View details
 				</Button>
 
-				{onInstallShare && (
-					<Button
-						onClick={onInstallShare}
-						variant="outline"
-						className="sm:col-span-1"
-					>
+				{pendingInstallation && (
+					<Button onClick={onInstallShare} className="sm:col-span-1">
 						Install / share
 					</Button>
 				)}
