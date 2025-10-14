@@ -1,11 +1,15 @@
 import { UserDataDAO } from '@travelpulse/interfaces';
 import { comparePassword, hashPassword } from '../utils/hash';
-import { BadRequestException, NotFoundException } from '@travelpulse/middlewares';
+import {
+	BadRequestException,
+	NotFoundException,
+} from '@travelpulse/middlewares';
 import User from '../db/models/User';
 import { SignInType, SignUpType } from '../schema/auth.schema';
 import { DEFAULT_USER_PICTURE } from '@travelpulse/utils';
 import Country from '../db/models/Country';
 import { TokenMetadata, issueSessionTokens } from './token.service';
+import { sendAccountVerificationEmail } from '@travelpulse/services';
 
 const buildUserResponse = (
 	user: User & { country?: Country | null }
@@ -23,14 +27,14 @@ const buildUserResponse = (
 				name: user.country.name,
 				iso2: user.country.iso2,
 				flag: user.country.flag,
-		  }
+			}
 		: null,
 });
 
 export const registerService = async (
 	profileData: SignUpType,
 	metadata: TokenMetadata = {}
-): Promise<UserDataDAO> => {
+): Promise<Omit<UserDataDAO, 'token'>> => {
 	const { email, firstName, lastName, password } = profileData;
 
 	// Check if user already exists
@@ -56,14 +60,22 @@ export const registerService = async (
 	// Generate session tokens
 	const tokens = await issueSessionTokens(user.id, user.email, metadata);
 
+	// Fire-and-forget: send account verification email (best-effort)
+	try {
+		const verifyUrl = `/verify-email/${tokens.refreshToken}`;
+
+		await sendAccountVerificationEmail(user.email, {
+			firstName: user.firstName,
+			lastName: user.lastName,
+			verifyUrl,
+		});
+	} catch (e) {
+		// Log and continue; do not block signup on email failures
+		console.error('Failed to send verification email:', e);
+	}
+
 	return {
 		user: buildUserResponse(user),
-		token: {
-			accessToken: tokens.accessToken,
-			refreshToken: tokens.refreshToken,
-			refreshTokenExpiresAt:
-				tokens.refreshTokenExpiresAt.toISOString(),
-		},
 	};
 };
 
@@ -102,8 +114,7 @@ export const loginService = async (
 		token: {
 			accessToken: tokens.accessToken,
 			refreshToken: tokens.refreshToken,
-			refreshTokenExpiresAt:
-				tokens.refreshTokenExpiresAt.toISOString(),
+			refreshTokenExpiresAt: tokens.refreshTokenExpiresAt.toISOString(),
 		},
 	};
 };

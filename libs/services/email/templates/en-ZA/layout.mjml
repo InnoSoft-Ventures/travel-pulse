@@ -1,0 +1,7 @@
+<mjml>
+  <mj-body background-color="#ffffff">
+    {{> header}}
+    {{{body}}}
+    {{> footer}}
+  </mj-body>
+</mjml>

@@ -16,6 +16,7 @@
     "dayjs": "^1.11.11"
   },
   "devDependencies": {
-    "@config/tsconfig": "workspace:^"
+    "@config/tsconfig": "workspace:^",
+    "@types/node": "^24.7.2"
   }
 }

@@ -12,7 +12,16 @@
   "dependencies": {
     "@travelpulse/api-service": "workspace:^",
     "@travelpulse/interfaces": "workspace:^",
+    "@travelpulse/utils": "workspace:^",
+    "handlebars": "^4.7.8",
+    "mjml": "^4.16.1",
+    "nodemailer": "^6.10.1",
     "rabbitmq-client": "^4.6.0",
     "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@types/mjml": "^4.7.4",
+    "@types/node": "^24.7.2",
+    "@types/nodemailer": "^7.0.2"
   }
 }

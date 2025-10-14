@@ -87,27 +87,11 @@ export const registerUser = async (req: Request, res: Response) => {
 	const metadata = buildTokenMetadata(req);
 	const results = await registerService(req.body, metadata);
 
-	const {
-		token: { accessToken, refreshToken, refreshTokenExpiresAt },
-		user,
-	} = results;
-
-	if (!refreshToken) {
-		throw new Error('Refresh token generation failed');
-	}
-
-	applyAuthCookies(res, {
-		accessToken,
-		refreshToken,
-	});
+	const { user } = results;
 
 	res.status(HTTP_STATUS_CODES.CREATED).json(
 		successResponse({
 			user,
-			token: {
-				accessToken,
-				refreshTokenExpiresAt,
-			},
 		})
 	);
 };
@@ -143,8 +127,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const logoutUser = async (req: Request, res: Response) => {
 	const metadata = buildTokenMetadata(req);
-	const potentialToken =
-		req.cookies?.refreshToken || req.body?.refreshToken;
+	const potentialToken = req.cookies?.refreshToken || req.body?.refreshToken;
 	const refreshTokenValue =
 		typeof potentialToken === 'string' ? potentialToken : undefined;
 
@@ -158,8 +141,7 @@ export const logoutUser = async (req: Request, res: Response) => {
 };
 
 export const refreshSession = async (req: Request, res: Response) => {
-	const potentialToken =
-		req.cookies?.refreshToken || req.body?.refreshToken;
+	const potentialToken = req.cookies?.refreshToken || req.body?.refreshToken;
 	const refreshTokenValue =
 		typeof potentialToken === 'string' ? potentialToken : undefined;
 

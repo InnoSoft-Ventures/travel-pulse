@@ -1,0 +1,10 @@
+<mj-section>
+  <mj-column>
+    <mj-text font-size="18px" font-weight="bold">Verify your account</mj-text>
+    <mj-text>Hello {{#if firstName}}{{firstName}}{{else}}there{{/if}},</mj-text>
+    <mj-text>Please verify your account by clicking the button below.</mj-text>
+    <mj-button href="{{verifyUrl}}">Verify my account</mj-button>
+    <mj-text>If the button doesn't work, copy and paste this link:</mj-text>
+    <mj-text color="#2563eb">{{verifyUrl}}</mj-text>
+  </mj-column>
+</mj-section>

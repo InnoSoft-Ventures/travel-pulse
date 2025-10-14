@@ -18,6 +18,15 @@
 				"$tsc"
 			],
 			"group": "build"
+		},
+		{
+			"label": "typecheck:full (root) run",
+			"type": "shell",
+			"command": "pnpm -w -s tsc -p tsconfig.json --noEmit",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
 		}
 	]
 }

@@ -4,7 +4,7 @@ import { SessionToken } from '@travelpulse/interfaces';
 declare module 'express' {
 	export interface Request {
 		user?: SessionToken; // Adjust the type according to your payload
-		cookies?: Record<string, string>;
+		// cookies?: Record<string, string>;
 	}
 }
 
