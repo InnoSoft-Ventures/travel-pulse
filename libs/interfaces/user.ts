@@ -31,6 +31,7 @@ export interface UserDataDAO {
 		registrationDate: string;
 		picture: string;
 		country: Pick<Country, 'id' | 'name' | 'iso2' | 'flag'> | null;
+		isActivated: boolean;
 	};
 	token: {
 		accessToken: string;

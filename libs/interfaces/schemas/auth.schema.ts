@@ -49,6 +49,7 @@ export const RegisterSchema = AuthSchema.extend({
 });
 
 export const LoginSchema = AuthSchema;
+export const ForgotPasswordSchema = EmailSchema;
 
 export const NewPasswordSchema = PasswordSchema.extend({
 	confirmPassword: z.string().min(1, 'Confirm password is required'),
@@ -61,3 +62,4 @@ export type RegisterFormValues = z.infer<typeof RegisterSchema>;
 export type LoginFormValues = z.infer<typeof LoginSchema>;
 export type EmailFormValues = z.infer<typeof EmailSchema>;
 export type NewPasswordFormValues = z.infer<typeof NewPasswordSchema>;
+export type ForgotPasswordSchemaValues = z.infer<typeof ForgotPasswordSchema>;

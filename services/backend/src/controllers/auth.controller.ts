@@ -3,6 +3,7 @@ import {
 	getUserSessionById,
 	loginService,
 	registerService,
+	verifyAccountService,
 } from '../services/auth.service';
 import {
 	HTTP_STATUS_CODES,
@@ -16,6 +17,7 @@ import {
 	rotateRefreshToken,
 	revokeRefreshToken,
 } from '../services/token.service';
+import { getEnv } from '@travelpulse/utils';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -84,8 +86,7 @@ const clearAuthCookies = (res: Response) => {
 };
 
 export const registerUser = async (req: Request, res: Response) => {
-	const metadata = buildTokenMetadata(req);
-	const results = await registerService(req.body, metadata);
+	const results = await registerService(req.body);
 
 	const { user } = results;
 
@@ -123,6 +124,18 @@ export const loginUser = async (req: Request, res: Response) => {
 			},
 		})
 	);
+};
+
+export const verifyAccount = async (req: Request, res: Response) => {
+	const { token } = req.params as { token: string };
+
+	await verifyAccountService(token);
+
+	const baseUrl = getEnv('FRONTEND_BASE_URL', 'http://localhost:3000');
+
+	const redirectUrl = `${baseUrl}/login?verified=1`;
+
+	res.redirect(redirectUrl);
 };
 
 export const logoutUser = async (req: Request, res: Response) => {

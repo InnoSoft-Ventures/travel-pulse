@@ -5,11 +5,18 @@ import {
 	NotFoundException,
 } from '@travelpulse/middlewares';
 import User from '../db/models/User';
-import { SignInType, SignUpType } from '../schema/auth.schema';
-import { DEFAULT_USER_PICTURE } from '@travelpulse/utils';
+import { DEFAULT_USER_PICTURE, getEnv } from '@travelpulse/utils';
 import Country from '../db/models/Country';
 import { TokenMetadata, issueSessionTokens } from './token.service';
 import { sendAccountVerificationEmail } from '@travelpulse/services';
+import {
+	LoginFormValues,
+	RegisterFormValues,
+} from '@travelpulse/interfaces/schemas';
+import {
+	createAccountToken,
+	consumeAccountToken,
+} from './account-token.service';
 
 const buildUserResponse = (
 	user: User & { country?: Country | null }
@@ -21,6 +28,7 @@ const buildUserResponse = (
 	phoneNumber: user.phone || '',
 	registrationDate: user.createdAt.toISOString(),
 	picture: DEFAULT_USER_PICTURE,
+	isActivated: Boolean(user.isActivated),
 	country: user.country
 		? {
 				id: user.country.id,
@@ -32,8 +40,7 @@ const buildUserResponse = (
 });
 
 export const registerService = async (
-	profileData: SignUpType,
-	metadata: TokenMetadata = {}
+	profileData: RegisterFormValues
 ): Promise<Omit<UserDataDAO, 'token'>> => {
 	const { email, firstName, lastName, password } = profileData;
 
@@ -57,12 +64,16 @@ export const registerService = async (
 		lastName,
 	});
 
-	// Generate session tokens
-	const tokens = await issueSessionTokens(user.id, user.email, metadata);
+	const { token: activationToken } = await createAccountToken(
+		user.id,
+		'ACCOUNT_ACTIVATION'
+	);
 
 	// Fire-and-forget: send account verification email (best-effort)
 	try {
-		const verifyUrl = `/verify-email/${tokens.refreshToken}`;
+		const serverBaseUrl = getEnv('SERVER_URL');
+
+		const verifyUrl = `${serverBaseUrl}/auth/verify-account/${activationToken}`;
 
 		await sendAccountVerificationEmail(user.email, {
 			firstName: user.firstName,
@@ -80,7 +91,7 @@ export const registerService = async (
 };
 
 export const loginService = async (
-	data: SignInType,
+	data: LoginFormValues,
 	metadata: TokenMetadata = {}
 ): Promise<UserDataDAO> => {
 	const { email, password } = data;
@@ -105,6 +116,13 @@ export const loginService = async (
 
 	if (!passwordMatch) {
 		throw new BadRequestException('Invalid password', null);
+	}
+
+	if (!user.isActivated) {
+		throw new BadRequestException(
+			'Account is not activated. Please verify your email.',
+			{ errorCode: 'ACCOUNT_NOT_ACTIVATED' }
+		);
 	}
 
 	const tokens = await issueSessionTokens(user.id, user.email, metadata);
@@ -138,4 +156,22 @@ export const getUserSessionById = async (
 	}
 
 	return buildUserResponse(user);
+};
+
+export const verifyAccountService = async (token: string) => {
+	const tokenRecord = await consumeAccountToken(token, 'ACCOUNT_ACTIVATION');
+
+	const user = await User.findByPk(tokenRecord.userId);
+
+	if (!user) {
+		throw new NotFoundException('User not found', null);
+	}
+
+	if (!user.isActivated) {
+		user.isActivated = true;
+
+		await user.save();
+	}
+
+	return true;
 };

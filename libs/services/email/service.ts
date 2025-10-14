@@ -64,5 +64,9 @@ export class EmailService {
 			text: compiled.text,
 			attachments: opts.attachments as any,
 		});
+
+		console.log(
+			`🫡 Email sent to ${opts.to} with template ${opts.template}`
+		);
 	}
 }

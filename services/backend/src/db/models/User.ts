@@ -10,13 +10,14 @@ export interface UserAttributes {
 	password: string;
 	phone: string;
 	countryId?: number | null;
+	isActivated: boolean;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
 export type UserCreationAttributes = Optional<
 	UserAttributes,
-	'id' | 'phone' | 'createdAt' | 'updatedAt'
+	'id' | 'phone' | 'isActivated' | 'createdAt' | 'updatedAt'
 >;
 
 class User extends Model<UserAttributes, UserCreationAttributes> {
@@ -27,6 +28,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
 	public phone!: string;
 	public password!: string;
 	public countryId?: number | null;
+	public isActivated!: boolean;
 
 	public country?: Country | null;
 
@@ -69,6 +71,12 @@ User.init(
 			allowNull: true,
 			field: 'country_id',
 			type: DataTypes.INTEGER,
+		},
+		isActivated: {
+			allowNull: false,
+			field: 'is_activated',
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
 		},
 		createdAt: {
 			allowNull: false,
