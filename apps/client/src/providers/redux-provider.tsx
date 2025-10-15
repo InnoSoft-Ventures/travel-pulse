@@ -38,7 +38,7 @@ export default function StoreProvider({
 						placement={toastPlacement}
 						toastOffset={toastPlacement.includes('top') ? 20 : 0}
 					/>
-					<PurgeStoreButton onPurge={store.persistor.purge} />
+					<PurgeStoreButton persistor={store.persistor} />
 					{children}
 				</UIProvider>
 			</PersistGate>

@@ -1,14 +1,25 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ErrorHandler, ListState, SIMInfo } from '@travelpulse/interfaces';
-import { createInitialListState } from '@travelpulse/utils';
-import { fetchSims } from '../thunks/sim.thunk';
+import {
+	ErrorHandler,
+	ItemState,
+	ListState,
+	SIMDetails,
+	SIMInfo,
+} from '@travelpulse/interfaces';
+import {
+	createInitialItemState,
+	createInitialListState,
+} from '@travelpulse/utils';
+import { fetchSimDetails, fetchSims } from '../thunks/sim.thunk';
 
 interface EsimState {
 	sims: ListState<SIMInfo>;
+	simDetails: ItemState<SIMDetails | null>;
 }
 
 const initialState: EsimState = {
 	sims: createInitialListState<SIMInfo>(),
+	simDetails: createInitialItemState<SIMDetails | null>(null),
 };
 
 const simsSlice = createSlice({
@@ -49,6 +60,22 @@ const simsSlice = createSlice({
 		builder.addCase(fetchSims.rejected, (state, action) => {
 			state.sims.status = 'failed';
 			state.sims.error = action.payload as ErrorHandler;
+		});
+
+		builder.addCase(fetchSimDetails.pending, (state) => {
+			state.simDetails.status = 'loading';
+			state.simDetails.error = undefined;
+		});
+		builder.addCase(
+			fetchSimDetails.fulfilled,
+			(state, action: PayloadAction<SIMDetails>) => {
+				state.simDetails.status = 'succeeded';
+				state.simDetails.data = action.payload;
+			}
+		);
+		builder.addCase(fetchSimDetails.rejected, (state, action) => {
+			state.simDetails.status = 'failed';
+			state.simDetails.error = action.payload as ErrorHandler;
 		});
 	},
 });

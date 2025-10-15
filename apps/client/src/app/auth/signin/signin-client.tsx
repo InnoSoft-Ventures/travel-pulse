@@ -32,7 +32,7 @@ export default function LoginClient() {
 		try {
 			await dispatch(loginUser(data)).unwrap();
 
-			redirectUtil('/');
+			redirectUtil('/app');
 		} catch (error) {
 			toast.error({
 				title: 'Login failed',

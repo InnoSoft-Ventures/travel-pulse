@@ -27,6 +27,18 @@
 				"$tsc"
 			],
 			"group": "build"
+		},
+		{
+			"label": "typecheck:full (root) run",
+			"type": "shell",
+			"command": "pnpm -w -s tsc -p tsconfig.json --noEmit",
+			"group": "build"
+		},
+		{
+			"label": "typecheck:full (root) run",
+			"type": "shell",
+			"command": "pnpm -w -s tsc -p tsconfig.json --noEmit",
+			"group": "build"
 		}
 	]
 }

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { ApiService } from '@travelpulse/ui/state';
+import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
 import { Button } from '@travelpulse/ui';
 import { Switch } from '@heroui/switch';
 // import UsageChart from './UsageChart'; // your chart component
@@ -10,6 +10,7 @@ import styles from './styles.module.scss';
 import { SIMDetails, SuccessResponse } from '@travelpulse/interfaces';
 import Link from 'next/link';
 import { toast } from '@travelpulse/utils';
+import { fetchSimDetails } from '@travelpulse/ui/thunks';
 
 export default function EsimDetailsPage() {
 	const params = useParams();
@@ -17,35 +18,30 @@ export default function EsimDetailsPage() {
 		? params.esimId[0]
 		: (params?.esimId as string | undefined);
 
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
-	const [sim, setSim] = useState<SIMDetails | null>(null);
 	const [showActivation, setShowActivation] = useState(false);
 	const [showLpa, setShowLpa] = useState(false);
 	// ICCID is shown plainly (no masking) per product decision
 	const [apnExpanded, setApnExpanded] = useState(false);
 
+	const dispatch = useAppDispatch();
+	const {
+		status,
+		error,
+		data: sim,
+	} = useAppSelector((state) => state.account.sims.simDetails);
+
 	useEffect(() => {
 		if (!esimId) return;
-		setLoading(true);
-		setError(null);
 
-		ApiService.get(`/esims/${esimId}`)
-			.then((res) => {
-				const parsed = res.data as SuccessResponse<SIMDetails>;
-				setSim(parsed.data);
-			})
-			.catch(() => {
-				setError('Failed to load eSIM details');
-			})
-			.finally(() => setLoading(false));
+		dispatch(fetchSimDetails({ simId: esimId }));
 	}, [esimId]);
 
-	if (loading) {
+	if (status === 'loading') {
 		return <div>Loading details…</div>;
 	}
+
 	if (error || !sim) {
-		return <div>Error: {error || 'Not found'}</div>;
+		return <div>Error: {error?.toString() || 'Not found'}</div>;
 	}
 
 	const isActive = sim.status === 'ACTIVE';

@@ -1,7 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { ApiService } from '../request';
-import { SIMInfoResponse, SuccessResponse } from '@travelpulse/interfaces';
+import {
+	SIMDetails,
+	SIMInfoResponse,
+	SuccessResponse,
+} from '@travelpulse/interfaces';
 
 export const fetchSims = createAsyncThunk<
 	SIMInfoResponse['items'],
@@ -18,5 +22,23 @@ export const fetchSims = createAsyncThunk<
 	} catch (err) {
 		console.error('Failed to load eSIMs', err);
 		return rejectWithValue('Failed to load eSIMs');
+	}
+});
+
+export const fetchSimDetails = createAsyncThunk<
+	SIMDetails,
+	{ simId: string },
+	{ rejectValue: string }
+>('sim/fetchSimDetails', async ({ simId }, { rejectWithValue }) => {
+	try {
+		const res = await ApiService.get<SuccessResponse<SIMDetails>>(
+			`/api/esims/${simId}`
+		);
+		const parsed = res.data;
+
+		return parsed.data;
+	} catch (err) {
+		console.error(`Failed to load eSIM details for SIM ID: ${simId}`, err);
+		return rejectWithValue('Failed to load eSIM details');
 	}
 });
