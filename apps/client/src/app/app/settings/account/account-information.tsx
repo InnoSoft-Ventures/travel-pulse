@@ -3,7 +3,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 import Image from 'next/image';
-import { Button, Input, Title, CountryPicker } from '@travelpulse/ui';
+import { Button, Input, Title } from '@travelpulse/ui';
 import { FormCountryPicker } from '@travelpulse/ui';
 import { Country } from '@travelpulse/interfaces';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
@@ -17,7 +17,9 @@ import {
 
 export const AccountInformation = () => {
 	// Get user data from a global state or context if needed
-	const user = useAppSelector((state) => state.account.user.session);
+	const { data: user, status } = useAppSelector(
+		(state) => state.account.user.session
+	);
 	const dispatch = useAppDispatch();
 
 	const {
@@ -117,8 +119,8 @@ export const AccountInformation = () => {
 								radius="sm"
 								label="Country"
 								id="country"
-								placeholder="Where do you need internet?"
-								aria-label="Select an destination"
+								placeholder="Select your country"
+								aria-label="Select a country"
 								hideDropdownIndicator={false}
 								controlVariant="tertiary"
 								rules={{ required: 'Country is required' }}
@@ -147,7 +149,9 @@ export const AccountInformation = () => {
 					>
 						Cancel
 					</Button>
-					<Button type="submit">Save changes</Button>
+					<Button type="submit" isLoading={status === 'loading'}>
+						Save changes
+					</Button>
 				</div>
 			</form>
 		</div>

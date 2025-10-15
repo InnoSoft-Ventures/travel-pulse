@@ -48,9 +48,6 @@ export const updateAccount = createAsyncThunk(
 				);
 			}
 
-			thunkAPI.dispatch(
-				setUser({ user: results.data.user } as UserDataDAO)
-			);
 			return results.data.user;
 		} catch (err: any) {
 			return thunkAPI.rejectWithValue(

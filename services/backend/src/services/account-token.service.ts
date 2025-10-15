@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import { Op } from 'sequelize';
 import AccountToken, { AccountTokenType } from '../db/models/AccountToken';
 import {
 	BadRequestException,
@@ -44,13 +43,17 @@ const markExistingTokensAsConsumed = async (
 	);
 };
 
-const pruneExpiredTokens = async () => {
-	await AccountToken.destroy({
+export const findActiveAccountToken = async (
+	userId: number,
+	tokenType: AccountTokenType
+) => {
+	return AccountToken.findOne({
 		where: {
-			expiresAt: {
-				[Op.lt]: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // keep a week of history
-			},
+			userId,
+			tokenType,
+			consumedAt: null,
 		},
+		order: [['createdAt', 'DESC']],
 	});
 };
 
@@ -58,7 +61,6 @@ export const createAccountToken = async (
 	userId: number,
 	tokenType: AccountTokenType
 ) => {
-	await pruneExpiredTokens();
 	await markExistingTokensAsConsumed(userId, tokenType);
 
 	const tokenValue = crypto.randomBytes(48).toString('hex');
@@ -78,15 +80,10 @@ export const createAccountToken = async (
 	};
 };
 
-export const consumeAccountToken = async (
-	rawToken: string,
+const consumeTokenRecord = async (
+	tokenHash: string,
 	tokenType: AccountTokenType
 ) => {
-	if (!rawToken) {
-		throw new BadRequestException('Token is required', null);
-	}
-
-	const tokenHash = hashToken(rawToken);
 	const tokenRecord = await AccountToken.findOne({
 		where: {
 			tokenHash,
@@ -111,4 +108,16 @@ export const consumeAccountToken = async (
 	await tokenRecord.save();
 
 	return tokenRecord;
+};
+
+export const consumeAccountToken = async (
+	rawToken: string,
+	tokenType: AccountTokenType
+) => {
+	if (!rawToken) {
+		throw new BadRequestException('Token is required', null);
+	}
+
+	const tokenHash = hashToken(rawToken);
+	return consumeTokenRecord(tokenHash, tokenType);
 };

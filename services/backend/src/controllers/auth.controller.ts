@@ -4,6 +4,9 @@ import {
 	loginService,
 	registerService,
 	verifyAccountService,
+	resendActivationEmailService,
+	requestPasswordResetService,
+	resetPasswordService,
 } from '../services/auth.service';
 import {
 	HTTP_STATUS_CODES,
@@ -131,11 +134,53 @@ export const verifyAccount = async (req: Request, res: Response) => {
 
 	await verifyAccountService(token);
 
-	const baseUrl = getEnv('FRONTEND_BASE_URL', 'http://localhost:3000');
-
-	const redirectUrl = `${baseUrl}/login?verified=1`;
+	const baseUrl =
+		getEnv('FRONTEND_BASE_URL') ||
+		getEnv('WEB_APP_URL') ||
+		'http://localhost:3000';
+	const normalizedBase = baseUrl.replace(/\/$/, '');
+	const redirectUrl = `${normalizedBase}/auth/verify-email/success`;
 
 	res.redirect(redirectUrl);
+};
+
+export const resendVerificationEmail = async (req: Request, res: Response) => {
+	const { email } = req.body as { email: string };
+	const result = await resendActivationEmailService(email);
+
+	return res
+		.status(HTTP_STATUS_CODES.OK)
+		.json(
+			successResponse(
+				result,
+				'If the email is registered, a new verification link has been sent.'
+				)
+			);
+};
+
+export const requestPasswordReset = async (req: Request, res: Response) => {
+	const { email } = req.body as { email: string };
+	const result = await requestPasswordResetService(email);
+
+	return res.status(HTTP_STATUS_CODES.OK).json(
+		successResponse(
+			result,
+			'If the email is registered, you will receive a password reset link shortly.'
+		)
+	);
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+	const { token, password } = req.body as {
+		token: string;
+		password: string;
+	};
+
+	await resetPasswordService(token, password);
+
+	return res
+		.status(HTTP_STATUS_CODES.OK)
+		.json(successResponse({}, 'Password updated successfully.'));
 };
 
 export const logoutUser = async (req: Request, res: Response) => {

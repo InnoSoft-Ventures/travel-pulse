@@ -9,3 +9,7 @@ export const ResetPasswordSchema = z.object({
 	...TokenSchema.shape,
 	...PasswordSchema.shape,
 });
+
+export const EmailSchema = z.object({
+	email: z.string().email().min(1).trim().toLowerCase(),
+});

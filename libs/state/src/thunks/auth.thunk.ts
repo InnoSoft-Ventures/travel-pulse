@@ -67,14 +67,52 @@ export const forgotPassword = createAsyncThunk(
 	'auth/forgotPassword',
 	async (data: { email: string }, thunkAPI) => {
 		try {
-			const res = await ApiService.post('/auth/forgot-password', data);
-			return res.data;
+			const res = await ApiService.post<
+				ResponseData<{ sent: boolean; cooldownSeconds: number }>
+			>('/auth/forgot-password', data);
+			const payload = res.data;
+
+			if (!payload.success) {
+				return thunkAPI.rejectWithValue(
+					errorHandler(
+						payload,
+						'Failed to request password reset email'
+					)
+				);
+			}
+
+			return payload.data;
 		} catch (err: any) {
 			return thunkAPI.rejectWithValue(
 				errorHandler(
 					err,
 					'Unexpected error during forgot password process'
 				)
+			);
+		}
+	}
+);
+
+export const resetPassword = createAsyncThunk(
+	'auth/resetPassword',
+	async (data: { token: string; password: string }, thunkAPI) => {
+		try {
+			const res = await ApiService.post<ResponseData<unknown>>(
+				'/auth/reset-password',
+				data
+			);
+			const payload = res.data;
+
+			if (!payload.success) {
+				return thunkAPI.rejectWithValue(
+					errorHandler(payload, 'Failed to reset password')
+				);
+			}
+
+			return payload.data;
+		} catch (err: any) {
+			return thunkAPI.rejectWithValue(
+				errorHandler(err, 'Unexpected error during password reset')
 			);
 		}
 	}

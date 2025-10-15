@@ -36,11 +36,7 @@ export default function SignupClient() {
 		try {
 			await dispatch(registerUser(data)).unwrap();
 
-			// @TODO - Redirect to verify email page
-			// router.push('/auth/verify-email');
-
-			// For now, redirect to the login page
-			router.push('/auth/signin');
+			router.push('/auth/verify-email');
 		} catch (error) {
 			console.error('Registration failed:', error);
 			toast.error({

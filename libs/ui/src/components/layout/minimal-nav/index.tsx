@@ -8,7 +8,7 @@ import { AccountDropdown, Button } from '../../common';
 import { usePathname, useRouter } from 'next/navigation';
 
 export const MinimalNav = () => {
-	const account = useAppSelector((state) => state.account.user.session);
+	const account = useAppSelector((state) => state.account.user.session.data);
 	const isLoggedIn = useAppSelector((state) => sessionValid(state.account));
 	const router = useRouter();
 

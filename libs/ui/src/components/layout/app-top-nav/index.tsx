@@ -33,7 +33,7 @@ const getTitleFromPath = (pathname: string, userFullName: string): string => {
 
 export function AppTopBar() {
 	const pathname = usePathname();
-	const account = useAppSelector((state) => state.account.user.session);
+	const account = useAppSelector((state) => state.account.user.session.data);
 	const title = getTitleFromPath(
 		pathname,
 		`${account.firstName} ${account.lastName}`
