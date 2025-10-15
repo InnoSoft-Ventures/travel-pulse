@@ -10,6 +10,7 @@ import products from './features/products.slice';
 import metaData from './features/metadata.slice';
 import cart from './features/cart.slice';
 import orders from './features/orders.slice';
+import sims from './features/sim.slice';
 
 const persistedProductsReducer = persistReducer(
 	{
@@ -33,6 +34,7 @@ const persistedMetaDataReducer = persistReducer(
 const accountReducer = combineReducers({
 	user,
 	orders,
+	sims,
 });
 
 // App related reducers

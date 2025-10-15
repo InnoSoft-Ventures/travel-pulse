@@ -43,7 +43,7 @@ export const createOrder = createAsyncThunk<
 
 	try {
 		const response = await ApiService.post<ResponseData<OrderResponse>>(
-			'/orders',
+			'/api/orders',
 			{ packages, currency }
 		);
 
@@ -71,7 +71,7 @@ export const fetchOrders = createAsyncThunk<
 	try {
 		const response = await ApiService.get<
 			ResponseData<OrderDetailResponse[]>
-		>('/orders');
+		>('/api/orders');
 
 		const results = response.data;
 
@@ -97,7 +97,7 @@ export const fetchOrderById = createAsyncThunk<
 	try {
 		const response = await ApiService.get<
 			ResponseData<OrderDetailResponse>
-		>(`/orders/${orderId}`);
+		>(`/api/orders/${orderId}`);
 
 		const results = response.data;
 
@@ -129,7 +129,7 @@ export const createPaymentAttempt = createAsyncThunk<
 
 		const response = await ApiService.post<
 			ResponseData<PaymentAttemptResponse>
-		>(`/orders/${orderId}/payments`, {
+		>(`/api/orders/${orderId}/payments`, {
 			provider,
 			method,
 			currency,

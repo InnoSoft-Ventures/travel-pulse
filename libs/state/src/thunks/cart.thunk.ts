@@ -22,7 +22,7 @@ export const processCart = createAsyncThunk<
 
 	try {
 		const response = await ApiService.post<ResponseData<CartDetails>>(
-			'/cart',
+			'/api/cart',
 			{ items }
 		);
 

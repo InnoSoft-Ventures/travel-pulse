@@ -13,7 +13,7 @@ export const getPopularDestinations = createAsyncThunk(
 		try {
 			const response = await ApiService.get<
 				ResponseData<CountryProduct[]>
-			>(`/products/popular-destinations`, {
+			>(`/api/products/popular-destinations`, {
 				params: {
 					countryISO: params?.countryISO,
 					size: params?.size,
@@ -50,7 +50,7 @@ export const getMultipleRegions = createAsyncThunk(
 		try {
 			const response = await ApiService.get<
 				ResponseData<CountryProduct[]>
-			>(`/products/regions`, {
+			>(`/api/products/regions`, {
 				params: {
 					size: params?.size,
 				},
@@ -90,7 +90,7 @@ export const productSearch = createAsyncThunk(
 	) => {
 		try {
 			const response = await ApiService.get<ResponseData<PackageResults>>(
-				`/products/search`,
+				`/api/products/search`,
 				{
 					params,
 				}

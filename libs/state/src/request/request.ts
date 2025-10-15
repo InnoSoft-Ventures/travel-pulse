@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import { BASE_API_URL } from './config';
+// import { BASE_API_URL } from './config';
 import { logoutUser } from '../thunks/auth.thunk';
 import { setUser } from '../features/user.slice';
 import { ResponseData, UserDataDAO } from '@travelpulse/interfaces';
@@ -13,7 +13,7 @@ interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {
 type RefreshSubscriber = (success: boolean) => void;
 
 const axiosInstance = axios.create({
-	baseURL: BASE_API_URL,
+	// baseURL: BASE_API_URL,
 	timeout: 5000,
 	headers: {
 		Accept: 'application/json',
@@ -55,7 +55,7 @@ const performRefresh = async () => {
 	};
 
 	const response = await axiosInstance.post<ResponseData<UserDataDAO>>(
-		'/auth/refresh',
+		'/api/auth/refresh',
 		{},
 		refreshConfig
 	);
@@ -83,10 +83,10 @@ axiosInstance.interceptors.response.use(
 		if (
 			response?.status === 401 &&
 			!originalRequest?.skipAuthRefresh &&
-			!originalRequest?.url?.includes('/auth/signin') &&
-			!originalRequest?.url?.includes('/auth/signup') &&
-			!originalRequest?.url?.includes('/auth/logout') &&
-			!originalRequest?.url?.includes('/auth/refresh')
+			!originalRequest?.url?.includes('/api/auth/signin') &&
+			!originalRequest?.url?.includes('/api/auth/signup') &&
+			!originalRequest?.url?.includes('/api/auth/logout') &&
+			!originalRequest?.url?.includes('/api/auth/refresh')
 		) {
 			if (originalRequest._retry) {
 				return Promise.reject(error);

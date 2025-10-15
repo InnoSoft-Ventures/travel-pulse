@@ -10,7 +10,7 @@ export const registerUser = createAsyncThunk(
 	async (formData: RegisterFormValues, thunkAPI) => {
 		try {
 			const response = await ApiService.post<ResponseData<UserDataDAO>>(
-				'/auth/signup',
+				'/api/auth/signup',
 				formData
 			);
 			const results = response.data;
@@ -39,7 +39,7 @@ export const loginUser = createAsyncThunk(
 	async (data: { email: string; password: string }, thunkAPI) => {
 		try {
 			const res = await ApiService.post<ResponseData<UserDataDAO>>(
-				'/auth/signin',
+				'/api/auth/signin',
 				data
 			);
 			const results = res.data;
@@ -69,7 +69,7 @@ export const forgotPassword = createAsyncThunk(
 		try {
 			const res = await ApiService.post<
 				ResponseData<{ sent: boolean; cooldownSeconds: number }>
-			>('/auth/forgot-password', data);
+			>('/api/auth/forgot-password', data);
 			const payload = res.data;
 
 			if (!payload.success) {
@@ -98,7 +98,7 @@ export const resetPassword = createAsyncThunk(
 	async (data: { token: string; password: string }, thunkAPI) => {
 		try {
 			const res = await ApiService.post<ResponseData<unknown>>(
-				'/auth/reset-password',
+				'/api/auth/reset-password',
 				data
 			);
 			const payload = res.data;
@@ -126,7 +126,7 @@ export const logoutUser = createAsyncThunk(
 	) => {
 		try {
 			// Best-effort server logout (clears httpOnly cookie)
-			await ApiService.post('/auth/logout');
+			await ApiService.post('/api/auth/logout');
 		} catch {}
 
 		// Trigger client-side reset of account domain (handled in store.ts)

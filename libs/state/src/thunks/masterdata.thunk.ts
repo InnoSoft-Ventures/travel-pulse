@@ -8,7 +8,7 @@ export const getCountries = createAsyncThunk(
 	async (query: string, thunkAPI) => {
 		try {
 			const response = await ApiService.get<ResponseData<Country[]>>(
-				'/data/countries',
+				'/api/data/countries',
 				{
 					params: {
 						query,
@@ -39,7 +39,7 @@ export const getPopularCountries = createAsyncThunk(
 	async () => {
 		try {
 			const response = await ApiService.get<ResponseData<Country[]>>(
-				'/data/popular-countries'
+				'/api/data/popular-countries'
 			);
 			const results = response.data;
 
@@ -60,7 +60,7 @@ export const getRegions = createAsyncThunk(
 	async ({ size }: { size?: number }) => {
 		try {
 			const response = await ApiService.get<ResponseData<Continent[]>>(
-				'/data/regions',
+				'/api/data/regions',
 				{
 					params: {
 						size,

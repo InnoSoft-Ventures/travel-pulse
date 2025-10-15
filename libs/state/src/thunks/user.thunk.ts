@@ -11,7 +11,7 @@ export const fetchAccount = createAsyncThunk(
 		try {
 			const res = await ApiService.get<
 				ResponseData<{ user: UserDataDAO['user'] }>
-			>('/account/me');
+			>('/api/account/me');
 			const results = res.data;
 
 			if (!results.success) {
@@ -39,7 +39,7 @@ export const updateAccount = createAsyncThunk(
 		try {
 			const res = await ApiService.patch<
 				ResponseData<{ user: UserDataDAO['user'] }>
-			>('/account/me', data);
+			>('/api/account/me', data);
 			const results = res.data;
 
 			if (!results.success) {
