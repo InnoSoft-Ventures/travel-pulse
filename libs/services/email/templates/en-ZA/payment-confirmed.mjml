@@ -1,0 +1,33 @@
+<mj-section>
+	<mj-column>
+		<mj-text font-size="18px" font-weight="bold">Payment confirmed</mj-text>
+		<mj-text>Hello {{firstName}} {{lastName}},</mj-text>
+		<mj-text>
+			We're excited to let you know we received your payment for order
+			<strong>#{{orderNumber}}</strong>.
+		</mj-text>
+		<mj-text>
+			Total amount:
+			<strong>
+				{{#if amountFormatted}} {{amountFormatted}} {{else}}
+				{{currency}} {{amount}} {{/if}}
+			</strong>
+		</mj-text>
+		{{#if orderNumber}}
+		<mj-text> Order Number: <strong>{{orderNumber}}</strong> </mj-text>
+		{{/if}} {{#if paymentId}}
+		<mj-text> Payment ID: <strong>{{paymentId}}</strong> </mj-text>
+		{{/if}} {{#if viewOrderUrl}}
+		<mj-button href="{{viewOrderUrl}}">View order details</mj-button>
+		{{/if}}
+		<mj-text>
+			We'll send another update as soon as everything is ready to install.
+			In the meantime, you can manage your orders from your dashboard.
+		</mj-text>
+		<mj-text>
+			{{#if supportUrl}} Need a hand?
+			<a href="{{supportUrl}}">Contact support</a> and we'll help.
+			{{else}} Need a hand? Reply to this email and we'll help. {{/if}}
+		</mj-text>
+	</mj-column>
+</mj-section>

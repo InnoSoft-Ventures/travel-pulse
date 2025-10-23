@@ -3,6 +3,7 @@ import { determineBaseUrl } from './util';
 import {
 	AccountVerificationData,
 	PasswordResetData,
+	PaymentConfirmedData,
 } from './types/email-types';
 
 // Initialize singleton when module loads
@@ -36,6 +37,40 @@ export const sendPasswordResetEmail = async (
 		data: {
 			...params,
 			resetUrl: url,
+		},
+	});
+};
+
+export const sendPaymentConfirmedEmail = async (
+	to: string,
+	params: PaymentConfirmedData
+) => {
+	const viewOrderUrl = params.viewOrderUrl
+		? determineBaseUrl(params.viewOrderUrl)
+		: undefined;
+	const supportUrl = params.supportUrl
+		? determineBaseUrl(params.supportUrl)
+		: undefined;
+
+	let amountFormatted: string;
+
+	try {
+		amountFormatted = new Intl.NumberFormat('en-ZA', {
+			style: 'currency',
+			currency: params.currency,
+		}).format(params.amount);
+	} catch (error) {
+		amountFormatted = `${params.currency} ${params.amount.toFixed(2)}`;
+	}
+
+	await email.send({
+		to,
+		template: 'payment-confirmed',
+		data: {
+			...params,
+			viewOrderUrl,
+			supportUrl,
+			amountFormatted,
 		},
 	});
 };

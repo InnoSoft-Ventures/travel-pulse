@@ -89,9 +89,16 @@ Legend:
 - **Trigger:** Payment provider requests additional customer action.
 - **Key Variables:** `firstName`, `actionUrl`, `orderNumber`.
 
-### 5.2 Payment Receipt / Order Confirmation
+### 5.2 Payment Confirmation
+- **Template Key:** `payment-confirmed` (✅)
+- **Purpose:** Acknowledge successful payment and set expectations for next steps.
+- **Trigger:** Payment provider confirms capture for an order.
+- **Key Variables:** `firstName`, `orderId`, `amount`, `currency`, `amountFormatted`, `viewOrderUrl`, `supportUrl`.
+- **Notes:** Future enhancement: attach PDF invoice once available.
+
+### 5.3 Order Summary / Receipt
 - **Template Key:** `order-confirmation` (🛠)
-- **Purpose:** Provide official receipt + plan activation expectations.
+- **Purpose:** Provide detailed line items and plan activation expectations.
 - **Trigger:** Payment captured & order persisted.
 - **Key Variables:** `firstName`, `orderNumber`, `orderDate`, `items[] (planName, region, qty, total)`, `totalAmount`, `currency`, `supportUrl`.
 
@@ -182,6 +189,7 @@ Legend:
 | Funnel | cart-abandon | 🔍 | Inactive cart |
 | Funnel | promo-offer | 🔍 | Campaign event |
 | Payments | payment-action-required | 🔍 | 3DS / action needed |
+| Payments | payment-confirmed | ✅ | Payment captured |
 | Payments | order-confirmation | 🛠 | Payment captured |
 | Payments | payment-failed | 🔍 | Final payment failure |
 | Payments | refund-issued | 🔍 | Refund processed |

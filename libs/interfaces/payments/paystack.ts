@@ -13,6 +13,7 @@ export interface PaystackChargeSuccessPayload {
 			orderId: string;
 			userId: string;
 			paymentAttemptId: string;
+			orderNumber: string;
 		};
 		fees: number;
 		authorization: {

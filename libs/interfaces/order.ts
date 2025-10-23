@@ -8,6 +8,18 @@ export interface OrderResponse {
 	currency: string;
 }
 
+export interface OrderTimelineEvent {
+	status: OrderStatus;
+	datetime: string;
+	message: string;
+	description: string;
+}
+
+export interface OrderTimeline {
+	events: OrderTimelineEvent[];
+	nextStepMessage?: string;
+}
+
 export interface OrderDetailResponse {
 	orderId: number;
 	orderNumber: string;
@@ -23,4 +35,5 @@ export interface OrderDetailResponse {
 	}[];
 	createdAt: Date;
 	formattedCreatedAt: string;
+	timeline: OrderTimeline;
 }

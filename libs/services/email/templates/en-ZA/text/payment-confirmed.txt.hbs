@@ -1,0 +1,15 @@
+Hello {{firstName}} {{lastName}},
+
+We received your payment for order #{{orderNumber}}.
+
+Total amount: {{#if amountFormatted}}{{amountFormatted}}{{else}}{{currency}} {{amount}}{{/if}}
+
+{{#if orderNumber}}Order Number: {{orderNumber}}
+
+{{/if}}{{#if paymentId}}Payment ID: {{paymentId}}
+
+{{/if}}{{#if viewOrderUrl}}View order details: {{viewOrderUrl}}
+
+{{/if}}{{#if supportUrl}}Need help? Contact support: {{supportUrl}}{{else}}Need help? Reply to this email and we'll help.{{/if}}
+
+Thank you for choosing {{appName}}.

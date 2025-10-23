@@ -11,7 +11,18 @@ export interface PasswordResetData extends BaseTemplateData {
 	resetUrl: string;
 }
 
+export interface PaymentConfirmedData extends BaseTemplateData {
+	orderNumber: string;
+	amount: number;
+	currency: string;
+	amountFormatted?: string;
+	paymentId?: string;
+	viewOrderUrl?: string;
+	supportUrl?: string;
+}
+
 export type TemplatePayloadMap = {
 	'account-verify': AccountVerificationData;
 	'password-reset': PasswordResetData;
+	'payment-confirmed': PaymentConfirmedData;
 };

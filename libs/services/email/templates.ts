@@ -5,6 +5,7 @@ import type { TemplatePayloadMap } from './types/email-types';
 const SUBJECTS: Record<TemplateName, string> = {
 	'account-verify': '{{appName}}: Verify your email',
 	'password-reset': '{{appName}}: Reset your password',
+	'payment-confirmed': '{{appName}}: Payment received for order {{orderId}}',
 };
 
 export const renderTemplate = <T extends TemplateName>(

@@ -32,10 +32,11 @@ const PaymentModal = ({ open, onClose }: PaymentModalProps) => {
 					return s != null ? Math.max(s - 1, 0) : s;
 				});
 			}, 1000);
-			timeoutId = setTimeout(
-				() => onClose(true, paymentAttempt.data?.orderId),
-				ms
-			);
+			timeoutId = setTimeout(() => {
+				const orderId = paymentAttempt.data?.orderId;
+
+				onClose(!!orderId, orderId);
+			}, ms);
 		};
 
 		if (confirmationStep === 'completed') {

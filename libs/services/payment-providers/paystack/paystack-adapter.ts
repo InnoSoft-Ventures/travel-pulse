@@ -24,6 +24,16 @@ export class PaystackAdapter implements PaymentProviderAdapter {
 		}
 	}
 
+	private getSecretKey() {
+		if (process.env.SERVER_ENV === 'production') {
+			this.secretKey = process.env.PAYSTACK_SECRET_KEY || '';
+		} else {
+			this.secretKey = process.env.PAYSTACK_TEST_SECRET_KEY || '';
+		}
+
+		return this.secretKey;
+	}
+
 	async initOneTimePayment(ctx: OneTimePaymentContext) {
 		const ps = await initPaystackOneTimePayment(
 			{
@@ -35,9 +45,10 @@ export class PaystackAdapter implements PaymentProviderAdapter {
 					orderId: ctx.order.orderId,
 					userId: ctx.userId,
 					paymentAttemptId: ctx.paymentAttemptId,
+					orderNumber: ctx.order.orderNumber,
 				},
 			},
-			this.secretKey,
+			this.getSecretKey(),
 			this.apiUrl
 		);
 

@@ -15,7 +15,6 @@ import {
 } from '@heroui/drawer';
 import { dateJs } from '@travelpulse/utils';
 import styles from './styles.module.scss';
-import { constructTimeline, orderNextStepMsg } from '../../timeline-util';
 
 const STATUS_INTENT: Record<
 	string,
@@ -122,19 +121,8 @@ export default function OrderModalPage() {
 		}));
 	}, [order?.details, order?.orderId]);
 
-	const timeline = useMemo(() => {
-		if (!order) return [];
-
-		return constructTimeline(order);
-	}, [order?.status, order?.createdAt]);
-
-	const nextStepMsg = useMemo(() => {
-		const status = order?.status;
-
-		if (!status) return undefined;
-
-		return orderNextStepMsg(status);
-	}, [order?.status]);
+	const timeline = order?.timeline?.events || [];
+	const nextStepMsg = order?.timeline?.nextStepMessage || '';
 
 	const handlePayNow = useCallback(async () => {
 		if (!order) return;
@@ -301,7 +289,7 @@ export default function OrderModalPage() {
 										<ol className={styles.timeline}>
 											{timeline.map((t, i) => (
 												<li
-													key={`${t.title}-${i}`}
+													key={`${t.message}-${i}`}
 													className={
 														styles.timelineItem
 													}
@@ -321,28 +309,24 @@ export default function OrderModalPage() {
 																styles.timelineTitle
 															}
 														>
-															{t.title}
+															{t.message}
 														</div>
-														{t.subtitle && (
+														{t.description && (
 															<div
 																className={
 																	styles.timelineSub
 																}
 															>
-																{t.subtitle}
+																{t.description}
 															</div>
 														)}
-														{t.at && (
+														{t.datetime && (
 															<div
 																className={
 																	styles.timelineAt
 																}
 															>
-																{dateJs(
-																	t.at as any
-																).format(
-																	'DD MMM YYYY, HH:mm'
-																)}
+																{t.datetime}
 															</div>
 														)}
 													</div>

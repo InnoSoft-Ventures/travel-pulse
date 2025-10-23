@@ -82,6 +82,7 @@ export const createPaymentAttemptService = async (
 				order: {
 					orderId: order.id,
 					totalAmount: order.totalAmount,
+					orderNumber: order.orderNumber,
 				},
 				currency,
 				userId,

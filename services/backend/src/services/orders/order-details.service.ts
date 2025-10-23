@@ -2,7 +2,8 @@ import { OrderDetailResponse } from '@travelpulse/interfaces';
 import { SessionRequest } from '../../../types/express';
 import Order from '../../db/models/Order';
 import OrderItem from '../../db/models/OrderItem';
-import { dateJs } from '@travelpulse/utils';
+import { dateJs, PRETTY_DATETIME_FORMAT } from '@travelpulse/utils';
+import { constructTimeline } from './order-util';
 
 export const getOrdersService = async (
 	req: SessionRequest
@@ -21,6 +22,9 @@ export const getOrdersService = async (
 	});
 
 	return orders.map((order) => {
+		// Construct order timeline
+		const timeline = constructTimeline(order);
+
 		const details: OrderDetailResponse = {
 			orderId: order.id,
 			orderNumber: order.orderNumber,
@@ -35,7 +39,10 @@ export const getOrdersService = async (
 				startDate: detail.startDate,
 			})),
 			createdAt: order.createdAt,
-			formattedCreatedAt: dateJs(order.createdAt).format('D MMM, YYYY'),
+			formattedCreatedAt: dateJs(order.createdAt).format(
+				PRETTY_DATETIME_FORMAT
+			),
+			timeline,
 		};
 
 		return details;
@@ -63,6 +70,9 @@ export const getOrderByIdService = async (
 		throw new NotFoundException('Order not found', { orderId });
 	}
 
+	// Construct order timeline
+	const timeline = constructTimeline(order);
+
 	return {
 		orderId: order.id,
 		orderNumber: order.orderNumber,
@@ -77,6 +87,9 @@ export const getOrderByIdService = async (
 			startDate: detail.startDate,
 		})),
 		createdAt: order.createdAt,
-		formattedCreatedAt: dateJs(order.createdAt).format('D MMM, YYYY'),
+		formattedCreatedAt: dateJs(order.createdAt).format(
+			PRETTY_DATETIME_FORMAT
+		),
+		timeline,
 	};
 };

@@ -7,6 +7,8 @@ import { saveCardDetails } from '../../payment-cards/payment-card.service';
 import dbConnect from '../../../db';
 import { Transaction } from 'sequelize';
 import { sendPaymentConfirmed } from '../../sse/payment-sse.service';
+import { sendPaymentConfirmedEmail } from '@travelpulse/services';
+import User from '../../../db/models/User';
 
 function verifyChargeAmount(
 	status: string,
@@ -35,6 +37,14 @@ async function fetchPaymentDetails(
 			userId,
 			referenceId: data.reference,
 		},
+		include: [
+			{
+				model: User,
+				as: 'user',
+				attributes: ['email', 'firstName', 'lastName'],
+				required: true,
+			},
+		],
 		transaction: transact,
 	});
 
@@ -44,6 +54,53 @@ async function fetchPaymentDetails(
 
 	return paymentDetails;
 }
+
+const processPaymentConfirmedEmail = async (
+	paymentDetails: PaymentAttempt,
+	orderNumber: string
+) => {
+	const userDetails = paymentDetails.user;
+
+	const recipientEmail = paymentDetails.user?.email;
+
+	if (!recipientEmail) {
+		console.warn(
+			`⚠️ Unable to send payment confirmation email; missing recipient for paymentAttempt ${paymentDetails.id}`
+		);
+
+		return;
+	}
+
+	const frontendBase = process.env.WEB_APP_URL || 'http://localhost:3000';
+	const supportBase =
+		process.env.SUPPORT_PORTAL_URL || `${frontendBase}/support`;
+
+	const viewOrderUrl = new URL(
+		`/app/settings/orders/${paymentDetails.orderId}`,
+		frontendBase
+	).toString();
+
+	const amountValue =
+		typeof paymentDetails.amount === 'string'
+			? parseFloat(paymentDetails.amount)
+			: paymentDetails.amount;
+
+	void sendPaymentConfirmedEmail(recipientEmail, {
+		firstName: userDetails?.firstName || 'there',
+		lastName: userDetails?.lastName || '',
+		orderNumber,
+		paymentId: String(paymentDetails.id),
+		amount: amountValue,
+		currency: paymentDetails.currency,
+		viewOrderUrl,
+		supportUrl: supportBase,
+	}).catch((error) => {
+		console.error(
+			`❌ Failed to send payment confirmation email for paymentAttempt ${paymentDetails.id}`,
+			error
+		);
+	});
+};
 
 const handleCardSave = async (
 	userId: number,
@@ -77,7 +134,6 @@ const handleCardSave = async (
 	await saveCardDetails(cardDetails, transact);
 };
 
-// TODO: Verify amount matches expected amount,  save card details (authorization), then distribute product by calling confirmPaymentService method
 export const handleChargeSuccess = async (
 	data: PaystackChargeSuccessPayload['data']
 ) => {
@@ -93,19 +149,23 @@ export const handleChargeSuccess = async (
 		throw new BadRequestException('Invalid charge amount or status', null);
 	}
 
-	// 4. Emit SSE to notify FE listeners
+	// 3. Emit SSE to notify FE listeners
 	sendPaymentConfirmed(paymentDetails.userId, {
 		orderId: paymentDetails.orderId,
 		paymentId: paymentDetails.id,
 		referenceId: data.reference,
 	});
 
-	// 3. Send confirmation email
+	// 4. Send confirmation email
+	await processPaymentConfirmedEmail(
+		paymentDetails,
+		data.metadata.orderNumber
+	);
 
-	// 4. Save card details (authorization)
+	// 5. Save card details (authorization)
 	await handleCardSave(paymentDetails.userId, data, transact);
 
-	// 5. Distribute product by calling confirmPaymentService method
+	// 6. Distribute product by calling confirmPaymentService method
 	await confirmPaymentService(
 		{
 			orderId: paymentDetails.orderId,

@@ -45,7 +45,7 @@ export default function PlanList({
 			UIPlanTypeMap[targetDestination]
 		);
 
-		ApiService.get('/products/search', {
+		ApiService.get('/api/products/search', {
 			params: {
 				query: slug,
 				targetDestination: UIPlanTypeMap[targetDestination],

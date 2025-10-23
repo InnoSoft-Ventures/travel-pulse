@@ -4,6 +4,7 @@ export interface OneTimePaymentContext {
 	order: {
 		orderId: number;
 		totalAmount: number;
+		orderNumber: string;
 	};
 	userId: number;
 	currency: string;

@@ -66,7 +66,7 @@ const saveOrderProducts = async (
 
 	return {
 		updatedProviderOrder: {
-			orderId: updatedProviderOrder.id,
+			orderId: updatedProviderOrder.orderId,
 			providerOrderId: updatedProviderOrder.id,
 		},
 		createdSims: createdSims.map((sim) => ({
@@ -191,6 +191,9 @@ export const processAsyncOrders = async (
 				transaction: transact,
 			}
 		);
+
+		// TODO: Send email to user about order completion and SIM details
+		void sendOrderCompletionEmail(processedOrder);
 
 		await transact.commit();
 		console.log('Order processed', processedOrder);

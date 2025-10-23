@@ -9,12 +9,37 @@ function StatusBadge({ status }: { status?: string }) {
 	const s = (status || '').toUpperCase();
 	if (['PAID', 'COMPLETED'].includes(s))
 		return <span className={styles.badgeSuccess}>Paid</span>;
+
 	if (['PROCESSING_PAYMENT'].includes(s))
 		return <span className={styles.badgeWarn}>Processing</span>;
+
 	if (['PENDING'].includes(s))
 		return <span className={styles.badgeNeutral}>Unpaid</span>;
+
 	if (['PAYMENT_FAILED', 'CANCELLED'].includes(s))
 		return <span className={styles.badgeDanger}>Failed</span>;
+
+	return <span className={styles.badgeNeutral}>{status ?? '—'}</span>;
+}
+
+function ProcessingStatusBadge({ status }: { status?: string }) {
+	const s = (status || '').toUpperCase();
+
+	if (['PAID'].includes(s))
+		return <span className={styles.badgeSuccess}>Paid</span>;
+
+	if (['COMPLETED'].includes(s))
+		return <span className={styles.badgeSuccess}>Completed</span>;
+
+	if (['PROCESSING_PAYMENT'].includes(s))
+		return <span className={styles.badgeWarn}>Processing</span>;
+
+	if (['PENDING'].includes(s))
+		return <span className={styles.badgeNeutral}>Pending</span>;
+
+	if (['PAYMENT_FAILED', 'CANCELLED'].includes(s))
+		return <span className={styles.badgeDanger}>Failed</span>;
+
 	return <span className={styles.badgeNeutral}>{status ?? '—'}</span>;
 }
 
@@ -42,7 +67,7 @@ function OrderItemRow({ order, isUnpaid, handlePayNow }: OrderItemRowProps) {
 					<StatusBadge status={paymentStatus} />
 				</div>
 				<div>
-					<StatusBadge status={processingStatus} />
+					<ProcessingStatusBadge status={processingStatus} />
 				</div>
 				<div>
 					{order.totalAmount} {order.currency}

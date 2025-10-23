@@ -2,13 +2,12 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
 import { fetchOrderById, createPaymentAttempt } from '@travelpulse/ui/thunks';
 import { Button, Title } from '@travelpulse/ui';
 import { dateJs } from '@travelpulse/utils';
 import styles from './style.module.scss';
-import { constructTimeline, orderNextStepMsg } from '../timeline-util';
 
 type Line = {
 	id: string | number;
@@ -53,7 +52,6 @@ const money = (n: number, ccy: string) => `${Number(n ?? 0).toFixed(2)} ${ccy}`;
 export default function OrderDetailsPage() {
 	const { orderId: idParam } = useParams<{ orderId: string }>();
 	const orderId = Number(idParam);
-	const router = useRouter();
 	const dispatch = useAppDispatch();
 
 	const { list } = useAppSelector((s) => s.account.orders);
@@ -89,11 +87,8 @@ export default function OrderDetailsPage() {
 	const notFound = !order && tried && !isFetching;
 
 	const createdAtFmt = useMemo(
-		() =>
-			order?.createdAt
-				? dateJs(order.createdAt).format('D MMM YYYY, HH:mm A')
-				: '—',
-		[order?.createdAt]
+		() => (order?.formattedCreatedAt ? order.formattedCreatedAt : '—'),
+		[order?.formattedCreatedAt]
 	);
 
 	const lines: Line[] = useMemo(() => {
@@ -127,19 +122,8 @@ export default function OrderDetailsPage() {
 		[order?.status]
 	);
 
-	const timeline = useMemo(() => {
-		if (!order) return [];
-
-		return constructTimeline(order);
-	}, [order?.status, order?.createdAt]);
-
-	const nextStepMsg = useMemo(() => {
-		const status = order?.status;
-
-		if (!status) return undefined;
-
-		return orderNextStepMsg(status);
-	}, [order?.status]);
+	const timeline = order?.timeline?.events || [];
+	const nextStepMsg = order?.timeline?.nextStepMessage || '';
 
 	const handlePayNow = useCallback(async () => {
 		if (!order) return;
@@ -309,18 +293,16 @@ export default function OrderDetailsPage() {
 							<span className={styles.timelineBullet} />
 							<div className={styles.timelineBody}>
 								<div className={styles.timelineTitle}>
-									{t.title}
+									{t.message}
 								</div>
-								{t.subtitle && (
+								{t.description && (
 									<div className={styles.timelineSub}>
-										{t.subtitle}
+										{t.description}
 									</div>
 								)}
-								{t.at && (
+								{t.datetime && (
 									<div className={styles.timelineAt}>
-										{dateJs(t.at as any).format(
-											'DD MMM YYYY, HH:mm'
-										)}
+										{t.datetime}
 									</div>
 								)}
 							</div>

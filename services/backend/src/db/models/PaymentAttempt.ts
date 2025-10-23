@@ -55,6 +55,7 @@ class PaymentAttempt
 	public currency!: string;
 	public errorCode!: string | null;
 	public errorMessage!: string | null;
+	public user?: User;
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
 }
