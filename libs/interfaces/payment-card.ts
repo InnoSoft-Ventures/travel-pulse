@@ -1,14 +1,15 @@
 export interface PaymentCard {
+	id: number;
 	cardName: string | null;
-	authorizationCode: string;
+	isDefault: boolean;
 	last4: string;
-	expMonth: string;
-	expYear: string;
-	channel: string;
-	cardType: string;
-	bank: string;
-	countryCode: string;
-	brand: string;
-	reusable: boolean;
-	signature: string;
+	expMonth: number;
+	expYear: number;
+	brand: 'visa' | 'mastercard' | 'amex' | 'verve' | 'unknown';
+	createdAt?: string;
 }
+
+export type PaymentCardCreation = Omit<
+	PaymentCard,
+	'id' | 'last4' | 'isDefault' | 'brand' | 'createdAt'
+>;

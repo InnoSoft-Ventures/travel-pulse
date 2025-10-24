@@ -29,3 +29,4 @@ export * from './notification-card';
 export * from './stats';
 export * from './sim-management';
 export * from './activity-log';
+export * from './saved-card';
