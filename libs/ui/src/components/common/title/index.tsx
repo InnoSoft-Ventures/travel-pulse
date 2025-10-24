@@ -28,6 +28,9 @@ const titleVariants = cva(styles.mainTitle, {
 			center: styles.center,
 			right: styles.right,
 		},
+		margin: {
+			none: styles.zeroMargin,
+		},
 	},
 	defaultVariants: {
 		color: 'primary',
@@ -80,13 +83,14 @@ const Title = (props: TitleProps) => {
 		dualColor,
 		fontWeight,
 		isSubTitle,
+		margin,
 		...rest
 	} = props;
 
 	return (
 		<div
 			className={cn(
-				titleVariants({ color, size, dualColor, position }),
+				titleVariants({ color, size, dualColor, position, margin }),
 				isSubTitle && styles.subTitle,
 				className
 			)}

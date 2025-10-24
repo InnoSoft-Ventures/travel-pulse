@@ -10,7 +10,7 @@ const tabs = [
 	{ key: 'security', label: 'Security', icon: Lock },
 	// { key: 'appearance', label: 'Appearance', icon: Moon },
 	{ key: 'orders', label: 'Orders', icon: Package },
-	{ key: 'saved-cards', label: 'Saved Cards', icon: CreditCard },
+	{ key: 'cards', label: 'Cards', icon: CreditCard },
 	// { key: 'device', label: 'Device', icon: TabletSmartphone },
 ];
 

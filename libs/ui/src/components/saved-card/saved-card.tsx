@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trash2, Star, StarOff, MoreHorizontal, Clock } from 'lucide-react';
+import { Trash2, Star, MoreHorizontal, Clock } from 'lucide-react';
 
 import {
 	Badge,
@@ -12,13 +12,13 @@ import {
 	DropdownMenuTrigger,
 	Card,
 	CardContent,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 	Title,
 } from '../common';
 import { PaymentCard } from '@travelpulse/interfaces';
 import { classNames } from '../../utils';
+import { dateJs } from '@travelpulse/utils';
 
 interface SavedCardProps {
 	card: PaymentCard;
@@ -28,17 +28,25 @@ interface SavedCardProps {
 
 export function SavedCard({ card, makeDefault, removeCard }: SavedCardProps) {
 	return (
-		<Card key={card.id} className="relative overflow-hidden">
-			<CardHeader className="pb-2">
-				<div className="flex items-center justify-between">
-					<CardTitle className="flex items-center gap-2 text-base">
-						<BrandPill brand={card.brand} />
-						<span className="font-medium">•••• {card.last4}</span>
-					</CardTitle>
+		<Card
+			key={card.id}
+			className="relative flex h-full flex-col overflow-hidden"
+		>
+			<CardHeader className="space-y-3 pb-0">
+				<div className="flex items-start justify-between gap-3">
+					<div className="flex items-center gap-2">
+						<Title size={'size14'} margin="none">
+							{card.cardName || '—'}
+						</Title>
+					</div>
 					<div className="flex items-center gap-2">
 						{card.isDefault ? (
-							<Badge variant="secondary" className="gap-1">
-								<Star className="h-3 w-3" />
+							<Badge variant="success" className="gap-1">
+								<Star
+									fill="white"
+									stroke="none"
+									className="h-3 w-3"
+								/>
 								Default
 							</Badge>
 						) : null}
@@ -93,24 +101,14 @@ export function SavedCard({ card, makeDefault, removeCard }: SavedCardProps) {
 				</div>
 			</CardHeader>
 
-			<CardContent className="space-y-2">
-				<div className="flex items-center justify-between text-sm">
+			<CardContent className="flex flex-1 flex-col gap-3 py-3">
+				<div className="flex flex-wrap items-center justify-between gap-3 text-sm">
+					<CardTitle className="flex items-center gap-2 text-base">
+						<BrandPill brand={card.brand} />
+						<span className="font-medium">•••• {card.last4}</span>
+					</CardTitle>
 					<div className="flex items-center gap-2">
-						<Title
-							size={'size14'}
-							className="text-muted-foreground"
-						>
-							Nickname
-						</Title>
-						<span className="font-medium">
-							{card.cardName || '—'}
-						</span>
-					</div>
-					<div className="flex items-center gap-2">
-						<Title
-							size={'size14'}
-							className="text-muted-foreground"
-						>
+						<Title size={'size14'} margin="none">
 							Expires
 						</Title>
 						<span className="font-medium">
@@ -119,7 +117,7 @@ export function SavedCard({ card, makeDefault, removeCard }: SavedCardProps) {
 					</div>
 				</div>
 
-				<div className="flex flex-wrap items-center gap-2">
+				<div className="flex flex-wrap items-center gap-1.5">
 					{isExpiringSoon(card.expMonth, card.expYear) && (
 						<Badge className="gap-1" variant="destructive">
 							<Clock className="h-3 w-3" />
@@ -128,51 +126,6 @@ export function SavedCard({ card, makeDefault, removeCard }: SavedCardProps) {
 					)}
 				</div>
 			</CardContent>
-
-			<CardFooter className="justify-between">
-				{!card.isDefault ? (
-					<Button
-						variant="secondary"
-						size="sm"
-						onClick={() => makeDefault(card.id)}
-						className="gap-2"
-					>
-						<Star className="h-4 w-4" />
-						Make default
-					</Button>
-				) : (
-					<Button
-						variant="secondary"
-						size="sm"
-						disabled
-						className="gap-2"
-					>
-						<StarOff className="h-4 w-4" />
-						Default set
-					</Button>
-				)}
-
-				<div className="flex gap-2">
-					{/* <Button
-						variant="outline"
-						size="sm"
-						onClick={() => setUsageOpenFor(card)}
-						className="gap-2"
-					>
-						<ExternalLink className="h-4 w-4" />
-						Usage
-					</Button> */}
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={() => removeCard(card.id)}
-						className="gap-2 text-destructive"
-					>
-						<Trash2 className="h-4 w-4" />
-						Remove
-					</Button>
-				</div>
-			</CardFooter>
 		</Card>
 	);
 }
@@ -205,9 +158,8 @@ function expiryLabel(m: number, y: number) {
 }
 
 function isExpiringSoon(m: number, y: number): boolean {
-	const now = new Date();
-	const lastOfMonth = new Date(y, m, 0); // end of expiry month
-	const diffMs = lastOfMonth.getTime() - now.getTime();
-	const days = diffMs / (1000 * 60 * 60 * 24);
-	return days <= 60; // 60-day window
+	const now = dateJs();
+	const lastOfMonth = dateJs(new Date(y, m, 0));
+
+	return lastOfMonth.diff(now, 'day') <= 60;
 }

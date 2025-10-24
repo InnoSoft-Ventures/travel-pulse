@@ -1,9 +1,9 @@
 import SavedCardsSection from './saved-cards-client';
 
 export const metadata = {
-	title: 'Saved Cards - Settings',
+	title: 'Cards - Settings',
 };
 
-export default function SavedCardsPage() {
+export default function CardsPage() {
 	return <SavedCardsSection />;
 }

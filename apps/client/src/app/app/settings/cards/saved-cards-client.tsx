@@ -86,7 +86,7 @@ export default function SavedCardsSection() {
 			<div className="flex items-center justify-between gap-4 mb-6">
 				<div>
 					<Title size="size19" className={styles.title}>
-						Saved cards
+						Cards
 					</Title>
 
 					<Title color="tertiary" size={'size14'}>

@@ -57,8 +57,9 @@
 	}
 
 	&.iconSize {
-		width: 36px;
-		height: 36px;
+		height: 2rem;
+		max-width: 2rem;
+		min-width: 2rem;
 		border-radius: 6px;
 	}
 
