@@ -16,6 +16,20 @@ import dbConnect from '../db';
 import { Transaction } from 'sequelize';
 import Sim, { SimCreationAttributes } from '../db/models/Sims';
 import Order from '../db/models/Order';
+import User from '../db/models/User';
+import { sendOrderConfirmationEmail } from '@travelpulse/services';
+
+interface ProcessedOrder {
+	updatedProviderOrder: {
+		orderId: number;
+		providerOrderId: number;
+	};
+	createdSims: {
+		id: number;
+		iccid: string;
+		msisdn: string | null;
+	}[];
+}
 
 /**
  * Fetches the provider order by external request ID and provider.
@@ -54,7 +68,7 @@ const saveOrderProducts = async (
 	providerOrderData: ProviderOrderCreationAttributes,
 	simData: SimCreationAttributes[],
 	transact: Transaction
-) => {
+): Promise<ProcessedOrder> => {
 	const [updatedProviderOrder, createdSims] = await Promise.all([
 		providerOrder.update(providerOrderData, {
 			transaction: transact,
@@ -72,6 +86,7 @@ const saveOrderProducts = async (
 		createdSims: createdSims.map((sim) => ({
 			id: sim.id,
 			iccid: sim.iccid,
+			msisdn: sim.msisdn,
 		})),
 	};
 };
@@ -167,6 +182,78 @@ const getProviderFunction = (provider: ProviderIdentity) => {
 	}
 };
 
+async function processOrderConfirmationEmail(
+	processedOrder: ProcessedOrder,
+	transact: Transaction
+) {
+	try {
+		// Fetch the order with its user (we'll use created SIMs from processedOrder)
+		const order = await Order.findByPk(
+			processedOrder.updatedProviderOrder.orderId,
+			{
+				include: [
+					{
+						model: User,
+						as: 'user',
+						attributes: ['id', 'email', 'firstName', 'lastName'],
+						required: true,
+					},
+					{
+						association: 'orderItems',
+						include: [
+							{
+								association: 'package',
+								include: [
+									{
+										association: 'operator',
+										include: [{ association: 'country' }],
+									},
+								],
+							},
+						],
+					},
+				],
+				transaction: transact,
+			}
+		);
+
+		if (order && order.user && order.user.email) {
+			const user = order.user;
+
+			// Use sims returned by the provider processing step (createdSims)
+			const createdSims = processedOrder.createdSims || [];
+
+			const viewOrderUrl = `${process.env.WEB_APP_URL || 'http://localhost:3000'}/app/settings/orders/${order.id}`;
+
+			const orderItems = (order as any).orderItems || [];
+
+			void sendOrderConfirmationEmail(user.email, {
+				firstName: user.firstName || 'there',
+				lastName: user.lastName || '',
+				orderNumber: order.orderNumber,
+				totalAmount: Number(order.totalAmount),
+				currency: order.currency,
+				sims: createdSims,
+				orderItems: orderItems.map((item: any) => ({
+					planName: item.package?.title || 'eSIM Plan',
+					region:
+						item.package?.operator?.title ||
+						item.package?.operator?.country?.name ||
+						'Region unavailable',
+					quantity: item.quantity,
+					price: Number(item.price),
+				})),
+				viewOrderUrl,
+				supportUrl: process.env.SUPPORT_PORTAL_URL || undefined,
+			}).catch((e) =>
+				console.error('Failed sending order confirmation email', e)
+			);
+		}
+	} catch (e) {
+		console.error('Failed to prepare or send order confirmation email', e);
+	}
+}
+
 /**
  * Processes async orders for a given provider.
  * @param provider - The provider identity.
@@ -192,8 +279,8 @@ export const processAsyncOrders = async (
 			}
 		);
 
-		// TODO: Send email to user about order completion and SIM details
-		void sendOrderCompletionEmail(processedOrder);
+		// Send email to user about order completion and SIM details (best-effort)
+		await processOrderConfirmationEmail(processedOrder, transact);
 
 		await transact.commit();
 		console.log('Order processed', processedOrder);

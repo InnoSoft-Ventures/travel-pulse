@@ -28,6 +28,7 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> {
 	public status!: OrderStatus;
 	public currency!: string;
 
+	public user?: User | null;
 	public orderItems!: OrderItem[];
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;

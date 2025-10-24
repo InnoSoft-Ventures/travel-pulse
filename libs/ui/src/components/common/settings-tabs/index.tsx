@@ -30,7 +30,7 @@ export function SettingsTabs() {
 				className={`grid grid-cols-${tabs.length} items-center justify-center gap-[9.5px] px-[0.5px] py-[0.5px]`}
 			>
 				{tabs.map(({ key, label, icon: Icon }) => {
-					const isActive = current === key;
+					const isActive = current === key || pathname.includes(key);
 
 					return (
 						<button

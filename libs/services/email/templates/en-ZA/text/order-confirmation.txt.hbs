@@ -1,0 +1,22 @@
+Hello {{firstName}} {{lastName}},
+
+Your order #{{orderNumber}} is complete. Below are your SIM details:
+
+{{#if sims}}
+{{#each sims}}
+- ICCID: {{this.iccid}} | MSISDN: {{#if this.msisdn}}{{this.msisdn}}{{else}}-{{/if}}
+{{/each}}
+{{/if}}
+
+{{#if orderItems}}
+Order items:
+{{#each orderItems}}
+- {{this.planName}} ({{this.region}}) x{{this.quantity}} — {{this.price}}
+{{/each}}
+{{/if}}
+
+Order total: {{currency}} {{totalAmount}}
+
+View your order: {{viewOrderUrl}}
+
+If you need help, reply to this email or visit our support page.

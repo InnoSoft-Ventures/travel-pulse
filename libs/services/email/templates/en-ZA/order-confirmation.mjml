@@ -1,0 +1,57 @@
+<mj-section>
+	<mj-column>
+		<mj-text font-size="18px" font-weight="bold">Order confirmed</mj-text>
+		<mj-text>Hello {{firstName}} {{lastName}},</mj-text>
+		<mj-text>
+			Your order <strong>#{{orderNumber}}</strong> is complete. Below are
+			the details for your SIM(s).
+		</mj-text>
+
+		{{#if sims}}
+		<mj-table>
+			<tr style="text-align: left">
+				<th>ICCID</th>
+				<th>MSISDN</th>
+			</tr>
+			{{#each sims}}
+			<tr>
+				<td>{{this.iccid}}</td>
+				<td>{{#if this.msisdn}}{{this.msisdn}}{{else}}-{{/if}}</td>
+			</tr>
+			{{/each}}
+		</mj-table>
+		{{/if}} {{#if orderItems}}
+		<mj-text font-weight="bold" padding-top="16px">Order items</mj-text>
+		<mj-table>
+			<tr style="text-align: left">
+				<th>Plan</th>
+				<th>Region</th>
+				<th>Qty</th>
+				<th>Price</th>
+			</tr>
+			{{#each orderItems}}
+			<tr>
+				<td>{{this.planName}}</td>
+				<td>{{this.region}}</td>
+				<td>{{this.quantity}}</td>
+				<td>{{this.price}}</td>
+			</tr>
+			{{/each}}
+		</mj-table>
+		{{/if}}
+
+		<mj-text>
+			Order total: <strong>{{currency}} {{totalAmount}}</strong>
+		</mj-text>
+
+		{{#if viewOrderUrl}}
+		<mj-button href="{{viewOrderUrl}}">View order</mj-button>
+		{{/if}}
+
+		<mj-text>
+			{{#if supportUrl}}Need help?
+			<a href="{{supportUrl}}">Contact support</a>{{else}}Reply to this
+			email for help{{/if}}
+		</mj-text>
+	</mj-column>
+</mj-section>

@@ -4,6 +4,7 @@ import {
 	AccountVerificationData,
 	PasswordResetData,
 	PaymentConfirmedData,
+	OrderConfirmationData,
 } from './types/email-types';
 
 // Initialize singleton when module loads
@@ -71,6 +72,28 @@ export const sendPaymentConfirmedEmail = async (
 			viewOrderUrl,
 			supportUrl,
 			amountFormatted,
+		},
+	});
+};
+
+export const sendOrderConfirmationEmail = async (
+	to: string,
+	params: OrderConfirmationData
+) => {
+	const viewOrderUrl = params.viewOrderUrl
+		? determineBaseUrl(params.viewOrderUrl)
+		: undefined;
+	const supportUrl = params.supportUrl
+		? determineBaseUrl(params.supportUrl)
+		: undefined;
+
+	await email.send({
+		to,
+		template: 'order-confirmation',
+		data: {
+			...params,
+			viewOrderUrl,
+			supportUrl,
 		},
 	});
 };

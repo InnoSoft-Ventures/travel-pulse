@@ -21,8 +21,30 @@ export interface PaymentConfirmedData extends BaseTemplateData {
 	supportUrl?: string;
 }
 
+export interface SimInfo {
+	id: number;
+	iccid: string;
+	msisdn?: string | null;
+}
+
+export interface OrderConfirmationData extends BaseTemplateData {
+	orderNumber: string;
+	totalAmount: number;
+	currency: string;
+	sims: SimInfo[];
+	orderItems: Array<{
+		planName: string;
+		region: string;
+		quantity: number;
+		price: number;
+	}>;
+	viewOrderUrl?: string;
+	supportUrl?: string;
+}
+
 export type TemplatePayloadMap = {
 	'account-verify': AccountVerificationData;
 	'password-reset': PasswordResetData;
 	'payment-confirmed': PaymentConfirmedData;
+	'order-confirmation': OrderConfirmationData;
 };
