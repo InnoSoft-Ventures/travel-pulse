@@ -139,6 +139,11 @@ export const handleChargeSuccess = async (
 ) => {
 	console.log('Handling charge success...', data);
 
+	// If it is a subscription payment it would have a plan object
+	if (data.plan) {
+		return;
+	}
+
 	const transact = await dbConnect.transaction();
 
 	// 1. Fetch order details using orderId from metadata

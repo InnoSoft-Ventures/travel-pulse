@@ -1,4 +1,4 @@
-import { PaymentMethod, PaymentProvider } from './constants';
+import { PaymentMethod, PaymentProvider } from './payment-card';
 import { PaymentStatus } from './enums';
 
 export type PaymentAttemptResponse = {

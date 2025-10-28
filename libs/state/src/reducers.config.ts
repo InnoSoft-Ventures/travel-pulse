@@ -11,6 +11,7 @@ import metaData from './features/metadata.slice';
 import cart from './features/cart.slice';
 import orders from './features/orders.slice';
 import sims from './features/sim.slice';
+import cards from './features/card.slice';
 
 const persistedProductsReducer = persistReducer(
 	{
@@ -35,6 +36,7 @@ const accountReducer = combineReducers({
 	user,
 	orders,
 	sims,
+	cards,
 });
 
 // App related reducers
@@ -50,7 +52,7 @@ const appReducer = combineReducers({
 const accountPersistConfig = {
 	key: 'account',
 	storage,
-	blacklist: ['orders'],
+	blacklist: ['orders', 'cards'],
 };
 const persistedAccountReducer = persistReducer(
 	accountPersistConfig,

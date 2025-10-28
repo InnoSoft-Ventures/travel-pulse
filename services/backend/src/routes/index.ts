@@ -11,6 +11,7 @@ import sseRoute from './sse.route';
 import authRoute from './auth.route';
 import cartRoute from './cart.route';
 import accountRoute from './account.route';
+import cardsRoute from './cards.route';
 import { routeMiddleware } from '@travelpulse/middlewares';
 import User from '../db/models/User';
 
@@ -41,6 +42,8 @@ router.use('/account', accountRoute);
 
 // eSIM management routes
 router.use('/esims', esimsRoute);
+
+router.use('/cards', cardsRoute);
 
 // Server-Sent Events
 router.use('/sse', sseRoute);

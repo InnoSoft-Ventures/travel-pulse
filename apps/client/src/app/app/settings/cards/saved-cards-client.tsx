@@ -1,9 +1,11 @@
 'use client';
 import * as React from 'react';
 
-import { PaymentCard, PaymentCardCreation } from '@travelpulse/interfaces';
+import { PaymentCardCreation } from '@travelpulse/interfaces';
 import { AddCard, SavedCard, Title } from '@travelpulse/ui';
 import styles from './styles.module.scss';
+import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
+import { fetchCards } from '@travelpulse/ui/thunks';
 
 // ---------- Paystack stub ----------
 /**
@@ -22,62 +24,28 @@ import styles from './styles.module.scss';
 
 // ---------- Component ----------
 export default function SavedCardsSection() {
-	const [cards, setCards] = React.useState<PaymentCard[]>([
-		{
-			id: 1,
-			brand: 'mastercard',
-			last4: '4748',
-			expMonth: 12,
-			expYear: new Date().getFullYear() + 0,
-			cardName: 'ST V',
-			isDefault: true,
-			createdAt: new Date().toISOString(),
-		},
-		{
-			id: 2,
-			brand: 'visa',
-			last4: '0099',
-			expMonth: 11,
-			expYear: new Date().getFullYear() + 1,
-			cardName: 'Personal',
-			isDefault: false,
-		},
-		{
-			id: 3,
-			brand: 'amex',
-			last4: '1005',
-			expMonth: new Date().getMonth() + 1,
-			expYear: new Date().getFullYear(),
-			cardName: 'Biz Travel',
-			isDefault: false,
-		},
-	]);
+	const dispatch = useAppDispatch();
 
-	function removeCard(id: number) {
-		setCards((prev) => prev.filter((c) => c.id !== id));
-	}
+	const { status, list: cards } = useAppSelector(
+		(state) => state.account.cards.items
+	);
+
+	React.useEffect(() => {
+		dispatch(fetchCards());
+	}, [dispatch]);
 
 	function addCard(newCard: PaymentCardCreation) {
-		setCards((prev) => [
-			...prev,
-			{
-				...newCard,
-				id: prev.length + 1,
-				brand: 'unknown',
-				last4: '0000',
-				isDefault: false,
-				createdAt: new Date().toISOString(),
-			},
-		]);
-	}
-
-	function makeDefault(id: number) {
-		setCards((prev) =>
-			prev.map((c) => ({
-				...c,
-				isDefault: c.id === id,
-			}))
-		);
+		// setCards((prev) => [
+		// 	...prev,
+		// 	{
+		// 		...newCard,
+		// 		id: prev.length + 1,
+		// 		brand: 'unknown',
+		// 		last4: '0000',
+		// 		isDefault: false,
+		// 		createdAt: new Date().toISOString(),
+		// 	},
+		// ]);
 	}
 
 	return (
@@ -104,13 +72,8 @@ export default function SavedCardsSection() {
 
 			{/* Grid */}
 			<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-				{cards.map((card) => (
-					<SavedCard
-						key={card.id}
-						card={card}
-						makeDefault={makeDefault}
-						removeCard={removeCard}
-					/>
+				{cards.map((card, index) => (
+					<SavedCard key={card.id} index={index} card={card} />
 				))}
 			</div>
 

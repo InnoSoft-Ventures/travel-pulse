@@ -34,6 +34,17 @@ export interface PaystackChargeSuccessPayload {
 			email: string;
 			customer_code: string;
 		};
+		plan?: {
+			id: number;
+			name: string;
+			plan_code: string;
+			description: string;
+			amount: number;
+			interval: string;
+			send_invoices: number;
+			send_sms: number;
+			currency: string;
+		};
 	};
 }
 

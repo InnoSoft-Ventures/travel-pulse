@@ -1,6 +1,10 @@
 import { z } from 'zod';
 import { isValidPaymentMethod } from '../utils/data';
-import { PAYMENT_METHODS, PaymentMethod, PaymentProvider } from '../constants';
+import {
+	PAYMENT_METHODS,
+	PaymentMethod,
+	PaymentProvider,
+} from '../payment-card';
 
 const providerEnum = z.enum(
 	Object.keys(PAYMENT_METHODS) as [PaymentProvider, ...PaymentProvider[]]

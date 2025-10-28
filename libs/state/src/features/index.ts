@@ -6,3 +6,4 @@ export * from './metadata.slice';
 export * from './cart.slice';
 export * from './orders.slice';
 export * from './sim.slice';
+export * from './card.slice';

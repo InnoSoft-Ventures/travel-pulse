@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Trash2, Star, MoreHorizontal, Clock } from 'lucide-react';
 
@@ -16,17 +17,82 @@ import {
 	CardTitle,
 	Title,
 } from '../common';
-import { PaymentCard } from '@travelpulse/interfaces';
+import { ErrorHandler, PaymentCardPayload } from '@travelpulse/interfaces';
 import { classNames } from '../../utils';
-import { dateJs } from '@travelpulse/utils';
+import { dateJs, formatApiErrorDescription, toast } from '@travelpulse/utils';
+import styles from './styles.module.scss';
+import {
+	markDefaultCard,
+	removeCard,
+	useAppDispatch,
+} from '@travelpulse/state';
+import {
+	markDefaultCardThunk,
+	removeCardThunk,
+} from '@travelpulse/state/thunks';
+import { LoaderIcon } from '../common/icon';
 
 interface SavedCardProps {
-	card: PaymentCard;
-	makeDefault: (id: number) => void;
-	removeCard: (id: number) => void;
+	card: PaymentCardPayload;
+	index: number;
 }
 
-export function SavedCard({ card, makeDefault, removeCard }: SavedCardProps) {
+export function SavedCard({ card, index }: SavedCardProps) {
+	const dispatch = useAppDispatch();
+	const [deleting, setDeleting] = React.useState(false);
+
+	async function removeCardFn() {
+		setDeleting(true);
+
+		try {
+			const results = await dispatch(removeCardThunk(card.id)).unwrap();
+
+			if (results) {
+				toast.success({
+					title: 'Card Removed',
+					description: 'The card has been removed successfully.',
+				});
+
+				dispatch(removeCard(index));
+			}
+		} catch (error) {
+			console.error('Failed to remove card:', error);
+
+			toast.error({
+				title: 'Card Removal Failed',
+				description: formatApiErrorDescription(error as ErrorHandler),
+			});
+		} finally {
+			setDeleting(false);
+		}
+	}
+
+	// Mark as default card
+	async function markDefaultCardFn() {
+		try {
+			const results = await dispatch(
+				markDefaultCardThunk(card.id)
+			).unwrap();
+
+			if (results) {
+				toast.success({
+					title: 'Card Marked as Default',
+					description:
+						'The card has been marked as default successfully.',
+				});
+
+				dispatch(markDefaultCard(index));
+			}
+		} catch (error) {
+			console.error('Failed to mark card as default:', error);
+
+			toast.error({
+				title: 'Card Marking Failed',
+				description: formatApiErrorDescription(error as ErrorHandler),
+			});
+		}
+	}
+
 	return (
 		<Card
 			key={card.id}
@@ -72,7 +138,7 @@ export function SavedCard({ card, makeDefault, removeCard }: SavedCardProps) {
 									<>
 										<DropdownMenuSeparator />
 										<DropdownMenuItem
-											onClick={() => makeDefault(card.id)}
+											onClick={markDefaultCardFn}
 											className="gap-2 cursor-pointer"
 										>
 											<Star className="h-4 w-4" /> Make
@@ -89,11 +155,22 @@ export function SavedCard({ card, makeDefault, removeCard }: SavedCardProps) {
 								</DropdownMenuItem> */}
 								<DropdownMenuSeparator />
 								<DropdownMenuItem
-									onClick={() => removeCard(card.id)}
+									onClick={removeCardFn}
+									disabled={deleting}
 									role="button"
 									className="gap-2 cursor-pointer text-destructive focus:text-destructive"
 								>
-									<Trash2 className="h-4 w-4" /> Remove
+									{deleting ? (
+										<>
+											<LoaderIcon size={20} />
+											Removing...
+										</>
+									) : (
+										<>
+											<Trash2 className="h-4 w-4" />{' '}
+											Remove
+										</>
+									)}
 								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>
@@ -119,7 +196,10 @@ export function SavedCard({ card, makeDefault, removeCard }: SavedCardProps) {
 
 				<div className="flex flex-wrap items-center gap-1.5">
 					{isExpiringSoon(card.expMonth, card.expYear) && (
-						<Badge className="gap-1" variant="destructive">
+						<Badge
+							className={styles.expireSoon}
+							variant="destructive"
+						>
 							<Clock className="h-3 w-3" />
 							Expiring soon
 						</Badge>
@@ -131,8 +211,13 @@ export function SavedCard({ card, makeDefault, removeCard }: SavedCardProps) {
 }
 
 // Lightweight brand pill (kept local to avoid external assets)
-const BrandPill: React.FC<{ brand: PaymentCard['brand'] }> = ({ brand }) => {
-	const map: Record<PaymentCard['brand'], { label: string; bg: string }> = {
+const BrandPill: React.FC<{ brand: PaymentCardPayload['brand'] }> = ({
+	brand,
+}) => {
+	const map: Record<
+		PaymentCardPayload['brand'],
+		{ label: string; bg: string }
+	> = {
 		visa: { label: 'VISA', bg: 'bg-blue-600' },
 		mastercard: { label: 'MC', bg: 'bg-red-600' },
 		amex: { label: 'AMEX', bg: 'bg-emerald-600' },

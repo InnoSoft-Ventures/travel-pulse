@@ -1,4 +1,4 @@
-import { PAYMENT_METHODS, PaymentProvider } from '../constants';
+import { PAYMENT_METHODS, PaymentProvider } from '../payment-card';
 
 /**
  * Checks if a given payment method is valid for the specified payment provider.
