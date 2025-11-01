@@ -46,7 +46,15 @@ export const PaymentConfirmationRequestSchema = z.object({
 		}),
 });
 
+export const ChargeAuthorizationSchema = z.object({
+	paymentCardId: z.number({
+		required_error: 'Payment Card ID is required',
+		invalid_type_error: 'Payment Card ID must be a number',
+	}),
+});
+
 export type PaymentAttemptRequest = z.infer<typeof PaymentAttemptSchema>;
 export type PaymentConfirmationRequest = z.infer<
 	typeof PaymentConfirmationRequestSchema
 >;
+export type ChargeAuthorization = z.infer<typeof ChargeAuthorizationSchema>;

@@ -5,8 +5,14 @@ import {
 	getOrderById,
 	makeOrder,
 } from '../controllers/orders.controller';
-import { OrderPayloadSchema } from '@travelpulse/interfaces/schemas';
-import { createPaymentAttempt } from '../controllers/payment.controller';
+import {
+	ChargeAuthorizationSchema,
+	OrderPayloadSchema,
+} from '@travelpulse/interfaces/schemas';
+import {
+	chargePaymentCard,
+	createPaymentAttempt,
+} from '../controllers/payment.controller';
 import { PaymentAttemptSchema } from '@travelpulse/interfaces/schemas';
 
 const router = express.Router();
@@ -19,6 +25,12 @@ router.post(
 	'/:orderId/payments',
 	validateData(PaymentAttemptSchema),
 	errorHandler(createPaymentAttempt)
+);
+
+router.post(
+	'/:orderId/payments/:paymentId/charge',
+	validateData(ChargeAuthorizationSchema),
+	errorHandler(chargePaymentCard)
 );
 
 export default router;

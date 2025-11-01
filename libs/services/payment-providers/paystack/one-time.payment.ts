@@ -20,6 +20,10 @@ interface PaystackInitParams {
 	callbackUrl?: string; // redirect URL after payment
 }
 
+export interface PaystackChargePayload extends PaystackInitParams {
+	authorizationCode: string; // saved card authorization code
+}
+
 export interface PaystackInitResponse {
 	status: boolean;
 	message: string;
@@ -36,6 +40,11 @@ export interface OneTimePaymentSession {
 	authorizationUrl: string;
 	accessCode: string;
 }
+
+export type PaystackChargeResponse = Omit<
+	OneTimePaymentSession,
+	'authorizationUrl' | 'accessCode'
+>;
 
 /**
  * Create a Paystack one-time payment initialization.
@@ -84,6 +93,52 @@ export async function initPaystackOneTimePayment(
 		reference,
 		authorizationUrl: authorization_url,
 		accessCode: access_code,
+	};
+}
+
+export async function chargePayStackReusableCard(
+	params: PaystackChargePayload,
+	secretKey: string,
+	apiUrl: string
+): Promise<PaystackChargeResponse> {
+	// Paystack expects amount in the lowest currency denomination (cents for ZAR)
+	const amountInMinorUnits = Math.round(params.amount * 100);
+
+	const payload: Record<string, any> = {
+		email: params.email,
+		amount: amountInMinorUnits,
+		channels: params.channels,
+		currency: params.currency,
+		authorization_code: params.authorizationCode,
+		metadata: params.metadata || {},
+	};
+
+	if (params.reference) payload.reference = params.reference;
+	if (params.callbackUrl) payload.callback_url = params.callbackUrl;
+
+	const response = await APIRequest.post<PaystackInitResponse>(
+		`${apiUrl}/transaction/charge_authorization`,
+		payload,
+		{
+			headers: {
+				Authorization: `Bearer ${secretKey}`,
+			},
+		}
+	);
+
+	if (!response.data.status || !response.data.data) {
+		throw new Error(
+			`Paystack charge authorization failed: ${
+				response.data.message || 'Unknown error'
+			}`
+		);
+	}
+
+	const { reference } = response.data.data;
+
+	return {
+		provider: 'paystack',
+		reference,
 	};
 }
 

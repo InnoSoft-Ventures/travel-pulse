@@ -1,5 +1,12 @@
-import { initPaystackOneTimePayment } from './one-time.payment';
-import { OneTimePaymentContext, PaymentProviderAdapter } from '../types';
+import {
+	chargePayStackReusableCard,
+	initPaystackOneTimePayment,
+} from './one-time.payment';
+import {
+	ChargePaymentCardContext,
+	OneTimePaymentContext,
+	PaymentProviderAdapter,
+} from '../types';
 
 export class PaystackAdapter implements PaymentProviderAdapter {
 	public readonly name = 'paystack';
@@ -34,6 +41,10 @@ export class PaystackAdapter implements PaymentProviderAdapter {
 		return this.secretKey;
 	}
 
+	/**
+	 * Initialize a one-time payment transaction.
+	 * @link https://paystack.com/docs/api/transaction/#initialize
+	 */
 	async initOneTimePayment(ctx: OneTimePaymentContext) {
 		const ps = await initPaystackOneTimePayment(
 			{
@@ -47,6 +58,7 @@ export class PaystackAdapter implements PaymentProviderAdapter {
 					paymentAttemptId: ctx.paymentAttemptId,
 					orderNumber: ctx.order.orderNumber,
 				},
+				reference: `tpay_${ctx.paymentAttemptId}_${Date.now()}`,
 			},
 			this.getSecretKey(),
 			this.apiUrl
@@ -56,6 +68,34 @@ export class PaystackAdapter implements PaymentProviderAdapter {
 			providerReference: ps.reference,
 			redirectUrl: ps.authorizationUrl,
 			metadata: { accessCode: ps.accessCode },
+		};
+	}
+
+	/**
+	 * Charge a saved payment card using authorization code.
+	 * @link https://paystack.com/docs/api/transaction/#charge-authorization
+	 */
+	async chargePaymentCard(data: ChargePaymentCardContext) {
+		const process = await chargePayStackReusableCard(
+			{
+				authorizationCode: data.authorizationCode,
+				email: data.email,
+				amount: data.order.totalAmount,
+				currency: data.currency,
+				channels: ['card'],
+				metadata: {
+					orderId: data.order.orderId,
+					userId: data.userId,
+					paymentAttemptId: data.paymentAttemptId,
+				},
+				reference: `tpay_${data.paymentAttemptId}_${Date.now()}`,
+			},
+			this.getSecretKey(),
+			this.apiUrl
+		);
+
+		return {
+			providerReference: process.reference,
 		};
 	}
 }

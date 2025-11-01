@@ -150,3 +150,37 @@ export const createPaymentAttempt = createAsyncThunk<
 		);
 	}
 });
+
+export const chargePaymentCardThunk = createAsyncThunk<
+	boolean,
+	{
+		paymentAttemptId: number;
+		orderId: number;
+		paymentCardId: number;
+	},
+	{ state: RootState }
+>('orders/chargePaymentCard', async (payload, thunkAPI) => {
+	try {
+		const { paymentAttemptId, orderId, paymentCardId } = payload;
+
+		const response = await ApiService.post<
+			ResponseData<{ success: boolean }>
+		>(`/api/orders/${orderId}/payments/${paymentAttemptId}/charge`, {
+			paymentCardId,
+		});
+
+		const results = response.data;
+
+		if (!results.success) {
+			return thunkAPI.rejectWithValue(
+				errorHandler(results, 'Failed to charge payment card')
+			);
+		}
+
+		return results.data.success;
+	} catch (error) {
+		return thunkAPI.rejectWithValue(
+			errorHandler(error, 'Unexpected error charging payment card')
+		);
+	}
+});

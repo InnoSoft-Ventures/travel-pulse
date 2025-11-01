@@ -5,13 +5,15 @@ import { LoaderIcon } from '../../common/icon';
 import { listenPaymentConfirmed } from '../payment-methods/payment-sse';
 import { updateConfirmationStep } from '@travelpulse/state';
 import { CheckCircle } from 'lucide-react';
+import { PaymentCardPayload } from '@travelpulse/interfaces';
 
 interface PaymentModalProps {
 	open: boolean;
+	selectedCard: Pick<PaymentCardPayload, 'id' | 'last4'> | null;
 	onClose: (redirect?: boolean, orderId?: number) => void;
 }
 
-const PaymentModal = ({ open, onClose }: PaymentModalProps) => {
+const PaymentModal = ({ open, onClose, selectedCard }: PaymentModalProps) => {
 	const dispatch = useAppDispatch();
 	const { confirmation, confirmationStep, paymentAttempt } = useAppSelector(
 		(state) => state.account.orders
@@ -26,12 +28,21 @@ const PaymentModal = ({ open, onClose }: PaymentModalProps) => {
 
 		const setupClose = (ms: number) => {
 			setSecondsLeft(Math.ceil(ms / 1000));
+
 			intervalId = setInterval(() => {
 				setSecondsLeft((s) => {
-					console.log(s != null ? Math.max(s - 1, 0) : s);
-					return s != null ? Math.max(s - 1, 0) : s;
+					const timeLeft = s !== null ? Math.max(s - 1, 0) : s;
+					const left = timeLeft !== null ? timeLeft : 0;
+
+					if (left <= 0 && intervalId) {
+						clearInterval(intervalId);
+					}
+
+					console.log(left);
+					return left;
 				});
 			}, 1000);
+
 			timeoutId = setTimeout(() => {
 				const orderId = paymentAttempt.data?.orderId;
 
@@ -127,12 +138,20 @@ const PaymentModal = ({ open, onClose }: PaymentModalProps) => {
 						<p className="text-lg font-medium">
 							Waiting for your payment...
 						</p>
-						<div className="text-sm text-center mt-2">
-							Complete the payment in the Paystack window to
-							continue.
-						</div>
+						{!selectedCard ? (
+							<div className="text-sm text-center mt-2">
+								Complete the payment in the Paystack window to
+								continue.
+							</div>
+						) : (
+							<div className="text-sm text-center mt-2">
+								Please wait, charging card ending with ••••
+								<strong>{selectedCard.last4}</strong>.
+							</div>
+						)}
 					</>
 				)}
+
 			{confirmationStep !== 'completed' && (
 				<div className="text-sm text-center mt-2">
 					Please do not close this window.

@@ -18,8 +18,7 @@ import {
 	Title,
 } from '../common';
 import { ErrorHandler, PaymentCardPayload } from '@travelpulse/interfaces';
-import { classNames } from '../../utils';
-import { dateJs, formatApiErrorDescription, toast } from '@travelpulse/utils';
+import { formatApiErrorDescription, toast } from '@travelpulse/utils';
 import styles from './styles.module.scss';
 import {
 	markDefaultCard,
@@ -31,6 +30,7 @@ import {
 	removeCardThunk,
 } from '@travelpulse/state/thunks';
 import { LoaderIcon } from '../common/icon';
+import { BrandPill, expiryLabel, isExpiringSoon } from './saved-card.util';
 
 interface SavedCardProps {
 	card: PaymentCardPayload;
@@ -208,43 +208,4 @@ export function SavedCard({ card, index }: SavedCardProps) {
 			</CardContent>
 		</Card>
 	);
-}
-
-// Lightweight brand pill (kept local to avoid external assets)
-const BrandPill: React.FC<{ brand: PaymentCardPayload['brand'] }> = ({
-	brand,
-}) => {
-	const map: Record<
-		PaymentCardPayload['brand'],
-		{ label: string; bg: string }
-	> = {
-		visa: { label: 'VISA', bg: 'bg-blue-600' },
-		mastercard: { label: 'MC', bg: 'bg-red-600' },
-		amex: { label: 'AMEX', bg: 'bg-emerald-600' },
-		verve: { label: 'VERVE', bg: 'bg-orange-600' },
-		unknown: { label: 'CARD', bg: 'bg-gray-600' },
-	};
-	const b = map[brand];
-	return (
-		<span
-			className={classNames(
-				'inline-flex items-center justify-center text-[10px] font-bold text-white rounded px-1.5 py-0.5',
-				b.bg
-			)}
-		>
-			{b.label}
-		</span>
-	);
-};
-
-function expiryLabel(m: number, y: number) {
-	const mm = String(m).padStart(2, '0');
-	return `${mm} / ${String(y).slice(-2)}`;
-}
-
-function isExpiringSoon(m: number, y: number): boolean {
-	const now = dateJs();
-	const lastOfMonth = dateJs(new Date(y, m, 0));
-
-	return lastOfMonth.diff(now, 'day') <= 60;
 }

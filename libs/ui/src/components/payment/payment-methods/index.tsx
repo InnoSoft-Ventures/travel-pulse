@@ -2,13 +2,17 @@
 import React, { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
 import { PaymentCard } from '../payment-card';
-import { Paypal } from '../paypal';
+// import { Paypal } from '../paypal';
 import { Button, Checkbox, Title } from '../../common';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@travelpulse/state';
-import { createOrder, createPaymentAttempt } from '@travelpulse/state/thunks';
+import {
+	chargePaymentCardThunk,
+	createOrder,
+	createPaymentAttempt,
+} from '@travelpulse/state/thunks';
 import PaymentModal from '../payment-modal';
-import { PaymentMethod } from '@travelpulse/interfaces';
+import { PaymentCardPayload, PaymentMethod } from '@travelpulse/interfaces';
 import { launchPaymentProvider } from './payment-provider-launcher';
 
 interface PaymentMethodsProps {
@@ -26,9 +30,14 @@ export const PaymentMethods = ({
 	total,
 }: PaymentMethodsProps) => {
 	const [selectedMethod, setSelectedMethod] = useState<PaymentMethod | null>(
-		null
+		'card'
 	);
-	const [isCardValid, setIsCardValid] = useState(false);
+	const [selectedCard, setSelectedCard] = useState<Pick<
+		PaymentCardPayload,
+		'id' | 'last4'
+	> | null>(null);
+	const [showProcessingModal, setShowProcessingModal] = useState(false);
+
 	const [isEsimCompatible, setIsEsimCompatible] = useState(false);
 	const [isPayButtonEnabled, setIsPayButtonEnabled] = useState(false);
 
@@ -51,9 +60,7 @@ export const PaymentMethods = ({
 		setIsPayButtonEnabled(
 			isEsimCompatible && (isPaypalSelected || isCardSelectedAndValid)
 		);
-	}, [selectedMethod, isCardValid, isEsimCompatible]);
-
-	const [showProcessingModal, setShowProcessingModal] = useState(false);
+	}, [selectedMethod, isEsimCompatible]);
 
 	const submitOrder = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -76,6 +83,23 @@ export const PaymentMethods = ({
 					currency: 'ZAR', // adjust per selected currency mapping
 				})
 			).unwrap();
+
+			// Check if paying with saved card or new card
+			if (selectedCard) {
+				setShowProcessingModal(true);
+
+				const chargeResponse = await dispatch(
+					chargePaymentCardThunk({
+						paymentAttemptId: paymentAttempt.paymentId,
+						orderId: order.orderId,
+						paymentCardId: selectedCard.id,
+					})
+				).unwrap();
+
+				console.log('Charge response', chargeResponse);
+
+				return;
+			}
 
 			launchPaymentProvider(paymentAttempt, dispatch);
 		} catch (error) {
@@ -110,17 +134,18 @@ export const PaymentMethods = ({
 						onClick={() => setSelectedMethod('card')}
 					>
 						<PaymentCard
+							onSelectedCard={setSelectedCard}
+							selectedCard={selectedCard}
 							selected={selectedMethod === 'card'}
-							onValidityChange={setIsCardValid}
 						/>
 					</div>
 
-					<div
+					{/* <div
 						className={styles.paymentMethod}
 						onClick={() => setSelectedMethod('paypal')}
 					>
 						<Paypal selected={selectedMethod === 'paypal'} />
-					</div>
+					</div> */}
 				</div>
 			</div>
 
@@ -167,7 +192,11 @@ export const PaymentMethods = ({
 				All transactions are secure and encrypted via SSL encryption
 			</div>
 
-			<PaymentModal open={showProcessingModal} onClose={handleClose} />
+			<PaymentModal
+				open={showProcessingModal}
+				selectedCard={selectedCard}
+				onClose={handleClose}
+			/>
 		</>
 	);
 };
