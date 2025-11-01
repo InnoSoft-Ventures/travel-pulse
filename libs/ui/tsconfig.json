@@ -7,18 +7,14 @@
 		"baseUrl": "./",
 		"paths": {
 			"@travelpulse/ui": ["index.ts"],
-      "@travelpulse/ui/forms": ["src/forms/index.ts"],
-      "@travelpulse/ui/utils": ["src/utils/index.ts"],
+			"@travelpulse/ui/skeletons": ["src/skeletons/index.ts"],
+			"@travelpulse/ui/forms": ["src/forms/index.ts"],
+			"@travelpulse/ui/utils": ["src/utils/index.ts"],
 			"@travelpulse/ui/state": ["src/store/state.ts"],
 			"@travelpulse/ui/thunks": ["src/store/thunks/index.ts"],
-			"@travelpulse/ui/theme": ["src/theme.ts"],
-		},
+			"@travelpulse/ui/theme": ["src/theme.ts"]
+		}
 	},
-	"include": [
-		"**/*.ts",
-		"**/*.tsx",
-	],
-	"exclude": [
-		"node_modules"
-	]
+	"include": ["**/*.ts", "**/*.tsx"],
+	"exclude": ["node_modules"]
 }
