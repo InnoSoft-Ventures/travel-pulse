@@ -8,9 +8,6 @@
     ".": {
       "import": "./index.ts"
     },
-    "./skeletons": {
-			"import": "./src/skeletons/index.ts"
-		},
     "./forms": {
       "import": "./src/forms/index.ts"
     },
