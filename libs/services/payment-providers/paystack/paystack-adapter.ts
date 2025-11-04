@@ -10,17 +10,15 @@ import {
 
 export class PaystackAdapter implements PaymentProviderAdapter {
 	public readonly name = 'paystack';
-	private apiUrl = '';
-	private secretKey = '';
+	private readonly apiUrl: string;
+	private readonly secretKey: string;
 
 	constructor() {
 		this.apiUrl = process.env.PAYSTACK_API_URL || '';
-
-		if (process.env.SERVER_ENV === 'production') {
-			this.secretKey = process.env.PAYSTACK_SECRET_KEY || '';
-		} else {
-			this.secretKey = process.env.PAYSTACK_TEST_SECRET_KEY || '';
-		}
+		this.secretKey =
+			process.env.SERVER_ENV === 'production'
+				? process.env.PAYSTACK_SECRET_KEY || ''
+				: process.env.PAYSTACK_TEST_SECRET_KEY || '';
 
 		if (!this.secretKey) {
 			throw new Error('PAYSTACK_SECRET_KEY not configured');
@@ -32,12 +30,6 @@ export class PaystackAdapter implements PaymentProviderAdapter {
 	}
 
 	private getSecretKey() {
-		if (process.env.SERVER_ENV === 'production') {
-			this.secretKey = process.env.PAYSTACK_SECRET_KEY || '';
-		} else {
-			this.secretKey = process.env.PAYSTACK_TEST_SECRET_KEY || '';
-		}
-
 		return this.secretKey;
 	}
 

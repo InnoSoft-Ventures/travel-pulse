@@ -35,7 +35,6 @@ async function fetchPaymentDetails(
 			id: paymentAttemptId,
 			orderId,
 			userId,
-			referenceId: data.reference,
 		},
 		include: [
 			{

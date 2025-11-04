@@ -67,6 +67,12 @@ export const ESimTabs = ({ sims }: ESimTabsProps) => {
 			<Tabs defaultValue="active" className="space-y-6">
 				<TabsList className="grid max-w-2xl grid-cols-3 h-auto">
 					<TabsTrigger
+						value="all"
+						className="flex items-center gap-2 py-[8px]"
+					>
+						All eSIMs
+					</TabsTrigger>
+					<TabsTrigger
 						value="active"
 						className="flex items-center gap-2 py-[8px]"
 					>
@@ -78,24 +84,17 @@ export const ESimTabs = ({ sims }: ESimTabsProps) => {
 					>
 						Inactive
 					</TabsTrigger>
-					<TabsTrigger
-						value="all"
-						className="flex items-center gap-2 py-[8px]"
-					>
-						All eSIMs
-					</TabsTrigger>
 				</TabsList>
 
+				<TabsContent value="all" className="space-y-6">
+					{renderGrid(sims)}
+				</TabsContent>
 				<TabsContent value="active" className="space-y-6">
 					{renderGrid(active)}
 				</TabsContent>
 
 				<TabsContent value="inactive" className="space-y-6">
 					{renderGrid(inactive)}
-				</TabsContent>
-
-				<TabsContent value="all" className="space-y-6">
-					{renderGrid(sims)}
 				</TabsContent>
 			</Tabs>
 		</div>
