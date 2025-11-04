@@ -1,4 +1,5 @@
 import { PackageType, SIM } from '@travelpulse/interfaces';
+import { ProviderOrderRequest } from '../../types/common.type';
 
 export interface AiraloCountry {
 	country_code: string;
@@ -156,11 +157,7 @@ export type AiraloNotification =
 	| AiraloLowDataNotification
 	| AiraloCreditLimitNotification;
 
-export interface AiraloOrderRequest {
-	packageId: string;
-	type: PackageType;
-	quantity: number;
-}
+export type AiraloOrderRequest = ProviderOrderRequest;
 
 export interface AiraloOrderResponse {
 	data: {
@@ -187,6 +184,7 @@ export type AiraloAsyncOrderResponse = {
 		package_id: string;
 		quantity: number;
 		type: PackageType;
+		/** Stringified metadata about the order */
 		description: string;
 		esim_type: string;
 		validity: number;

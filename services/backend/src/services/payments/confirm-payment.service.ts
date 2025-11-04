@@ -21,6 +21,8 @@ interface ConfirmPaymentServiceRequest {
 
 /**
  * Confirm a successful payment and create provider orders atomically.
+ *
+ * Called after payment provider notifies of successful payment.
  * Implements idempotency: if already confirmed, does not duplicate provider orders.
  */
 export const confirmPaymentService = async (
@@ -119,6 +121,7 @@ export const confirmPaymentService = async (
 				}
 
 				return {
+					orderItemId: item.id,
 					packageId: pkg.externalPackageId,
 					provider: pkg.provider as any,
 					quantity: item.quantity,

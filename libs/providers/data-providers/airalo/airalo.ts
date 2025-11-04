@@ -15,6 +15,7 @@ import {
 } from '@travelpulse/interfaces';
 
 import { AIRALO_API_URL } from '../../config';
+import { orderMetaUtil } from '../../util';
 
 export class Airalo extends AiraloBase implements ProviderStrategy {
 	private static instance: Airalo;
@@ -219,8 +220,6 @@ export class Airalo extends AiraloBase implements ProviderStrategy {
 	 */
 	private async createAiraloOrder(data: AiraloOrderRequest) {
 		try {
-			const description = `${data.quantity} x ${data.type} - ${data.packageId}`;
-
 			// Call the service to process the order
 			const response = await this.request.post<AiraloOrderResponse>(
 				`${AIRALO_API_URL}/orders-async`,
@@ -228,7 +227,7 @@ export class Airalo extends AiraloBase implements ProviderStrategy {
 					package_id: data.packageId,
 					quantity: data.quantity,
 					type: data.type,
-					description: description,
+					description: data.description,
 				}
 			);
 
@@ -251,10 +250,13 @@ export class Airalo extends AiraloBase implements ProviderStrategy {
 	): Promise<ProviderOrderResponse> {
 		console.log('Processing item for Airalo');
 
+		const description = orderMetaUtil(data);
+
 		const response = await this.createAiraloOrder({
 			quantity: data.quantity,
 			packageId: data.packageId,
 			type: data.type,
+			description,
 		});
 
 		if (!response.success || !response.data) {

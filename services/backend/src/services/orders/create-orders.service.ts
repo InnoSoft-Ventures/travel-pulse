@@ -17,6 +17,8 @@ import { SessionRequest } from '../../../types/express';
 import { toDecimalPoints } from '@travelpulse/utils';
 import { generateOrderNumber } from '../../utils/generate-order-number';
 
+type ProviderOrderSeed = Omit<ProviderFactoryData, 'orderItemId'>;
+
 const fetchPackages = async (
 	packageQuantityMap: Map<number, number>,
 	transact: Transaction
@@ -71,7 +73,7 @@ const prepareOrderDetails = (
 ) => {
 	let totalAmount = 0;
 	const orderDetails: OrderItemCreationAttributes[] = [];
-	const providerOrderDataPreparation: ProviderFactoryData[] = [];
+	const providerOrderSeeds: ProviderOrderSeed[] = [];
 
 	for (const item of data) {
 		const packageData = reducePackage.get(Number(item.packageId));
@@ -90,7 +92,7 @@ const prepareOrderDetails = (
 			startDate: item.startDate,
 		});
 
-		providerOrderDataPreparation.push({
+		providerOrderSeeds.push({
 			packageId: packageData.externalPackageId,
 			provider: packageData.provider,
 			quantity: item.quantity,
@@ -105,7 +107,7 @@ const prepareOrderDetails = (
 	return {
 		totalAmount: toDecimalPoints<number>(totalAmount),
 		orderDetails,
-		providerOrderDataPreparation,
+		providerOrderSeeds,
 	};
 };
 
@@ -152,25 +154,40 @@ export const createOrderService = async (
 		const reducePackage = await fetchPackages(packageQuantityMap, transact);
 
 		// Step 3: Prepare order details
-		const { totalAmount, orderDetails } = prepareOrderDetails(
-			data.packages,
-			reducePackage,
-			order.id
-		);
+		const { totalAmount, orderDetails, providerOrderSeeds } =
+			prepareOrderDetails(data.packages, reducePackage, order.id);
 
 		// Step 4: Create order items
-		await OrderItem.bulkCreate(orderDetails, {
+		const createdOrderItems = await OrderItem.bulkCreate(orderDetails, {
 			transaction: transact,
+			returning: true,
 		});
 
 		console.log('Order items created');
 
-		// // Step 5: Process provider orders
-		// await processProviderOrders(
-		// 	providerOrderDataPreparation,
-		// 	order.id,
-		// 	transact
-		// );
+		const providerOrderDataPreparation: ProviderFactoryData[] =
+			createdOrderItems.map((orderItem, index) => {
+				const seed = providerOrderSeeds[index];
+
+				if (!seed) {
+					throw new InternalException(
+						'Provider order preparation mismatch',
+						null
+					);
+				}
+
+				return {
+					orderItemId: orderItem.id,
+					...seed,
+				};
+			});
+
+		if (providerOrderDataPreparation.length !== providerOrderSeeds.length) {
+			throw new InternalException(
+				'Failed to prepare provider orders',
+				null
+			);
+		}
 
 		// Step 4: Update order total amount
 		await order.update({ totalAmount }, { transaction: transact });

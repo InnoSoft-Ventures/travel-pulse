@@ -14,7 +14,7 @@ const shimmer = 'animate-pulse bg-slate-200';
  * - Card shells and element proportions reflect the live components closely
  * - Keep heights stable to limit CLS during hydration
  */
-export function DashboardSkeleton() {
+export default function DashboardSkeleton() {
 	return (
 		<div className="space-y-6">
 			{/* Top-level layout */}

@@ -1,6 +1,7 @@
 import { PackageType, ProviderIdentity } from './enums';
 
 export interface ProviderFactoryData {
+	orderItemId: number;
 	packageId: string;
 	provider: ProviderIdentity;
 	quantity: number;

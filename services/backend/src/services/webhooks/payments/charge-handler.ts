@@ -139,8 +139,8 @@ export const handleChargeSuccess = async (
 ) => {
 	console.log('Handling charge success...', data);
 
-	// If it is a subscription payment it would have a plan object
-	if (data.plan) {
+	// If it is a subscription payment it would have a non-empty plan object
+	if (data.plan && Object.keys(data.plan).length > 0) {
 		return;
 	}
 

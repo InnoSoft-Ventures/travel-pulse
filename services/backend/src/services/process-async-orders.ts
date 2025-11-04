@@ -16,12 +16,14 @@ import dbConnect from '../db';
 import { Transaction } from 'sequelize';
 import Sim, { SimCreationAttributes } from '../db/models/Sims';
 import Order from '../db/models/Order';
+import OrderItem from '../db/models/OrderItem';
 import User from '../db/models/User';
 import { sendOrderConfirmationEmail } from '@travelpulse/services';
 import Package from '../db/models/Package';
 import Operator from '../db/models/Operator';
 import Country from '../db/models/Country';
 import Continent from '../db/models/Continent';
+import { orderMetaUtil } from '@travelpulse/providers/util';
 
 interface ProcessedOrder {
 	updatedProviderOrder: {
@@ -143,6 +145,36 @@ const saveOrderProducts = async (
 	};
 };
 
+const updateOrderItemSimMapping = async (
+	orderItemId: number | undefined,
+	sims: { iccid?: string | null }[] | undefined,
+	transact: Transaction
+) => {
+	if (!orderItemId || !sims || sims.length === 0) {
+		return;
+	}
+
+	const normalizedOrderItemId = Number(orderItemId);
+
+	if (!Number.isInteger(normalizedOrderItemId)) {
+		return;
+	}
+
+	const iccid = sims.find((sim) => sim.iccid)?.iccid;
+
+	if (!iccid) {
+		return;
+	}
+
+	await OrderItem.update(
+		{ iccid },
+		{
+			where: { id: normalizedOrderItemId },
+			transaction: transact,
+		}
+	);
+};
+
 /**
  * Processes an Airalo order asynchronously.
  * @param data - The async order response data.
@@ -159,6 +191,9 @@ const processAiraloOrder = async (
 		transact
 	);
 
+	const descriptionObj = orderMetaUtil(data.data.description);
+	const description = `${descriptionObj.quantity} x ${descriptionObj.type} - ${descriptionObj.packageId}`;
+
 	const providerOrderData: ProviderOrderCreationAttributes = {
 		externalOrderId: data.data.code,
 		status: ProviderOrderStatus.COMPLETED,
@@ -166,7 +201,7 @@ const processAiraloOrder = async (
 		packageId: data.data.package_id,
 		quantity: data.data.quantity,
 		type: data.data.type,
-		description: data.data.description,
+		description,
 		esimType: data.data.esim_type,
 		validity: data.data.validity,
 		package: data.data.package,
@@ -181,7 +216,11 @@ const processAiraloOrder = async (
 		netPrice: data.data.net_price,
 	};
 
-	// TODO: Update OrderItems with the respective SIM->iccid mapping
+	await updateOrderItemSimMapping(
+		descriptionObj.orderItemId,
+		data.data.sims,
+		transact
+	);
 
 	// Save the SIMs
 	const simData: SimCreationAttributes[] = await Promise.all(
@@ -317,6 +356,8 @@ async function processOrderConfirmationEmail(
 
 /**
  * Processes async orders for a given provider.
+ *
+ * Called via webhook handlers when providers send async order status updates.
  * @param provider - The provider identity.
  * @param data - The order data.
  */
