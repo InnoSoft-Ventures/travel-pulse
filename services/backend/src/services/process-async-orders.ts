@@ -18,6 +18,10 @@ import Sim, { SimCreationAttributes } from '../db/models/Sims';
 import Order from '../db/models/Order';
 import User from '../db/models/User';
 import { sendOrderConfirmationEmail } from '@travelpulse/services';
+import Package from '../db/models/Package';
+import Operator from '../db/models/Operator';
+import Country from '../db/models/Country';
+import Continent from '../db/models/Continent';
 
 interface ProcessedOrder {
 	updatedProviderOrder: {
@@ -54,6 +58,54 @@ const findProviderOrder = async (
 
 	return record;
 };
+
+/**
+ * Create SIM name
+ */
+async function createSimName(
+	packageId: string,
+	provider: ProviderIdentity,
+	providerOrderId: number
+) {
+	const packageInfo = await Package.findOne({
+		where: {
+			externalPackageId: packageId,
+			provider,
+		},
+		attributes: ['day', 'data'],
+		include: [
+			{
+				model: Operator,
+				as: 'operator',
+				include: [
+					{
+						model: Country,
+						as: 'country',
+						attributes: ['name'],
+						required: false,
+					},
+					{
+						model: Continent,
+						as: 'continent',
+						attributes: ['name'],
+						required: false,
+					},
+				],
+			},
+		],
+	});
+
+	if (packageInfo) {
+		const countryName =
+			packageInfo.operator?.country?.name ||
+			packageInfo.operator?.continent?.name ||
+			'Unknown Region';
+
+		return `${countryName} - ${packageInfo.data} for ${packageInfo.day} days`;
+	}
+
+	return `Package #${providerOrderId}`;
+}
 
 /**
  * Saves the provider order and associated SIMs in a single transaction.
@@ -129,32 +181,41 @@ const processAiraloOrder = async (
 		netPrice: data.data.net_price,
 	};
 
+	// TODO: Update OrderItems with the respective SIM->iccid mapping
+
 	// Save the SIMs
-	const simData: SimCreationAttributes[] = data.data.sims.map((sim) => ({
-		providerOrderId: providerOrder.id,
-		iccid: sim.iccid,
-		lpa: sim.lpa,
-		imsis: sim.imsis,
-		matchingId: sim.matching_id,
-		qrcode: sim.qrcode,
-		qrcodeUrl: sim.qrcode_url,
-		code: sim.airalo_code,
-		apnType: sim.apn_type,
-		apnValue: sim.apn_value,
-		isRoaming: sim.is_roaming,
-		confirmationCode: sim.confirmation_code,
-		apn: sim.apn,
-		msisdn: sim.msisdn,
-		directAppleInstallationUrl: sim.direct_apple_installation_url,
-		remaining: providerOrder.dataAmount,
-		total: providerOrder.dataAmount,
-		isUnlimited: false,
-		status: SimStatus.NOT_ACTIVE,
-		remainingVoice: 0,
-		remainingText: 0,
-		totalVoice: 0,
-		totalText: 0,
-	}));
+	const simData: SimCreationAttributes[] = await Promise.all(
+		data.data.sims.map(async (sim) => ({
+			providerOrderId: providerOrder.id,
+			iccid: sim.iccid,
+			lpa: sim.lpa,
+			name: await createSimName(
+				data.data.package_id,
+				providerOrder.provider,
+				providerOrder.id
+			),
+			imsis: sim.imsis,
+			matchingId: sim.matching_id,
+			qrcode: sim.qrcode,
+			qrcodeUrl: sim.qrcode_url,
+			code: sim.airalo_code,
+			apnType: sim.apn_type,
+			apnValue: sim.apn_value,
+			isRoaming: sim.is_roaming,
+			confirmationCode: sim.confirmation_code,
+			apn: sim.apn,
+			msisdn: sim.msisdn,
+			directAppleInstallationUrl: sim.direct_apple_installation_url,
+			remaining: providerOrder.dataAmount,
+			total: providerOrder.dataAmount,
+			isUnlimited: false,
+			status: SimStatus.NOT_ACTIVE,
+			remainingVoice: 0,
+			remainingText: 0,
+			totalVoice: 0,
+			totalText: 0,
+		}))
+	);
 
 	return await saveOrderProducts(
 		providerOrder,
