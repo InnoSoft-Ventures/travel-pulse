@@ -12,6 +12,7 @@ import styles from './style.module.scss';
 type Line = {
 	id: string | number;
 	packageId: number;
+	simId?: number | null;
 	name?: string;
 	dataSize?: string;
 	validityDays?: number;
@@ -96,7 +97,8 @@ export default function OrderDetailsPage() {
 		return order.details.map((d: any) => ({
 			id: d.id ?? d.packageId ?? `${order.orderId}-${Math.random()}`,
 			packageId: Number(d.packageId),
-			name: d.name ?? `Package #${d.packageId}`,
+			simId: d.sim?.id ?? null,
+			name: d.sim?.name ?? `Package #${d.packageId}`,
 			dataSize: d.dataSize ?? (d.dataGb ? `${d.dataGb} GB` : undefined),
 			validityDays:
 				Number(d.validityDays ?? d.validity ?? 0) || undefined,
@@ -241,12 +243,18 @@ export default function OrderDetailsPage() {
 				{lines.map((l) => (
 					<div key={l.id} className={styles.row}>
 						<div className={styles.tdPlan}>
-							<Link
-								href={`/esims/${l.packageId}`}
-								className={styles.planLink}
-							>
-								{l.name}
-							</Link>
+							{l.simId ? (
+								<Link
+									href={`/app/esims/${l.simId}`}
+									className={styles.planLink}
+								>
+									{l.name}
+								</Link>
+							) : (
+								<span className={styles.planLink}>
+									{l.name}
+								</span>
+							)}
 							{l.dataSize && (
 								<div className={styles.planSub}>
 									{l.dataSize} • {l.validityDays || 0} Days
@@ -269,14 +277,20 @@ export default function OrderDetailsPage() {
 							</span>
 						</div>
 						<div className={styles.tdActions}>
-							<Button
-								size="sm"
-								variant="outline"
-								as={Link as any}
-								href={`/esims/${l.packageId}`}
-							>
-								View eSIM
-							</Button>
+							{l.simId ? (
+								<Button
+									size="sm"
+									variant="outline"
+									as={Link as any}
+									href={`/app/esims/${l.simId}`}
+								>
+									View eSIM
+								</Button>
+							) : (
+								<Button size="sm" variant="outline" isDisabled>
+									View eSIM
+								</Button>
+							)}
 						</div>
 					</div>
 				))}

@@ -28,6 +28,10 @@ export interface OrderDetailResponse {
 	currency: string;
 	details: {
 		id: number;
+		sim?: {
+			id: number;
+			name: string;
+		};
 		packageId: number;
 		quantity: number;
 		price: number;

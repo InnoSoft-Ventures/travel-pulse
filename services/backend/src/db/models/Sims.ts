@@ -15,6 +15,7 @@ export interface SimAttributes {
 	providerOrderId: number;
 	iccid: string;
 	lpa: string;
+	name: string | null;
 	imsis: string | null;
 	matchingId: string;
 	qrcode: string;
@@ -42,7 +43,7 @@ export interface SimAttributes {
 
 export type SimCreationAttributes = Optional<
 	SimAttributes,
-	'id' | 'expiredAt' | 'createdAt' | 'updatedAt'
+	'id' | 'expiredAt' | 'createdAt' | 'updatedAt' | 'name'
 >;
 
 class Sim extends Model<SimAttributes, SimCreationAttributes> {
@@ -50,6 +51,7 @@ class Sim extends Model<SimAttributes, SimCreationAttributes> {
 	public providerOrderId!: number;
 	public iccid!: string;
 	public imsis!: string | null;
+	public name!: string | null;
 	public lpa!: string;
 	public matchingId!: string;
 	public qrcode!: string;
@@ -91,6 +93,10 @@ Sim.init(
 				model: ProviderOrder,
 				key: 'id',
 			},
+		},
+		name: {
+			allowNull: true,
+			type: DataTypes.STRING,
 		},
 		iccid: {
 			allowNull: false,

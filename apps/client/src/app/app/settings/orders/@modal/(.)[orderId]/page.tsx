@@ -111,10 +111,11 @@ export default function OrderModalPage() {
 
 	const items = useMemo(() => {
 		if (!order?.details?.length) return [];
-		return order.details.map((d: any) => ({
+		return order.details.map((d) => ({
 			id: d.id ?? d.packageId ?? `${order.orderId}-${Math.random()}`,
 			packageId: Number(d.packageId),
-			name: d.name ?? `Package #${d.packageId}`,
+			simId: d.sim?.id ?? null,
+			name: d.sim?.name ?? `Package #${d.packageId}`,
 			quantity: Number(d.quantity ?? 1),
 			unitPrice: Number(d.price ?? 0),
 			startDate: d.startDate,
@@ -264,14 +265,16 @@ export default function OrderModalPage() {
 															styles.itemActions
 														}
 													>
-														<Button
-															as={Link as any}
-															size="sm"
-															variant="outline"
-															href={`/esims/${it.packageId}`}
-														>
-															View eSIM
-														</Button>
+														{it.simId && (
+															<Button
+																as={Link as any}
+																size="sm"
+																variant="outline"
+																href={`/app/esims/${it.simId}`}
+															>
+																View eSIM
+															</Button>
+														)}
 													</div>
 												</li>
 											))}

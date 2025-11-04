@@ -2,6 +2,7 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
 import Order from './Order';
 import Package from './Package';
+import Sim from './Sims';
 
 export interface OrderItemAttributes {
 	id: number;
@@ -31,6 +32,8 @@ class OrderItem extends Model<
 	public startDate!: string;
 	public iccid!: string;
 	public price!: number;
+
+	public sim?: Sim | null;
 	public createdAt!: Date;
 	public updatedAt!: Date;
 }
@@ -73,6 +76,11 @@ OrderItem.init(
 		iccid: {
 			allowNull: true,
 			type: DataTypes.STRING,
+			field: 'iccid',
+			references: {
+				model: Sim,
+				key: 'iccid',
+			},
 		},
 		startDate: {
 			allowNull: false,
@@ -113,6 +121,20 @@ Order.hasMany(OrderItem, {
 OrderItem.belongsTo(Package, {
 	foreignKey: 'packageId',
 	as: 'package',
+});
+
+OrderItem.belongsTo(Sim, {
+	foreignKey: 'iccid',
+	targetKey: 'iccid',
+	as: 'sim',
+	constraints: false,
+});
+
+Sim.hasOne(OrderItem, {
+	foreignKey: 'iccid',
+	sourceKey: 'iccid',
+	as: 'orderItem',
+	constraints: false,
 });
 
 export default OrderItem;

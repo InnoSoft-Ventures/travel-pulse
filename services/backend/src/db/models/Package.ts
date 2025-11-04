@@ -81,7 +81,7 @@ Package.init(
 			type: DataTypes.BIGINT,
 			field: 'operator_id',
 			references: {
-				model: 'operators',
+				model: Operator,
 				key: 'id',
 			},
 		},

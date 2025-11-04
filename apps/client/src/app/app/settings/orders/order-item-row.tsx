@@ -57,7 +57,7 @@ function OrderItemRow({ order, isUnpaid, handlePayNow }: OrderItemRowProps) {
 		<div className={styles.tableRow}>
 			<Link
 				className={styles.rowDetails}
-				href={`orders/${order.orderId}`}
+				href={`/app/settings/orders/${order.orderId}`}
 			>
 				<div className={styles.orderNumber}>
 					#{order.orderNumber || order.orderId}
@@ -89,7 +89,7 @@ function OrderItemRow({ order, isUnpaid, handlePayNow }: OrderItemRowProps) {
 						variant="outline"
 						size="sm"
 						as={Link as any}
-						href={`orders/${order.orderId}`}
+						href={`/app/settings/orders/${order.orderId}`}
 						onClick={(e) => e.stopPropagation()}
 					>
 						View details

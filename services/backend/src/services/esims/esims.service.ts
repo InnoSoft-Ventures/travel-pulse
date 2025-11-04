@@ -83,16 +83,18 @@ export const listEsimsService = async (
 	});
 
 	const items: SIMInfo[] = rows.map((sim) => {
-		const po = sim.get('providerOrder') as ProviderOrder;
+		const po = sim.get('providerOrder') as ProviderOrder | undefined;
 		const order = po?.get('order') as Order | undefined;
 		const expiredAt = sim.expiredAt
 			? dateJs(sim.expiredAt).format(PRETTY_DATE_FORMAT)
 			: '-';
+		const planName =
+			sim.name ?? po?.package ?? po?.packageId ?? 'eSIM Plan';
 
 		return {
 			id: sim.id,
 			status: sim.status,
-			name: po.packageId || 'eSIM Plan',
+			name: planName,
 			msisdn: sim.msisdn,
 			remaining: sim.remaining,
 			total: sim.total,
@@ -155,7 +157,7 @@ export const getEsimDetailsService = async (
 		throw new NotFoundException('eSIM not found', null);
 	}
 
-	const po = sim.get('providerOrder') as ProviderOrder;
+	const po = sim.get('providerOrder') as ProviderOrder | undefined;
 
 	// Resolve country by looking up the package via externalPackageId/provider
 	let country: {
@@ -221,9 +223,12 @@ export const getEsimDetailsService = async (
 		? dateJs(sim.expiredAt).format(PRETTY_DATE_FORMAT)
 		: '-';
 
+	const friendlyName =
+		sim.name ?? po?.package ?? po?.packageId ?? 'eSIM Plan';
+
 	return {
 		id: sim.id,
-		name: po.packageId || 'eSIM Plan',
+		name: friendlyName,
 		status: sim.status,
 		msisdn: sim.msisdn,
 		iccid: sim.iccid,
