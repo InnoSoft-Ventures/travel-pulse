@@ -3,7 +3,7 @@ import cron from 'node-cron';
 import dbConnect from '../db';
 import { runEsimUsageJob } from './jobs/airalo-jobs/esim-usage.job';
 
-const CRON_SCHEDULE = '*/5 * * * *';
+const CRON_SCHEDULE = '*/5 * * * *'; // Every 5 minutes
 
 let isRunning = false;
 

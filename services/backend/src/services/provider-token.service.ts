@@ -3,7 +3,6 @@ import Provider from '../db/models/Provider';
 import { InternalException } from '@travelpulse/middlewares';
 import { isTokenValid } from '../utils/date';
 import {
-	AIRALO_API_URL,
 	ProviderAccessToken,
 	ProviderAuthenticate,
 } from '@travelpulse/providers';
@@ -84,7 +83,7 @@ export async function authenticateProviderService(
 export function getProviderURL(provider: ProviderIdentity): string {
 	switch (provider) {
 		case ProviderIdentity.AIRALO:
-			return AIRALO_API_URL || '';
+			return process.env.AIRALO_API_URL || '';
 		// case ProviderIdentity.ESIM_ACCESS:
 		// 	return ESIM_ACCESS_API_URL;
 		default:

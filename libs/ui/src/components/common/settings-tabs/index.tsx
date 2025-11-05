@@ -21,7 +21,7 @@ export function SettingsTabs() {
 	const router = useRouter();
 
 	const onTabChange = (tab: string) => {
-		router.push(tab);
+		router.push(`/app/settings/${tab}`);
 	};
 
 	return (

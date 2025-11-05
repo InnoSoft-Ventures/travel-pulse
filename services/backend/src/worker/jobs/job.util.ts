@@ -114,17 +114,19 @@ export async function retryWithBackoff<T>(
 }
 
 export async function fetchAccessToken(
-	provider: ProviderIdentity
+	provider: ProviderIdentity,
+	transact?: Transaction
 ): Promise<string> {
-	let transact: Transaction | null = null;
 	try {
-		transact = await dbConnect.transaction();
+		if (!transact) {
+			transact = await dbConnect.transaction();
+		}
+
 		const tokenFetcher = providerTokenHandler(transact);
 		const token = await tokenFetcher(provider);
-		await transact.commit();
+
 		return token;
 	} catch (error) {
-		if (transact) await transact.rollback();
 		throw error;
 	}
 }

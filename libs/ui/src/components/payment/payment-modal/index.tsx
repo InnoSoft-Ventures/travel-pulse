@@ -51,7 +51,7 @@ const PaymentModal = ({ open, onClose, selectedCard }: PaymentModalProps) => {
 		};
 
 		if (confirmationStep === 'completed') {
-			setupClose(30000);
+			setupClose(5000); // 5 seconds
 		} else if (
 			confirmation.status === 'succeeded' ||
 			confirmationStep === 'failed' ||

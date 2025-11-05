@@ -49,6 +49,10 @@ export const PaymentCard = ({
 			return;
 		}
 
+		if (addNewCardSignal) {
+			return;
+		}
+
 		const hasSelected = cards.some((card) => card.id === selectedCard?.id);
 		if (!hasSelected) {
 			const fallback =
@@ -58,7 +62,7 @@ export const PaymentCard = ({
 				onSelectedCard(fallback);
 			}
 		}
-	}, [cards, selectedCard]);
+	}, [cards, selectedCard, addNewCardSignal]);
 
 	function showSelector() {
 		setAddNewCardSignal(false);
@@ -66,6 +70,7 @@ export const PaymentCard = ({
 
 	function onNewCardSignal() {
 		// Return to the initial screen; parent can open the Add Card modal
+		onSelectedCard(null);
 		setAddNewCardSignal(true);
 	}
 

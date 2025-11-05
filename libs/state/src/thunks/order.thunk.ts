@@ -163,11 +163,12 @@ export const chargePaymentCardThunk = createAsyncThunk<
 	try {
 		const { paymentAttemptId, orderId, paymentCardId } = payload;
 
-		const response = await ApiService.post<
-			ResponseData<{ success: boolean }>
-		>(`/api/orders/${orderId}/payments/${paymentAttemptId}/charge`, {
-			paymentCardId,
-		});
+		const response = await ApiService.post<ResponseData<boolean>>(
+			`/api/orders/${orderId}/payments/${paymentAttemptId}/charge`,
+			{
+				paymentCardId,
+			}
+		);
 
 		const results = response.data;
 
@@ -177,7 +178,7 @@ export const chargePaymentCardThunk = createAsyncThunk<
 			);
 		}
 
-		return results.data.success;
+		return results.data;
 	} catch (error) {
 		return thunkAPI.rejectWithValue(
 			errorHandler(error, 'Unexpected error charging payment card')

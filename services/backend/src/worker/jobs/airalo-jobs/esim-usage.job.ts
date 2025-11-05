@@ -1,5 +1,5 @@
 import Bottleneck from 'bottleneck';
-import { Op } from 'sequelize';
+import { Op, Transaction } from 'sequelize';
 import Sim, { SimAttributes } from '../../../db/models/Sims';
 import { ProviderIdentity, SimStatus } from '@travelpulse/interfaces';
 import { APIRequest, AxiosError, isAxiosError } from '@travelpulse/api-service';
@@ -18,6 +18,7 @@ import {
 	retryWithBackoff,
 	wait,
 } from '../job.util';
+import dbConnect from '../../../db';
 
 const limiter = new Bottleneck({
 	maxConcurrent: Math.max(
@@ -92,7 +93,7 @@ async function fetchUsage(iccid: string, token: string) {
 	}, RETRY_OPTIONS);
 }
 
-async function processSim(sim: Sim, token: string) {
+async function processSim(sim: Sim, token: string, transact: Transaction) {
 	try {
 		const usage = await fetchUsage(sim.iccid, token);
 		const payload = usage.data ?? {};
@@ -171,7 +172,10 @@ async function processSim(sim: Sim, token: string) {
 		updates.updatedAt = now;
 
 		if (Object.keys(updates).length > 0) {
-			await Sim.update(updates, { where: { id: sim.id } });
+			await Sim.update(updates, {
+				where: { id: sim.id },
+				transaction: transact,
+			});
 		}
 
 		const remoteStatusForLog = status;
@@ -200,31 +204,47 @@ export async function runEsimUsageJob() {
 		throw new Error('Airalo API URL not configured for usage polling');
 	}
 
-	const token = await fetchAccessToken(ProviderIdentity.AIRALO);
+	const transact = await dbConnect.transaction();
 
-	let lastId = 0;
-	while (true) {
-		const sims = await Sim.findAll({
-			where: {
-				status: {
-					[Op.in]: [SimStatus.NOT_ACTIVE, SimStatus.ACTIVE],
-				},
-				id: {
-					[Op.gt]: lastId,
-				},
-			},
-			order: [['id', 'ASC']],
-			limit: batchSize,
-		});
+	try {
+		const token = await fetchAccessToken(ProviderIdentity.AIRALO, transact);
 
-		if (sims.length === 0) {
-			break;
+		let lastId = 0;
+		while (true) {
+			const sims = await Sim.findAll({
+				where: {
+					status: {
+						[Op.in]: [SimStatus.NOT_ACTIVE, SimStatus.ACTIVE],
+					},
+					id: {
+						[Op.gt]: lastId,
+					},
+				},
+				order: [['id', 'ASC']],
+				limit: batchSize,
+				transaction: transact,
+			});
+
+			if (sims.length === 0) {
+				console.log(
+					'\n[ESIM USAGE] No more SIMs to process, exiting\n'
+				);
+
+				break;
+			}
+
+			lastId = sims[sims.length - 1].id;
+
+			await Promise.all(
+				sims.map((sim) =>
+					limiter.schedule(() => processSim(sim, token, transact))
+				)
+			);
 		}
 
-		lastId = sims[sims.length - 1].id;
-
-		await Promise.all(
-			sims.map((sim) => limiter.schedule(() => processSim(sim, token)))
-		);
+		await transact.commit();
+	} catch (error) {
+		if (transact) await transact.rollback();
+		throw error;
 	}
 }
