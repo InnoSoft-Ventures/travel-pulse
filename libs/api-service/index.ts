@@ -1,19 +1,20 @@
-import { Request } from "express";
+import { Request } from 'express';
 import axios, {
 	AxiosError,
 	AxiosInstance,
 	AxiosRequestHeaders,
+	isAxiosError,
 	Method,
-} from "axios";
-import { SERVICE, SERVICE_NAME } from "./service-urls";
-import { ResponseData } from "@travelpulse/interfaces";
-import { tokenSigning } from "@travelpulse/middlewares";
-import { ServiceDiscovery } from "./serviceDiscovery";
+} from 'axios';
+import { SERVICE, SERVICE_NAME } from './service-urls';
+import { ResponseData } from '@travelpulse/interfaces';
+import { tokenSigning } from '@travelpulse/middlewares';
+import { ServiceDiscovery } from './serviceDiscovery';
 
 type RequestHeaders = Partial<
 	AxiosRequestHeaders & {
-		"x-service-name": string;
-		"service-token": string;
+		'x-service-name': string;
+		'service-token': string;
 	}
 >;
 
@@ -25,7 +26,7 @@ class ApiService {
 		if (!this.instance) {
 			this.instance = axios.create({
 				headers: {
-					"Content-Type": "application/json",
+					'Content-Type': 'application/json',
 				},
 				validateStatus: (status) => {
 					return status >= 200 && status < 500;
@@ -41,12 +42,14 @@ class ApiService {
 		service: SERVICE
 	): Promise<AxiosInstance> {
 		if (!this.axiosInstances[service]) {
-			const serviceURL = await ServiceDiscovery.getServiceAddress(service);
+			const serviceURL = await ServiceDiscovery.getServiceAddress(
+				service
+			);
 
 			this.axiosInstances[service] = axios.create({
 				baseURL: serviceURL,
 				headers: {
-					"Content-Type": "application/json",
+					'Content-Type': 'application/json',
 				},
 				validateStatus: (status) => {
 					return status >= 200 && status < 500;
@@ -55,7 +58,7 @@ class ApiService {
 			});
 
 			this.axiosInstances[service]?.interceptors.request.use((config) => {
-				config.headers["service-token"] = ApiService.signServiceToken();
+				config.headers['service-token'] = ApiService.signServiceToken();
 
 				return config;
 			});
@@ -82,17 +85,17 @@ class ApiService {
 		const serviceToken = process.env.SERVICE_COMMUNICATION_TOKEN;
 
 		if (!serviceToken) {
-			throw new Error("Service communication token not found!");
+			throw new Error('Service communication token not found!');
 		}
 
 		try {
 			return `ISC ${tokenSigning({}, serviceToken, {
-				expiresIn: "2m",
+				expiresIn: '2m',
 			})}`;
 		} catch (error) {
-			console.error("signServiceToken:", error);
+			console.error('signServiceToken:', error);
 
-			throw new Error("Failed to sign service token");
+			throw new Error('Failed to sign service token');
 		}
 	}
 
@@ -109,8 +112,8 @@ class ApiService {
 
 			const customHeaders = {
 				...headers,
-				"x-service-name": process.env.SERVICE_NAME || "",
-				authentication: req.headers ? req.headers.authorization : "",
+				'x-service-name': process.env.SERVICE_NAME || '',
+				authentication: req.headers ? req.headers.authorization : '',
 			} as unknown as AxiosRequestHeaders;
 
 			const response = await axiosInstance<ResponseData<Response>>({
@@ -129,7 +132,7 @@ class ApiService {
 	}
 
 	private static handleError(err: Error | unknown): void {
-		console.error("AxiosInstance:handleError", err);
+		console.error('AxiosInstance:handleError', err);
 	}
 
 	public static async get<Response>(
@@ -139,7 +142,14 @@ class ApiService {
 		data?: Record<string, string>,
 		headers?: RequestHeaders
 	): Promise<ResponseData<Response>> {
-		return this.requestConfig<Response>(service, "GET", req, endpoint, data, headers);
+		return this.requestConfig<Response>(
+			service,
+			'GET',
+			req,
+			endpoint,
+			data,
+			headers
+		);
 	}
 
 	public static async post<Response>(
@@ -151,7 +161,7 @@ class ApiService {
 	): Promise<ResponseData<Response>> {
 		return this.requestConfig<Response>(
 			service,
-			"POST",
+			'POST',
 			req,
 			endpoint,
 			data,
@@ -166,7 +176,14 @@ class ApiService {
 		data: Record<string, string>,
 		headers?: RequestHeaders
 	): Promise<ResponseData<Response>> {
-		return this.requestConfig<Response>(service, "PUT", req, endpoint, data, headers);
+		return this.requestConfig<Response>(
+			service,
+			'PUT',
+			req,
+			endpoint,
+			data,
+			headers
+		);
 	}
 
 	public static async delete<Response>(
@@ -178,7 +195,7 @@ class ApiService {
 	): Promise<ResponseData<Response>> {
 		return this.requestConfig<Response>(
 			service,
-			"DELETE",
+			'DELETE',
 			req,
 			endpoint,
 			data,
@@ -189,4 +206,11 @@ class ApiService {
 
 const APIRequest = ApiService.request();
 
-export { ApiService, SERVICE_NAME, SERVICE, APIRequest, AxiosError };
+export {
+	ApiService,
+	SERVICE_NAME,
+	SERVICE,
+	APIRequest,
+	AxiosError,
+	isAxiosError,
+};

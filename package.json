@@ -4,7 +4,10 @@
   "description": "",
   "scripts": {
     "web:dev": "pnpm run --filter @travel-pulse/client dev",
-    "server:dev": "pnpm run --filter @travel-pulse/api dev",
+    "server:dev": "pnpm run --filter @travel-pulse/api dev && npm run worker:dev",
+		"server:start": "pnpm run --filter @travel-pulse/api start",
+		"server:build": "pnpm run --filter @travel-pulse/api build",
+		"worker:dev": "pnpm run --filter @travel-pulse/api worker:usage",
     "servers": "concurrently -n API,MCP -c green,blue \"pnpm run server:dev\" \"pnpm run mcp:dev\"",
 		"setup:all": "npm run setup:container && npm run setup:server",
     "setup:container": "docker-compose up -d --remove-orphans",

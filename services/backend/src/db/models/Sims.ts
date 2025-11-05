@@ -37,13 +37,14 @@ export interface SimAttributes {
 	remainingText: number;
 	totalVoice: number;
 	totalText: number;
+	lastUsageFetchAt: Date | null;
 	createdAt: Date;
 	updatedAt: Date;
 }
 
 export type SimCreationAttributes = Optional<
 	SimAttributes,
-	'id' | 'expiredAt' | 'createdAt' | 'updatedAt' | 'name'
+	'id' | 'expiredAt' | 'createdAt' | 'updatedAt' | 'name' | 'lastUsageFetchAt'
 >;
 
 class Sim extends Model<SimAttributes, SimCreationAttributes> {
@@ -73,6 +74,7 @@ class Sim extends Model<SimAttributes, SimCreationAttributes> {
 	public remainingText!: number;
 	public totalVoice!: number;
 	public totalText!: number;
+	public lastUsageFetchAt!: Date | null;
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
 }
@@ -207,6 +209,11 @@ Sim.init(
 			type: DataTypes.INTEGER,
 			field: 'total_text',
 			defaultValue: 0,
+		},
+		lastUsageFetchAt: {
+			allowNull: true,
+			type: DataTypes.DATE,
+			field: 'last_usage_fetch_at',
 		},
 		createdAt: {
 			allowNull: false,
