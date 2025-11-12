@@ -12,12 +12,16 @@ interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {
 
 type RefreshSubscriber = (success: boolean) => void;
 
+// const cookieStore = cookies();
+// const cookieHeader = cookieStore.toString() || undefined;
+
 const axiosInstance = axios.create({
 	// baseURL: BASE_API_URL,
 	timeout: 5000,
 	headers: {
 		Accept: 'application/json',
 		'Content-Type': 'application/json',
+		// Cookie: cookieHeader || '',
 	},
 	withCredentials: true,
 	validateStatus(status) {

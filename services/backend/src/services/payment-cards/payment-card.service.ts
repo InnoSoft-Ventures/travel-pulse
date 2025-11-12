@@ -12,12 +12,22 @@ export async function saveCardDetails(
 ) {
 	if (!cardDetails || !cardDetails.reusable) return;
 
+	// Set previous card to non-default as new is set to default
+	await PaymentCard.update(
+		{ default: false },
+		{
+			where: { userId: cardDetails.userId, default: true },
+			transaction: transact,
+		}
+	);
+
 	// Upsert by userId + provider + last4 (+exp if available)
 	const [record] = await PaymentCard.findOrCreate({
 		where: {
 			userId: cardDetails.userId,
 			provider: cardDetails.provider,
 			last4: cardDetails.last4,
+			authorizationCode: cardDetails.authorizationCode,
 		},
 		defaults: cardDetails as any,
 		transaction: transact,

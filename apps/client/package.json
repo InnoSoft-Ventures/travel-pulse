@@ -12,6 +12,7 @@
     "@config/prettier": "workspace:^",
     "@config/tsconfig": "workspace:^",
     "@heroui/react": "^2.7.6",
+    "@travelpulse/api-service": "workspace:^",
     "@travelpulse/interfaces": "workspace:^",
     "@travelpulse/ui": "workspace:^",
     "@travelpulse/utils": "workspace:^",

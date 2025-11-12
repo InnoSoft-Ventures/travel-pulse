@@ -181,7 +181,7 @@ export const getPopularDestinations = async (req: Request, res: Response) => {
 
 		// Find the cheapest package for each country
 		const [results] = await dbConnect.query(`
-			SELECT c.name, c.flag, MIN(p.price) AS price
+			SELECT c.name, c.flag, c.slug, MIN(p.price) AS price
 			FROM countries c
 			JOIN operators o ON c.id = o.country_id
 			JOIN packages p ON o.id = p.operator_id
@@ -191,12 +191,25 @@ export const getPopularDestinations = async (req: Request, res: Response) => {
 			${size ? `LIMIT ${parseInt(size as string, 10)}` : ''};
 		`);
 
-		res.json(successResponse(results));
+		const randomized = Array.isArray(results)
+			? shuffleResults(results as Record<string, unknown>[])
+			: [];
+
+		res.json(successResponse(randomized));
 	} catch (error) {
 		console.error('Error in getPopularDestinations', error);
 		res.status(500).json(errorResponse(SOMETHING_WENT_WRONG));
 	}
 };
+
+function shuffleResults<T>(data: T[]) {
+	const shuffled = [...data];
+	for (let i = shuffled.length - 1; i > 0; i -= 1) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+	}
+	return shuffled;
+}
 
 /**
  * Retrieves all packages for a specific region identified by its slug.

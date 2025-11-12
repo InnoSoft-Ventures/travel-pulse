@@ -8,12 +8,13 @@ import styles from './style.module.scss';
 interface DestinationCardProps {
 	flagUrl: string;
 	countryName: string;
-	slugLink?: string;
+	slugLink: string;
 	price?: string;
+	role?: 'link' | 'button';
 }
 
 const DestinationCard = (props: DestinationCardProps) => {
-	const { flagUrl, countryName, price, slugLink } = props;
+	const { flagUrl, countryName, price, slugLink, role = 'link' } = props;
 
 	const cardContent = (
 		<div>
@@ -42,30 +43,16 @@ const DestinationCard = (props: DestinationCardProps) => {
 		</div>
 	);
 
-	if (slugLink) {
-		return (
-			<Link
-				aria-label="Destination Card"
-				role="link"
-				href={slugLink}
-				title={countryName}
-				className={styles.destinationCardContainer}
-			>
-				{cardContent}
-			</Link>
-		);
-	}
-
 	return (
-		<button
+		<Link
 			aria-label="Destination Card"
-			type="button"
-			role="button"
+			role={role}
+			href={slugLink}
 			title={countryName}
 			className={styles.destinationCardContainer}
 		>
 			{cardContent}
-		</button>
+		</Link>
 	);
 };
 

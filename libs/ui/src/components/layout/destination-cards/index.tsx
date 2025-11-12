@@ -47,6 +47,8 @@ function DestinationCards(props: DestinationCardsProps) {
 			{!isLoading &&
 				destinationType !== 'search-results' &&
 				(data as CountryProduct[]).map((destination, index) => {
+					console.log('destination', destination);
+
 					switch (destinationType) {
 						case 'popular':
 							return (
@@ -54,7 +56,9 @@ function DestinationCards(props: DestinationCardsProps) {
 									key={`popular-destination-${index}`}
 									flagUrl={destination.flag}
 									price={destination.price}
+									role="button"
 									countryName={destination.name}
+									slugLink={`/${destination.slug}-esim`}
 								/>
 							);
 						case 'local':
