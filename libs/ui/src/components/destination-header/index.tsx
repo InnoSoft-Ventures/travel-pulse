@@ -6,17 +6,18 @@ import styles from './style.module.scss';
 import { SearchAndCalendar } from '../search-and-calendar';
 
 interface DestinationHeaderProps {
-	title: string;
+	title: React.ReactNode;
 	subTitle: React.ReactNode;
 	/**
 	 * Enable or disable the search bar
 	 * @default true
 	 */
 	enableSearch?: boolean;
+	skeleton?: React.ReactNode;
 }
 
 const DestinationHeader = (props: DestinationHeaderProps) => {
-	const { title, subTitle, enableSearch = true } = props;
+	const { title, subTitle, enableSearch = true, skeleton = null } = props;
 
 	return (
 		<Hero>
@@ -25,12 +26,14 @@ const DestinationHeader = (props: DestinationHeaderProps) => {
 					<h1 className={styles.title}>{title}</h1>
 					<h2 className={styles.subTitle}>{subTitle}</h2>
 				</div>
-				{enableSearch && (
+				{enableSearch && !skeleton && (
 					<SearchAndCalendar
 						className={styles.searchContainer}
 						controlVariant="secondary"
 					/>
 				)}
+
+				{skeleton}
 			</div>
 		</Hero>
 	);

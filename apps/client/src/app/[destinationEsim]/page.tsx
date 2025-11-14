@@ -4,10 +4,11 @@ import { notFound } from 'next/navigation';
 import 'server-only';
 import {
 	Continent,
+	ResponseData,
 	UIPlanType,
 	type Country,
-	type SuccessResponse,
 } from '@travelpulse/interfaces';
+import { APIRequest } from '@travelpulse/api-service';
 
 async function fetchData(info: {
 	target: UIPlanType;
@@ -15,22 +16,28 @@ async function fetchData(info: {
 }): Promise<Country | Continent | null> {
 	switch (info.target) {
 		case UIPlanType.Local: {
-			const res = await fetch(
-				`http://localhost:4000/data/countries/search?query=${info.slug}&matchType=exact`
+			const res = await APIRequest.get<ResponseData<Country[]>>(
+				`/api/data/countries/search?query=${info.slug}&matchType=exact`
 			);
 
-			if (!res.ok) return null;
-			const { data }: SuccessResponse<Country[]> = await res.json();
+			const payload = res.data;
+
+			if (!payload.success) return null;
+
+			const { data } = payload;
 
 			return data[0] || null;
 		}
 		default: {
-			const res = await fetch(
-				`http://localhost:4000/data/regions/${info.slug}`
+			const res = await APIRequest.get<ResponseData<Continent>>(
+				`/api/data/regions/${info.slug}`
 			);
 
-			if (!res.ok) return null;
-			const { data }: SuccessResponse<Continent> = await res.json();
+			const payload = res.data;
+
+			if (!payload.success) return null;
+
+			const { data } = payload;
 			console.log('Data fetched:', data);
 
 			return data || null;

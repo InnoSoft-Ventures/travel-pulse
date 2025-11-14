@@ -7,3 +7,6 @@ export const DEFAULT_CURRENCY = '£';
 export const DEFAULT_CURRENCY_CODE = 'GBP';
 export const DEFAULT_USER_PICTURE =
 	'https://randomuser.me/api/portraits/men/19.jpg';
+
+export const SHIMMER =
+	'motion-safe:animate-pulse bg-slate-200/80 dark:bg-slate-700/60';

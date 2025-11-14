@@ -47,8 +47,6 @@ function DestinationCards(props: DestinationCardsProps) {
 			{!isLoading &&
 				destinationType !== 'search-results' &&
 				(data as CountryProduct[]).map((destination, index) => {
-					console.log('destination', destination);
-
 					switch (destinationType) {
 						case 'popular':
 							return (

@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import styles from './country.module.scss';
 import Image from 'next/image';
 import toronto from '@/assets/toronto_bg.jpg';
@@ -125,15 +125,13 @@ const DestinationEsimContent = ({ destination, targetDestination }: Props) => {
 								</div>
 							</div>
 
-							<Suspense fallback={<p>Loading plans...</p>}>
-								<PlanList
-									targetDestination={targetDestination}
-									slug={destination.slug}
-									handlePlanDetails={handlePlanDetails}
-									startDate={startDate}
-									endDate={endDate}
-								/>
-							</Suspense>
+							<PlanList
+								targetDestination={targetDestination}
+								slug={destination.slug}
+								handlePlanDetails={handlePlanDetails}
+								startDate={startDate}
+								endDate={endDate}
+							/>
 						</div>
 					</div>
 				</section>
