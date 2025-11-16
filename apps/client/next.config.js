@@ -17,6 +17,12 @@ module.exports = {
 			},
 		];
 	},
+	transpilePackages: [
+		'@travelpulse/ui',
+		'@travelpulse/state',
+		'@travelpulse/interfaces',
+		'@travelpulse/utils',
+	],
 	webpack(config) {
 		config.resolve.alias['@/assets'] = path.resolve(
 			__dirname,
