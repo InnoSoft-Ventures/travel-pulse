@@ -45,7 +45,7 @@ export const RAW_AIRALO_BASE_URL =
 	process.env.AIRALO_API_URL || PROVIDER_AIRALO_URL || '';
 export const AIRALO_BASE_URL = RAW_AIRALO_BASE_URL.replace(/\/$/, '');
 export const AIRALO_USAGE_ENDPOINT = AIRALO_BASE_URL
-	? `${AIRALO_BASE_URL}/v2/sims`
+	? `${AIRALO_BASE_URL}/sims`
 	: '';
 
 export function maskIccid(iccid: string): string {

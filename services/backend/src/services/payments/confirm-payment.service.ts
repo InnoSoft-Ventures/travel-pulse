@@ -20,12 +20,45 @@ interface ConfirmPaymentServiceRequest {
 }
 
 /**
- * Confirm a successful payment and create provider orders atomically.
  *
- * Called after payment provider notifies of successful payment.
- * Implements idempotency: if already confirmed, does not duplicate provider orders.
+ * @param data
+ * @param transact
+ * @returns
  */
-export const confirmPaymentService = async (
+/**
+ * Distributes products to the appropriate providers after a successful payment confirmation.
+ *
+ * This service handles the post-payment workflow including:
+ * - Verifying the order and payment attempt exist
+ * - Implementing idempotency checks to prevent duplicate processing
+ * - Updating payment attempt and order statuses to PAID
+ * - Creating provider orders based on order items and package data
+ * - Managing all operations within a database transaction for consistency
+ *
+ * @param data - The payment confirmation request data
+ * @param data.orderId - The unique identifier of the order
+ * @param data.userId - The unique identifier of the user who made the order
+ * @param data.paymentAttemptId - The unique identifier of the payment attempt
+ * @param data.referenceId - Optional external payment reference identifier
+ * @param transact - The database transaction to ensure atomicity of all operations
+ *
+ * @returns A promise that resolves to an object containing:
+ * - `orderId`: The order identifier
+ * - `paymentId`: The payment attempt identifier
+ * - `orderStatus`: The updated order status (OrderStatus.PAID)
+ * - `paymentStatus`: The updated payment status (PaymentStatus.PAID)
+ * - `providerOrdersCreated`: Boolean indicating if provider orders were newly created
+ * - `message`: Optional message (e.g., 'already_confirmed' for idempotent calls)
+ *
+ * @throws {NotFoundException} When the order or payment attempt is not found
+ * @throws {InternalException} When package data is missing or provider order processing fails
+ *
+ * @remarks
+ * - This function commits or rolls back the transaction based on success or failure
+ * - Idempotency is guaranteed: subsequent calls with the same data will return success without reprocessing
+ * - All database operations are performed within the provided transaction for consistency
+ */
+export const distributeProductService = async (
 	data: ConfirmPaymentServiceRequest,
 	transact: Transaction
 ) => {
@@ -146,8 +179,8 @@ export const confirmPaymentService = async (
 		return {
 			orderId: order.id,
 			paymentId: paymentAttempt.id,
-			orderStatus: 'paid',
-			paymentStatus: 'succeeded',
+			orderStatus: OrderStatus.PAID,
+			paymentStatus: PaymentStatus.PAID,
 			providerOrdersCreated: true,
 		} as const;
 	} catch (error) {

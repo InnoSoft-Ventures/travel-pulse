@@ -1,35 +1,36 @@
 {
-  "name": "travel-pulse",
-  "version": "1.0.0",
-  "description": "",
-  "scripts": {
-    "web:dev": "pnpm run --filter @travel-pulse/client dev",
-    "server:dev": "pnpm run --filter @travel-pulse/api dev && npm run worker:dev",
+	"name": "travel-pulse",
+	"version": "1.0.0",
+	"description": "",
+	"scripts": {
+		"dev:all": "concurrently -n API,WORKER -c green,yellow \"npm run server:dev\" \"npm run worker:dev\"",
+		"web:dev": "pnpm run --filter @travel-pulse/client dev",
+		"server:dev": "pnpm run --filter @travel-pulse/api dev",
 		"server:start": "pnpm run --filter @travel-pulse/api start",
 		"server:build": "pnpm run --filter @travel-pulse/api build",
 		"worker:dev": "pnpm run --filter @travel-pulse/api worker:usage",
-    "servers": "concurrently -n API,MCP -c green,blue \"pnpm run server:dev\" \"pnpm run mcp:dev\"",
+		"servers": "concurrently -n API,MCP -c green,blue \"pnpm run server:dev\" \"pnpm run mcp:dev\"",
 		"setup:all": "npm run setup:container && npm run setup:server",
-    "setup:container": "docker-compose up -d --remove-orphans",
-    "setup:container:stop": "docker-compose down",
-    "db:migrate": "pnpm run --filter @travel-pulse/api sq-cli db:migrate",
-    "db:seeder": "pnpm run --filter @travel-pulse/api sq-cli db:seed:all",
+		"setup:container": "docker-compose up -d --remove-orphans",
+		"setup:container:stop": "docker-compose down",
+		"db:migrate": "pnpm run --filter @travel-pulse/api sq-cli db:migrate",
+		"db:seeder": "pnpm run --filter @travel-pulse/api sq-cli db:seed:all",
 		"db:sq-cli": "pnpm run --filter @travel-pulse/api sq-cli",
-    "setup:server": "npm run db:migrate && npm run db:seeder && npm run servers",
-    "mcp:dev": "pnpm run --filter @travel-pulse/mcp-server dev",
-    "mcp:start": "pnpm run --filter @travel-pulse/mcp-server start",
-    "mcp:build": "pnpm run --filter @travel-pulse/mcp-server build",
+		"setup:server": "npm run db:migrate && npm run db:seeder && npm run servers",
+		"mcp:dev": "pnpm run --filter @travel-pulse/mcp-server dev",
+		"mcp:start": "pnpm run --filter @travel-pulse/mcp-server start",
+		"mcp:build": "pnpm run --filter @travel-pulse/mcp-server build",
 		"mcp:query": "pnpm run --filter @travel-pulse/mcp-server mcp-query",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@config/eslint": "workspace:^",
-    "@config/prettier": "workspace:^",
-    "@config/tsconfig": "workspace:^",
-    "typescript": "^5.8.3",
-    "concurrently": "^9.1.2"
-  }
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@config/eslint": "workspace:^",
+		"@config/prettier": "workspace:^",
+		"@config/tsconfig": "workspace:^",
+		"typescript": "^5.8.3",
+		"concurrently": "^9.1.2"
+	}
 }

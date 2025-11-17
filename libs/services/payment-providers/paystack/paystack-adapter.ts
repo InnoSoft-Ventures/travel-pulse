@@ -11,18 +11,9 @@ import {
 export class PaystackAdapter implements PaymentProviderAdapter {
 	public readonly name = 'paystack';
 	private readonly apiUrl: string;
-	private readonly secretKey: string;
 
 	constructor() {
 		this.apiUrl = process.env.PAYSTACK_API_URL || '';
-		this.secretKey =
-			process.env.SERVER_ENV === 'production'
-				? process.env.PAYSTACK_SECRET_KEY || ''
-				: process.env.PAYSTACK_TEST_SECRET_KEY || '';
-
-		if (!this.secretKey) {
-			throw new Error('PAYSTACK_SECRET_KEY not configured');
-		}
 
 		if (!this.apiUrl) {
 			throw new Error('PAYSTACK_API_URL not configured');
@@ -30,7 +21,9 @@ export class PaystackAdapter implements PaymentProviderAdapter {
 	}
 
 	private getSecretKey() {
-		return this.secretKey;
+		return process.env.SERVER_ENV === 'production'
+			? process.env.PAYSTACK_SECRET_KEY || ''
+			: process.env.PAYSTACK_TEST_SECRET_KEY || '';
 	}
 
 	/**

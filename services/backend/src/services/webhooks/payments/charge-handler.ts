@@ -1,7 +1,7 @@
 import { PaystackChargeSuccessPayload } from '@travelpulse/interfaces';
 import PaymentAttempt from '../../../db/models/PaymentAttempt';
 import { BadRequestException } from '@travelpulse/middlewares';
-import { confirmPaymentService } from '../../payments/confirm-payment.service';
+import { distributeProductService } from '../../payments/confirm-payment.service';
 import { PaymentCardCreationAttributes } from '../../../db/models/PaymentCard';
 import { saveCardDetails } from '../../payment-cards/payment-card.service';
 import dbConnect from '../../../db';
@@ -160,17 +160,11 @@ export const handleChargeSuccess = async (
 		referenceId: data.reference,
 	});
 
-	// 4. Send confirmation email
-	await processPaymentConfirmedEmail(
-		paymentDetails,
-		data.metadata.orderNumber
-	);
-
-	// 5. Save card details (authorization)
+	// 4. Save card details (authorization)
 	await handleCardSave(paymentDetails.userId, data, transact);
 
-	// 6. Distribute product by calling confirmPaymentService method
-	await confirmPaymentService(
+	// 6. Distribute product by calling distributeProductService method
+	await distributeProductService(
 		{
 			orderId: paymentDetails.orderId,
 			userId: paymentDetails.userId,
@@ -178,5 +172,11 @@ export const handleChargeSuccess = async (
 			referenceId: data.reference,
 		},
 		transact
+	);
+
+	// 5. Send confirmation email
+	await processPaymentConfirmedEmail(
+		paymentDetails,
+		data.metadata.orderNumber
 	);
 };

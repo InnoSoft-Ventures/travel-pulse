@@ -15,14 +15,16 @@ import {
 	UIPlanTypeMap,
 } from '@travelpulse/interfaces';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
+	getCountries,
 	getPopularCountries,
 	getPopularDestinations,
 	getRegions,
 } from '@travelpulse/ui/thunks';
 import { redirect, useRouter } from 'next/navigation';
 import { destinationCopy, DestinationType } from '../destinationCopy';
+import EsimDetailsPage from '../../app/esims/[esimId]/page';
 
 interface DestinationPageProps {
 	params: { destination: 'local' | 'regional' | 'global' };
@@ -50,10 +52,11 @@ const DestinationsPage = ({ params }: DestinationPageProps) => {
 			break;
 	}
 
+	const [viewAll, setViewAll] = useState(false);
 	const { popularDestinations } = useAppSelector(
 		(state) => state.app.products
 	);
-	const { popularCountries, regions } = useAppSelector(
+	const { popularCountries, regions, countries } = useAppSelector(
 		(state) => state.app.masterData
 	);
 	const router = useRouter();
@@ -85,11 +88,26 @@ const DestinationsPage = ({ params }: DestinationPageProps) => {
 		});
 	};
 
+	function onViewAll() {
+		setViewAll(true);
+
+		if (destination === 'local') {
+			dispatch(getCountries(''));
+			return;
+		}
+	}
+
 	let data: CountryPackageType = [];
 
 	switch (destination) {
 		case 'local':
-			data = popularCountries.list;
+			{
+				if (!viewAll) {
+					data = popularCountries.list;
+				} else {
+					data = countries.list;
+				}
+			}
 			break;
 		case 'regional':
 			data = regions.list;
@@ -140,11 +158,13 @@ const DestinationsPage = ({ params }: DestinationPageProps) => {
 							destination === 'regional' ? 'region-link' : 'local'
 						}
 					/>
-					{copy.buttonText && (
+					{copy.buttonText && !viewAll && (
 						<div className="text-center">
 							<Button
 								variant="outline"
 								className={styles.seeAllBtn}
+								onClick={onViewAll}
+								isLoading={countries.status === 'loading'}
 							>
 								{copy.buttonText}
 							</Button>

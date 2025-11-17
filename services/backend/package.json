@@ -3,11 +3,11 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"dev": "nodemon .",
+		"dev": "nodemon --config nodemon.json",
 		"start": "node dist/index.js",
 		"sq-cli": "npx sequelize-cli --env development",
 		"build": "tsc",
-		"worker:usage": "ts-node src/worker/index.ts",
+		"worker:usage": "nodemon --config nodemon.worker.json",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {

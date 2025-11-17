@@ -220,6 +220,12 @@ export class Airalo extends AiraloBase implements ProviderStrategy {
 	 */
 	private async createAiraloOrder(data: AiraloOrderRequest) {
 		try {
+			let WEBHOOK_URL = process.env.WEBHOOK_BASE_URL || '';
+
+			if (WEBHOOK_URL) {
+				WEBHOOK_URL += '/airalo/orders';
+			}
+
 			// Call the service to process the order
 			const response = await this.request.post<AiraloOrderResponse>(
 				`${AIRALO_API_URL}/orders-async`,
@@ -228,6 +234,7 @@ export class Airalo extends AiraloBase implements ProviderStrategy {
 					quantity: data.quantity,
 					type: data.type,
 					description: data.description,
+					webhook_url: WEBHOOK_URL,
 				}
 			);
 
@@ -235,9 +242,9 @@ export class Airalo extends AiraloBase implements ProviderStrategy {
 				return { success: true, data: response.data.data };
 			}
 
-			console.log('Airalo Order Error:', response.data.data);
+			console.log('Airalo Order Error:', response.data);
 
-			return { success: false, error: response.data.data };
+			return { success: false, error: response.data };
 		} catch (error) {
 			console.error('Airalo API: Failed to order package:', error);
 

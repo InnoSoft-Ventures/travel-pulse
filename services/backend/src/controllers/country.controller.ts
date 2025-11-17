@@ -23,6 +23,7 @@ export const getCountries = async (_req: Request, res: Response) => {
 				'currencyName',
 				'currencySymbol',
 			],
+			order: [['name', 'ASC']],
 		});
 
 		return res.status(200).json(successResponse(countries));

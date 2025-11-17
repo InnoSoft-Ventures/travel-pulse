@@ -18,21 +18,25 @@ export const processProviderOrders = async (
 ) => {
 	console.log('Processing provider orders');
 
-	const provider = new ProviderFactory(
-		providerOrderDataPreparation,
-		providerTokenHandler(transact)
-	);
-	const providerOrders = await provider.processOrder();
+	try {
+		const provider = new ProviderFactory(
+			providerOrderDataPreparation,
+			providerTokenHandler(transact)
+		);
+		const providerOrders = await provider.processOrder();
 
-	const providerOrderList = providerOrders.map((item) => ({
-		...item,
-		orderId,
-		currency,
-	}));
+		const providerOrderList = providerOrders.map((item) => ({
+			...item,
+			orderId,
+			currency,
+		}));
 
-	await ProviderOrder.bulkCreate(providerOrderList, {
-		transaction: transact,
-	});
+		await ProviderOrder.bulkCreate(providerOrderList, {
+			transaction: transact,
+		});
 
-	console.log('Provider orders processed');
+		console.log('Provider orders processed');
+	} catch (error) {
+		console.error('Error creating provider orders:', error);
+	}
 };
