@@ -22,20 +22,14 @@ export const PaymentCard = ({
 	onSelectedCard,
 }: PaymentCardProps) => {
 	const dispatch = useAppDispatch();
-	let {
-		list: cards,
-		status,
-		error,
-	} = useAppSelector((state) => state.account.cards.items);
+	let { list: cards, status } = useAppSelector(
+		(state) => state.account.cards.items
+	);
 
 	const isLoading = status === 'loading';
 	const [addNewCardSignal, setAddNewCardSignal] = React.useState(false);
 
 	const isError = status === 'failed';
-	const errorMessage =
-		typeof error === 'string'
-			? error
-			: error?.message ?? 'Unable to load your saved cards.';
 
 	useEffect(() => {
 		if (status === 'idle') {
@@ -62,7 +56,7 @@ export const PaymentCard = ({
 				onSelectedCard(fallback);
 			}
 		}
-	}, [cards, selectedCard, addNewCardSignal]);
+	}, [cards, selectedCard, addNewCardSignal, isError]);
 
 	function showSelector() {
 		setAddNewCardSignal(false);
@@ -74,9 +68,13 @@ export const PaymentCard = ({
 		setAddNewCardSignal(true);
 	}
 
+	function retryFetchCards() {
+		void dispatch(fetchCards());
+	}
+
 	const canShowSummary =
 		(!isLoading && !isError && addNewCardSignal) ||
-		(!isLoading && cards.length === 0 && !isError);
+		(!isLoading && cards.length === 0);
 
 	return (
 		<div className={styles.paymentCardContainer} data-selected={selected}>
@@ -97,13 +95,26 @@ export const PaymentCard = ({
 							</div>
 
 							{/* Mobile button (full width) */}
-							{cards.length > 0 && (
+							{cards.length > 0 && !isError && (
 								<div className="mt-4 sm:hidden">
 									<Button
 										onClick={showSelector}
 										className="w-full rounded-full"
 									>
 										Select card
+									</Button>
+								</div>
+							)}
+
+							{isError && (
+								<div className="mt-4 sm:hidden">
+									<Button
+										variant="outline"
+										size="sm"
+										className="mt-3"
+										onClick={retryFetchCards}
+									>
+										Retry
 									</Button>
 								</div>
 							)}
@@ -117,6 +128,19 @@ export const PaymentCard = ({
 									className="rounded-full px-5"
 								>
 									Select card
+								</Button>
+							</div>
+						)}
+
+						{isError && (
+							<div className="hidden sm:block">
+								<Button
+									variant="outline"
+									size="sm"
+									className="mt-3"
+									onClick={retryFetchCards}
+								>
+									Retry
 								</Button>
 							</div>
 						)}
@@ -136,22 +160,6 @@ export const PaymentCard = ({
 					/>
 				</div>
 			)}
-
-			{isError ? (
-				<div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-					<p className="font-medium">{errorMessage}</p>
-					<Button
-						variant="outline"
-						size="sm"
-						className="mt-3"
-						onClick={() => {
-							void dispatch(fetchCards());
-						}}
-					>
-						Retry
-					</Button>
-				</div>
-			) : null}
 		</div>
 	);
 };

@@ -15,15 +15,6 @@ export function isTokenValid(
 ): boolean {
 	const expiryTime = dateJs(issuedAt).add(expiresIn, 'seconds').valueOf();
 
-	console.log(
-		'Expiry Time:',
-		new Date(expiryTime).toISOString(),
-		'Current Time:',
-		new Date(currentTime).toISOString(),
-		'Is Valid:',
-		currentTime < expiryTime
-	);
-
 	return currentTime < expiryTime;
 }
 

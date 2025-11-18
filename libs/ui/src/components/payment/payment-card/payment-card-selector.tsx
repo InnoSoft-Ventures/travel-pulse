@@ -105,66 +105,60 @@ export const PaymentCardSelector = ({
 										).slice(-4)}`;
 
 										return (
-											<div key={card.id}>
-												<div
+											<div
+												key={card.id}
+												role="radio"
+												aria-checked={selected}
+												tabIndex={0}
+											>
+												<label
+													htmlFor={`card-${card.id}`}
 													className={cn(
+														'grid cursor-pointer grid-cols-[auto_1fr] items-center gap-4',
 														'rounded-xl border px-4 py-4 transition-colors focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-300',
 														selected
 															? 'border-indigo-300 bg-indigo-50'
-															: 'border-transparent bg-slate-50/60 hover:border-slate-200'
+															: 'border-slate-100 bg-slate-50/60 hover:border-slate-200'
 													)}
-													role="radio"
-													aria-checked={selected}
-													tabIndex={0}
 												>
-													<div className="grid grid-cols-[auto_1fr] items-center gap-4">
-														<Radio
-															id={`card-${card.id}`}
-															value={value}
-															tabIndex={-1}
-															classNames={{
-																hiddenInput:
-																	'focus-within:outline-none',
-															}}
-														/>
-														<label
-															htmlFor={`card-${card.id}`}
-															className="cursor-pointer"
-														>
-															<div className="space-y-1">
-																<div className="text-base font-semibold">
-																	{card.cardName ||
-																		brandLabel(
-																			card.brand
-																		)}
-																</div>
-																<div className="text-sm text-slate-600">
-																	{brandLabel(
-																		card.brand
-																	)}{' '}
-																	••••
-																	{
-																		card.last4
-																	}{' '}
-																	• Expires{' '}
-																	{expiry}
-																</div>
-																<div className="mt-2 flex items-center gap-2">
-																	{card.isDefault && (
-																		<Badge variant="success">
-																			Default
-																		</Badge>
-																	)}
-																	<BrandPill
-																		brand={
-																			card.brand
-																		}
-																	/>
-																</div>
-															</div>
-														</label>
+													<Radio
+														id={`card-${card.id}`}
+														value={value}
+														tabIndex={-1}
+														classNames={{
+															hiddenInput:
+																'focus-within:outline-none',
+														}}
+													/>
+													<div className="space-y-1">
+														<div className="text-base font-semibold">
+															{card.cardName ||
+																brandLabel(
+																	card.brand
+																)}
+														</div>
+														<div className="text-sm text-slate-600">
+															{brandLabel(
+																card.brand
+															)}{' '}
+															••••
+															{card.last4} •
+															Expires {expiry}
+														</div>
+														<div className="mt-2 flex items-center gap-2">
+															{card.isDefault && (
+																<Badge variant="success">
+																	Default
+																</Badge>
+															)}
+															<BrandPill
+																brand={
+																	card.brand
+																}
+															/>
+														</div>
 													</div>
-												</div>
+												</label>
 											</div>
 										);
 									})}
