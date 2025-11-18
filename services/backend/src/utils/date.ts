@@ -13,7 +13,17 @@ export function isTokenValid(
 	expiresIn: number,
 	currentTime = Date.now()
 ): boolean {
-	const expiryTime = new Date(issuedAt).getTime() + expiresIn * 1000;
+	const expiryTime = dateJs(issuedAt).add(expiresIn, 'seconds').valueOf();
+
+	console.log(
+		'Expiry Time:',
+		new Date(expiryTime).toISOString(),
+		'Current Time:',
+		new Date(currentTime).toISOString(),
+		'Is Valid:',
+		currentTime < expiryTime
+	);
+
 	return currentTime < expiryTime;
 }
 

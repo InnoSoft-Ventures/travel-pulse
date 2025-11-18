@@ -33,6 +33,7 @@ async function fetchUsage(iccid: string, token: string) {
 	return retryWithBackoff(async () => {
 		try {
 			const response = await APIRequest.get<AiraloUsagePayload>(url, {
+				baseURL: undefined,
 				headers: {
 					Accept: 'application/json',
 					Authorization: `Bearer ${token}`,

@@ -18,7 +18,7 @@ export function providerTokenHandler(transact: Transaction) {
 	return async (provider: ProviderIdentity) => {
 		const details = await findProvider(provider, transact);
 
-		const isValid = isTokenValid(details.createdAt, details.expiresIn);
+		const isValid = isTokenValid(details.issuedAt, details.expiresIn);
 
 		if (isValid) return details.accessToken;
 
