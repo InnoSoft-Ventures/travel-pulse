@@ -1,12 +1,9 @@
 import { Suspense } from 'react';
-import { CountryProduct, ResponseData } from '@travelpulse/interfaces';
-import { APIRequest } from '@travelpulse/api-service';
 
 import {
 	Hero,
 	Button,
 	Title,
-	DestinationCards,
 	SearchAndCalendar,
 	SectionCard,
 	Testimonial,

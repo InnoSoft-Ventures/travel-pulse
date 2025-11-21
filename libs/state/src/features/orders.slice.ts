@@ -16,6 +16,7 @@ import {
 	fetchOrders,
 	fetchOrderById,
 	createPaymentAttempt,
+	reInitiatePaymentAttempt,
 } from '../thunks/order.thunk';
 
 export interface OrdersState {
@@ -109,6 +110,20 @@ const ordersSlice = createSlice({
 			state.paymentAttempt.status = 'succeeded';
 		});
 		builder.addCase(createPaymentAttempt.rejected, (state, action) => {
+			state.paymentAttempt.status = 'failed';
+			state.paymentAttempt.error = action.payload as ErrorHandler;
+		});
+
+		// Re-initiate payment attempt
+		builder.addCase(reInitiatePaymentAttempt.pending, (state) => {
+			state.paymentAttempt.status = 'loading';
+			state.paymentAttempt.error = undefined;
+		});
+		builder.addCase(reInitiatePaymentAttempt.fulfilled, (state, action) => {
+			state.paymentAttempt.data = action.payload;
+			state.paymentAttempt.status = 'succeeded';
+		});
+		builder.addCase(reInitiatePaymentAttempt.rejected, (state, action) => {
 			state.paymentAttempt.status = 'failed';
 			state.paymentAttempt.error = action.payload as ErrorHandler;
 		});

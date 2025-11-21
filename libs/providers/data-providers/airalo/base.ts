@@ -1,15 +1,15 @@
-import { APIRequest } from '@travelpulse/api-service';
+import { RequestService } from '@travelpulse/api-service';
 
 export class AiraloBase {
 	private token: string = '';
-	public request: typeof APIRequest;
+	public request: ReturnType<typeof RequestService>;
 
 	public constructor(accessToken: string) {
-		this.request = APIRequest;
-
 		if (!accessToken) {
 			throw new Error('Airalo API token is missing');
 		}
+
+		this.request = RequestService();
 
 		this.token = accessToken;
 

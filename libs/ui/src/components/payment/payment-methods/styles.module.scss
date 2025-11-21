@@ -63,4 +63,17 @@
 .payButtonContainer {
 	max-width: 460px;
 	margin: 0 auto 20px;
+
+	&.evenSpacing {
+		justify-content: space-between;
+		display: flex;
+		margin: 0 0 20px;
+		width: 100%;
+		max-width: 100%;
+
+		> button {
+			max-width: 220px;
+			width: 100%;
+		}
+	}
 }

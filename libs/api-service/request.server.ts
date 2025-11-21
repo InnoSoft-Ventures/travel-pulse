@@ -3,7 +3,6 @@ import axios, {
 	AxiosError,
 	AxiosInstance,
 	AxiosRequestHeaders,
-	isAxiosError,
 	Method,
 } from 'axios';
 import { SERVICE } from './service-urls';
@@ -19,32 +18,7 @@ type RequestHeaders = Partial<
 >;
 
 class ApiService {
-	private static instance: AxiosInstance;
 	private static axiosInstances: { [key in SERVICE]?: AxiosInstance } = {};
-
-	public static request() {
-		if (!this.instance) {
-			// if local then baseURL = 'http://localhost:3000' otherwise get from service discovery
-			const baseURL = 'http://localhost:3000';
-
-			this.instance = axios.create({
-				baseURL,
-				timeout: 5000,
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json',
-					// Cookie: cookieHeader || '',
-				},
-				withCredentials: true,
-				validateStatus(status) {
-					return status !== 401 && status >= 200 && status < 500;
-				},
-				maxRedirects: 5,
-			});
-		}
-
-		return this.instance;
-	}
 
 	private static async getAxiosInstance(
 		service: SERVICE
@@ -212,6 +186,4 @@ class ApiService {
 	}
 }
 
-const APIRequest = ApiService.request();
-
-export { ApiService, APIRequest, AxiosError, isAxiosError };
+export { ApiService };

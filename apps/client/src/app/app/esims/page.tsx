@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { ActivityLog, ESimTabs } from '@travelpulse/ui';
+import { ESimTabs } from '@travelpulse/ui';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
 
 import { fetchSims } from '@travelpulse/ui/thunks';
@@ -34,7 +34,7 @@ const ESimsPage = () => {
 				<ESimTabs sims={list} />
 			)}
 
-			<ActivityLog />
+			{/* <ActivityLog /> */}
 		</div>
 	);
 };

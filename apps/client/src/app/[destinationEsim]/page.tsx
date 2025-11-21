@@ -8,7 +8,7 @@ import {
 	UIPlanType,
 	type Country,
 } from '@travelpulse/interfaces';
-import { APIRequest } from '@travelpulse/api-service';
+import { RequestService } from '@travelpulse/api-service';
 
 async function fetchData(info: {
 	target: UIPlanType;
@@ -16,7 +16,7 @@ async function fetchData(info: {
 }): Promise<Country | Continent | null> {
 	switch (info.target) {
 		case UIPlanType.Local: {
-			const res = await APIRequest.get<ResponseData<Country[]>>(
+			const res = await RequestService().get<ResponseData<Country[]>>(
 				`/api/data/countries/search?query=${info.slug}&matchType=exact`
 			);
 
@@ -29,7 +29,7 @@ async function fetchData(info: {
 			return data[0] || null;
 		}
 		default: {
-			const res = await APIRequest.get<ResponseData<Continent>>(
+			const res = await RequestService().get<ResponseData<Continent>>(
 				`/api/data/regions/${info.slug}`
 			);
 

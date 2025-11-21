@@ -1,4 +1,4 @@
-import { Transaction } from 'sequelize';
+import { Op, Transaction } from 'sequelize';
 import PaymentCard, {
 	PaymentCardCreationAttributes,
 } from '../../db/models/PaymentCard';
@@ -8,35 +8,50 @@ import dbConnect from '../../db';
 
 export async function saveCardDetails(
 	cardDetails: PaymentCardCreationAttributes,
-	transact: Transaction
+	transaction: Transaction
 ) {
-	if (!cardDetails || !cardDetails.reusable) return;
+	if (!cardDetails?.reusable) return;
 
-	// Set previous card to non-default as new is set to default
-	await PaymentCard.update(
-		{ default: false },
-		{
-			where: { userId: cardDetails.userId, default: true },
-			transaction: transact,
-		}
-	);
+	const identity = {
+		userId: cardDetails.userId,
+		provider: cardDetails.provider,
+		last4: cardDetails.last4,
+		signature: cardDetails.signature ?? null,
+	};
 
-	// Upsert by userId + provider + last4 (+exp if available)
-	const [record] = await PaymentCard.findOrCreate({
-		where: {
-			userId: cardDetails.userId,
-			provider: cardDetails.provider,
-			last4: cardDetails.last4,
-			authorizationCode: cardDetails.authorizationCode,
-		},
-		defaults: cardDetails as any,
-		transaction: transact,
+	// Step 1: get or create the card
+	const [card, created] = await PaymentCard.findOrCreate({
+		where: identity,
+		defaults: cardDetails,
+		transaction,
 	});
 
-	// Update changing fields (e.g., authorization code) if already exists
-	await record.update(cardDetails, {
-		transaction: transact,
-	});
+	// Prepare fields we actually want to update (avoid mutating identity)
+	const { userId, provider, last4, signature, ...updatable } = cardDetails;
+
+	// Step 2: handle default logic AFTER we know the card id
+	if (cardDetails.default) {
+		// Clear default only on *other* cards
+		await PaymentCard.update(
+			{ default: false },
+			{
+				where: {
+					userId: cardDetails.userId,
+					id: { [Op.ne]: card.id },
+					default: true,
+				},
+				transaction,
+			}
+		);
+
+		// Ensure this card is default
+		updatable.default = true;
+	}
+
+	// Step 3: update existing card if needed
+	if (!created) {
+		await card.update(updatable, { transaction });
+	}
 }
 
 export async function getUserPaymentCards(

@@ -52,7 +52,7 @@ importers:
         version: 12.7.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next:
         specifier: 14.2.11
-        version: 14.2.11(@babel/core@7.25.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.80.3)
+        version: 14.2.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.80.3)
       react:
         specifier: ^18
         version: 18.3.1
@@ -237,15 +237,15 @@ importers:
       '@reduxjs/toolkit':
         specifier: ^2.2.3
         version: 2.6.1(react-redux@9.2.0(@types/react@19.1.0)(react@19.1.0)(redux@5.0.1))(react@19.1.0)
+      '@travelpulse/api-service':
+        specifier: workspace:^
+        version: link:../api-service
       '@travelpulse/interfaces':
         specifier: workspace:^
         version: link:../interfaces
       '@travelpulse/utils':
         specifier: workspace:^
         version: link:../util
-      axios:
-        specifier: ^1.7.2
-        version: 1.7.7
       react-redux:
         specifier: ^9.1.0
         version: 9.2.0(@types/react@19.1.0)(react@19.1.0)(redux@5.0.1)
@@ -330,7 +330,7 @@ importers:
         version: 0.487.0(react@18.3.1)
       next:
         specifier: 14.2.11
-        version: 14.2.11(react-dom@19.1.0(react@18.3.1))(react@18.3.1)(sass@1.80.3)
+        version: 14.2.11(@babel/core@7.25.2)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)(sass@1.80.3)
       react:
         specifier: ^18
         version: 18.3.1
@@ -17809,7 +17809,7 @@ snapshots:
 
   next-tick@1.1.0: {}
 
-  next@14.2.11(@babel/core@7.25.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.80.3):
+  next@14.2.11(@babel/core@7.25.2)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)(sass@1.80.3):
     dependencies:
       '@next/env': 14.2.11
       '@swc/helpers': 0.5.5
@@ -17818,7 +17818,7 @@ snapshots:
       graceful-fs: 4.2.11
       postcss: 8.4.31
       react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
+      react-dom: 19.1.0(react@18.3.1)
       styled-jsx: 5.1.1(@babel/core@7.25.2)(react@18.3.1)
     optionalDependencies:
       '@next/swc-darwin-arm64': 14.2.11
@@ -17835,7 +17835,7 @@ snapshots:
       - '@babel/core'
       - babel-plugin-macros
 
-  next@14.2.11(react-dom@19.1.0(react@18.3.1))(react@18.3.1)(sass@1.80.3):
+  next@14.2.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.80.3):
     dependencies:
       '@next/env': 14.2.11
       '@swc/helpers': 0.5.5
@@ -17844,7 +17844,7 @@ snapshots:
       graceful-fs: 4.2.11
       postcss: 8.4.31
       react: 18.3.1
-      react-dom: 19.1.0(react@18.3.1)
+      react-dom: 18.3.1(react@18.3.1)
       styled-jsx: 5.1.1(@babel/core@7.25.2)(react@18.3.1)
     optionalDependencies:
       '@next/swc-darwin-arm64': 14.2.11

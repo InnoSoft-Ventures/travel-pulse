@@ -88,11 +88,7 @@ export const PaymentCardSelector = ({
 											) || null
 										)
 									}
-									className={cn(
-										cards.length >= 3
-											? 'grid gap-4 sm:grid-cols-2 lg:grid-cols-3'
-											: 'flex flex-col gap-4'
-									)}
+									className="flex flex-col gap-4"
 								>
 									{cards.map((card) => {
 										const value = String(card.id);

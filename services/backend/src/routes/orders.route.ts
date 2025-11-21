@@ -12,6 +12,7 @@ import {
 import {
 	chargePaymentCard,
 	createPaymentAttempt,
+	reInitiatePaymentAttempt,
 } from '../controllers/payment.controller';
 import { PaymentAttemptSchema } from '@travelpulse/interfaces/schemas';
 
@@ -31,6 +32,11 @@ router.post(
 	'/:orderId/payments/:paymentId/charge',
 	validateData(ChargeAuthorizationSchema),
 	errorHandler(chargePaymentCard)
+);
+
+router.post(
+	'/:orderId/payments/re-initiate-attempt',
+	errorHandler(reInitiatePaymentAttempt)
 );
 
 export default router;

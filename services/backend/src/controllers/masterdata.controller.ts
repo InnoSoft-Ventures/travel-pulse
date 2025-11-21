@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { APIRequest } from '@travelpulse/api-service';
+import { RequestService } from '@travelpulse/api-service';
 import dbConnect from '../db';
 import { QueryTypes } from 'sequelize';
 import Continent from '../db/models/Continent';
@@ -212,7 +212,7 @@ export const processCountries = async (_req: Request, res: Response) => {
 			console.log('Fetching countries data from the API');
 
 			// Call the service to process the countries data
-			const result = await APIRequest.get(
+			const result = await RequestService().get(
 				'https://restcountries.com/v3.1/all'
 			);
 			data = result.data as (typeof S)[];

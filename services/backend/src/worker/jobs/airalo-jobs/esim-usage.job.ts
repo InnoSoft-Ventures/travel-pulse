@@ -2,7 +2,11 @@ import Bottleneck from 'bottleneck';
 import { Op, Transaction } from 'sequelize';
 import Sim, { SimAttributes } from '../../../db/models/Sims';
 import { ProviderIdentity, SimStatus } from '@travelpulse/interfaces';
-import { APIRequest, AxiosError, isAxiosError } from '@travelpulse/api-service';
+import {
+	RequestService,
+	AxiosError,
+	isAxiosError,
+} from '@travelpulse/api-service';
 
 import {
 	AIRALO_USAGE_ENDPOINT,
@@ -32,12 +36,10 @@ async function fetchUsage(iccid: string, token: string) {
 
 	return retryWithBackoff(async () => {
 		try {
-			const response = await APIRequest.get<AiraloUsagePayload>(url, {
+			const response = await RequestService(
+				token
+			).get<AiraloUsagePayload>(url, {
 				baseURL: undefined,
-				headers: {
-					Accept: 'application/json',
-					Authorization: `Bearer ${token}`,
-				},
 				timeout: 15000,
 			});
 

@@ -1,4 +1,4 @@
-import { APIRequest } from '@travelpulse/api-service';
+import { RequestService } from '@travelpulse/api-service';
 import { ProviderIdentity } from '@travelpulse/interfaces';
 
 export interface ProviderAuthCredentials {
@@ -8,11 +8,11 @@ export interface ProviderAuthCredentials {
 }
 
 export class ProviderAuthenticate {
-	private request: typeof APIRequest;
+	private request: ReturnType<typeof RequestService>;
 	private static instance: ProviderAuthenticate;
 
 	constructor() {
-		this.request = APIRequest;
+		this.request = RequestService();
 	}
 
 	// Singleton Pattern - ensures only one instance is created

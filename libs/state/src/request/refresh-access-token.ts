@@ -1,4 +1,5 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosBare, AxiosResponse } from '@travelpulse/api-service/request';
+
 // import { BASE_API_URL } from './config';
 
 let refreshPromise: Promise<AxiosResponse<string> | null> | null = null;
@@ -9,7 +10,7 @@ export async function refreshAccessToken(): Promise<AxiosResponse<string> | null
 	refreshing = true;
 
 	// Use a bare axios instance to avoid interceptors recursion
-	const bare = axios.create({
+	const bare = AxiosBare.create({
 		// baseURL: BASE_API_URL,
 		withCredentials: true,
 		timeout: 10000,

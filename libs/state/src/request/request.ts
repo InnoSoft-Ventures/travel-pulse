@@ -1,9 +1,14 @@
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 // import { BASE_API_URL } from './config';
 import { logoutUser } from '../thunks/auth.thunk';
 import { setUser } from '../features/user.slice';
 import { ResponseData, UserDataDAO } from '@travelpulse/interfaces';
 import { storeRef } from '@travelpulse/state';
+
+import {
+	RequestService,
+	AxiosError,
+	AxiosRequestConfig,
+} from '@travelpulse/api-service/request';
 
 interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {
 	_retry?: boolean;
@@ -15,21 +20,7 @@ type RefreshSubscriber = (success: boolean) => void;
 // const cookieStore = cookies();
 // const cookieHeader = cookieStore.toString() || undefined;
 
-const axiosInstance = axios.create({
-	// baseURL: BASE_API_URL,
-	timeout: 5000,
-	headers: {
-		Accept: 'application/json',
-		'Content-Type': 'application/json',
-		// Cookie: cookieHeader || '',
-	},
-	withCredentials: true,
-	validateStatus(status) {
-		return status !== 401 && status >= 200 && status < 500;
-	},
-});
-
-axiosInstance.interceptors.request.use((config) => config);
+const axiosInstance = RequestService();
 
 let refreshInProgress = false;
 let refreshSubscribers: RefreshSubscriber[] = [];

@@ -1,4 +1,4 @@
-import { APIRequest } from '@travelpulse/api-service';
+import { RequestService } from '@travelpulse/api-service';
 
 interface PaystackInitParams {
 	email: string;
@@ -70,14 +70,9 @@ export async function initPaystackOneTimePayment(
 	if (params.reference) payload.reference = params.reference;
 	if (params.callbackUrl) payload.callback_url = params.callbackUrl;
 
-	const response = await APIRequest.post<PaystackInitResponse>(
+	const response = await RequestService(secretKey).post<PaystackInitResponse>(
 		`${apiUrl}/transaction/initialize`,
-		payload,
-		{
-			headers: {
-				Authorization: `Bearer ${secretKey}`,
-			},
-		}
+		payload
 	);
 
 	if (!response.data.status || !response.data.data) {
@@ -116,14 +111,9 @@ export async function chargePayStackReusableCard(
 	if (params.reference) payload.reference = params.reference;
 	if (params.callbackUrl) payload.callback_url = params.callbackUrl;
 
-	const response = await APIRequest.post<PaystackInitResponse>(
+	const response = await RequestService(secretKey).post<PaystackInitResponse>(
 		`${apiUrl}/transaction/charge_authorization`,
-		payload,
-		{
-			headers: {
-				Authorization: `Bearer ${secretKey}`,
-			},
-		}
+		payload
 	);
 
 	if (!response.data.status || !response.data.data) {

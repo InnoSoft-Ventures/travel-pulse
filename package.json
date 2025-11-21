@@ -3,8 +3,8 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"dev:all": "concurrently -n API,WORKER -c green,yellow \"npm run server:dev\" \"npm run worker:dev\"",
 		"web:dev": "pnpm run --filter @travel-pulse/client dev",
+		"server:all": "concurrently -n API,WORKER -c green,yellow \"npm run server:dev\" \"npm run worker:dev\"",
 		"server:dev": "pnpm run --filter @travel-pulse/api dev",
 		"server:start": "pnpm run --filter @travel-pulse/api start",
 		"server:build": "pnpm run --filter @travel-pulse/api build",

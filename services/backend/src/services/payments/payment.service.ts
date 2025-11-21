@@ -21,6 +21,58 @@ import PaymentCard from '../../db/models/PaymentCard';
 import User from '../../db/models/User';
 
 /**
+ * Re-initiate payment attempt for an order using the latest attempt.
+ */
+export const reInitiatePaymentAttemptService = async (
+	req: SessionRequest
+): Promise<PaymentAttemptResponse | null> => {
+	const { accountId: userId } = req.user;
+	const { orderId } = req.params;
+
+	try {
+		const paymentAttempt = await PaymentAttempt.findOne({
+			where: {
+				orderId,
+				userId,
+			},
+			order: [['createdAt', 'DESC']],
+		});
+
+		if (!paymentAttempt) {
+			return null;
+		}
+
+		let session: PaymentAttemptResponse['session'] = {};
+
+		if (paymentAttempt.metadata) {
+			session.metadata = paymentAttempt.metadata;
+		}
+
+		if (paymentAttempt.redirectUrl) {
+			session.redirectUrl = paymentAttempt.redirectUrl;
+		}
+
+		if (paymentAttempt.referenceId) {
+			session.providerReference = paymentAttempt.referenceId;
+		}
+
+		return {
+			paymentId: paymentAttempt.id,
+			orderId: paymentAttempt.orderId,
+			status: paymentAttempt.status,
+			amount: paymentAttempt.amount,
+			currency: paymentAttempt.currency,
+			provider: paymentAttempt.provider,
+			method: paymentAttempt.method,
+			session,
+		};
+	} catch (error) {
+		console.error('Failed to get latest payment attempt:', error);
+		throw new InternalException(SOMETHING_WENT_WRONG, error);
+	}
+};
+
+/**
  * Create payment attempt for an order.
  * @returns
  */

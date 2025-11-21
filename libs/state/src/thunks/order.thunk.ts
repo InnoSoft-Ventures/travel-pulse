@@ -151,6 +151,38 @@ export const createPaymentAttempt = createAsyncThunk<
 	}
 });
 
+export const reInitiatePaymentAttempt = createAsyncThunk<
+	PaymentAttemptResponse,
+	{
+		orderId: number;
+	}
+>('orders/reInitiatePaymentAttempt', async (payload, thunkAPI) => {
+	try {
+		const { orderId } = payload;
+
+		const response = await ApiService.post<
+			ResponseData<PaymentAttemptResponse>
+		>(`/api/orders/${orderId}/payments/re-initiate-attempt`);
+
+		const results = response.data;
+
+		if (!results.success) {
+			return thunkAPI.rejectWithValue(
+				errorHandler(results, 'Failed to re-initiate payment attempt')
+			);
+		}
+
+		return results.data;
+	} catch (error) {
+		return thunkAPI.rejectWithValue(
+			errorHandler(
+				error,
+				'Unexpected error re-initiating payment attempt'
+			)
+		);
+	}
+});
+
 export const chargePaymentCardThunk = createAsyncThunk<
 	boolean,
 	{

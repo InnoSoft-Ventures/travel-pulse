@@ -3,6 +3,7 @@ import { SessionRequest } from '../../types/express';
 import {
 	chargePaymentCardService,
 	createPaymentAttemptService,
+	reInitiatePaymentAttemptService,
 } from '../services/payments/payment.service';
 import { HTTP_STATUS_CODES, successResponse } from '@travelpulse/middlewares';
 
@@ -14,6 +15,17 @@ export const createPaymentAttempt = async (
 
 	res.status(HTTP_STATUS_CODES.CREATED).json(
 		successResponse(paymentAttempt, 'Payment attempt created')
+	);
+};
+
+export const reInitiatePaymentAttempt = async (
+	req: SessionRequest,
+	res: Response
+) => {
+	const paymentAttempt = await reInitiatePaymentAttemptService(req);
+
+	res.status(HTTP_STATUS_CODES.OK).json(
+		successResponse(paymentAttempt, 'Latest payment attempt retrieved')
 	);
 };
 

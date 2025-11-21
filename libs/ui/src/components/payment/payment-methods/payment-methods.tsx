@@ -10,15 +10,24 @@ import {
 	chargePaymentCardThunk,
 	createOrder,
 	createPaymentAttempt,
+	reInitiatePaymentAttempt,
 } from '@travelpulse/state/thunks';
 import PaymentModal from '../payment-modal';
-import { PaymentCardPayload, PaymentMethod } from '@travelpulse/interfaces';
+import {
+	OrderStatus,
+	PaymentCardPayload,
+	PaymentMethod,
+} from '@travelpulse/interfaces';
 import { launchPaymentProvider } from './payment-provider-launcher';
+import { cn } from '../../../utils';
 
 interface PaymentMethodsProps {
-	currency: string;
+	currency?: string;
 	hasItems: boolean;
-	total: number;
+	total: number | string;
+	orderId?: number;
+	onCancel?: () => void;
+	orderStatus?: OrderStatus;
 }
 
 // Enable pay button only if:
@@ -28,6 +37,9 @@ export const PaymentMethods = ({
 	currency,
 	hasItems,
 	total,
+	onCancel,
+	orderId,
+	orderStatus,
 }: PaymentMethodsProps) => {
 	const [selectedMethod, setSelectedMethod] = useState<PaymentMethod | null>(
 		'card'
@@ -62,27 +74,49 @@ export const PaymentMethods = ({
 		);
 	}, [selectedMethod, isEsimCompatible]);
 
-	const submitOrder = async (e: React.FormEvent) => {
+	async function processPaymentAttempt(orderId: number) {
+		const existingOrder = !!orderId;
+		// Determine provider + method based on selection
+		const provider = selectedMethod === 'paypal' ? 'paypal' : 'paystack';
+
+		// Trigger payment processing for existing order if status = PROCESSING_PAYMENT
+		if (orderStatus === OrderStatus.PROCESSING_PAYMENT && existingOrder) {
+			// Fetch existing payment attempt for order
+			return await dispatch(
+				reInitiatePaymentAttempt({
+					orderId,
+				})
+			).unwrap();
+		}
+
+		return await dispatch(
+			createPaymentAttempt({
+				orderId,
+				provider: provider,
+				method: selectedMethod as PaymentMethod,
+				currency: 'ZAR', // adjust per selected currency mapping
+			})
+		).unwrap();
+	}
+
+	const processPayment = async (e: React.FormEvent) => {
 		e.preventDefault();
 
 		try {
-			const order = await dispatch(createOrder()).unwrap();
+			let currentOrderId = orderId;
+
+			// If no orderId provided, create a new order first
+			if (!currentOrderId) {
+				const order = await dispatch(createOrder()).unwrap();
+				currentOrderId = order.orderId;
+			}
 
 			// Open processing modal
 			setShowProcessingModal(true);
 
-			// Determine provider + method based on selection
-			const provider =
-				selectedMethod === 'paypal' ? 'paypal' : 'paystack';
-
-			const paymentAttempt = await dispatch(
-				createPaymentAttempt({
-					orderId: order.orderId,
-					provider: provider,
-					method: selectedMethod as PaymentMethod,
-					currency: 'ZAR', // adjust per selected currency mapping
-				})
-			).unwrap();
+			// If existing order and its status = PROCESSING_PAYMENT, re-initiate payment attempt
+			// otherwise, create new payment attempt
+			const paymentAttempt = await processPaymentAttempt(currentOrderId);
 
 			// Check if paying with saved card or new card
 			if (selectedCard) {
@@ -91,7 +125,7 @@ export const PaymentMethods = ({
 				const chargeResponse = await dispatch(
 					chargePaymentCardThunk({
 						paymentAttemptId: paymentAttempt.paymentId,
-						orderId: order.orderId,
+						orderId: currentOrderId,
 						paymentCardId: selectedCard.id,
 					})
 				).unwrap();
@@ -173,15 +207,26 @@ export const PaymentMethods = ({
 				</ul>
 			</div>
 
-			<div className={styles.payButtonContainer}>
+			<div
+				className={cn(
+					styles.payButtonContainer,
+					onCancel ? styles.evenSpacing : ''
+				)}
+			>
+				{onCancel && (
+					<Button size="lg" variant="outline" onClick={onCancel}>
+						Cancel
+					</Button>
+				)}
+
 				<Button
 					size="lg"
-					fullWidth
+					fullWidth={!onCancel}
 					id="payment-button"
 					type="button"
 					isLoading={status === 'loading'}
 					disabled={!isPayButtonEnabled || !hasItems}
-					onClick={submitOrder}
+					onClick={processPayment}
 				>
 					Pay {currency}
 					{total}

@@ -1,14 +1,14 @@
 import { Title, DestinationCards } from '@travelpulse/ui';
 import styles from './home.module.scss';
 import { CountryProduct, ResponseData } from '@travelpulse/interfaces';
-import { APIRequest } from '@travelpulse/api-service';
+import { RequestService } from '@travelpulse/api-service';
 import { PopularDestinationsClient } from './home-page-client';
 
 const POPULAR_DESTINATION_SIZE = 6;
 const MULTIPLE_REGION_SIZE = 8;
 
 async function fetchPopularDestinations() {
-	const response = await APIRequest.get<ResponseData<CountryProduct[]>>(
+	const response = await RequestService().get<ResponseData<CountryProduct[]>>(
 		'/api/products/popular-destinations',
 		{
 			params: {
@@ -29,7 +29,7 @@ async function fetchPopularDestinations() {
 }
 
 async function fetchMultipleRegions() {
-	const response = await APIRequest.get<ResponseData<CountryProduct[]>>(
+	const response = await RequestService().get<ResponseData<CountryProduct[]>>(
 		'/api/products/regions',
 		{
 			params: {
