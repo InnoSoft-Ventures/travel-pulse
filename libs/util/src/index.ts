@@ -6,3 +6,4 @@ export * from './getPlanServices';
 export * from './toast';
 export * from './strings';
 export * from './numbers';
+export * from './initials';

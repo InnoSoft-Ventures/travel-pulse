@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { useEffect } from 'react';
-import Image from 'next/image';
-import { Button, Input, Title } from '@travelpulse/ui';
+import { Button, Input, Title, Avatar } from '@travelpulse/ui';
 import { FormCountryPicker } from '@travelpulse/ui';
 import { Country } from '@travelpulse/interfaces';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
@@ -27,6 +26,7 @@ export const AccountInformation = () => {
 		formSubmit,
 		formState: { errors },
 		control,
+		getValues,
 	} = useForm(UpdateProfileInputSchema, {
 		mode: 'all',
 		defaultValues: {
@@ -128,15 +128,16 @@ export const AccountInformation = () => {
 						</div>
 
 						<div className="flex flex-col gap-6 justify-between">
-							<div className="w-[150px] h-[150px] rounded-full overflow-hidden shadow">
-								<Image
-									src="https://randomuser.me/api/portraits/men/25.jpg"
-									alt="Profile"
-									width={150}
-									height={150}
-									className="object-cover"
-								/>
-							</div>
+							<Avatar
+								alt={`${user.firstName} ${user.lastName}`}
+								firstName={
+									getValues('firstName') || user.firstName
+								}
+								lastName={
+									getValues('lastName') || user.lastName
+								}
+								size={150}
+							/>
 						</div>
 					</div>
 				</div>

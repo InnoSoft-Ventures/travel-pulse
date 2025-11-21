@@ -37,7 +37,8 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({
 				>
 					<button type="button">
 						<UserProfile
-							name={account.firstName}
+							firstName={account.firstName}
+							lastName={account.lastName}
 							avatarUrl={account.picture}
 						/>
 					</button>

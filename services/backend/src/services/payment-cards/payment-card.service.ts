@@ -27,7 +27,8 @@ export async function saveCardDetails(
 	});
 
 	// Prepare fields we actually want to update (avoid mutating identity)
-	const { userId, provider, last4, signature, ...updatable } = cardDetails;
+	const { userId, provider, last4, signature, accountName, ...updatable } =
+		cardDetails;
 
 	// Step 2: handle default logic AFTER we know the card id
 	if (cardDetails.default) {
