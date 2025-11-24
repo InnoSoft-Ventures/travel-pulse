@@ -9,7 +9,7 @@ import {
 	CountryProduct,
 	PackageInterface,
 } from '@travelpulse/interfaces';
-import { PlanCard } from '../../plan-card';
+import { PlanCard, PlanCardSkeleton } from '../../plan-card';
 import { PlanDetailModal } from '../../plan-detail-modal';
 import { cn } from '../../../utils';
 import { useAppSelector } from '@travelpulse/state';
@@ -112,9 +112,11 @@ function DestinationCards(props: DestinationCardsProps) {
 			)}
 
 			{isLoading && (
-				<div className={styles.loadingContainer}>
-					<div className={styles.loadingText}>Loading...</div>
-				</div>
+				<>
+					{Array.from({ length: 6 }).map((_, idx) => (
+						<PlanCardSkeleton key={`plan-${idx}`} />
+					))}
+				</>
 			)}
 
 			{!isLoading && data.length === 0 && (

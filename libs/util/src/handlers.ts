@@ -30,3 +30,11 @@ export const createInitialItemState = <T>(initialData: T): ItemState<T> => ({
 	status: 'idle',
 	error: undefined,
 });
+
+export function elementScrollTo(elementId: string) {
+	const element = document.getElementById(elementId);
+
+	if (element) {
+		element.scrollIntoView({ behavior: 'smooth' });
+	}
+}

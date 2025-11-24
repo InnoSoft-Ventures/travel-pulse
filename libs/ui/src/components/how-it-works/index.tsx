@@ -7,6 +7,7 @@ import MapIcon from '../../assets/map.svg';
 import QRcodeIcon from '../../assets/qr-code.svg';
 import NetworkIcon from '../../assets/network.svg';
 import { cn } from '../../utils';
+import Link from 'next/link';
 
 interface HowItWorksProps {
 	className?: string;
@@ -46,6 +47,8 @@ export const HowItWorks = ({ className, destinationName }: HowItWorksProps) => {
 					<Button
 						variant="secondary"
 						className={styles.AllDestinations}
+						as={Link}
+						href="/destinations/local"
 					>
 						View all destinations
 					</Button>

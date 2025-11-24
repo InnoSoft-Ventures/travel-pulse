@@ -33,9 +33,9 @@ export const ESimTabs = ({ sims }: ESimTabsProps) => {
 		router.push(`/app/esims/${sim.id}`);
 	};
 
-	// const onInstallShare = (simId: string) => {
-	//   console.log(`Install/share flow for SIM ${simId}`);
-	// };
+	const onInstallShare = (simId: number) => {
+		router.push(`/app/esims/${simId}#connect`);
+	};
 
 	// const onToggleRenew = (simId: string, next: boolean) => {
 	//   console.log(`Auto-renew for ${simId}: ${next}`);
@@ -51,7 +51,7 @@ export const ESimTabs = ({ sims }: ESimTabsProps) => {
 						data={sim}
 						onRecharge={() => onRecharge(sim.id)}
 						onViewDetails={() => onViewDetails(sim)}
-						// onInstallShare={() => onInstallShare(sim.id)}
+						onInstallShare={() => onInstallShare(sim.id)}
 						// onToggleRenew={(next) => onToggleRenew(sim.id, next)}
 					/>
 				))}
@@ -64,7 +64,7 @@ export const ESimTabs = ({ sims }: ESimTabsProps) => {
 
 	return (
 		<div className="space-y-6">
-			<Tabs defaultValue="active" className="space-y-6">
+			<Tabs defaultValue="all" className="space-y-6">
 				<TabsList className="grid max-w-2xl grid-cols-3 h-auto">
 					<TabsTrigger
 						value="all"

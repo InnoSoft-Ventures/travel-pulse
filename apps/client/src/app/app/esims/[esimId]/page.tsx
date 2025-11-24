@@ -9,7 +9,7 @@ import { Switch } from '@heroui/switch';
 import styles from './styles.module.scss';
 import { SIMDetails, SuccessResponse } from '@travelpulse/interfaces';
 import Link from 'next/link';
-import { toast } from '@travelpulse/utils';
+import { elementScrollTo, toast } from '@travelpulse/utils';
 import { fetchSimDetails } from '@travelpulse/ui/thunks';
 
 export default function EsimDetailsPage() {
@@ -33,12 +33,16 @@ export default function EsimDetailsPage() {
 	useEffect(() => {
 		if (!esimId) return;
 
+		if (window.location.hash === '#connect') {
+			elementScrollTo('connect-share');
+		}
+
 		dispatch(fetchSimDetails({ simId: esimId }));
 	}, [esimId]);
 
-	if (status === 'loading') {
-		return <div>Loading details…</div>;
-	}
+	// if (status === 'loading') {
+	// 	return <div>Loading details…</div>;
+	// }
 
 	if (error || !sim) {
 		return <div>Error: {error?.toString() || 'Not found'}</div>;
@@ -276,7 +280,7 @@ export default function EsimDetailsPage() {
 				</section>
 
 				{/* Installation */}
-				<section className={styles.actionsSection}>
+				<section className={styles.actionsSection} id="connect-share">
 					<h2 className={styles.sectionTitle}>Install your eSIM</h2>
 					<div className={styles.installGrid}>
 						{sim.qrcodeUrl ? (
@@ -531,33 +535,6 @@ export default function EsimDetailsPage() {
         </div>
       )} */}
 
-				{/* Actions / Connect / Install */}
-				<section className={styles.actionsSection}>
-					<h2 className={styles.sectionTitle}>Actions</h2>
-					<div className={styles.actionRow}>
-						<Button
-							onClick={() => {
-								/* install / share */
-							}}
-						>
-							Install / Share
-						</Button>
-						<Button
-							variant="outline"
-							onClick={() => {
-								/* show connect instructions */
-							}}
-						>
-							Connect instructions
-						</Button>
-						{/* {sim.canDeactivate && (
-            <Button variant="danger" onClick={() => {}}>
-              Deactivate
-            </Button>
-          )} */}
-					</div>
-				</section>
-
 				{/* Auto-renew */}
 				<section className={styles.renewSection}>
 					<h2 className={styles.sectionTitle}>Auto-renewal</h2>
@@ -614,7 +591,7 @@ export default function EsimDetailsPage() {
 				<div className={styles.stickyInner}>
 					<Button
 						onClick={() => {
-							/* install / share */
+							elementScrollTo('connect-share');
 						}}
 					>
 						Install / Share

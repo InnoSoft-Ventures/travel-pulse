@@ -24,7 +24,7 @@ import {
 } from '@travelpulse/ui/thunks';
 import { redirect, useRouter } from 'next/navigation';
 import { destinationCopy, DestinationType } from '../destinationCopy';
-import EsimDetailsPage from '../../app/esims/[esimId]/page';
+import { elementScrollTo } from '@travelpulse/utils';
 
 interface DestinationPageProps {
 	params: { destination: 'local' | 'regional' | 'global' };
@@ -63,6 +63,35 @@ const DestinationsPage = ({ params }: DestinationPageProps) => {
 
 	const dispatch = useAppDispatch();
 
+	function onViewAll() {
+		setViewAll(true);
+
+		if (destination === 'local') {
+			dispatch(getCountries(''));
+			return;
+		}
+	}
+
+	useEffect(() => {
+		// scroll to destination section if coming from plan tabs
+		const hash = window.location.hash;
+
+		if (hash === '#destination') {
+			const element = document.getElementById('destination-section');
+
+			if (element) {
+				element.scrollIntoView({ behavior: 'smooth' });
+
+				onViewAll();
+
+				// Remove hash without affecting browser history
+				setTimeout(() => {
+					router.replace(window.location.pathname, { scroll: false });
+				}, 1000);
+			}
+		}
+	}, []);
+
 	useEffect(() => {
 		if (popularDestinations.list.length === 0) {
 			dispatch(getPopularDestinations({ size: 6 }));
@@ -88,15 +117,6 @@ const DestinationsPage = ({ params }: DestinationPageProps) => {
 		});
 	};
 
-	function onViewAll() {
-		setViewAll(true);
-
-		if (destination === 'local') {
-			dispatch(getCountries(''));
-			return;
-		}
-	}
-
 	let data: CountryPackageType = [];
 
 	switch (destination) {
@@ -120,6 +140,7 @@ const DestinationsPage = ({ params }: DestinationPageProps) => {
 		<>
 			<DestinationHeader
 				title="Discover the power of International eSIM"
+				enableSearch={false}
 				subTitle="Explore the world without losing connection. Choose from hundreds of data plans and enjoy fast, seamless eSIM connectivity tailored for travelers and digital nomads."
 			/>
 			<main className={styles.destinationMain}>
@@ -146,11 +167,17 @@ const DestinationsPage = ({ params }: DestinationPageProps) => {
 					{copy.subtitle}
 				</Title>
 
-				<div className={styles.planTabsContainer}>
+				<div
+					className={styles.planTabsContainer}
+					id="destination-title"
+				>
 					<PlanTabs onChange={onTabClick} activePlan={currentTab} />
 				</div>
 
-				<div className={styles.popularDestinationContainer}>
+				<div
+					className={styles.popularDestinationContainer}
+					id="destination-section"
+				>
 					<Title size="size20">{copy.sectionTitle}</Title>
 					<DestinationCards
 						data={data}
@@ -186,7 +213,12 @@ const DestinationsPage = ({ params }: DestinationPageProps) => {
 					</Title>
 
 					<div className={styles.getStartedBtnContainer}>
-						<Button size="lg">Get your eSIM now</Button>
+						<Button
+							size="lg"
+							onClick={() => elementScrollTo('destination-title')}
+						>
+							Get your eSIM now
+						</Button>
 					</div>
 				</div>
 			</main>

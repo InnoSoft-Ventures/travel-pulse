@@ -6,10 +6,23 @@
 	.dashboardContainer {
 		display: grid;
 		grid-template-columns: 1fr 389px;
+		grid-template-rows: auto auto;
+		grid-auto-rows: min-content;
 		column-gap: 50px;
+		grid-template-areas:
+			'box1 box2'
+			'box3 box4';
+
+		.myEsims {
+			grid-area: box3;
+		}
 
 		.dataUsageChartContainer {
-			@apply bg-white rounded-lg shadow-sm filter drop-shadow;
+			grid-area: box1;
+
+			> div {
+				@apply bg-white rounded-lg shadow-sm filter drop-shadow;
+			}
 		}
 
 		.dataUsageChartTitle {
@@ -19,6 +32,7 @@
 
 		.dashboardRightContainer {
 			max-width: 389px;
+			grid-area: box2;
 
 			> div {
 				display: flex;

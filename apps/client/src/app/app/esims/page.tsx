@@ -12,7 +12,7 @@ const ESimsPage = () => {
 	const { status, error, list } = sims;
 
 	useEffect(() => {
-		dispatch(fetchSims());
+		dispatch(fetchSims({}));
 	}, []);
 
 	return (

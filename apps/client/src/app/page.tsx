@@ -22,6 +22,7 @@ import {
 	PopularDestinationsSection,
 	MultipleRegionsSection,
 } from './home-page-server';
+import Link from 'next/link';
 
 export default async function HomePage() {
 	return (
@@ -110,6 +111,8 @@ export default async function HomePage() {
 							<Button
 								variant="outline"
 								className={styles.seeAllBtn}
+								as={Link}
+								href="/destinations/local#destination"
 							>
 								See all 200+ countries
 							</Button>
@@ -156,7 +159,9 @@ export default async function HomePage() {
 							<div className="text-center">
 								<Button
 									variant="outline"
+									as={Link}
 									className={styles.seeAllBtn}
+									href="/destinations/regional#destination"
 								>
 									View all regions
 								</Button>

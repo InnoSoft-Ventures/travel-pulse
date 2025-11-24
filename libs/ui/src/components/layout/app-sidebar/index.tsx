@@ -2,7 +2,7 @@ import React from 'react';
 import {
 	Home,
 	Smartphone,
-	Bell,
+	// Bell,
 	Settings,
 	HelpCircle,
 	Package,
@@ -24,9 +24,9 @@ export function AppSidebar() {
 				<NavLink href="/app/esims" partialMatchValue="esims">
 					<Smartphone size={18} /> eSIM Management
 				</NavLink>
-				<NavLink href="/app/notifications">
+				{/* <NavLink href="/app/notifications">
 					<Bell size={18} /> Notifications
-				</NavLink>
+				</NavLink> */}
 				<NavLink href="/app/settings/orders" partialMatchValue="orders">
 					<Package size={18} /> Orders
 				</NavLink>

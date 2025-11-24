@@ -26,8 +26,8 @@ const DashboardPage = () => {
 	return (
 		<div className={styles.dashboardPage}>
 			<div className={styles.dashboardContainer}>
-				<div className={styles.dashboardLeftContainer}>
-					<div className={styles.dataUsageChartContainer}>
+				<div className={styles.dataUsageChartContainer}>
+					<div>
 						<Title
 							size="size19"
 							className={styles.dataUsageChartTitle}
@@ -42,35 +42,17 @@ const DashboardPage = () => {
 							gradientEnd="#FFFFFF"
 						/>
 					</div>
-
-					<MyESims
-						sims={[
-							{
-								id: 'sim1',
-								planName: 'Primary eSIM',
-								providerName: 'Global connect',
-								phoneNumber: '(+27) 60 320 7047',
-								dataLeft: '10 GB',
-								expiresOn: 'May 18, 2025',
-								isActive: true,
-							},
-							{
-								id: 'sim2',
-								planName: 'Travel eSIM (US)',
-								providerName: 'TravelSIM',
-								phoneNumber: '(+27) 60 320 7047',
-								dataLeft: '5 GB',
-								expiresOn: 'Jun 21, 2025',
-								isActive: false,
-							},
-						]}
-					/>
 				</div>
+
 				<div className={styles.dashboardRightContainer}>
 					<div>
 						<UsageStats />
 						<NotificationsCard />
 					</div>
+				</div>
+
+				<div className={styles.myEsims}>
+					<MyESims />
 				</div>
 			</div>
 		</div>

@@ -9,12 +9,16 @@ import {
 
 export const fetchSims = createAsyncThunk<
 	SIMInfoResponse['items'],
-	void,
+	{ size?: number; page?: number },
 	{ rejectValue: string }
->('sim/fetchSims', async (_, { rejectWithValue }) => {
+>('sim/fetchSims', async (params, { rejectWithValue }) => {
 	try {
 		const res = await ApiService.get('/api/esims', {
-			params: { status: 'all', page: 1, size: 20 },
+			params: {
+				status: 'all',
+				page: params.page || 1,
+				size: params.size || 100,
+			},
 		});
 		const parsed = res.data as SuccessResponse<SIMInfoResponse>;
 
