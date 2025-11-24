@@ -175,6 +175,26 @@ const updateOrderItemSimMapping = async (
 	);
 };
 
+function extractTextAndVoice(webhook: Record<string, any>) {
+	// Iterate only over keys "0" and "1" (or any that exist)
+	for (const key of Object.keys(webhook)) {
+		const entry = webhook[key];
+
+		// Look for structure matching { data: { text, voice } }
+		if (entry && typeof entry === 'object' && entry.data) {
+			const { text, voice } = entry.data;
+
+			return {
+				text: text ?? null,
+				voice: voice ?? null,
+			};
+		}
+	}
+
+	// Nothing found
+	return { text: null, voice: null };
+}
+
 /**
  * Processes an Airalo order asynchronously.
  * @param data - The async order response data.
@@ -190,6 +210,8 @@ const processAiraloOrder = async (
 		ProviderIdentity.AIRALO,
 		transact
 	);
+
+	const { text, voice } = extractTextAndVoice(data.data);
 
 	const descriptionObj = orderMetaUtil(data.data.description);
 	const description = `${descriptionObj.quantity} x ${descriptionObj.type} - ${descriptionObj.packageId}`;
@@ -211,8 +233,8 @@ const processAiraloOrder = async (
 		manualInstallation: data.data.manual_installation,
 		qrcodeInstallation: data.data.qrcode_installation,
 		installationGuides: data.data.installation_guides,
-		text: data.data['0'].data.text,
-		voice: data.data['0'].data.voice,
+		text,
+		voice,
 		netPrice: data.data.net_price,
 	};
 
