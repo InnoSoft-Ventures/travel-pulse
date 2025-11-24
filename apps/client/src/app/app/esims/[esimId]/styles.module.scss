@@ -5,7 +5,7 @@
 	padding: 24px;
 	max-width: 800px;
 	margin: 0 auto;
-	color: #1f2937; // base text color
+	color: var(--dark-purple); // base text color
 }
 
 /* Hero / header area */
@@ -65,7 +65,7 @@
 .planName {
 	font-size: 22px;
 	font-weight: 700;
-	color: #111827;
+	color: var(--dark-purple);
 	margin: 0;
 }
 
@@ -152,7 +152,7 @@
 
 		&.value {
 			font-weight: 500;
-			color: #111827;
+			color: var(--dark-purple);
 		}
 	}
 }
@@ -180,9 +180,9 @@
 		color: #6b7280;
 	}
 	.packValue {
-		font-size: 20px;
-		font-weight: 700;
-		color: #111827;
+		font-size: 15px;
+		font-weight: 500;
+		color: var(--dark-purple);
 		margin-top: 4px;
 	}
 }
@@ -480,7 +480,7 @@
 .iccidValue {
 	margin-top: 6px;
 	font-size: 14px;
-	color: #111827;
+	color: var(--dark-purple);
 }
 
 .iconButton {
@@ -492,7 +492,7 @@
 	width: 28px;
 	height: 28px;
 	border-radius: 8px;
-	color: #111827;
+	color: var(--dark-purple);
 	cursor: pointer;
 }
 .iconButton:hover {

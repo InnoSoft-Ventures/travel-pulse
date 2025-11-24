@@ -6,6 +6,7 @@ import styles from './style.module.scss';
 
 import WifiIcon from '../../../assets/wifi.svg';
 import { SIMInfo } from '@travelpulse/interfaces';
+import { formatDataSize } from '@travelpulse/utils';
 
 export type SimCardProps = {
 	data: SIMInfo;
@@ -80,7 +81,7 @@ export const SimCard: React.FC<SimCardProps> = ({
 				<div className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-2">
 					<div className="text-xs text-gray-500">Data left</div>
 					<div className="font-medium text-[15px] leading-7">
-						{remaining} MB
+						{formatDataSize(remaining)}
 					</div>
 				</div>
 				<div className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-2">

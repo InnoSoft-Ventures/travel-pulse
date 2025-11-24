@@ -1,13 +1,16 @@
 import React from 'react';
 import styles from './styles.module.scss';
 import { SIMDetails } from '@travelpulse/interfaces';
+import { formatDataSize } from '@travelpulse/utils';
 
 interface UsageChartProps {
 	sim: SIMDetails;
 }
 
 export default function SimUsage({ sim }: UsageChartProps) {
-	const dataLeft = `${sim.remaining} / ${sim.total}`;
+	const dataLeft = `${formatDataSize(sim.remaining)} / ${formatDataSize(
+		sim.total
+	)}`;
 	const total = sim.total ?? 0;
 	const remaining = sim.remaining ?? 0;
 	const used = Math.max(0, total - remaining);
@@ -25,7 +28,7 @@ export default function SimUsage({ sim }: UsageChartProps) {
 			</div>
 			<div className={styles.kvRow}>
 				<span>Used</span>
-				<span>{used}</span>
+				<span>{formatDataSize(used)}</span>
 			</div>
 			<div className={styles.progressWrap} aria-label="Usage progress">
 				<div className={styles.progressBar}>

@@ -23,6 +23,7 @@ export interface SIMDetails extends SIMInfo {
 	lpa: string;
 	activationCode: string | null;
 	qrcodeUrl: string | null;
+	validity: string;
 	apnType: string;
 	apnValue: string | null;
 	isRoaming: boolean;
@@ -50,7 +51,7 @@ export interface SIMDetails extends SIMInfo {
 }
 
 export interface SIMInfoResponse {
-	items: SIMInfo[];
+	items: SIMDetails[];
 	page: number;
 	size: number;
 	total: number;

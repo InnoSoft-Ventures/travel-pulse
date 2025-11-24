@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './styles.module.scss';
 import { SIMDetails } from '@travelpulse/interfaces';
 import { SimUtilConfig } from './sim-util';
+import { formatDataSize } from '@travelpulse/utils';
 
 interface IdentifiersPlanProps {
 	sim: SIMDetails;
@@ -82,17 +83,16 @@ export default function IdentifiersPlan({
 				<div className={styles.packRow}>
 					<div className={styles.packItem}>
 						<div className={styles.packLabel}>Data</div>
-						<div className={styles.packValue}>{sim.total}</div>
+						<div className={styles.packValue}>
+							{formatDataSize(sim.total)}
+						</div>
 					</div>
 					<div className={styles.packItem}>
 						<div className={styles.packLabel}>Validity</div>
-						<div className={styles.packValue}>—</div>
+						<div className={styles.packValue}>{sim.validity}</div>
 					</div>
 				</div>
-				<div className={styles.kvRow}>
-					<span>Start</span>
-					<span>—</span>
-				</div>
+
 				<div className={styles.kvRow}>
 					<span>Expires</span>
 					<span>{expiresOn}</span>

@@ -13,6 +13,8 @@ export interface AiraloUsagePayload {
 		remaining_text: number;
 		total_voice: number;
 		total_text: number;
+		expired_at: string | null;
+		is_unlimited: boolean | null;
 	};
 }
 

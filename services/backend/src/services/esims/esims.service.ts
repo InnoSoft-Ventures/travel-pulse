@@ -10,7 +10,6 @@ import Country from '../../db/models/Country';
 import Order from '../../db/models/Order';
 import {
 	SIMDetails,
-	SIMInfo,
 	SIMInfoResponse,
 	SimStatus,
 } from '@travelpulse/interfaces';
@@ -82,7 +81,7 @@ export const listEsimsService = async (
 		offset,
 	});
 
-	const items: SIMInfo[] = rows.map((sim) => {
+	const items: SIMDetails[] = rows.map((sim) => {
 		const po = sim.get('providerOrder') as ProviderOrder | undefined;
 		const order = po?.get('order') as Order | undefined;
 		const expiredAt = sim.expiredAt
@@ -91,12 +90,23 @@ export const listEsimsService = async (
 		const planName =
 			sim.name ?? po?.package ?? po?.packageId ?? 'eSIM Plan';
 
+		const validity = po?.validity ?? 0;
+		const days = validity > 1 ? `${validity} days` : '0 day';
+
 		return {
 			id: sim.id,
 			status: sim.status,
 			name: planName,
 			msisdn: sim.msisdn,
+			iccid: sim.iccid,
+			isRoaming: sim.isRoaming,
+			confirmationCode: sim.confirmationCode,
+			apn: sim.apn,
+			lpa: sim.lpa,
+			activationCode: '',
+			qrcodeUrl: sim.qrcodeUrl,
 			remaining: sim.remaining,
+			validity: days,
 			total: sim.total,
 			expiredAt,
 			apnType: sim.apnType,
@@ -116,6 +126,8 @@ export const listEsimsService = async (
 			order: order
 				? { id: order.id, orderNumber: order.orderNumber }
 				: null,
+			country: null,
+			continent: null,
 		};
 	});
 
@@ -167,6 +179,7 @@ export const getEsimDetailsService = async (
 		flag: string;
 	} | null = null;
 	let continent: { id: number; name: string } | null = null;
+
 	try {
 		if (po?.packageId && po?.provider) {
 			const pkg = await Package.findOne({
@@ -218,6 +231,7 @@ export const getEsimDetailsService = async (
 		country = null;
 		continent = null;
 	}
+
 	const order = po?.get('order') as Order | undefined;
 	const expiredAt = sim.expiredAt
 		? dateJs(sim.expiredAt).format(PRETTY_DATE_FORMAT)
@@ -225,6 +239,8 @@ export const getEsimDetailsService = async (
 
 	const friendlyName =
 		sim.name ?? po?.package ?? po?.packageId ?? 'eSIM Plan';
+	const validity = po?.validity ?? 0;
+	const days = validity > 1 ? `${validity} days` : '0 day';
 
 	return {
 		id: sim.id,
@@ -243,6 +259,7 @@ export const getEsimDetailsService = async (
 		isRoaming: sim.isRoaming,
 		confirmationCode: sim.confirmationCode,
 		apn: sim.apn,
+		validity: days,
 		directAppleInstallationUrl: sim.directAppleInstallationUrl,
 		providerOrder: po
 			? {

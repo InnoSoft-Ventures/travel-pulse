@@ -127,6 +127,7 @@ export default function EsimDetailsPage() {
 				{/* Misc / Support / Logs */}
 				<SupportSection />
 			</div>
+
 			{/* Sticky action bar */}
 			<div className={styles.stickyBar}>
 				<div className={styles.stickyInner}>

@@ -107,6 +107,8 @@ async function processSim(sim: Sim, token: string, transact: Transaction) {
 		const totalVoice = toNumber(payload.total_voice);
 		const totalText = toNumber(payload.total_text);
 		const status = payload.status ?? null;
+		const expiredAt = payload.expired_at ?? null;
+		const isUnlimited = payload.is_unlimited ?? null;
 
 		type SimUsageUpdate = Partial<
 			Pick<
@@ -120,11 +122,12 @@ async function processSim(sim: Sim, token: string, transact: Transaction) {
 				| 'remainingText'
 				| 'totalVoice'
 				| 'remainingVoice'
+				| 'expiredAt'
+				| 'isUnlimited'
 			>
 		>;
 
 		const updates: SimUsageUpdate = {};
-		let nextStatus = sim.status;
 
 		if (status && sim.status !== status) {
 			updates.status = status;
@@ -154,20 +157,18 @@ async function processSim(sim: Sim, token: string, transact: Transaction) {
 			updates.remainingText = remainingText;
 		}
 
-		const consumed =
-			totalMb !== null && remainingMb !== null
-				? totalMb - remainingMb
-				: null;
+		if (expiredAt) {
+			const expiredDate = new Date(expiredAt);
 
-		if (
-			sim.status === SimStatus.NOT_ACTIVE &&
-			(status === SimStatus.ACTIVE || (consumed !== null && consumed > 0))
-		) {
-			nextStatus = SimStatus.ACTIVE;
+			updates.expiredAt = expiredDate;
 		}
 
-		if (nextStatus !== sim.status) {
-			updates.status = nextStatus;
+		if (isUnlimited !== null && isUnlimited !== sim.isUnlimited) {
+			updates.isUnlimited = isUnlimited;
+		}
+
+		if (sim.status !== status) {
+			updates.status = status;
 		}
 
 		const now = new Date();
@@ -184,7 +185,7 @@ async function processSim(sim: Sim, token: string, transact: Transaction) {
 		const remoteStatusForLog = status;
 
 		console.log(
-			`[ESIM USAGE] iccid=${maskIccid(sim.iccid)} local=${sim.status}->${nextStatus} remote=${remoteStatusForLog} total=${
+			`[ESIM USAGE] iccid=${maskIccid(sim.iccid)} local=${sim.status}->${status} remote=${remoteStatusForLog} total=${
 				totalMb ?? 'n/a'
 			} remaining=${remainingMb ?? 'n/a'}`
 		);
