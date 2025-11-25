@@ -91,11 +91,10 @@ export default function IdentifiersPlan({
 						<div className={styles.packLabel}>Validity</div>
 						<div className={styles.packValue}>{sim.validity}</div>
 					</div>
-				</div>
-
-				<div className={styles.kvRow}>
-					<span>Expires</span>
-					<span>{expiresOn}</span>
+					<div className={styles.packItem}>
+						<div className={styles.packLabel}>Expires</div>
+						<div className={styles.packValue}>{expiresOn}</div>
+					</div>
 				</div>
 			</section>
 		</>
