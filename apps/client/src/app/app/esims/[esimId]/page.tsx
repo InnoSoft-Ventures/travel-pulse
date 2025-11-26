@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
 import { Button } from '@travelpulse/ui';
 import styles from './styles.module.scss';
 import Link from 'next/link';
-import { elementScrollTo } from '@travelpulse/utils';
+import { capitalizeFirstLetter, elementScrollTo } from '@travelpulse/utils';
 import { fetchSimDetails } from '@travelpulse/ui/thunks';
 import SimUsage from './sim-usage';
 import SimInstall from './sim-install';
@@ -16,6 +16,7 @@ import NetworkAndOrder from './network-and-order';
 import IdentifiersPlan from './identifiers-plan';
 import SimAlert from './sim-alerts';
 import SimAutoRenew from './sim-auto-renew';
+import { SimStatus } from '@travelpulse/interfaces';
 
 export default function EsimDetailsPage() {
 	const params = useParams();
@@ -48,7 +49,7 @@ export default function EsimDetailsPage() {
 		return <div>Error: {error?.toString() || 'Not found'}</div>;
 	}
 
-	const isActive = sim.status === 'ACTIVE';
+	const isNotActive = sim.status === SimStatus.NOT_ACTIVE;
 	const planName = sim.name;
 	const providerName = sim.order?.orderNumber
 		? `Order #${sim.order.orderNumber}`
@@ -100,10 +101,12 @@ export default function EsimDetailsPage() {
 					</div>
 					<span
 						className={`${styles.statusChip} ${
-							isActive ? styles.active : styles.inactive
+							sim.status === SimStatus.ACTIVE
+								? styles.active
+								: styles.inactive
 						}`}
 					>
-						{isActive ? 'Active' : 'Inactive'}
+						{capitalizeFirstLetter(sim.status)}
 					</span>
 				</div>
 
@@ -117,7 +120,7 @@ export default function EsimDetailsPage() {
 				<SimUsage sim={sim} />
 
 				{/* Installation */}
-				<SimInstall sim={sim} fieldCopy={fieldCopy} />
+				{isNotActive && <SimInstall sim={sim} fieldCopy={fieldCopy} />}
 
 				<NetworkAndOrder sim={sim} />
 
@@ -133,12 +136,17 @@ export default function EsimDetailsPage() {
 				<div className={styles.stickyInner}>
 					<Button
 						onClick={() => {
-							elementScrollTo('connect-share');
+							if (isNotActive) {
+								elementScrollTo('connect-share');
+							}
 						}}
 					>
-						Install / Share
+						{isNotActive ? 'Install / Share' : 'Top Up'}
 					</Button>
-					<Button variant="outline">Connect instructions</Button>
+
+					{isNotActive && (
+						<Button variant="outline">Connect instructions</Button>
+					)}
 				</div>
 			</div>
 		</>

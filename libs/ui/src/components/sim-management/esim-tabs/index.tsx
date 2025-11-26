@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../common';
 import { SimCard } from '../sim-card';
 
 import styles from './styles.module.scss';
-import { SIMInfo } from '@travelpulse/interfaces';
+import { SIMInfo, SimStatus } from '@travelpulse/interfaces';
 import { useRouter } from 'next/navigation';
 
 interface ESimTabsProps {
@@ -15,11 +15,11 @@ export const ESimTabs = ({ sims }: ESimTabsProps) => {
 	const router = useRouter();
 
 	const active = useMemo(
-		() => sims.filter((s) => s.status === 'ACTIVE'),
+		() => sims.filter((s) => s.status === SimStatus.ACTIVE),
 		[sims]
 	);
 	const inactive = useMemo(
-		() => sims.filter((s) => s.status === 'NOT_ACTIVE'),
+		() => sims.filter((s) => s.status !== SimStatus.ACTIVE),
 		[sims]
 	);
 

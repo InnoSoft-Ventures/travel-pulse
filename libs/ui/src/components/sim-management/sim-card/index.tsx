@@ -5,8 +5,8 @@ import { Button } from '../../common';
 import styles from './style.module.scss';
 
 import WifiIcon from '../../../assets/wifi.svg';
-import { SIMInfo } from '@travelpulse/interfaces';
-import { formatDataSize } from '@travelpulse/utils';
+import { SIMInfo, SimStatus } from '@travelpulse/interfaces';
+import { capitalizeFirstLetter, formatDataSize } from '@travelpulse/utils';
 
 export type SimCardProps = {
 	data: SIMInfo;
@@ -34,9 +34,11 @@ export const SimCard: React.FC<SimCardProps> = ({
 		// autoRenew,
 	} = data;
 
-	const isActive = status === 'ACTIVE';
+	const isActive = status === SimStatus.ACTIVE;
+	const isNotActive = status === SimStatus.NOT_ACTIVE;
+	const statusLabel = capitalizeFirstLetter(status);
 	const autoRenew = false;
-	const pendingInstallation = !isActive;
+	const pendingInstallation = isNotActive; // show install/share if not active
 
 	const statusCls = isActive
 		? 'bg-emerald-100 text-emerald-700 border border-emerald-300'
@@ -62,7 +64,7 @@ export const SimCard: React.FC<SimCardProps> = ({
 
 				<span
 					className={`flex items-center gap-2 px-3 py-1 rounded-full ${statusCls}`}
-					aria-label={`Status: ${isActive ? 'Active' : 'Inactive'}`}
+					aria-label={`Status: ${statusLabel}`}
 				>
 					<WifiIcon
 						fill="none"
@@ -70,9 +72,7 @@ export const SimCard: React.FC<SimCardProps> = ({
 						data-active={isActive}
 						className={styles.wifiIcon}
 					/>
-					<span className="text-xs font-medium">
-						{isActive ? 'Active' : 'Inactive'}
-					</span>
+					<span className="text-xs font-medium">{statusLabel}</span>
 				</span>
 			</div>
 
@@ -151,7 +151,7 @@ export const SimCard: React.FC<SimCardProps> = ({
 
 			{/* Actions */}
 			<div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
-				{isActive && (
+				{!isNotActive && (
 					<Button onClick={onRecharge} className="sm:col-span-1">
 						Top up
 					</Button>

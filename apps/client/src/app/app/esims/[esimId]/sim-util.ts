@@ -15,7 +15,10 @@ export class SimUtil implements SimUtilConfig {
 		this.sim = sim;
 	}
 
-	copyField<Key extends keyof SIMDetails>(keyField: Key, message: string) {
+	copyField = <Key extends keyof SIMDetails>(
+		keyField: Key,
+		message: string
+	) => {
 		if (!this.sim) return;
 
 		const value = this.sim[keyField];
@@ -23,5 +26,5 @@ export class SimUtil implements SimUtilConfig {
 		if (!value) return;
 
 		copyUtil(String(value), message);
-	}
+	};
 }
