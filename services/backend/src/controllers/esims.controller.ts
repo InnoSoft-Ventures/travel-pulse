@@ -5,6 +5,7 @@ import {
 	getEsimDetailsService,
 	getEsimQrService,
 	listEsimsService,
+	getPackageHistoryService,
 } from '../services/esims/esims.service';
 
 export const listEsims = async (req: SessionRequest, res: Response) => {
@@ -20,4 +21,14 @@ export const getEsimDetails = async (req: SessionRequest, res: Response) => {
 export const getEsimQr = async (req: SessionRequest, res: Response) => {
 	const data = await getEsimQrService(req);
 	res.json(successResponse(data, 'eSIM QR retrieved successfully'));
+};
+
+export const getPackageHistory = async (
+	req: SessionRequest,
+	res: Response
+) => {
+	const data = await getPackageHistoryService(req);
+	res.json(
+		successResponse(data, 'Package history retrieved successfully')
+	);
 };

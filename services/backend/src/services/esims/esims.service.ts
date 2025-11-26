@@ -8,6 +8,7 @@ import Operator from '../../db/models/Operator';
 import Continent from '../../db/models/Continent';
 import Country from '../../db/models/Country';
 import Order from '../../db/models/Order';
+import PackageHistory from '../../db/models/PackageHistory';
 import {
 	SIMDetails,
 	SIMInfoResponse,
@@ -308,4 +309,79 @@ export const getEsimQrService = async (req: SessionRequest) => {
 	}
 
 	return { id: sim.id, qrcode: sim.qrcode, qrcodeUrl: sim.qrcodeUrl };
+};
+
+export const getPackageHistoryService = async (req: SessionRequest) => {
+	const userId = req.user.accountId;
+	const simId = Number(req.params.simId);
+
+	// First verify the SIM belongs to the user
+	const sim = await Sim.findOne({
+		where: { id: simId },
+		include: [
+			{
+				model: ProviderOrder,
+				as: 'providerOrder',
+				required: true,
+				include: [
+					{
+						model: Order,
+						as: 'order',
+						required: true,
+						where: { userId },
+						attributes: ['id'],
+					},
+				],
+			},
+		],
+		attributes: ['id'],
+	});
+
+	if (!sim) {
+		throw new NotFoundException('eSIM not found', null);
+	}
+
+	// Fetch package history for this SIM
+	const history = await PackageHistory.findAll({
+		where: { simId },
+		order: [['createdAt', 'DESC']],
+		include: [
+			{
+				model: ProviderOrder,
+				as: 'providerOrder',
+				attributes: ['id', 'externalOrderId'],
+				required: false,
+			},
+		],
+	});
+
+	return history.map((record) => ({
+		id: record.id,
+		actionType: record.actionType,
+		status: record.status,
+		packageId: record.packageId,
+		packageName: record.packageName,
+		dataAmount: record.dataAmount,
+		voiceAmount: record.voiceAmount,
+		textAmount: record.textAmount,
+		validityDays: record.validityDays,
+		price: Number(record.price),
+		netPrice: record.netPrice ? Number(record.netPrice) : null,
+		currency: record.currency,
+		activatedAt: record.activatedAt
+			? dateJs(record.activatedAt).format(PRETTY_DATE_FORMAT)
+			: null,
+		expiresAt: record.expiresAt
+			? dateJs(record.expiresAt).format(PRETTY_DATE_FORMAT)
+			: null,
+		createdAt: dateJs(record.createdAt).format(PRETTY_DATE_FORMAT),
+		providerOrder: record.providerOrderId
+			? {
+					id: record.providerOrderId,
+					externalOrderId:
+						(record.get('providerOrder') as any)
+							?.externalOrderId ?? null,
+				}
+			: null,
+	}));
 };

@@ -24,6 +24,8 @@ import Operator from '../db/models/Operator';
 import Country from '../db/models/Country';
 import Continent from '../db/models/Continent';
 import { orderMetaUtil } from '@travelpulse/providers/util';
+import { PackageActionType } from '../db/models/PackageHistory';
+import { createPackageHistoryRecord } from './package-history.service';
 
 interface ProcessedOrder {
 	updatedProviderOrder: {
@@ -271,19 +273,54 @@ const processAiraloOrder = async (
 			total: providerOrder.dataAmount,
 			isUnlimited: false,
 			status: SimStatus.NOT_ACTIVE,
-			remainingVoice: 0,
-			remainingText: 0,
-			totalVoice: 0,
-			totalText: 0,
+			remainingVoice: text || 0,
+			remainingText: voice || 0,
+			totalVoice: text || 0,
+			totalText: voice || 0,
 		}))
 	);
 
-	return await saveOrderProducts(
+	const processedOrder = await saveOrderProducts(
 		providerOrder,
 		providerOrderData,
 		simData,
 		transact
 	);
+
+	// Calculate expiration date based on validity days
+	const validityDays = providerOrderData.validity || 0;
+	const expiresAt = new Date();
+	expiresAt.setDate(expiresAt.getDate() + validityDays);
+
+	// Create package history records for each SIM
+	await Promise.all(
+		processedOrder.createdSims.map(async (sim) => {
+			await createPackageHistoryRecord(
+				{
+					simId: sim.id,
+					providerOrderId: providerOrder.id,
+					actionType: PackageActionType.INITIAL_PURCHASE,
+					status: SimStatus.NOT_ACTIVE,
+					packageId: data.data.package_id,
+					packageName: data.data.package,
+					dataAmount: providerOrder.dataAmount,
+					voiceAmount: voice || 0,
+					textAmount: text || 0,
+					validityDays,
+					price: Number(data.data.price),
+					netPrice: data.data.net_price
+						? Number(data.data.net_price)
+						: undefined,
+					currency: data.data.currency,
+					activatedAt: undefined, // Will be set when SIM becomes active
+					expiresAt,
+				},
+				transact
+			);
+		})
+	);
+
+	return processedOrder;
 };
 
 /**

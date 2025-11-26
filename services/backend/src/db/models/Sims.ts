@@ -246,4 +246,7 @@ ProviderOrder.hasMany(Sim, {
 	as: 'sims',
 });
 
+// PackageHistory association will be set up in PackageHistory model
+// to avoid circular dependency issues
+
 export default Sim;
