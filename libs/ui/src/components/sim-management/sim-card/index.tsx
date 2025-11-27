@@ -36,7 +36,9 @@ export const SimCard: React.FC<SimCardProps> = ({
 
 	const isActive = status === SimStatus.ACTIVE;
 	const isNotActive = status === SimStatus.NOT_ACTIVE;
-	const statusLabel = capitalizeFirstLetter(status);
+	const statusLabel = capitalizeFirstLetter(
+		status === SimStatus.NOT_ACTIVE ? 'in active' : status
+	);
 	const autoRenew = false;
 	const pendingInstallation = isNotActive; // show install/share if not active
 

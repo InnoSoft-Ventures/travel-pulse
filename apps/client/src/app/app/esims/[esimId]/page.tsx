@@ -106,7 +106,11 @@ export default function EsimDetailsPage() {
 								: styles.inactive
 						}`}
 					>
-						{capitalizeFirstLetter(sim.status)}
+						{capitalizeFirstLetter(
+							sim.status === SimStatus.NOT_ACTIVE
+								? 'in active'
+								: sim.status
+						)}
 					</span>
 				</div>
 
