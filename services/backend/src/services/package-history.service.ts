@@ -1,9 +1,8 @@
 import { Transaction, Op } from 'sequelize';
 import PackageHistory, {
-	PackageActionType,
 	PackageHistoryCreationAttributes,
 } from '../db/models/PackageHistory';
-import { SimStatus } from '@travelpulse/interfaces';
+import { PackageActionType, SimStatus } from '@travelpulse/interfaces';
 import { dateJs } from '@travelpulse/utils';
 
 export interface CreatePackageHistoryData {

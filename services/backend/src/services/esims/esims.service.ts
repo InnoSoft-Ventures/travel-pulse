@@ -9,6 +9,7 @@ import Country from '../../db/models/Country';
 import Order from '../../db/models/Order';
 import PackageHistory from '../../db/models/PackageHistory';
 import {
+	PackageHistoryItem,
 	PackageHistoryResponse,
 	SIMDetails,
 	SIMInfoResponse,
@@ -358,31 +359,29 @@ export const getPackageHistoryService = async (
 		order: [['createdAt', 'DESC']],
 	});
 
-	const mappedHistory = history.map((record) => ({
-		id: record.id,
-		actionType: record.actionType,
-		status: record.status,
-		packageId: record.packageId,
-		packageName: record.packageName,
-		totalData: record.totalData,
-		remainingData: record.remainingData,
-		totalVoice: record.totalVoice,
-		remainingVoice: record.remainingVoice,
-		totalText: record.totalText,
-		remainingText: record.remainingText,
-		isUnlimited: record.isUnlimited,
-		validityDays: record.validityDays,
-		price: Number(record.price),
-		netPrice: record.netPrice ? Number(record.netPrice) : null,
-		currency: record.currency,
-		activatedAt: record.activatedAt
-			? dateJs(record.activatedAt).format(PRETTY_DATETIME_FORMAT)
-			: '-',
-		expiresAt: record.expiresAt
-			? dateJs(record.expiresAt).format(PRETTY_DATETIME_FORMAT)
-			: '-',
-		createdAt: dateJs(record.createdAt).format(PRETTY_DATETIME_FORMAT),
-	}));
+	const mappedHistory = history.map(
+		(record): PackageHistoryItem => ({
+			id: record.id,
+			actionType: record.actionType,
+			status: record.status,
+			packageId: record.packageId,
+			totalDataMB: record.totalData,
+			remainingDataMB: record.remainingData,
+			totalVoice: record.totalVoice,
+			remainingVoice: record.remainingVoice,
+			totalText: record.totalText,
+			remainingText: record.remainingText,
+			isUnlimited: record.isUnlimited,
+			validityDays: record.validityDays,
+			activatedAt: record.activatedAt
+				? dateJs(record.activatedAt).format(PRETTY_DATETIME_FORMAT)
+				: '-',
+			expiresAt: record.expiresAt
+				? dateJs(record.expiresAt).format(PRETTY_DATETIME_FORMAT)
+				: '-',
+			createdAt: dateJs(record.createdAt).format(PRETTY_DATETIME_FORMAT),
+		})
+	);
 
 	return { simId, history: mappedHistory };
 };

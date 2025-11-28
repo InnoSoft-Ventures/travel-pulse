@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
 import { fetchPackageHistory } from '@travelpulse/ui/thunks';
 import { PackageHistoryItem, SimStatus } from '@travelpulse/interfaces';
-import { capitalizeFirstLetter } from '@travelpulse/utils';
+import { capitalizeFirstLetter, formatDataSize } from '@travelpulse/utils';
 import styles from './package-history.module.scss';
 
 interface PackageHistoryProps {
@@ -15,18 +15,14 @@ export default function PackageHistory({ simId }: PackageHistoryProps) {
 	const dispatch = useAppDispatch();
 	const [isExpanded, setIsExpanded] = useState(false);
 
-	// Fetch history from state, keyed by simId
 	const historySlice = useAppSelector(
 		(state) => state.account.sims.packageHistory
 	);
 	const { list = [], status = 'idle', error } = historySlice || {};
 
-	// On first expansion, dispatch fetch
 	useEffect(() => {
-		if (isExpanded && status === 'idle') {
-			dispatch(fetchPackageHistory({ simId }));
-		}
-	}, [isExpanded, status, simId, dispatch]);
+		dispatch(fetchPackageHistory({ simId }));
+	}, [simId, dispatch]);
 
 	const toggleSection = () => {
 		setIsExpanded((prev) => !prev);
@@ -49,6 +45,7 @@ export default function PackageHistory({ simId }: PackageHistoryProps) {
 					{status === 'loading' && (
 						<div className={styles.loading}>Loading history…</div>
 					)}
+
 					{status === 'failed' && error && (
 						<div className={styles.errorText}>
 							Failed to load history:{' '}
@@ -57,11 +54,13 @@ export default function PackageHistory({ simId }: PackageHistoryProps) {
 								: 'Unknown error'}
 						</div>
 					)}
+
 					{status === 'succeeded' && list.length === 0 && (
 						<div className={styles.empty}>
 							No package history found for this eSIM.
 						</div>
 					)}
+
 					{status === 'succeeded' && list.length > 0 && (
 						<div className={styles.historyList}>
 							{list.map((item) => (
@@ -80,92 +79,107 @@ interface PackageHistoryCardProps {
 }
 
 function PackageHistoryCard({ item }: PackageHistoryCardProps) {
-	const statusClass = getStatusClass(item.status);
+	const statusClass = styles[getStatusClass(item.status)];
 
-	const dataText = item.isUnlimited
+	const isUnlimited = item.isUnlimited;
+	const hasTotals = !!item.totalDataMB;
+
+	const remaining =
+		!isUnlimited && hasTotals ? item.remainingDataMB ?? 0 : null;
+	const total = !isUnlimited && hasTotals ? item.totalDataMB ?? 0 : null;
+
+	const dataText = isUnlimited
 		? 'Unlimited'
-		: item.totalDataMB
-		? `${item.remainingDataMB ?? 0} / ${item.totalDataMB} MB`
+		: total
+		? `${formatDataSize(remaining ?? 0)} / ${formatDataSize(total)}`
 		: null;
 
-	const voiceText =
-		item.totalVoice !== null && item.totalVoice !== undefined
-			? `${item.remainingVoice ?? 0} / ${item.totalVoice} min`
-			: null;
-
-	const textText =
-		item.totalText !== null && item.totalText !== undefined
-			? `${item.remainingText ?? 0} / ${item.totalText} SMS`
-			: null;
-
-	const expiryText = item.expiresAt
-		? new Date(item.expiresAt).toLocaleDateString()
-		: null;
-
-	const activatedText = item.activatedAt
-		? new Date(item.activatedAt).toLocaleDateString()
-		: null;
+	let progressPercent: number | null = null;
+	if (
+		!isUnlimited &&
+		typeof remaining === 'number' &&
+		typeof total === 'number' &&
+		total > 0
+	) {
+		const ratio = Math.min(Math.max(remaining / total, 0), 1);
+		progressPercent = ratio * 100;
+	}
 
 	return (
 		<div className={styles.historyCard}>
+			{/* Top row now only wraps the whole content visually; chip moves down */}
 			<div className={styles.cardHeader}>
-				{item.name && (
-					<span className={styles.itemName}>{item.name}</span>
-				)}
-				<span className={`${styles.statusChip} ${statusClass}`}>
-					{capitalizeFirstLetter(
-						item.status === SimStatus.NOT_ACTIVE
-							? 'in active'
-							: item.status
-					)}
-				</span>
+				{/* We don't show validity here anymore */}
+				<div />{' '}
+				{/* keeps spacing; you can remove & adjust CSS if you like */}
 			</div>
-			{(item.price || item.currency) && (
-				<div className={styles.cardRow}>
-					<span className={styles.label}>Price</span>
-					<span className={styles.value}>
-						{item.price} {item.currency}
+
+			<div className={styles.bodyRow}>
+				{/* LEFT: Data + status */}
+				<div className={styles.leftBlock}>
+					<div className={styles.usageBlock}>
+						<span className={styles.usageIcon}>📊</span>
+						<div className={styles.usageDetails}>
+							<div className={styles.usageHeaderRow}>
+								<span className={styles.usageLabel}>Data</span>
+							</div>
+
+							{dataText && (
+								<span className={styles.usageValue}>
+									{dataText}
+								</span>
+							)}
+
+							{progressPercent !== null && (
+								<div className={styles.progressBar}>
+									<div
+										className={styles.progressFill}
+										style={{ width: `${progressPercent}%` }}
+									/>
+								</div>
+							)}
+						</div>
+					</div>
+				</div>
+
+				{/* RIGHT: Validity + dates */}
+				<div className={styles.metaBlock}>
+					<span className={`${styles.statusChip} ${statusClass}`}>
+						{capitalizeFirstLetter(
+							item.status === SimStatus.NOT_ACTIVE
+								? 'Inactive'
+								: item.status
+						)}
 					</span>
+
+					{item.validityDays && (
+						<div className={styles.metaItemInline}>
+							<span className={styles.metaLabel}>Validity</span>
+							<span className={styles.metaValue}>
+								{item.validityDays} days
+							</span>
+						</div>
+					)}
+
+					{item.activatedAt && (
+						<div className={styles.metaItemInline}>
+							<span className={styles.metaLabel}>Activated</span>
+							<span className={styles.metaValue}>
+								{item.activatedAt}
+							</span>
+						</div>
+					)}
+
+					{item.expiresAt && (
+						<div className={styles.metaItemInline}>
+							<span className={styles.metaLabel}>Expires</span>
+							<span className={styles.metaValue}>
+								{item.expiresAt}
+							</span>
+						</div>
+					)}
 				</div>
-			)}
-			{dataText && (
-				<div className={styles.cardRow}>
-					<span className={styles.label}>Data</span>
-					<span className={styles.value}>{dataText}</span>
-				</div>
-			)}
-			{voiceText && (
-				<div className={styles.cardRow}>
-					<span className={styles.label}>Voice</span>
-					<span className={styles.value}>{voiceText}</span>
-				</div>
-			)}
-			{textText && (
-				<div className={styles.cardRow}>
-					<span className={styles.label}>SMS</span>
-					<span className={styles.value}>{textText}</span>
-				</div>
-			)}
-			{item.validityDays && (
-				<div className={styles.cardRow}>
-					<span className={styles.label}>Validity</span>
-					<span className={styles.value}>
-						{item.validityDays} days
-					</span>
-				</div>
-			)}
-			{activatedText && (
-				<div className={styles.cardRow}>
-					<span className={styles.label}>Activated</span>
-					<span className={styles.value}>{activatedText}</span>
-				</div>
-			)}
-			{expiryText && (
-				<div className={styles.cardRow}>
-					<span className={styles.label}>Expires</span>
-					<span className={styles.value}>{expiryText}</span>
-				</div>
-			)}
+			</div>
 		</div>
 	);
 }

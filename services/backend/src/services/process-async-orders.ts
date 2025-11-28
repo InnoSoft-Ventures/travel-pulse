@@ -3,6 +3,7 @@ import {
 	ProviderIdentity,
 	OrderStatus,
 	SimStatus,
+	PackageActionType,
 } from '@travelpulse/interfaces';
 import {
 	BadRequestException,
@@ -24,7 +25,6 @@ import Operator from '../db/models/Operator';
 import Country from '../db/models/Country';
 import Continent from '../db/models/Continent';
 import { orderMetaUtil } from '@travelpulse/providers/util';
-import { PackageActionType } from '../db/models/PackageHistory';
 import { createPackageHistoryRecord } from './package-history.service';
 
 interface ProcessedOrder {

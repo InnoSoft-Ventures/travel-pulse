@@ -2,13 +2,7 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
 import Sim from './Sims';
 import ProviderOrder from './ProviderOrder';
-import { SimStatus } from '@travelpulse/interfaces';
-
-export enum PackageActionType {
-	INITIAL_PURCHASE = 'initial_purchase',
-	TOP_UP = 'top_up',
-	RENEWAL = 'renewal',
-}
+import { PackageActionType, SimStatus } from '@travelpulse/interfaces';
 
 export interface PackageHistoryAttributes {
 	id: number;

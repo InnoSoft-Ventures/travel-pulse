@@ -58,6 +58,12 @@ export interface SIMInfoResponse {
 	total: number;
 }
 
+export enum PackageActionType {
+	INITIAL_PURCHASE = 'initial_purchase',
+	TOP_UP = 'top_up',
+	RENEWAL = 'renewal',
+}
+
 /**
  * Package history record for an eSIM.
  * Fields are normalized and optional to accommodate provider differences.
@@ -65,26 +71,25 @@ export interface SIMInfoResponse {
 export interface PackageHistoryItem {
 	id: number;
 	status: SimStatus;
+	actionType: PackageActionType;
+	packageId: string;
 	/** Days of validity for the package, if provided. */
 	validityDays?: number | null;
 	activatedAt?: string | null;
 	expiresAt?: string | null;
 	/** Data usage in MB (remaining and total). */
-	remainingDataMB?: number | null;
-	totalDataMB?: number | null;
+	remainingDataMB: number;
+	totalDataMB: number;
 	/** Voice minutes usage (remaining and total). */
-	remainingVoice?: number | null;
-	totalVoice?: number | null;
+	remainingVoice: number;
+	totalVoice: number;
 	/** SMS usage (remaining and total). */
-	remainingText?: number | null;
-	totalText?: number | null;
+	remainingText: number;
+	totalText: number;
 	/** True if the package is unlimited for data. */
 	isUnlimited?: boolean | null;
 	/** Optional labeling/pricing metadata. */
-	name?: string | null;
-	price?: string | number | null;
-	currency?: string | null;
-	type?: string | null;
+	createdAt: string;
 }
 
 export interface PackageHistoryResponse {

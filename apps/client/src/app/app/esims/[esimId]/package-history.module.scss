@@ -3,6 +3,10 @@
 	border: 1px solid #e5e7eb;
 	border-radius: 12px;
 	overflow: hidden;
+
+	&:hover {
+		background: #f9fafb;
+	}
 }
 
 .headerButton {
@@ -15,10 +19,6 @@
 	padding: 20px;
 	cursor: pointer;
 	text-align: left;
-
-	&:hover {
-		background: #f9fafb;
-	}
 }
 
 .sectionTitle {
@@ -65,81 +65,202 @@
 	gap: 12px;
 }
 
+/* Card */
+
 .historyCard {
 	border: 1px solid #e5e7eb;
-	border-radius: 10px;
-	background: #fafafa;
-	padding: 14px;
+	border-radius: 12px;
+	background: #f8f8f8;
+	padding: 14px 18px;
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: 12px;
+	transition: all 0.2s ease;
+
+	&:hover {
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+	}
 }
 
 .cardHeader {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 4px;
 }
 
-.itemName {
-	font-size: 14px;
-	font-weight: 600;
-	color: var(--dark-purple);
+.cardHeaderLeft {
+	display: flex;
+	align-items: center;
+	gap: 8px;
 }
+
+/* Validity badge */
+
+.validityBadge {
+	font-size: 12px;
+	font-weight: 500;
+	color: #6b7280;
+	background: #f3f4f6;
+	padding: 4px 10px;
+	border-radius: 6px;
+	display: inline-flex;
+	align-items: center;
+	width: fit-content;
+}
+
+/* Status chip + modifiers */
 
 .statusChip {
 	font-size: 11px;
 	font-weight: 600;
-	padding: 3px 10px;
+	padding: 4px 12px;
 	border-radius: 999px;
 	display: inline-flex;
 	align-items: center;
 	line-height: 1;
-
-	&.statusActive {
-		background-color: #dcfce7;
-		color: #065f46;
-		border: 1px solid #86efac;
-	}
-
-	&.statusInactive {
-		background-color: #f3f4f6;
-		color: #6b7280;
-		border: 1px solid #d1d5db;
-	}
-
-	&.statusExpired {
-		background-color: #fee2e2;
-		color: #991b1b;
-		border: 1px solid #fca5a5;
-	}
-
-	&.statusDeactivated {
-		background-color: #fef3c7;
-		color: #92400e;
-		border: 1px solid #fde047;
-	}
-
-	&.statusUnknown {
-		background-color: #e5e7eb;
-		color: #4b5563;
-		border: 1px solid #d1d5db;
-	}
+	white-space: nowrap;
+	position: absolute;
+	top: -25px;
+	right: 0;
 }
 
-.cardRow {
-	display: flex;
-	justify-content: space-between;
-	font-size: 13px;
-	color: #4b5563;
+.statusActive {
+	background-color: #dcfce7;
+	color: #065f46;
+	border: 1px solid #86efac;
 }
 
-.label {
+.statusInactive {
+	background-color: #f3f4f6;
 	color: #6b7280;
+	border: 1px solid #d1d5db;
 }
 
-.value {
+.statusExpired {
+	background-color: #fee2e2;
+	color: #991b1b;
+	border: 1px solid #fca5a5;
+}
+
+.statusDeactivated {
+	background-color: #fef3c7;
+	color: #92400e;
+	border: 1px solid #fde047;
+}
+
+.statusUnknown {
+	background-color: #e5e7eb;
+	color: #4b5563;
+	border: 1px solid #d1d5db;
+}
+
+/* Body row */
+
+.bodyRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 32px;
+}
+
+.leftBlock {
+	width: 100%;
+	max-width: 380px;
+	display: flex;
+}
+
+/* Usage block */
+.usageBlock {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	padding: 10px 12px;
+	background: #fff;
+	border-radius: 8px;
+	border: 1px solid #f3f4f6;
+	flex: 1;
+	min-width: 0;
+}
+
+.usageIcon {
+	font-size: 18px;
+	line-height: 1;
+	flex-shrink: 0;
+}
+
+.usageDetails {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	flex: 1;
+	min-width: 0;
+}
+
+.usageHeaderRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+}
+
+.usageLabel {
+	font-size: 11px;
+	font-weight: 500;
+	color: #6b7280;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.usageValue {
+	font-size: 14px;
 	font-weight: 500;
 	color: var(--dark-purple);
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+/* Progress bar (remaining / total) */
+
+.progressBar {
+	height: 4px;
+	background: #e5e7eb;
+	border-radius: 999px;
+	overflow: hidden;
+	margin-top: 4px;
+}
+
+.progressFill {
+	height: 100%;
+	background: #10b981;
+}
+
+/* Meta (dates) */
+
+.metaBlock {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 4px;
+	min-width: max-content;
+	position: relative;
+	padding-top: 4px;
+}
+
+.metaItemInline {
+	display: flex;
+	gap: 25px;
+	font-size: 12px;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.metaLabel {
+	color: #6b7280;
+	font-weight: 500;
+}
+
+.metaValue {
+	color: var(--dark-purple);
+	font-weight: 500;
 }

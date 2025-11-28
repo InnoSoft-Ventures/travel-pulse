@@ -59,7 +59,10 @@ export default function EsimDetailsPage() {
 	);
 
 	const autoRenew = false; // TODO: wire to real field when available
-	const fieldCopy = useMemo(() => (sim ? new SimUtil(sim).copyField : () => {}), [sim]);
+	const fieldCopy = useMemo(
+		() => (sim ? new SimUtil(sim).copyField : () => {}),
+		[sim]
+	);
 
 	useEffect(() => {
 		if (!esimId) return;
@@ -163,7 +166,10 @@ export default function EsimDetailsPage() {
 				</Suspense>
 
 				<Suspense fallback={<SectionSkeleton />}>
-					<SimAutoRenew autoRenew={autoRenew} planName={planName || ''} />
+					<SimAutoRenew
+						autoRenew={autoRenew}
+						planName={planName || ''}
+					/>
 				</Suspense>
 
 				<Suspense fallback={<SectionSkeleton />}>
