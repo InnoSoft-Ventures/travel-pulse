@@ -1,6 +1,6 @@
 import Bottleneck from 'bottleneck';
 import { Op, Transaction } from 'sequelize';
-import Sim, { SimAttributes } from '../../../db/models/Sims';
+import Sim from '../../../db/models/Sims';
 import { ProviderIdentity, SimStatus } from '@travelpulse/interfaces';
 import {
 	RequestService,
@@ -23,6 +23,9 @@ import {
 	wait,
 } from '../job.util';
 import dbConnect from '../../../db';
+import PackageHistory from '../../../db/models/PackageHistory';
+import { getActivePackageForSim } from '../../../services/package-history.service';
+import { dateJs } from '@travelpulse/utils';
 
 const limiter = new Bottleneck({
 	maxConcurrent: Math.max(
@@ -110,82 +113,65 @@ async function processSim(sim: Sim, token: string, transact: Transaction) {
 		const expiredAt = payload.expired_at ?? null;
 		const isUnlimited = payload.is_unlimited ?? null;
 
-		type SimUsageUpdate = Partial<
-			Pick<
-				SimAttributes,
-				| 'status'
-				| 'total'
-				| 'lastUsageFetchAt'
-				| 'updatedAt'
-				| 'remaining'
-				| 'totalText'
-				| 'remainingText'
-				| 'totalVoice'
-				| 'remainingVoice'
-				| 'expiredAt'
-				| 'isUnlimited'
-			>
-		>;
+		// Update active package usage/state instead of Sim columns
+		const activePackage = await getActivePackageForSim(sim.id, transact);
 
-		const updates: SimUsageUpdate = {};
+		if (activePackage) {
+			const phUpdates: Partial<PackageHistory> = {} as any;
 
-		if (status && sim.status !== status) {
-			updates.status = status;
+			if (typeof totalMb === 'number') phUpdates.totalData = totalMb;
+
+			if (typeof remainingMb === 'number')
+				phUpdates.remainingData = remainingMb;
+
+			if (typeof totalVoice === 'number')
+				phUpdates.totalVoice = totalVoice;
+
+			if (typeof remainingVoice === 'number')
+				phUpdates.remainingVoice = remainingVoice;
+
+			if (typeof totalText === 'number') phUpdates.totalText = totalText;
+
+			if (typeof remainingText === 'number')
+				phUpdates.remainingText = remainingText;
+
+			if (expiredAt) {
+				phUpdates.expiresAt = new Date(expiredAt);
+			} else if (status === SimStatus.ACTIVE) {
+				// Calculate expiresAt based on validityDays if not provided and if status is ACTIVE
+				const newExpiry = dateJs();
+				newExpiry.add(activePackage.validityDays || 0, 'day');
+
+				phUpdates.expiresAt = newExpiry.toDate();
+			}
+
+			if (isUnlimited !== null)
+				phUpdates.isUnlimited = Boolean(isUnlimited);
+
+			if (status) phUpdates.status = status as SimStatus;
+
+			// Set activation date if not already set and status is ACTIVE
+			if (status === SimStatus.ACTIVE && !activePackage.activatedAt) {
+				phUpdates.activatedAt = dateJs().toDate();
+			}
+
+			if (Object.keys(phUpdates).length > 0) {
+				await PackageHistory.update(phUpdates as any, {
+					where: { id: activePackage.id },
+					transaction: transact,
+				});
+			}
 		}
 
-		if (totalMb && totalMb !== sim.total) {
-			updates.total = totalMb;
-		}
-
-		if (remainingMb && remainingMb !== sim.remaining) {
-			updates.remaining = remainingMb;
-		}
-
-		if (totalVoice && totalVoice !== sim.totalVoice) {
-			updates.totalVoice = totalVoice;
-		}
-
-		if (totalText && totalText !== sim.totalText) {
-			updates.totalText = totalText;
-		}
-
-		if (remainingVoice && remainingVoice !== sim.remainingVoice) {
-			updates.remainingVoice = remainingVoice;
-		}
-
-		if (remainingText && remainingText !== sim.remainingText) {
-			updates.remainingText = remainingText;
-		}
-
-		if (expiredAt) {
-			const expiredDate = new Date(expiredAt);
-
-			updates.expiredAt = expiredDate;
-		}
-
-		if (isUnlimited !== null && isUnlimited !== sim.isUnlimited) {
-			updates.isUnlimited = isUnlimited;
-		}
-
-		if (sim.status !== status) {
-			updates.status = status;
-		}
-
+		// Only update lastUsageFetchAt on Sim
 		const now = new Date();
-		updates.lastUsageFetchAt = now;
-		updates.updatedAt = now;
-
-		if (Object.keys(updates).length > 0) {
-			await Sim.update(updates, {
-				where: { id: sim.id },
-				transaction: transact,
-			});
-		}
-
-		const remoteStatusForLog = status;
+		await Sim.update(
+			{ lastUsageFetchAt: now, updatedAt: now },
+			{ where: { id: sim.id }, transaction: transact }
+		);
 
 		console.log(
-			`[ESIM USAGE] iccid=${maskIccid(sim.iccid)} local=${sim.status}->${status} remote=${remoteStatusForLog} total=${
+			`[ESIM USAGE] iccid=${maskIccid(sim.iccid)} status=${status} total=${
 				totalMb ?? 'n/a'
 			} remaining=${remainingMb ?? 'n/a'}`
 		);
@@ -217,9 +203,6 @@ export async function runEsimUsageJob() {
 		while (true) {
 			const sims = await Sim.findAll({
 				where: {
-					status: {
-						[Op.in]: [SimStatus.NOT_ACTIVE, SimStatus.ACTIVE],
-					},
 					id: {
 						[Op.gt]: lastId,
 					},

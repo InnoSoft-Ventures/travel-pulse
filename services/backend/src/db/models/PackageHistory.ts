@@ -18,15 +18,20 @@ export interface PackageHistoryAttributes {
 	status: SimStatus;
 	packageId: string;
 	packageName: string;
-	dataAmount: number;
-	voiceAmount: number;
-	textAmount: number;
 	validityDays: number;
 	price: number;
 	netPrice: number | null;
 	currency: string;
 	activatedAt: Date | null;
 	expiresAt: Date | null;
+	// Usage tracking fields
+	remainingData: number;
+	totalData: number;
+	remainingVoice: number;
+	totalVoice: number;
+	remainingText: number;
+	totalText: number;
+	isUnlimited: boolean;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -53,15 +58,20 @@ class PackageHistory extends Model<
 	public status!: SimStatus;
 	public packageId!: string;
 	public packageName!: string;
-	public dataAmount!: number;
-	public voiceAmount!: number;
-	public textAmount!: number;
 	public validityDays!: number;
 	public price!: number;
 	public netPrice!: number | null;
 	public currency!: string;
 	public activatedAt!: Date | null;
 	public expiresAt!: Date | null;
+	// Usage tracking
+	public remainingData!: number;
+	public totalData!: number;
+	public remainingVoice!: number;
+	public totalVoice!: number;
+	public remainingText!: number;
+	public totalText!: number;
+	public isUnlimited!: boolean;
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
 }
@@ -125,23 +135,6 @@ PackageHistory.init(
 			type: DataTypes.STRING,
 			field: 'package_name',
 		},
-		dataAmount: {
-			allowNull: false,
-			type: DataTypes.INTEGER,
-			field: 'data_amount',
-		},
-		voiceAmount: {
-			allowNull: false,
-			type: DataTypes.INTEGER,
-			field: 'voice_amount',
-			defaultValue: 0,
-		},
-		textAmount: {
-			allowNull: false,
-			type: DataTypes.INTEGER,
-			field: 'text_amount',
-			defaultValue: 0,
-		},
 		validityDays: {
 			allowNull: false,
 			type: DataTypes.INTEGER,
@@ -170,6 +163,48 @@ PackageHistory.init(
 			type: DataTypes.DATE,
 			field: 'expires_at',
 		},
+		remainingData: {
+			allowNull: false,
+			type: DataTypes.INTEGER,
+			field: 'remaining_data',
+			defaultValue: 0,
+		},
+		totalData: {
+			allowNull: false,
+			type: DataTypes.INTEGER,
+			field: 'total_data',
+			defaultValue: 0,
+		},
+		remainingVoice: {
+			allowNull: false,
+			type: DataTypes.INTEGER,
+			field: 'remaining_voice',
+			defaultValue: 0,
+		},
+		totalVoice: {
+			allowNull: false,
+			type: DataTypes.INTEGER,
+			field: 'total_voice',
+			defaultValue: 0,
+		},
+		remainingText: {
+			allowNull: false,
+			type: DataTypes.INTEGER,
+			field: 'remaining_text',
+			defaultValue: 0,
+		},
+		totalText: {
+			allowNull: false,
+			type: DataTypes.INTEGER,
+			field: 'total_text',
+			defaultValue: 0,
+		},
+		isUnlimited: {
+			allowNull: false,
+			type: DataTypes.BOOLEAN,
+			field: 'is_unlimited',
+			defaultValue: false,
+		},
 		createdAt: {
 			allowNull: false,
 			type: DataTypes.DATE,
@@ -194,6 +229,11 @@ PackageHistory.init(
 PackageHistory.belongsTo(Sim, {
 	foreignKey: 'simId',
 	as: 'sim',
+});
+
+Sim.hasMany(PackageHistory, {
+	foreignKey: 'simId',
+	as: 'packageHistories',
 });
 
 PackageHistory.belongsTo(ProviderOrder, {

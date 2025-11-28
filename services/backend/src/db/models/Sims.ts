@@ -1,7 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import dbConnect from '..';
 import ProviderOrder from './ProviderOrder';
-import { ApnType, SimStatus } from '@travelpulse/interfaces';
+import { ApnType } from '@travelpulse/interfaces';
 
 type SimAPNSettings = {
 	[key: string]: {
@@ -28,15 +28,6 @@ export interface SimAttributes {
 	apn: SimAPNSettings | null;
 	msisdn: string | null;
 	directAppleInstallationUrl: string;
-	remaining: number;
-	total: number;
-	expiredAt: Date;
-	isUnlimited: boolean;
-	status: SimStatus;
-	remainingVoice: number;
-	remainingText: number;
-	totalVoice: number;
-	totalText: number;
 	lastUsageFetchAt: Date | null;
 	createdAt: Date;
 	updatedAt: Date;
@@ -44,7 +35,7 @@ export interface SimAttributes {
 
 export type SimCreationAttributes = Optional<
 	SimAttributes,
-	'id' | 'expiredAt' | 'createdAt' | 'updatedAt' | 'name' | 'lastUsageFetchAt'
+	'id' | 'createdAt' | 'updatedAt' | 'name' | 'lastUsageFetchAt'
 >;
 
 class Sim extends Model<SimAttributes, SimCreationAttributes> {
@@ -65,15 +56,6 @@ class Sim extends Model<SimAttributes, SimCreationAttributes> {
 	public apn!: SimAPNSettings | null;
 	public msisdn!: string | null;
 	public directAppleInstallationUrl!: string;
-	public remaining!: number;
-	public total!: number;
-	public expiredAt!: Date;
-	public isUnlimited!: boolean;
-	public status!: SimStatus;
-	public remainingVoice!: number;
-	public remainingText!: number;
-	public totalVoice!: number;
-	public totalText!: number;
 	public lastUsageFetchAt!: Date | null;
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
@@ -162,53 +144,6 @@ Sim.init(
 			allowNull: false,
 			type: DataTypes.TEXT,
 			field: 'direct_apple_installation_url',
-		},
-		remaining: {
-			allowNull: false,
-			type: DataTypes.INTEGER,
-		},
-		total: {
-			allowNull: false,
-			type: DataTypes.INTEGER,
-		},
-		expiredAt: {
-			allowNull: true,
-			type: DataTypes.DATE,
-			field: 'expired_at',
-		},
-		isUnlimited: {
-			allowNull: false,
-			type: DataTypes.BOOLEAN,
-			field: 'is_unlimited',
-		},
-		status: {
-			allowNull: false,
-			type: DataTypes.STRING,
-			defaultValue: SimStatus.NOT_ACTIVE,
-		},
-		remainingVoice: {
-			allowNull: false,
-			type: DataTypes.INTEGER,
-			field: 'remaining_voice',
-			defaultValue: 0,
-		},
-		remainingText: {
-			allowNull: false,
-			type: DataTypes.INTEGER,
-			field: 'remaining_text',
-			defaultValue: 0,
-		},
-		totalVoice: {
-			allowNull: false,
-			type: DataTypes.INTEGER,
-			field: 'total_voice',
-			defaultValue: 0,
-		},
-		totalText: {
-			allowNull: false,
-			type: DataTypes.INTEGER,
-			field: 'total_text',
-			defaultValue: 0,
 		},
 		lastUsageFetchAt: {
 			allowNull: true,

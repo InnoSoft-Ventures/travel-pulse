@@ -1,6 +1,5 @@
 import { NotFoundException } from '@travelpulse/middlewares';
 import { SessionRequest } from '../../../types/express';
-import { Op } from 'sequelize';
 import Sim from '../../db/models/Sims';
 import ProviderOrder from '../../db/models/ProviderOrder';
 import Package from '../../db/models/Package';
@@ -15,6 +14,7 @@ import {
 	SimStatus,
 } from '@travelpulse/interfaces';
 import { dateJs, PRETTY_DATE_FORMAT } from '@travelpulse/utils';
+import { getActivePackageForSim } from '../package-history.service';
 
 type ListQuery = {
 	status?: 'active' | 'inactive' | 'all';
@@ -34,21 +34,18 @@ export const listEsimsService = async (
 	);
 	const offset = (pageNum - 1) * sizeNum;
 
-	const statusFilter = (() => {
-		switch (query.status) {
-			case 'active':
-				return { status: SimStatus.ACTIVE };
-			case 'inactive':
-				return { status: { [Op.ne]: SimStatus.ACTIVE } };
-			default:
-				return {};
-		}
-	})();
+	// Build status filter for PackageHistory if needed
+	const packageHistoryWhere: any = {};
+	if (query.status === 'active') {
+		packageHistoryWhere.status = SimStatus.ACTIVE;
+	} else if (query.status === 'inactive') {
+		packageHistoryWhere.status = {
+			[require('sequelize').Op.ne]: SimStatus.ACTIVE,
+		};
+	}
 
 	const { rows, count } = await Sim.findAndCountAll({
-		where: {
-			...statusFilter,
-		},
+		where: {},
 		include: [
 			{
 				model: ProviderOrder,
@@ -76,27 +73,54 @@ export const listEsimsService = async (
 					},
 				],
 			},
+			{
+				model: PackageHistory,
+				as: 'packageHistories',
+				required: query.status !== 'all' && query.status !== undefined,
+				where: packageHistoryWhere,
+				attributes: [
+					'id',
+					'status',
+					'validityDays',
+					'remainingData',
+					'totalData',
+					'expiresAt',
+				],
+				limit: 1,
+				order: [
+					['status', 'DESC'], // ACTIVE comes before NOT_ACTIVE
+					['createdAt', 'DESC'],
+				],
+			},
 		],
 		order: [['createdAt', 'DESC']],
 		limit: sizeNum,
 		offset,
+		distinct: true,
 	});
 
 	const items: SIMDetails[] = rows.map((sim) => {
 		const po = sim.get('providerOrder') as ProviderOrder | undefined;
 		const order = po?.get('order') as Order | undefined;
-		const expiredAt = sim.expiredAt
-			? dateJs(sim.expiredAt).format(PRETTY_DATE_FORMAT)
+		const packageHistories = sim.get('packageHistories') as
+			| PackageHistory[]
+			| undefined;
+
+		// Get the most relevant package (active or latest)
+		const activePackage = packageHistories?.[0];
+
+		const expiredAt = activePackage?.expiresAt
+			? dateJs(activePackage.expiresAt).format(PRETTY_DATE_FORMAT)
 			: '-';
 		const planName =
 			sim.name ?? po?.package ?? po?.packageId ?? 'eSIM Plan';
 
-		const validity = po?.validity ?? 0;
+		const validity = activePackage?.validityDays ?? 0;
 		const days = validity > 1 ? `${validity} days` : '0 day';
 
 		return {
 			id: sim.id,
-			status: sim.status,
+			status: activePackage?.status ?? SimStatus.NOT_ACTIVE,
 			name: planName,
 			msisdn: sim.msisdn,
 			iccid: sim.iccid,
@@ -106,9 +130,9 @@ export const listEsimsService = async (
 			lpa: sim.lpa,
 			activationCode: '',
 			qrcodeUrl: sim.qrcodeUrl,
-			remaining: sim.remaining,
+			remaining: activePackage?.remainingData ?? 0,
 			validity: days,
-			total: sim.total,
+			total: activePackage?.totalData ?? 0,
 			expiredAt,
 			apnType: sim.apnType,
 			apnValue: sim.apnValue,
@@ -234,26 +258,30 @@ export const getEsimDetailsService = async (
 	}
 
 	const order = po?.get('order') as Order | undefined;
-	const expiredAt = sim.expiredAt
-		? dateJs(sim.expiredAt).format(PRETTY_DATE_FORMAT)
+
+	// Get active package for this SIM
+	const activePackage = await getActivePackageForSim(sim.id);
+
+	const expiredAt = activePackage?.expiresAt
+		? dateJs(activePackage.expiresAt).format(PRETTY_DATE_FORMAT)
 		: '-';
 
 	const friendlyName =
 		sim.name ?? po?.package ?? po?.packageId ?? 'eSIM Plan';
-	const validity = po?.validity ?? 0;
+	const validity = activePackage?.validityDays ?? 0;
 	const days = validity > 1 ? `${validity} days` : '0 day';
 
 	return {
 		id: sim.id,
 		name: friendlyName,
-		status: sim.status,
+		status: activePackage?.status ?? SimStatus.NOT_ACTIVE,
 		msisdn: sim.msisdn,
 		iccid: sim.iccid,
 		lpa: sim.lpa,
 		activationCode: sim.qrcode,
 		qrcodeUrl: sim.qrcodeUrl,
-		remaining: sim.remaining,
-		total: sim.total,
+		remaining: activePackage?.remainingData ?? 0,
+		total: activePackage?.totalData ?? 0,
 		expiredAt,
 		apnType: sim.apnType,
 		apnValue: sim.apnValue,
@@ -361,9 +389,13 @@ export const getPackageHistoryService = async (req: SessionRequest) => {
 		status: record.status,
 		packageId: record.packageId,
 		packageName: record.packageName,
-		dataAmount: record.dataAmount,
-		voiceAmount: record.voiceAmount,
-		textAmount: record.textAmount,
+		totalData: record.totalData,
+		remainingData: record.remainingData,
+		totalVoice: record.totalVoice,
+		remainingVoice: record.remainingVoice,
+		totalText: record.totalText,
+		remainingText: record.remainingText,
+		isUnlimited: record.isUnlimited,
 		validityDays: record.validityDays,
 		price: Number(record.price),
 		netPrice: record.netPrice ? Number(record.netPrice) : null,
@@ -379,8 +411,8 @@ export const getPackageHistoryService = async (req: SessionRequest) => {
 			? {
 					id: record.providerOrderId,
 					externalOrderId:
-						(record.get('providerOrder') as any)
-							?.externalOrderId ?? null,
+						(record.get('providerOrder') as any)?.externalOrderId ??
+						null,
 				}
 			: null,
 	}));

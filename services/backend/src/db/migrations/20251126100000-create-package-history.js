@@ -55,20 +55,6 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.STRING,
 			},
-			data_amount: {
-				allowNull: false,
-				type: Sequelize.INTEGER,
-			},
-			voice_amount: {
-				allowNull: false,
-				type: Sequelize.INTEGER,
-				defaultValue: 0,
-			},
-			text_amount: {
-				allowNull: false,
-				type: Sequelize.INTEGER,
-				defaultValue: 0,
-			},
 			validity_days: {
 				allowNull: false,
 				type: Sequelize.INTEGER,
@@ -92,6 +78,47 @@ module.exports = {
 			expires_at: {
 				allowNull: true,
 				type: Sequelize.DATE,
+			},
+			remaining_data: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+				defaultValue: 0,
+				comment: 'Remaining data in MB',
+			},
+			total_data: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+				defaultValue: 0,
+				comment: 'Total data in MB',
+			},
+			remaining_voice: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+				defaultValue: 0,
+				comment: 'Remaining voice minutes',
+			},
+			total_voice: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+				defaultValue: 0,
+				comment: 'Total voice minutes',
+			},
+			remaining_text: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+				defaultValue: 0,
+				comment: 'Remaining text messages',
+			},
+			total_text: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+				defaultValue: 0,
+				comment: 'Total text messages',
+			},
+			is_unlimited: {
+				allowNull: false,
+				type: Sequelize.BOOLEAN,
+				defaultValue: false,
 			},
 			created_at: {
 				allowNull: false,

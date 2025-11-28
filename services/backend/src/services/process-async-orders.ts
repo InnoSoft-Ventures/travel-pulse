@@ -269,14 +269,6 @@ const processAiraloOrder = async (
 			apn: sim.apn,
 			msisdn: sim.msisdn,
 			directAppleInstallationUrl: sim.direct_apple_installation_url,
-			remaining: providerOrder.dataAmount,
-			total: providerOrder.dataAmount,
-			isUnlimited: false,
-			status: SimStatus.NOT_ACTIVE,
-			remainingVoice: text || 0,
-			remainingText: voice || 0,
-			totalVoice: text || 0,
-			totalText: voice || 0,
 		}))
 	);
 
@@ -287,14 +279,19 @@ const processAiraloOrder = async (
 		transact
 	);
 
-	// Calculate expiration date based on validity days
+	// If Calculate expiration date based on validity days
 	const validityDays = providerOrderData.validity || 0;
-	const expiresAt = new Date();
-	expiresAt.setDate(expiresAt.getDate() + validityDays);
+
+	// Since status = NOT_ACTIVE, we wont set expiry date
+	const expiresAt = undefined;
 
 	// Create package history records for each SIM
 	await Promise.all(
 		processedOrder.createdSims.map(async (sim) => {
+			const totalData = providerOrder.dataAmount;
+			const totalVoice = voice || 0;
+			const totalText = text || 0;
+
 			await createPackageHistoryRecord(
 				{
 					simId: sim.id,
@@ -303,9 +300,6 @@ const processAiraloOrder = async (
 					status: SimStatus.NOT_ACTIVE,
 					packageId: data.data.package_id,
 					packageName: data.data.package,
-					dataAmount: providerOrder.dataAmount,
-					voiceAmount: voice || 0,
-					textAmount: text || 0,
 					validityDays,
 					price: Number(data.data.price),
 					netPrice: data.data.net_price
@@ -314,6 +308,14 @@ const processAiraloOrder = async (
 					currency: data.data.currency,
 					activatedAt: undefined, // Will be set when SIM becomes active
 					expiresAt,
+					// Usage tracking fields
+					remainingData: totalData,
+					totalData,
+					remainingVoice: totalVoice,
+					totalVoice,
+					remainingText: totalText,
+					totalText,
+					isUnlimited: false,
 				},
 				transact
 			);
