@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RegisterFormValues } from '@travelpulse/interfaces/schemas';
-import { ApiService } from '../request/request';
+import { ApiService } from '../request';
 import { setUser } from '../features/user.slice';
 import { ResponseData, UserDataDAO } from '@travelpulse/interfaces';
 import { errorHandler } from '@travelpulse/utils';

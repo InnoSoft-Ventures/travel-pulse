@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ApiService } from '../request/request';
+import { ApiService } from '../request';
 import { CartDetails, ResponseData } from '@travelpulse/interfaces';
 import { errorHandler } from '@travelpulse/utils';
 import { RootState } from '../store';

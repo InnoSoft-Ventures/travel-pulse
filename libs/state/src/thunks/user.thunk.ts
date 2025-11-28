@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ApiService } from '../request/request';
+import { ApiService } from '../request';
 import { ResponseData, UserDataDAO } from '@travelpulse/interfaces';
 import { errorHandler } from '@travelpulse/utils';
 import { setUser } from '../features/user.slice';

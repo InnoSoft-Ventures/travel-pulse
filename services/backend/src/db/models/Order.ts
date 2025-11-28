@@ -96,7 +96,9 @@ Order.init(
 		sequelize: dbConnect,
 		modelName: 'Order',
 		tableName: 'orders',
-		timestamps: false,
+		timestamps: true,
+		createdAt: 'created_at',
+		updatedAt: 'updated_at',
 	}
 );
 

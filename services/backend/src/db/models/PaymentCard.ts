@@ -163,7 +163,9 @@ PaymentCard.init(
 		sequelize: dbConnect,
 		modelName: 'PaymentCard',
 		tableName: 'payment_cards',
-		timestamps: false,
+		timestamps: true,
+		createdAt: 'created_at',
+		updatedAt: 'updated_at',
 		indexes: [
 			{
 				name: 'idx_payment_cards_user_provider_last4',

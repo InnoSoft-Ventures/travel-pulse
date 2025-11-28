@@ -148,7 +148,9 @@ PaymentAttempt.init(
 		sequelize: dbConnect,
 		modelName: 'PaymentAttempt',
 		tableName: 'payment_attempts',
-		timestamps: false,
+		timestamps: true,
+		createdAt: 'created_at',
+		updatedAt: 'updated_at',
 		indexes: [
 			{
 				name: 'idx_payment_attempts_order_status',

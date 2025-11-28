@@ -216,7 +216,9 @@ PackageHistory.init(
 		sequelize: dbConnect,
 		modelName: 'PackageHistory',
 		tableName: 'package_history',
-		timestamps: false,
+		timestamps: true,
+		createdAt: 'created_at',
+		updatedAt: 'updated_at',
 	}
 );
 

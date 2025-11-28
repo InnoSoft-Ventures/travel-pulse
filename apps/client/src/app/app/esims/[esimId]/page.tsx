@@ -149,6 +149,11 @@ export default function EsimDetailsPage() {
 					<SimUsage sim={sim} />
 				</Suspense>
 
+				{/* Package History - Already has internal lazy loading */}
+				<Suspense fallback={<SectionSkeleton />}>
+					<PackageHistory simId={sim.id} />
+				</Suspense>
+
 				{/* Installation - Conditionally render */}
 				{isNotActive && (
 					<Suspense fallback={<SectionSkeleton />}>
@@ -158,11 +163,6 @@ export default function EsimDetailsPage() {
 
 				<Suspense fallback={<SectionSkeleton />}>
 					<NetworkAndOrder sim={sim} />
-				</Suspense>
-
-				{/* Package History - Already has internal lazy loading */}
-				<Suspense fallback={<SectionSkeleton />}>
-					<PackageHistory simId={sim.id} />
 				</Suspense>
 
 				<Suspense fallback={<SectionSkeleton />}>

@@ -159,8 +159,10 @@ export const issueSessionTokens = async (
 		email,
 	});
 
-	const { refreshTokenValue, expiresAt } =
-		await createRefreshTokenRecord(userId, metadata);
+	const { refreshTokenValue, expiresAt } = await createRefreshTokenRecord(
+		userId,
+		metadata
+	);
 
 	return {
 		accessToken,
@@ -204,8 +206,11 @@ export const rotateRefreshToken = async (
 		email: user.email || '',
 	});
 
-	const { refreshTokenValue: newRefreshTokenValue, tokenHash, expiresAt } =
-		await createRefreshTokenRecord(user.id, metadata);
+	const {
+		refreshTokenValue: newRefreshTokenValue,
+		tokenHash,
+		expiresAt,
+	} = await createRefreshTokenRecord(user.id, metadata);
 
 	tokenRecord.revokedAt = new Date();
 	tokenRecord.revokedByIp = metadata.ipAddress ?? null;

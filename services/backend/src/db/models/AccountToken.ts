@@ -86,7 +86,9 @@ AccountToken.init(
 		sequelize: dbConnect,
 		modelName: 'AccountToken',
 		tableName: 'account_tokens',
-		timestamps: false,
+		timestamps: true,
+		createdAt: 'created_at',
+		updatedAt: 'updated_at',
 	}
 );
 

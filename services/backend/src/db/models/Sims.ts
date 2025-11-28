@@ -167,7 +167,9 @@ Sim.init(
 		sequelize: dbConnect,
 		modelName: 'Sim',
 		tableName: 'sims',
-		timestamps: false,
+		timestamps: true,
+		createdAt: 'created_at',
+		updatedAt: 'updated_at',
 	}
 );
 
