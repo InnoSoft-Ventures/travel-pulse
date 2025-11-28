@@ -5,6 +5,7 @@ import {
 	SIMDetails,
 	SIMInfoResponse,
 	SuccessResponse,
+	PackageHistoryResponse,
 } from '@travelpulse/interfaces';
 
 export const fetchSims = createAsyncThunk<
@@ -44,5 +45,26 @@ export const fetchSimDetails = createAsyncThunk<
 	} catch (err) {
 		console.error(`Failed to load eSIM details for SIM ID: ${simId}`, err);
 		return rejectWithValue('Failed to load eSIM details');
+	}
+});
+
+export const fetchPackageHistory = createAsyncThunk<
+	PackageHistoryResponse,
+	{ simId: number },
+	{ rejectValue: string }
+>('sim/fetchPackageHistory', async ({ simId }, { rejectWithValue }) => {
+	try {
+		const res = await ApiService.get<
+			SuccessResponse<PackageHistoryResponse>
+		>(`/api/esims/${simId}/package-history`);
+		const parsed = res.data;
+
+		return parsed.data;
+	} catch (err) {
+		console.error(
+			`Failed to load package history for SIM ID: ${simId}`,
+			err
+		);
+		return rejectWithValue('Failed to load package history');
 	}
 });

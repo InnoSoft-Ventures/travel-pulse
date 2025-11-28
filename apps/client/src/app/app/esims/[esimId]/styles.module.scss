@@ -498,3 +498,23 @@
 .iconButton:hover {
 	background: #f3f4f6;
 }
+
+/* Loading skeleton */
+.skeletonPulse {
+	width: 100%;
+	height: 100%;
+	min-height: 80px;
+	background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+	background-size: 200% 100%;
+	animation: skeleton-pulse 1.5s ease-in-out infinite;
+	border-radius: 8px;
+}
+
+@keyframes skeleton-pulse {
+	0% {
+		background-position: 200% 0;
+	}
+	100% {
+		background-position: -200% 0;
+	}
+}

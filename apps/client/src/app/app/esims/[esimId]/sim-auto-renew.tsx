@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from './styles.module.scss';
 import { Switch } from '@heroui/switch';
 
@@ -7,10 +7,7 @@ interface SimAutoRenewProps {
 	planName: string;
 }
 
-export default function SimAutoRenew({
-	autoRenew,
-	planName,
-}: SimAutoRenewProps) {
+function SimAutoRenew({ autoRenew, planName }: SimAutoRenewProps) {
 	return (
 		<section className={styles.renewSection}>
 			<h2 className={styles.sectionTitle}>Auto-renewal</h2>
@@ -29,3 +26,5 @@ export default function SimAutoRenew({
 		</section>
 	);
 }
+
+export default memo(SimAutoRenew);

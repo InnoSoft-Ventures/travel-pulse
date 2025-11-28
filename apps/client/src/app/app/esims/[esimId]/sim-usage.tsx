@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import styles from './styles.module.scss';
 import { SIMDetails } from '@travelpulse/interfaces';
 import { formatDataSize } from '@travelpulse/utils';
@@ -7,16 +7,25 @@ interface UsageChartProps {
 	sim: SIMDetails;
 }
 
-export default function SimUsage({ sim }: UsageChartProps) {
-	const dataLeft = `${formatDataSize(sim.remaining)} / ${formatDataSize(
-		sim.total
-	)}`;
-	const total = sim.total ?? 0;
-	const remaining = sim.remaining ?? 0;
-	const used = Math.max(0, total - remaining);
-	const percentUsed =
-		total > 0 ? Math.min(100, Math.round((used / total) * 100)) : 0;
-	const percentRemaining = 100 - percentUsed;
+function SimUsageComponent({ sim }: UsageChartProps) {
+	// Memoize expensive calculations
+	const usageData = useMemo(() => {
+		const total = sim.total ?? 0;
+		const remaining = sim.remaining ?? 0;
+		const used = Math.max(0, total - remaining);
+		const percentUsed =
+			total > 0 ? Math.min(100, Math.round((used / total) * 100)) : 0;
+		const percentRemaining = 100 - percentUsed;
+
+		return {
+			dataLeft: `${formatDataSize(remaining)} / ${formatDataSize(total)}`,
+			used,
+			percentUsed,
+			percentRemaining,
+		};
+	}, [sim.total, sim.remaining]);
+
+	const { dataLeft, used, percentUsed, percentRemaining } = usageData;
 
 	return (
 		<section className={styles.usageSection}>
@@ -44,3 +53,11 @@ export default function SimUsage({ sim }: UsageChartProps) {
 		</section>
 	);
 }
+
+// Memoize component to prevent unnecessary re-renders
+export default memo(SimUsageComponent, (prevProps, nextProps) => {
+	return (
+		prevProps.sim.remaining === nextProps.sim.remaining &&
+		prevProps.sim.total === nextProps.sim.total
+	);
+});

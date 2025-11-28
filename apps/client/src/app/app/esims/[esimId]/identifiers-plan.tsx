@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from './styles.module.scss';
 import { SIMDetails } from '@travelpulse/interfaces';
 import { SimUtilConfig } from './sim-util';
@@ -10,10 +10,7 @@ interface IdentifiersPlanProps {
 	fieldCopy: SimUtilConfig['copyField'];
 }
 
-export default function IdentifiersPlan({
-	sim,
-	fieldCopy,
-}: IdentifiersPlanProps) {
+function IdentifiersPlanComponent({ sim, fieldCopy }: IdentifiersPlanProps) {
 	const phoneNumber = sim.msisdn ?? undefined;
 	const expiresOn = sim.expiredAt;
 
@@ -76,3 +73,6 @@ export default function IdentifiersPlan({
 		</>
 	);
 }
+
+// Memoize to prevent re-renders when sim data hasn't changed
+export default memo(IdentifiersPlanComponent);

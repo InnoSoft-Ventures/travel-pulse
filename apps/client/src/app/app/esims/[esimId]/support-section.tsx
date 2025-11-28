@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from './styles.module.scss';
 
-export default function SupportSection() {
+function SupportSection() {
 	return (
 		<section className={styles.miscSection}>
 			<h2 className={styles.sectionTitle}>More</h2>
@@ -37,3 +37,5 @@ export default function SupportSection() {
 		</section>
 	);
 }
+
+export default memo(SupportSection);

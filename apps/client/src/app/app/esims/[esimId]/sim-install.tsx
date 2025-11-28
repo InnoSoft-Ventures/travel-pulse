@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, memo, useCallback } from 'react';
 import { Button } from '@travelpulse/ui';
 import styles from './styles.module.scss';
 import { SIMDetails, SIMInfo } from '@travelpulse/interfaces';
@@ -10,9 +10,24 @@ interface SimInstallProps {
 	fieldCopy: SimUtilConfig['copyField'];
 }
 
-export default function SimInstall({ sim, fieldCopy }: SimInstallProps) {
+function SimInstallComponent({ sim, fieldCopy }: SimInstallProps) {
 	const [showActivation, setShowActivation] = useState(false);
 	const [showLpa, setShowLpa] = useState(false);
+
+	// Memoize callbacks to prevent re-creating functions on every render
+	const toggleActivation = useCallback(
+		() => setShowActivation((v) => !v),
+		[]
+	);
+	const toggleLpa = useCallback(() => setShowLpa((v) => !v), []);
+
+	const copyActivationCode = useCallback(() => {
+		fieldCopy('activationCode', 'Activation code copied');
+	}, [fieldCopy]);
+
+	const copyLpa = useCallback(() => {
+		fieldCopy('lpa', 'LPA address copied');
+	}, [fieldCopy]);
 
 	return (
 		<section className={styles.actionsSection} id="connect-share">
@@ -48,19 +63,14 @@ export default function SimInstall({ sim, fieldCopy }: SimInstallProps) {
 								<Button
 									variant="outline"
 									size="sm"
-									onClick={() => setShowActivation((v) => !v)}
+									onClick={toggleActivation}
 								>
 									{showActivation ? 'Hide' : 'Reveal'}
 								</Button>
 								<Button
 									variant="outline"
 									size="sm"
-									onClick={() => {
-										fieldCopy(
-											'activationCode',
-											'Activation code copied'
-										);
-									}}
+									onClick={copyActivationCode}
 								>
 									Copy
 								</Button>
@@ -84,16 +94,14 @@ export default function SimInstall({ sim, fieldCopy }: SimInstallProps) {
 								<Button
 									variant="outline"
 									size="sm"
-									onClick={() => setShowLpa((v) => !v)}
+									onClick={toggleLpa}
 								>
 									{showLpa ? 'Hide' : 'Reveal'}
 								</Button>
 								<Button
 									variant="outline"
 									size="sm"
-									onClick={() => {
-										fieldCopy('lpa', 'LPA address copied');
-									}}
+									onClick={copyLpa}
 								>
 									Copy
 								</Button>
@@ -129,3 +137,6 @@ export default function SimInstall({ sim, fieldCopy }: SimInstallProps) {
 		</section>
 	);
 }
+
+// Memoize to prevent unnecessary re-renders
+export default memo(SimInstallComponent);

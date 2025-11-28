@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, memo, useCallback } from 'react';
 import styles from './styles.module.scss';
 import { SIMDetails } from '@travelpulse/interfaces';
 import { Button } from '@travelpulse/ui';
@@ -8,9 +8,12 @@ interface NetworkAndOrderProps {
 	sim: SIMDetails;
 }
 
-export default function NetworkAndOrder({ sim }: NetworkAndOrderProps) {
+function NetworkAndOrder({ sim }: NetworkAndOrderProps) {
 	// ICCID is shown plainly (no masking) per product decision
 	const [apnExpanded, setApnExpanded] = useState(false);
+
+	// Memoize callbacks
+	const toggleApn = useCallback(() => setApnExpanded((v) => !v), []);
 
 	return (
 		<>
@@ -42,7 +45,7 @@ export default function NetworkAndOrder({ sim }: NetworkAndOrderProps) {
 									<Button
 										variant="outline"
 										size="sm"
-										onClick={() => setApnExpanded(true)}
+										onClick={toggleApn}
 									>
 										Show more
 									</Button>
@@ -76,7 +79,7 @@ export default function NetworkAndOrder({ sim }: NetworkAndOrderProps) {
 									<Button
 										variant="outline"
 										size="sm"
-										onClick={() => setApnExpanded(false)}
+										onClick={toggleApn}
 									>
 										Hide
 									</Button>
@@ -112,3 +115,5 @@ export default function NetworkAndOrder({ sim }: NetworkAndOrderProps) {
 		</>
 	);
 }
+
+export default memo(NetworkAndOrder);

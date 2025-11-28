@@ -9,11 +9,12 @@ import Country from '../../db/models/Country';
 import Order from '../../db/models/Order';
 import PackageHistory from '../../db/models/PackageHistory';
 import {
+	PackageHistoryResponse,
 	SIMDetails,
 	SIMInfoResponse,
 	SimStatus,
 } from '@travelpulse/interfaces';
-import { dateJs, PRETTY_DATE_FORMAT } from '@travelpulse/utils';
+import { dateJs, PRETTY_DATETIME_FORMAT } from '@travelpulse/utils';
 import { getActivePackageForSim } from '../package-history.service';
 
 type ListQuery = {
@@ -110,7 +111,7 @@ export const listEsimsService = async (
 		const activePackage = packageHistories?.[0];
 
 		const expiredAt = activePackage?.expiresAt
-			? dateJs(activePackage.expiresAt).format(PRETTY_DATE_FORMAT)
+			? dateJs(activePackage.expiresAt).format(PRETTY_DATETIME_FORMAT)
 			: '-';
 		const planName =
 			sim.name ?? po?.package ?? po?.packageId ?? 'eSIM Plan';
@@ -133,26 +134,16 @@ export const listEsimsService = async (
 			remaining: activePackage?.remainingData ?? 0,
 			validity: days,
 			total: activePackage?.totalData ?? 0,
-			expiredAt,
 			apnType: sim.apnType,
 			apnValue: sim.apnValue,
 			directAppleInstallationUrl: sim.directAppleInstallationUrl,
-			providerOrder: po
-				? {
-						id: po.id,
-						packageId: po.packageId,
-						type: po.type,
-						voice: po.voice,
-						text: po.text,
-						price: po.price,
-						currency: po.currency,
-					}
-				: null,
 			order: order
 				? { id: order.id, orderNumber: order.orderNumber }
 				: null,
 			country: null,
 			continent: null,
+			expiredAt,
+			createdAt: dateJs(sim.createdAt).format(PRETTY_DATETIME_FORMAT),
 		};
 	});
 
@@ -263,7 +254,7 @@ export const getEsimDetailsService = async (
 	const activePackage = await getActivePackageForSim(sim.id);
 
 	const expiredAt = activePackage?.expiresAt
-		? dateJs(activePackage.expiresAt).format(PRETTY_DATE_FORMAT)
+		? dateJs(activePackage.expiresAt).format(PRETTY_DATETIME_FORMAT)
 		: '-';
 
 	const friendlyName =
@@ -282,7 +273,6 @@ export const getEsimDetailsService = async (
 		qrcodeUrl: sim.qrcodeUrl,
 		remaining: activePackage?.remainingData ?? 0,
 		total: activePackage?.totalData ?? 0,
-		expiredAt,
 		apnType: sim.apnType,
 		apnValue: sim.apnValue,
 		isRoaming: sim.isRoaming,
@@ -290,20 +280,11 @@ export const getEsimDetailsService = async (
 		apn: sim.apn,
 		validity: days,
 		directAppleInstallationUrl: sim.directAppleInstallationUrl,
-		providerOrder: po
-			? {
-					id: po.id,
-					packageId: po.packageId,
-					type: po.type,
-					voice: po.voice,
-					text: po.text,
-					price: po.price,
-					currency: po.currency,
-				}
-			: null,
 		order: order ? { id: order.id, orderNumber: order.orderNumber } : null,
 		country,
 		continent,
+		expiredAt,
+		createdAt: dateJs(sim.createdAt).format(PRETTY_DATETIME_FORMAT),
 	};
 };
 
@@ -339,7 +320,9 @@ export const getEsimQrService = async (req: SessionRequest) => {
 	return { id: sim.id, qrcode: sim.qrcode, qrcodeUrl: sim.qrcodeUrl };
 };
 
-export const getPackageHistoryService = async (req: SessionRequest) => {
+export const getPackageHistoryService = async (
+	req: SessionRequest
+): Promise<PackageHistoryResponse> => {
 	const userId = req.user.accountId;
 	const simId = Number(req.params.simId);
 
@@ -373,17 +356,9 @@ export const getPackageHistoryService = async (req: SessionRequest) => {
 	const history = await PackageHistory.findAll({
 		where: { simId },
 		order: [['createdAt', 'DESC']],
-		include: [
-			{
-				model: ProviderOrder,
-				as: 'providerOrder',
-				attributes: ['id', 'externalOrderId'],
-				required: false,
-			},
-		],
 	});
 
-	return history.map((record) => ({
+	const mappedHistory = history.map((record) => ({
 		id: record.id,
 		actionType: record.actionType,
 		status: record.status,
@@ -401,19 +376,13 @@ export const getPackageHistoryService = async (req: SessionRequest) => {
 		netPrice: record.netPrice ? Number(record.netPrice) : null,
 		currency: record.currency,
 		activatedAt: record.activatedAt
-			? dateJs(record.activatedAt).format(PRETTY_DATE_FORMAT)
-			: null,
+			? dateJs(record.activatedAt).format(PRETTY_DATETIME_FORMAT)
+			: '-',
 		expiresAt: record.expiresAt
-			? dateJs(record.expiresAt).format(PRETTY_DATE_FORMAT)
-			: null,
-		createdAt: dateJs(record.createdAt).format(PRETTY_DATE_FORMAT),
-		providerOrder: record.providerOrderId
-			? {
-					id: record.providerOrderId,
-					externalOrderId:
-						(record.get('providerOrder') as any)?.externalOrderId ??
-						null,
-				}
-			: null,
+			? dateJs(record.expiresAt).format(PRETTY_DATETIME_FORMAT)
+			: '-',
+		createdAt: dateJs(record.createdAt).format(PRETTY_DATETIME_FORMAT),
 	}));
+
+	return { simId, history: mappedHistory };
 };

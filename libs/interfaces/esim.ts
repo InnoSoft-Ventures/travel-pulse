@@ -8,6 +8,7 @@ export interface SIMInfo {
 	remaining: number;
 	total: number;
 	expiredAt: string;
+	createdAt: string;
 }
 
 type SimAPNSettings = {
@@ -30,7 +31,7 @@ export interface SIMDetails extends SIMInfo {
 	confirmationCode: string | null;
 	apn: SimAPNSettings | null;
 	directAppleInstallationUrl: string;
-	providerOrder: {
+	providerOrder?: {
 		id: number;
 		packageId: string;
 		type: string;
@@ -55,4 +56,38 @@ export interface SIMInfoResponse {
 	page: number;
 	size: number;
 	total: number;
+}
+
+/**
+ * Package history record for an eSIM.
+ * Fields are normalized and optional to accommodate provider differences.
+ */
+export interface PackageHistoryItem {
+	id: number;
+	status: SimStatus;
+	/** Days of validity for the package, if provided. */
+	validityDays?: number | null;
+	activatedAt?: string | null;
+	expiresAt?: string | null;
+	/** Data usage in MB (remaining and total). */
+	remainingDataMB?: number | null;
+	totalDataMB?: number | null;
+	/** Voice minutes usage (remaining and total). */
+	remainingVoice?: number | null;
+	totalVoice?: number | null;
+	/** SMS usage (remaining and total). */
+	remainingText?: number | null;
+	totalText?: number | null;
+	/** True if the package is unlimited for data. */
+	isUnlimited?: boolean | null;
+	/** Optional labeling/pricing metadata. */
+	name?: string | null;
+	price?: string | number | null;
+	currency?: string | null;
+	type?: string | null;
+}
+
+export interface PackageHistoryResponse {
+	simId: number;
+	history: PackageHistoryItem[];
 }

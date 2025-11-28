@@ -5,21 +5,29 @@ import {
 	ListState,
 	SIMDetails,
 	SIMInfo,
+	PackageHistoryItem,
+	PackageHistoryResponse,
 } from '@travelpulse/interfaces';
 import {
 	createInitialItemState,
 	createInitialListState,
 } from '@travelpulse/utils';
-import { fetchSimDetails, fetchSims } from '../thunks/sim.thunk';
+import {
+	fetchSimDetails,
+	fetchSims,
+	fetchPackageHistory,
+} from '../thunks/sim.thunk';
 
 interface EsimState {
 	sims: ListState<SIMInfo>;
 	simDetails: ItemState<SIMDetails | null>;
+	packageHistory: ListState<PackageHistoryItem>;
 }
 
 const initialState: EsimState = {
 	sims: createInitialListState<SIMInfo>(),
 	simDetails: createInitialItemState<SIMDetails | null>(null),
+	packageHistory: createInitialListState<PackageHistoryItem>(),
 };
 
 const simsSlice = createSlice({
@@ -76,6 +84,24 @@ const simsSlice = createSlice({
 		builder.addCase(fetchSimDetails.rejected, (state, action) => {
 			state.simDetails.status = 'failed';
 			state.simDetails.error = action.payload as ErrorHandler;
+		});
+
+		builder.addCase(fetchPackageHistory.pending, (state) => {
+			state.packageHistory.list = [];
+			state.packageHistory.status = 'loading';
+			state.packageHistory.error = undefined;
+		});
+		builder.addCase(
+			fetchPackageHistory.fulfilled,
+			(state, action: PayloadAction<PackageHistoryResponse>) => {
+				state.packageHistory.status = 'succeeded';
+				state.packageHistory.list = action.payload.history;
+				state.packageHistory.error = undefined;
+			}
+		);
+		builder.addCase(fetchPackageHistory.rejected, (state, action) => {
+			state.packageHistory.status = 'failed';
+			state.packageHistory.error = action.payload as ErrorHandler;
 		});
 	},
 });

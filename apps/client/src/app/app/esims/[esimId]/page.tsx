@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, lazy, Suspense } from 'react';
 import { useParams } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@travelpulse/ui/state';
 import { Button } from '@travelpulse/ui';
@@ -8,15 +8,27 @@ import styles from './styles.module.scss';
 import Link from 'next/link';
 import { capitalizeFirstLetter, elementScrollTo } from '@travelpulse/utils';
 import { fetchSimDetails } from '@travelpulse/ui/thunks';
-import SimUsage from './sim-usage';
-import SimInstall from './sim-install';
 import { SimUtil } from './sim-util';
-import SupportSection from './support-section';
-import NetworkAndOrder from './network-and-order';
+import { SimStatus } from '@travelpulse/interfaces';
+
+// Lazy load heavy components for code splitting
+const SimUsage = lazy(() => import('./sim-usage'));
+const SimInstall = lazy(() => import('./sim-install'));
+const NetworkAndOrder = lazy(() => import('./network-and-order'));
+const PackageHistory = lazy(() => import('./package-history'));
+const SimAutoRenew = lazy(() => import('./sim-auto-renew'));
+const SupportSection = lazy(() => import('./support-section'));
+
+// Eagerly load above-the-fold components
 import IdentifiersPlan from './identifiers-plan';
 import SimAlert from './sim-alerts';
-import SimAutoRenew from './sim-auto-renew';
-import { SimStatus } from '@travelpulse/interfaces';
+
+// Loading skeleton component
+const SectionSkeleton = () => (
+	<div className={styles.actionsSection} style={{ minHeight: '100px' }}>
+		<div className={styles.skeletonPulse} />
+	</div>
+);
 
 export default function EsimDetailsPage() {
 	const params = useParams();
@@ -31,6 +43,24 @@ export default function EsimDetailsPage() {
 		data: sim,
 	} = useAppSelector((state) => state.account.sims.simDetails);
 
+	// All hooks must be called before any conditional returns
+	// Memoize computed values to prevent unnecessary recalculations
+	const isNotActive = useMemo(
+		() => sim?.status === SimStatus.NOT_ACTIVE,
+		[sim?.status]
+	);
+	const planName = sim?.name;
+	const providerName = useMemo(
+		() =>
+			sim?.order?.orderNumber
+				? `Order #${sim.order.orderNumber}`
+				: 'Provider',
+		[sim?.order?.orderNumber]
+	);
+
+	const autoRenew = false; // TODO: wire to real field when available
+	const fieldCopy = useMemo(() => (sim ? new SimUtil(sim).copyField : () => {}), [sim]);
+
 	useEffect(() => {
 		if (!esimId) return;
 
@@ -39,7 +69,7 @@ export default function EsimDetailsPage() {
 		}
 
 		dispatch(fetchSimDetails({ simId: esimId }));
-	}, [esimId]);
+	}, [esimId, dispatch]);
 
 	// if (status === 'loading') {
 	// 	return <div>Loading details…</div>;
@@ -48,15 +78,6 @@ export default function EsimDetailsPage() {
 	if (error || !sim) {
 		return <div>Error: {error?.toString() || 'Not found'}</div>;
 	}
-
-	const isNotActive = sim.status === SimStatus.NOT_ACTIVE;
-	const planName = sim.name;
-	const providerName = sim.order?.orderNumber
-		? `Order #${sim.order.orderNumber}`
-		: 'Provider';
-
-	const autoRenew = false; // TODO: wire to real field when available
-	const fieldCopy = new SimUtil(sim).copyField;
 
 	return (
 		<>
@@ -117,22 +138,37 @@ export default function EsimDetailsPage() {
 				{/* Alerts */}
 				<SimAlert sim={sim} />
 
-				{/* Identifiers & Plan Info */}
+				{/* Identifiers & Plan Info - Critical, render immediately */}
 				<IdentifiersPlan sim={sim} fieldCopy={fieldCopy} />
 
-				{/* Usage Chart */}
-				<SimUsage sim={sim} />
+				{/* Below-the-fold sections - Lazy load with suspense */}
+				<Suspense fallback={<SectionSkeleton />}>
+					<SimUsage sim={sim} />
+				</Suspense>
 
-				{/* Installation */}
-				{isNotActive && <SimInstall sim={sim} fieldCopy={fieldCopy} />}
+				{/* Installation - Conditionally render */}
+				{isNotActive && (
+					<Suspense fallback={<SectionSkeleton />}>
+						<SimInstall sim={sim} fieldCopy={fieldCopy} />
+					</Suspense>
+				)}
 
-				<NetworkAndOrder sim={sim} />
+				<Suspense fallback={<SectionSkeleton />}>
+					<NetworkAndOrder sim={sim} />
+				</Suspense>
 
-				{/* Auto-renew */}
-				<SimAutoRenew autoRenew={autoRenew} planName={planName} />
+				{/* Package History - Already has internal lazy loading */}
+				<Suspense fallback={<SectionSkeleton />}>
+					<PackageHistory simId={sim.id} />
+				</Suspense>
 
-				{/* Misc / Support / Logs */}
-				<SupportSection />
+				<Suspense fallback={<SectionSkeleton />}>
+					<SimAutoRenew autoRenew={autoRenew} planName={planName || ''} />
+				</Suspense>
+
+				<Suspense fallback={<SectionSkeleton />}>
+					<SupportSection />
+				</Suspense>
 			</div>
 
 			{/* Sticky action bar */}
